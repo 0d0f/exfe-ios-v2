@@ -33,21 +33,10 @@
 
 @property (nonatomic, strong) EFMarauderMapDataSource *mapDataSource;
 
-@property (nonatomic, strong) NSMutableDictionary   *personAnnotationDictionary;
 @property (nonatomic, strong) NSMutableDictionary   *personDictionary;
 @property (nonatomic, strong) MKAnnotationView      *meAnnotationView;
 @property (nonatomic, strong) NSArray               *invitations;
 @property (nonatomic, strong) NSMutableArray        *identityIds;
-
-@property (nonatomic, strong) NSMutableArray        *demoPathPoints;
-@property (nonatomic, strong) EFCrumPath            *demoOverlay;
-@property (nonatomic, strong) EFRoutePath           *demoRoutePath;
-
-@property (nonatomic, strong) NSMutableDictionary   *personOverlayMap;
-@property (nonatomic, strong) EFCrumPathView        *personPathOverlayView;
-
-@property (nonatomic, strong) NSMutableDictionary   *personPositionOverlayMap;
-@property (nonatomic, strong) NSMutableDictionary   *personPositionOverlayViewMap;
 
 @property (nonatomic, strong) EFCalloutAnnotation   *currentCalloutAnnotation;
 
@@ -77,10 +66,6 @@
 
 - (void)_startTimer;
 - (void)_stopTimer;
-
-- (BOOL)_isPersonOnline:(NSString *)identityId;
-
-- (void)_initDemo;
 
 @end
 
@@ -153,71 +138,6 @@
     }
 }
 
-- (BOOL)_isPersonOnline:(NSString *)identityId {
-    NSArray *locations = [self.personDictionary valueForKey:identityId];
-    
-    if (locations) {
-        EFLocation *lastestLocation = locations[0];
-        NSDate *lastestingUpdateTime = lastestLocation.timestamp;
-        NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:lastestingUpdateTime];
-        if (timeInterval <= 60.0f) {
-            return YES;
-        } else {
-            return NO;
-        }
-    }
-    
-    return NO;
-}
-
-- (void)_initDemo {
-    self.demoPathPoints = [[NSMutableArray alloc] init];
-    EFLocation *destination = [[EFLocation alloc] init];
-    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(23.114921, 113.328212);
-    destination.coordinate = coordinate;
-    [self.demoPathPoints addObject:destination];
-    
-    EFLocation *loction1 = [[EFLocation alloc] init];
-    coordinate = CLLocationCoordinate2DMake(23.118915,113.328017);
-    loction1.coordinate = coordinate;
-    [self.demoPathPoints addObject:loction1];
-    
-    EFLocation *loction2 = [[EFLocation alloc] init];
-    coordinate = CLLocationCoordinate2DMake(23.118602,113.332745);
-    loction2.coordinate = coordinate;
-    [self.demoPathPoints addObject:loction2];
-    
-    EFLocation *loction3 = [[EFLocation alloc] init];
-    coordinate = CLLocationCoordinate2DMake(23.118511,113.333832);
-    loction3.coordinate = coordinate;
-    [self.demoPathPoints addObject:loction3];
-    
-    EFLocation *loction4 = [[EFLocation alloc] init];
-    coordinate = CLLocationCoordinate2DMake(23.120837,113.333759);
-    loction4.coordinate = coordinate;
-    [self.demoPathPoints addObject:loction4];
-    
-    EFCrumPath *crumPath = [[EFCrumPath alloc] initWithMapPoints:self.demoPathPoints];
-    crumPath.linecolor = [UIColor COLOR_RGB(0x00, 0x7B, 0xFF)];
-    crumPath.lineWidth = 4.0f;
-    crumPath.lineStyle = kEFMapLineStyleLine;
-    
-    self.demoOverlay = crumPath;
-    
-    self.demoRoutePath = [[EFRoutePath alloc] init];
-    self.demoRoutePath.pathId = @"233";
-    self.demoRoutePath.createdDate = [NSDate date];
-    self.demoRoutePath.updatedDate = [NSDate date];
-    self.demoRoutePath.createdByUid = @"cfddream@wechat";
-    self.demoRoutePath.updatedByUid = @"cfddream@wechat";
-    self.demoRoutePath.title = @"";
-    self.demoRoutePath.description = @"";
-    self.demoRoutePath.strokeColor = [UIColor COLOR_RGB(0x00, 0x7B, 0xFF)];
-    self.demoRoutePath.positions = self.demoPathPoints;
-    
-    [self.mapView addOverlay:crumPath];
-}
-
 @end
 
 @implementation EFMarauderMapViewController
@@ -225,16 +145,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.personPositionOverlayMap = [[NSMutableDictionary alloc] initWithCapacity:6];
-        self.personPositionOverlayViewMap = [[NSMutableDictionary alloc] initWithCapacity:6];
-        self.personOverlayMap = [[NSMutableDictionary alloc] initWithCapacity:6];
-        
-        self.personAnnotationDictionary = [[NSMutableDictionary alloc] initWithCapacity:6];
         self.personDictionary = [[NSMutableDictionary alloc] initWithCapacity:6];
-        
-//        self.locationManager = [[CLLocationManager alloc] init];
-//        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-//        self.locationManager.delegate = self;
         
         self.mapView.delegate = self;
         
@@ -291,21 +202,16 @@
 
 - (void)enterBackground {
     [self _closeStreaming];
-    
     [self _stopTimer];
-//    [self.locationManager stopUpdatingLocation];
 }
 
 - (void)enterForeground {
-//    [self.locationManager startUpdatingLocation];
     [self _openStreaming];
-    
     [self _startTimer];
 }
 
 - (void)viewDidUnload {
     [self setTableView:nil];
-    
     [self setSelfTableView:nil];
     [self setLeftBaseView:nil];
     [super viewDidUnload];
@@ -337,7 +243,6 @@
     [self.mapStrokeView reloadData];
     
     [self _openStreaming];
-    [self _getRoute];
     
     [[EFLocationManager defaultManager] addObserver:self
                                          forKeyPath:@"userHeading"
@@ -350,7 +255,7 @@
                                                             message:@"是否启用"
                                                            delegate:self
                                                   cancelButtonTitle:@"残忍的拒绝"
-                                                  otherButtonTitles:@"欣然接受", nil];
+                                                  otherButtonTitles:@"欣然的接受", nil];
         [alertView show];
     } else {
         // register to update location
@@ -394,6 +299,8 @@
         
         // start updating location
         [[EFLocationManager defaultManager] startUpdatingLocation];
+    } else {
+        [self.tabBarViewController.tabBar setSelectedIndex:self.tabBarViewController.defaultIndex];
     }
 }
 
@@ -584,9 +491,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.personPathOverlayView.overlay) {
-        [self.mapView removeOverlay:self.personPathOverlayView.overlay];
-    }
+    [self.mapDataSource removeAllBreadcrumPathsToMapView:self.mapView];
     
     NSArray *locations = nil;
     EFMapPerson *person = nil;
@@ -599,20 +504,12 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     locations = person.locations;
     
-    if (!locations || !locations.count)
+    if (!locations || !locations.count) {
         return;
+    }
     
     // add overlay
-    
-    EFCrumPath *path = [[EFCrumPath alloc] initWithMapPoints:locations];
-    path.linecolor = [UIColor colorWithRed:1.0f
-                                     green:(127.0f / 255.0f)
-                                      blue:(153.0f / 255.0f)
-                                     alpha:1.0f];
-    path.lineStyle = kEFMapLineStyleDashedLine;
-    [self.personOverlayMap setObject:@"YES" forKey:[NSValue valueWithNonretainedObject:path]];
-    
-    [self.mapView addOverlay:path];
+    [self.mapDataSource updateBreadcrumPathForPerson:person toMapView:self.mapView];
     
     EFLocation *lastLocation = (EFLocation *)locations[0];
     
@@ -974,19 +871,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id<MKOverlay>)overlay {
     EFCrumPathView *crumPathView = nil;
     
-    if ([self.personOverlayMap objectForKey:[NSValue valueWithNonretainedObject:overlay]]) {
-        self.personPathOverlayView = [[EFCrumPathView alloc] initWithOverlay:overlay];
-        crumPathView = self.personPathOverlayView;
-    } else if ([self.personPositionOverlayMap objectForKey:[NSValue valueWithNonretainedObject:overlay]]) {
-        NSValue *value = [self.personPositionOverlayMap objectForKey:[NSValue valueWithNonretainedObject:overlay]];
-        crumPathView = [self.personPositionOverlayViewMap objectForKey:value];
-        if (!crumPathView) {
-            crumPathView = [[EFCrumPathView alloc] initWithOverlay:overlay];
-            [self.personPositionOverlayViewMap setObject:crumPathView forKey:value];
-        }
-    } else if (self.demoOverlay == overlay) {
-        crumPathView = [[EFCrumPathView alloc] initWithOverlay:overlay];
-    }
+    crumPathView = [[EFCrumPathView alloc] initWithOverlay:overlay];
     
     return crumPathView;
 }

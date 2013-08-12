@@ -28,4 +28,6 @@ MKOverlay
 - (void)removeMapPoint:(EFLocation *)point;
 - (void)replaceMapPointAtIndex:(NSUInteger)index withMapPoint:(EFLocation *)anotherPoint;
 
+- (void)replaceAllMapPointsWithMapPoints:(NSArray *)newMapPoints;
+
 @end

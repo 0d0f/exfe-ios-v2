@@ -478,14 +478,14 @@ static UIView * ReverseSubviews(UIView *view) {
     if ([self.delegate respondsToSelector:@selector(mapViewHeadingButtonPressed:)]) {
         [self.delegate mapViewHeadingButtonPressed:self];
     }
-    // TODO: heading tracking
-//    if (self.userTrackingMode == MKUserTrackingModeNone) {
-//        [sender setImage:[UIImage imageNamed:@"map_arrow_blue.png"] forState:UIControlStateNormal];
-//        [self setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
-//    } else {
-//        [sender setImage:[UIImage imageNamed:@"map_arrow_g5.png"] forState:UIControlStateNormal];
-//        [self setUserTrackingMode:MKUserTrackingModeNone animated:YES];
-//    }
+    
+    if (self.userTrackingMode == MKUserTrackingModeNone) {
+        [sender setImage:[UIImage imageNamed:@"map_arrow_blue.png"] forState:UIControlStateNormal];
+        [self setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
+    } else {
+        [sender setImage:[UIImage imageNamed:@"map_arrow_g5.png"] forState:UIControlStateNormal];
+        [self setUserTrackingMode:MKUserTrackingModeNone animated:YES];
+    }
 }
 
 #pragma mark - UIGestureRecognizerDelegate

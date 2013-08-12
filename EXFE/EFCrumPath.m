@@ -70,6 +70,13 @@
     [self.innerPoints replaceObjectAtIndex:index withObject:anotherPoint];
 }
 
+- (void)replaceAllMapPointsWithMapPoints:(NSArray *)newMapPoints {
+    NSParameterAssert(newMapPoints);
+    
+    [self.innerPoints removeAllObjects];
+    [self.innerPoints addObjectsFromArray:newMapPoints];
+}
+
 #pragma mark - Private
 
 - (void)_pointsDidChange {

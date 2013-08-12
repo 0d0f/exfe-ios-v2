@@ -1014,7 +1014,7 @@
     tabBarItem4.highlightImage = [UIImage imageNamed:@"widget_routex_30shine.png"];
     
     mapViewController.customTabBarItem = tabBarItem4;
-    mapViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
+    mapViewController.tabBarStyle = kEFTabBarStyleNormal;
     mapViewController.shadowImage = nil;
     mapViewController.cross = cross;
     mapViewController.model = model;

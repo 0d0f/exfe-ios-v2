@@ -20,6 +20,7 @@
 #import "EFAPI.h"
 #import "EFPersonAnnotation.h"
 #import "EFPersonAnnotationView.h"
+#import "EFCrumPath.h"
 
 #define kStreamingDataTypeLocaionts     @"/v3/crosses/routex/breadcrumbs"
 #define kStreamingDataTypeRoute         @"/v3/crosses/routex/geomarks"
@@ -37,6 +38,8 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 @property (nonatomic, strong) NSMutableArray        *routeLocations;
 @property (nonatomic, strong) NSMutableDictionary   *routeLocationAnnotationMap;
+
+@property (nonatomic, strong) NSMutableDictionary   *breadcrumPathMap;
 
 @property (nonatomic, strong) NSMutableDictionary   *personAnnotationMap;
 
@@ -143,6 +146,7 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
         self.routeLocations = [[NSMutableArray alloc] init];
         self.routeLocationAnnotationMap = [[NSMutableDictionary alloc] init];
         self.personAnnotationMap = [[NSMutableDictionary alloc] init];
+        self.breadcrumPathMap = [[NSMutableDictionary alloc] init];
     }
     
     return self;
@@ -178,7 +182,17 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
                                                           
                                                           [person.locations removeAllObjects];
                                                           
-                                                          [person.locations addObjectsFromArray:path.positions];
+                                                          if (person.lastLocation) {
+                                                              [person.locations addObjectsFromArray:path.positions];
+                                                          } else {
+                                                              if (path.positions.count > 1) {
+                                                                  NSArray *positions = [path.positions subarrayWithRange:(NSRange){0, path.positions.count - 1}];
+                                                                  [person.locations addObjectsFromArray:positions];
+                                                                  person.lastLocation = [path.positions lastObject];
+                                                              } else {
+                                                                  [person.locations addObjectsFromArray:path.positions];
+                                                              }
+                                                          }
                                                           
                                                           if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
                                                               [self.delegate mapDataSource:self
@@ -490,6 +504,69 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
         personAnnotationView.annotation = personAnnotation;
     } else {
         [self addPersonAnnotationForPerson:person toMapView:mapView];
+    }
+}
+
+#pragma mark - Breadcrum Path
+
+- (void)removeBreadcrumPathForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView {
+    NSParameterAssert(person);
+    NSParameterAssert(mapView);
+    
+    id key = [NSValue valueWithNonretainedObject:person];
+    EFCrumPath *crumPath = [self.breadcrumPathMap objectForKey:key];
+    [mapView removeOverlay:crumPath];
+    [self.breadcrumPathMap removeObjectForKey:key];
+}
+
+- (void)removeAllBreadcrumPathsToMapView:(MKMapView *)mapView {
+    NSParameterAssert(mapView);
+    
+    for (EFMapPerson *person in self.people) {
+        [self removeBreadcrumPathForPerson:person toMapView:mapView];
+    }
+}
+
+- (void)addBreadcrumPathForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView {
+    NSParameterAssert(person);
+    NSParameterAssert(mapView);
+    
+    EFCrumPath *path = [[EFCrumPath alloc] initWithMapPoints:person.locations];
+    
+    EFCrumPathView *pathView = (EFCrumPathView *)[mapView viewForOverlay:path];
+    if (pathView) {
+        [self updateBreadcrumPathForPerson:person toMapView:mapView];
+    } else {
+        if (kEFMapPersonConnectStateOnline == person.connectState) {
+            path.linecolor = [UIColor COLOR_RGB(0xFF, 0x7E, 0x98)];
+        } else {
+            path.linecolor = [UIColor COLOR_RGB(0xB2, 0xB2, 0xB2)];
+        }
+        path.lineStyle = kEFMapLineStyleDashedLine;
+        
+        [mapView addOverlay:path];
+        [self.breadcrumPathMap setObject:path forKey:[NSValue valueWithNonretainedObject:person]];
+    }
+}
+
+- (void)updateBreadcrumPathForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView {
+    NSParameterAssert(person);
+    NSParameterAssert(mapView);
+    
+    EFCrumPath *path = [self.breadcrumPathMap objectForKey:[NSValue valueWithNonretainedObject:person]];
+    EFCrumPathView *pathView = (EFCrumPathView *)[mapView viewForOverlay:path];
+    
+    if (!pathView) {
+        [self addBreadcrumPathForPerson:person toMapView:mapView];
+    } else {
+        [path replaceAllMapPointsWithMapPoints:person.locations];
+        if (kEFMapPersonConnectStateOnline == person.connectState) {
+            path.linecolor = [UIColor COLOR_RGB(0xFF, 0x7E, 0x98)];
+        } else {
+            path.linecolor = [UIColor COLOR_RGB(0xB2, 0xB2, 0xB2)];
+        }
+        
+        [pathView setNeedsDisplay];
     }
 }
 

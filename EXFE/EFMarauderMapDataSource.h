@@ -21,7 +21,7 @@
 
 @end
 
-@class EFAnnotation, EFAnnotationView, EFRouteLocation, EFLocation, EFRoutePath, Cross, EFPersonAnnotation;
+@class EFAnnotation, EFAnnotationView, EFRouteLocation, EFLocation, EFRoutePath, Cross, EFPersonAnnotation, EFCrumPath;
 @interface EFMarauderMapDataSource : NSObject
 <
 EFHTTPStreamingDelegate
@@ -60,6 +60,14 @@ EFHTTPStreamingDelegate
 - (EFPersonAnnotation *)personAnnotationForPerson:(EFMapPerson *)person;
 - (void)addPersonAnnotationForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView;
 - (void)updatePersonAnnotationForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView;
+
+/**
+ * Breadcrum Path
+ */
+- (void)removeBreadcrumPathForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView;
+- (void)removeAllBreadcrumPathsToMapView:(MKMapView *)mapView;
+- (void)addBreadcrumPathForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView;
+- (void)updateBreadcrumPathForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView;
 
 /**
  * Route Path
