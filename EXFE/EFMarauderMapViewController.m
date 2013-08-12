@@ -585,12 +585,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 - (void)mapViewHeadingButtonPressed:(EFMapView *)mapView {
-    if (self.mapView.userLocation) {
-        EFUserLocationAnnotationView *annotationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:self.mapView.userLocation];
-        if (annotationView) {
-            [annotationView playAnimation];
-        }
-    }
 }
 
 #pragma mark - MKMapViewDelegate

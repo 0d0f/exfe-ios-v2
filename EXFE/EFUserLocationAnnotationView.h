@@ -12,6 +12,4 @@
 
 @property (nonatomic, strong) CLHeading     *userHeading;
 
-- (void)playAnimation;
-
 @end
