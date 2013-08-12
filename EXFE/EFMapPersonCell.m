@@ -12,6 +12,9 @@
 #import "EFMapKit.h"
 #import "EFCache.h"
 
+#define kStateLabelNormalFrame  (CGRect){{5, 48}, {40, 12}}
+#define kStateLabelMeterFrame   (CGRect){{17, 48}, {36, 12}}
+
 @interface EFMapPersonCell ()
 
 @property (nonatomic, strong) UIView *stateView;
@@ -33,18 +36,25 @@
     
     NSString *infoText = nil;
     if (self.person.connectState == kEFMapPersonConnectStateUnknow) {
-        infoText = NSLocalizedString(@"方位?", nil);
+        infoText = NSLocalizedString(@"方位未知", nil);
         self.stateImageView.hidden = YES;
-        
-        self.stateView.layer.backgroundColor = [UIColor colorWithRed:(127.0f / 255.0f) green:(127.0f / 255.0f) blue:(127.0f / 255.0f) alpha:1.0f].CGColor;
-        self.stateView.hidden = NO;
+        self.stateView.hidden = YES;
+        self.meterLabel.hidden = YES;
+        self.stateLabel.textAlignment = NSTextAlignmentCenter;
+        self.stateLabel.frame = kStateLabelNormalFrame;
     } else {
         if (self.person.locationState == kEFMapPersonLocationStateArrival) {
             infoText = NSLocalizedString(@"抵达", nil);
             self.stateImageView.hidden = YES;
             
+            self.stateLabel.frame = kStateLabelMeterFrame;
+            self.stateLabel.text = infoText;
+            [self.stateLabel sizeToFit];
+            
             self.stateView.layer.backgroundColor = [UIColor colorWithRed:(229.0f / 255.0f) green:(49.0f / 255.0f) blue:(83.0f / 255.0f) alpha:1.0f].CGColor;
             self.stateView.hidden = NO;
+            self.meterLabel.hidden = YES;
+            self.stateLabel.textAlignment = NSTextAlignmentCenter;
         } else if (self.person.locationState == kEFMapPersonLocationStateOnTheWay) {
             if (self.person.connectState == kEFMapPersonConnectStateOnline) {
                 self.stateImageView.image = [UIImage imageNamed:@"map_arrow_14red.png"];
@@ -67,16 +77,30 @@
                 }
             }
             
-            infoText = [NSString stringWithFormat:NSLocalizedString(@"%d%@", nil), distance, m];
+            infoText = [NSString stringWithFormat:NSLocalizedString(@"%d", nil), distance];
+            
+            self.stateLabel.frame = kStateLabelMeterFrame;
+            self.stateLabel.text = infoText;
+            [self.stateLabel sizeToFit];
+            
+            self.meterLabel.text = m;
+            [self.meterLabel sizeToFit];
+            CGRect meterLabelFrame = self.meterLabel.frame;
+            meterLabelFrame.origin = (CGPoint){CGRectGetMaxX(self.stateLabel.frame), CGRectGetMinY(self.stateLabel.frame) + 2.0f};
+            self.meterLabel.frame = meterLabelFrame;
+            
             self.stateImageView.layer.transform = CATransform3DMakeRotation(self.person.angle, 0.0f, 0.0f, 1.0f);
             self.stateImageView.hidden = NO;
+            self.meterLabel.hidden = NO;
             self.stateView.hidden = YES;
+            self.stateLabel.textAlignment = NSTextAlignmentRight;
         } else {
-            infoText = NSLocalizedString(@"方位?", nil);
+            infoText = NSLocalizedString(@"方位未知", nil);
             self.stateImageView.hidden = YES;
-            
-            self.stateView.layer.backgroundColor = [UIColor colorWithRed:(127.0f / 255.0f) green:(127.0f / 255.0f) blue:(127.0f / 255.0f) alpha:1.0f].CGColor;
-            self.stateView.hidden = NO;
+            self.stateView.hidden = YES;
+            self.meterLabel.hidden = YES;
+            self.stateLabel.textAlignment = NSTextAlignmentCenter;
+            self.stateLabel.frame = kStateLabelNormalFrame;
         }
     }
     
@@ -103,7 +127,7 @@
         self.avatarImageView = avatarImageView;
         
         UIImageView *stateImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_arrow_12red.png"]];
-        stateImageView.frame = (CGRect){{4, 47}, {14, 14}};
+        stateImageView.frame = (CGRect){{3, 47}, {14, 14}};
         [self.contentView addSubview:stateImageView];
         self.stateImageView = stateImageView;
         
@@ -113,12 +137,20 @@
         self.stateView = stateView;
         self.stateView.hidden = YES;
         
-        UILabel *stateLabel = [[UILabel alloc] initWithFrame:(CGRect){{17, 48}, {40, 12}}];
+        UILabel *stateLabel = [[UILabel alloc] initWithFrame:kStateLabelNormalFrame];
+        stateLabel.textAlignment = NSTextAlignmentCenter;
         stateLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10];
         stateLabel.textColor = [UIColor blackColor];
         stateLabel.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:stateLabel];
         self.stateLabel = stateLabel;
+        
+        UILabel *meterLabel = [[UILabel alloc] initWithFrame:kStateLabelNormalFrame];
+        meterLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:8];
+        meterLabel.textColor = [UIColor blackColor];
+        meterLabel.backgroundColor = [UIColor clearColor];
+        [self.contentView addSubview:meterLabel];
+        self.meterLabel = meterLabel;
     }
     return self;
 }

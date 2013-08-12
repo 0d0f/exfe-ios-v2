@@ -182,7 +182,7 @@
 
 - (void)locationManager:(CLLocationManager *)manager
 	 didUpdateLocations:(NSArray *)locations {
-    CLLocation *location = locations[0];
+    CLLocation *location = [locations lastObject];
     self.userLocation = location;
     
     BOOL isInBackground = NO;

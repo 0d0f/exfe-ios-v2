@@ -31,6 +31,21 @@
 NSString *EFNotificationRoutePathDidChange = @"notification.routePath.didChange";
 NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.didChange";
 
+CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationCoordinate2D locationCoordinate) {
+    float fLat = DegreesToRadians(locationCoordinate.latitude);
+    float fLng = DegreesToRadians(locationCoordinate.longitude);
+    float tLat = DegreesToRadians(destinationCoordinate.latitude);
+    float tLng = DegreesToRadians(destinationCoordinate.longitude);
+    
+    float degree = RadiandsToDegrees(atan2(sin(tLng-fLng)*cos(tLat), cos(fLat)*sin(tLat)-sin(fLat)*cos(tLat)*cos(tLng-fLng)));
+    
+    if (degree >= 0.0f) {
+        return degree;
+    } else {
+        return 360.0f + degree;
+    }
+}
+
 @interface EFMarauderMapDataSource ()
 
 @property (nonatomic, strong) NSMutableArray        *people;
@@ -56,6 +71,8 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 - (NSString *)_generateRouteLocationId;
 - (NSString *)_userIdFromDirtyUserId:(NSString *)dirtyUserId;
+
+- (void)_updatePersonState:(EFMapPerson *)person;
 
 @end
 
@@ -118,23 +135,28 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     return userIdString;
 }
 
+- (void)_updatePersonState:(EFMapPerson *)person {
+    EFRouteLocation *destination = [self destinationLocation];
+    if (destination) {
+        CLLocation *destinationLocation = [[CLLocation alloc] initWithLatitude:destination.coordinate.latitude longitude:destination.coordinate.longitude];
+        CLLocation *personLocation = [[CLLocation alloc] initWithLatitude:person.lastLocation.coordinate.latitude longitude:person.lastLocation.coordinate.longitude];
+        CLLocationDistance distance = [destinationLocation distanceFromLocation:personLocation];
+        person.distance = distance;
+        if (distance < 30.0f) {
+            person.locationState = kEFMapPersonLocationStateArrival;
+        } else {
+            person.locationState = kEFMapPersonLocationStateOnTheWay;
+        }
+    } else {
+        person.locationState = kEFMapPersonLocationStateUnknow;
+    }
+    
+    person.angle = HeadingInAngle(destination.coordinate, person.lastLocation.coordinate);
+}
+
 @end
 
 @implementation EFMarauderMapDataSource
-
-CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationCoordinate2D locationCoordinate) {
-    float fLat = DegreesToRadians(locationCoordinate.latitude);
-    float fLng = DegreesToRadians(locationCoordinate.longitude);
-    float tLat = DegreesToRadians(destinationCoordinate.latitude);
-    float tLng = DegreesToRadians(destinationCoordinate.longitude);
-    
-    float degree = RadiandsToDegrees(atan2(sin(tLng-fLng)*cos(tLat), cos(fLat)*sin(tLat)-sin(fLat)*cos(tLat)*cos(tLng-fLng)));
-    
-    if (degree >= 0.0f) {
-        return degree;
-    } else {
-        return 360.0f + degree;
-    }}
 
 - (id)initWithCross:(Cross *)cross {
     self = [super init];
@@ -193,6 +215,8 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
                                                                   [person.locations addObjectsFromArray:path.positions];
                                                               }
                                                           }
+                                                          
+                                                          [self _updatePersonState:person];
                                                           
                                                           if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
                                                               [self.delegate mapDataSource:self
@@ -435,23 +459,7 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
                         person.lastLocation = path.positions[0];
                         
                         // update person connect state && location state && distance
-                        EFRouteLocation *destination = [self destinationLocation];
-                        if (destination) {
-                            CLLocation *destinationLocation = [[CLLocation alloc] initWithLatitude:destination.coordinate.latitude longitude:destination.coordinate.longitude];
-                            CLLocation *personLocation = [[CLLocation alloc] initWithLatitude:person.lastLocation.coordinate.latitude longitude:person.lastLocation.coordinate.longitude];
-                            CLLocationDistance distance = [destinationLocation distanceFromLocation:personLocation];
-                            person.distance = distance;
-                            if (distance < 30.0f) {
-                                person.locationState = kEFMapPersonLocationStateArrival;
-                            } else {
-                                person.locationState = kEFMapPersonLocationStateOnTheWay;
-                            }
-                        } else {
-                            person.locationState = kEFMapPersonLocationStateUnknow;
-                        }
-                        
-                        // update person angle
-                        person.angle = HeadingInAngle(destination.coordinate, person.lastLocation.coordinate);
+                        [self _updatePersonState:person];
                         
                         [self.delegate mapDataSource:self didUpdateLocations:path.positions forUser:person];
                     }

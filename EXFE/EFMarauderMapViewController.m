@@ -61,12 +61,6 @@
 - (void)_openStreaming;
 - (void)_closeStreaming;
 
-- (void)_getRoute;
-- (void)_postRoute;
-
-- (void)_startTimer;
-- (void)_stopTimer;
-
 @end
 
 @implementation EFMarauderMapViewController (Private)
@@ -86,58 +80,6 @@
     [self.mapDataSource closeStreaming];
 }
 
-- (void)_getRoute {
-//    [self.model.apiServer getRouteWithCrossId:[self.cross.cross_id integerValue]
-//                                      isEarth:NO
-//                                      success:^(NSArray *routeLocations, NSArray *routePaths){
-//                                          for (EFRouteLocation *routeLocation in routeLocations) {
-//                                              [self.mapDataSource addRouteLocation:routeLocation toMapView:self.mapView];
-//                                          }
-//                                          dispatch_async(dispatch_get_main_queue(), ^{
-//                                              [self.tableView reloadData];
-//                                              [self.selfTableView reloadData];
-//                                          });
-//                                      }
-//                                      failure:^(NSError *error){
-//                                          NSLog(@"%@", error);
-//                                      }];
-}
-
-- (void)_postRoute {
-//#if 0 // test
-//    [self.model.apiServer updateRouteWithCrossId:[self.cross.cross_id integerValue]
-//                                       locations:nil
-//                                          routes:nil
-//                                         isEarth:NO
-//                                         success:nil
-//                                         failure:nil];
-//#else
-//    [self.model.apiServer updateRouteWithCrossId:[self.cross.cross_id integerValue]
-//                                       locations:[self.mapDataSource allRouteLocations]
-//                                          routes:@[self.demoRoutePath]
-//                                         isEarth:NO
-//                                         success:nil
-//                                         failure:nil];
-//#endif
-}
-
-- (void)_startTimer {
-    [self _stopTimer];
-    
-    self.updateLocationTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f
-                                                                target:self
-                                                              selector:@selector(timerRunloop:)
-                                                              userInfo:nil
-                                                               repeats:YES];
-}
-
-- (void)_stopTimer {
-    if (self.updateLocationTimer) {
-        [self.updateLocationTimer invalidate];
-        self.updateLocationTimer = nil;
-    }
-}
-
 @end
 
 @implementation EFMarauderMapViewController
@@ -146,8 +88,6 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.personDictionary = [[NSMutableDictionary alloc] initWithCapacity:6];
-        
-        self.mapView.delegate = self;
         
         self.lock = [[NSRecursiveLock alloc] init];
         
@@ -202,12 +142,10 @@
 
 - (void)enterBackground {
     [self _closeStreaming];
-    [self _stopTimer];
 }
 
 - (void)enterForeground {
     [self _openStreaming];
-    [self _startTimer];
 }
 
 - (void)viewDidUnload {
@@ -219,6 +157,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    self.mapView.delegate = self;
     
     self.invitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
     
@@ -244,11 +184,6 @@
     
     [self _openStreaming];
     
-    [[EFLocationManager defaultManager] addObserver:self
-                                         forKeyPath:@"userHeading"
-                                            options:NSKeyValueObservingOptionNew
-                                            context:NULL];
-    
     if ([[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
 #warning !!! 文本替换
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"第一次使用活点地图"
@@ -264,14 +199,24 @@
     }
     
     [[EFLocationManager defaultManager] startUpdatingHeading];
+    
+    [[EFLocationManager defaultManager] addObserver:self
+                                         forKeyPath:@"userHeading"
+                                            options:NSKeyValueObservingOptionNew
+                                            context:NULL];
+    [[EFLocationManager defaultManager] addObserver:self
+                                         forKeyPath:@"userLocation"
+                                            options:NSKeyValueObservingOptionNew
+                                            context:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [[EFLocationManager defaultManager] removeObserver:self
+                                            forKeyPath:@"userLocation"];
+    [[EFLocationManager defaultManager] removeObserver:self
                                             forKeyPath:@"userHeading"];
     [[EFLocationManager defaultManager] stopUpdatingHeading];
     [self _closeStreaming];
-    [self _stopTimer];
     
     [super viewDidDisappear:animated];
 }
@@ -279,12 +224,16 @@
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (object == [EFLocationManager defaultManager] && [keyPath isEqualToString:@"userHeading"]) {
-        if (self.mapView && self.mapView.userLocation) {
-            EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:self.mapView.userLocation];
-            if (userLocationView) {
-                userLocationView.userHeading = [EFLocationManager defaultManager].userHeading;
+    if (object == [EFLocationManager defaultManager]) {
+        if ([keyPath isEqualToString:@"userHeading"]) {
+            if (self.mapView && self.mapView.userLocation) {
+                EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:self.mapView.userLocation];
+                if (userLocationView) {
+                    userLocationView.userHeading = [EFLocationManager defaultManager].userHeading;
+                }
             }
+        } else if ([keyPath isEqualToString:@"userLocation"]) {
+            [self.mapView userLocationDidChange];
         }
     }
 }
@@ -410,69 +359,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     cell.person = person;
     return cell;
-    
-//    Invitation *invitation = nil;
-//    NSString *identityId = nil;
-//    
-//    if (tableView == self.tableView) {
-//        invitation = self.invitations[indexPath.row + 1];
-//        identityId = self.identityIds[indexPath.row + 1];
-//    } else {
-//        invitation = self.invitations[0];
-//        identityId = self.identityIds[0];
-//    }
-//    
-//    Identity *identity = invitation.identity;
-//    
-//    EFMapPerson *person = [[EFMapPerson alloc] init];
-//    person.avatarName = identity.avatar_filename;
-//    
-//    EFRouteLocation *destination = self.mapDataSource.destinationLocation;
-//    
-//    NSArray *userLocations = [self.personDictionary valueForKey:identityId];
-//    if (userLocations && userLocations.count) {
-//        EFLocation *latestLocation = userLocations[0];
-//        NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:latestLocation.timestamp];
-//        
-//        if (timeInterval >= 0.0f && timeInterval <= 60.0f) {
-//            person.connectState = kEFMapPersonConnectStateOnline;
-//        } else {
-//            person.connectState = kEFMapPersonConnectStateOffline;
-//        }
-//        
-//        if (destination) {
-//            CLLocationCoordinate2D destinationCoordinate = destination.coordinate;
-//            CLLocation *destinationLocation = [[CLLocation alloc] initWithLatitude:destinationCoordinate.latitude longitude:destinationCoordinate.longitude];
-//            
-//            CLLocationCoordinate2D latestCoordinate = latestLocation.coordinate;
-//            CLLocation *latestCLLocation = [[CLLocation alloc] initWithLatitude:latestCoordinate.latitude longitude:latestCoordinate.longitude];
-//            
-//            CLLocationDistance distance = [destinationLocation distanceFromLocation:latestCLLocation];
-//            if (distance < 30.0f) {
-//                person.locationState = kEFMapPersonLocationStateArrival;
-//            } else {
-//                person.locationState = kEFMapPersonLocationStateOnTheWay;
-//            }
-//            person.distance = distance;
-//            
-//            CGFloat angle = HeadingInRadians(
-//                                             destinationCoordinate.latitude,
-//                                             destinationCoordinate.longitude,
-//                                             latestCoordinate.latitude,
-//                                             latestCoordinate.longitude);
-//            person.angle = angle;
-//        } else {
-//            person.locationState = kEFMapPersonLocationStateOnTheWay;
-//            person.distance = 0.0f;
-//        }
-//    } else {
-//        person.locationState = kEFMapPersonLocationStateUnknow;
-//        person.connectState = kEFMapPersonConnectStateOffline;
-//    }
-//    
-//    cell.person = person;
-    
-    return cell;
 }
 
 #pragma mark - UITableViewDelegate
@@ -540,43 +426,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return [EFMapPersonCell defaultCellHeight];
-}
-
-#pragma mark - CLLocationManagerDelegate
-
-- (void)locationManager:(CLLocationManager *)manager
-	 didUpdateLocations:(NSArray *)locations {
-    CLLocation *currentLocation = locations[0];
-    
-    EFLocation *position = [[EFLocation alloc] init];
-    position.coordinate = currentLocation.coordinate;
-    position.timestamp = [NSDate date];
-    position.accuracy = currentLocation.horizontalAccuracy;
-    
-    self.lastUpdatedLocation = position;
-    
-    if (!self.updateLocationTimer) {
-        [self _startTimer];
-        [self timerRunloop:self.updateLocationTimer];
-        
-        while (!self.hasGotOffset) {
-            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
-                                     beforeDate:[NSDate distantFuture]];
-        }
-        
-        CLLocationCoordinate2D fixedCoordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:manager.location.coordinate];
-        if (self.isInited) {
-            self.isInited = NO;
-            
-            MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(fixedCoordinate, 5000.0f, 5000.0f);
-            [self.mapView setRegion:region animated:YES];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
-                [self.selfTableView reloadData];
-            });
-        }
-    }
 }
 
 #pragma mark - Timer Runloop
@@ -700,7 +549,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     [routeLocation updateIconURL];
     
     [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
-    [self _postRoute];
+//    [self _postRoute];
 }
 
 - (void)mapView:(EFMapView *)mapView didChangeSelectedAnnotationStyle:(EFAnnotationStyle)style {
@@ -722,7 +571,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     [routeLocation updateIconURL];
     
     [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
-    [self _postRoute];
+//    [self _postRoute];
 }
 
 - (void)mapViewCancelButtonPressed:(EFMapView *)mapView {
@@ -736,12 +585,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 - (void)mapViewHeadingButtonPressed:(EFMapView *)mapView {
-    if (self.mapView.userLocation) {
-        EFUserLocationAnnotationView *annotationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:self.mapView.userLocation];
-        if (annotationView) {
-            [annotationView playAnimation];
-        }
-    }
 }
 
 #pragma mark - MKMapViewDelegate
@@ -828,7 +671,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             [routeLocation updateIconURL];
             
             [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
-            [self _postRoute];
+//            [self _postRoute];
         };
         
         return callout;

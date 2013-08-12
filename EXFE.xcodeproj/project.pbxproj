@@ -1453,9 +1453,14 @@
 		760F2B3817B4F841009C6A7E /* EFUserLocationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 760F2B3717B4F841009C6A7E /* EFUserLocationAnnotationView.m */; };
 		760F2B3917B4F841009C6A7E /* EFUserLocationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 760F2B3717B4F841009C6A7E /* EFUserLocationAnnotationView.m */; };
 		760F2B3A17B4F841009C6A7E /* EFUserLocationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 760F2B3717B4F841009C6A7E /* EFUserLocationAnnotationView.m */; };
-		761165A517B88FDA005B248A /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FE5611702E8B70098B9B9 /* libBlocksKit.a */; };
 		761165A617B89104005B248A /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F38E9DE17B5422700B850B6 /* libRestKit.a */; };
 		761165A717B8910D005B248A /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F38E9DE17B5422700B850B6 /* libRestKit.a */; };
+		761165B017B8E842005B248A /* EFTimestampAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 761165AF17B8E842005B248A /* EFTimestampAnnotation.m */; };
+		761165B117B8E842005B248A /* EFTimestampAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 761165AF17B8E842005B248A /* EFTimestampAnnotation.m */; };
+		761165B217B8E842005B248A /* EFTimestampAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 761165AF17B8E842005B248A /* EFTimestampAnnotation.m */; };
+		761165BC17B8E850005B248A /* EFTimestampAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 761165BB17B8E850005B248A /* EFTimestampAnnotationView.m */; };
+		761165BD17B8E850005B248A /* EFTimestampAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 761165BB17B8E850005B248A /* EFTimestampAnnotationView.m */; };
+		761165BE17B8E850005B248A /* EFTimestampAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 761165BB17B8E850005B248A /* EFTimestampAnnotationView.m */; };
 		761559BB177F1A2B00ABB62B /* header_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559B9177F1A2B00ABB62B /* header_arrow.png */; };
 		761559BC177F1A2B00ABB62B /* header_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559B9177F1A2B00ABB62B /* header_arrow.png */; };
 		761559BD177F1A2B00ABB62B /* header_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559B9177F1A2B00ABB62B /* header_arrow.png */; };
@@ -2674,6 +2679,10 @@
 		760F2B2817B4F81B009C6A7E /* map_arrow_ring@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_arrow_ring@2x.png"; sourceTree = "<group>"; };
 		760F2B3617B4F841009C6A7E /* EFUserLocationAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFUserLocationAnnotationView.h; sourceTree = "<group>"; };
 		760F2B3717B4F841009C6A7E /* EFUserLocationAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFUserLocationAnnotationView.m; sourceTree = "<group>"; };
+		761165AE17B8E842005B248A /* EFTimestampAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTimestampAnnotation.h; sourceTree = "<group>"; };
+		761165AF17B8E842005B248A /* EFTimestampAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTimestampAnnotation.m; sourceTree = "<group>"; };
+		761165BA17B8E850005B248A /* EFTimestampAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTimestampAnnotationView.h; sourceTree = "<group>"; };
+		761165BB17B8E850005B248A /* EFTimestampAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTimestampAnnotationView.m; sourceTree = "<group>"; };
 		761559B9177F1A2B00ABB62B /* header_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = header_arrow.png; sourceTree = "<group>"; };
 		761559BA177F1A2B00ABB62B /* header_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "header_arrow@2x.png"; sourceTree = "<group>"; };
 		7615B339172AB7D200C54031 /* EFLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLabel.h; sourceTree = "<group>"; };
@@ -3983,6 +3992,10 @@
 				76B1234D1796470C00A73E59 /* EFCalloutAnnotationView.m */,
 				760F2B3617B4F841009C6A7E /* EFUserLocationAnnotationView.h */,
 				760F2B3717B4F841009C6A7E /* EFUserLocationAnnotationView.m */,
+				761165AE17B8E842005B248A /* EFTimestampAnnotation.h */,
+				761165AF17B8E842005B248A /* EFTimestampAnnotation.m */,
+				761165BA17B8E850005B248A /* EFTimestampAnnotationView.h */,
+				761165BB17B8E850005B248A /* EFTimestampAnnotationView.m */,
 			);
 			name = Annotation;
 			sourceTree = "<group>";
@@ -6770,6 +6783,7 @@
 				4F63DAE517172AA600136B7E /* ExfeeRsvpCell.m in Sources */,
 				4F63DAE617172AA600136B7E /* Exfee+EXFE.m in Sources */,
 				4F63DAE717172AA600136B7E /* Invitation+EXFE.m in Sources */,
+				761165BD17B8E850005B248A /* EFTimestampAnnotationView.m in Sources */,
 				4F63DAE817172AA600136B7E /* Identity+EXFE.m in Sources */,
 				4F63DAE917172AA600136B7E /* ExfeeCollectionViewCell.m in Sources */,
 				4F63DAEA17172AA600136B7E /* EXMenu.m in Sources */,
@@ -6836,6 +6850,7 @@
 				76295DC1174B2112002F5CEF /* EFTabBarItemControl.m in Sources */,
 				76295DC4174B2112002F5CEF /* EFTabBarViewController.m in Sources */,
 				76073D05174F6241007CBFC3 /* EFPresentCardController.m in Sources */,
+				761165B117B8E842005B248A /* EFTimestampAnnotation.m in Sources */,
 				76073D0B174F6EA5007CBFC3 /* EFRomeViewController.m in Sources */,
 				4F05D440175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
 				4F05D459175DAFAC0050A726 /* Constants.m in Sources */,
@@ -7020,6 +7035,7 @@
 				4F63DCB417172B0700136B7E /* ExfeeRsvpCell.m in Sources */,
 				4F63DCB517172B0700136B7E /* Exfee+EXFE.m in Sources */,
 				4F63DCB617172B0700136B7E /* Invitation+EXFE.m in Sources */,
+				761165BE17B8E850005B248A /* EFTimestampAnnotationView.m in Sources */,
 				4F63DCB717172B0700136B7E /* Identity+EXFE.m in Sources */,
 				4F63DCB817172B0700136B7E /* ExfeeCollectionViewCell.m in Sources */,
 				4F63DCB917172B0700136B7E /* EXMenu.m in Sources */,
@@ -7086,6 +7102,7 @@
 				76295DC2174B2112002F5CEF /* EFTabBarItemControl.m in Sources */,
 				76295DC5174B2112002F5CEF /* EFTabBarViewController.m in Sources */,
 				76073D06174F6241007CBFC3 /* EFPresentCardController.m in Sources */,
+				761165B217B8E842005B248A /* EFTimestampAnnotation.m in Sources */,
 				76073D0C174F6EA5007CBFC3 /* EFRomeViewController.m in Sources */,
 				4F05D441175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
 				4F05D45A175DAFAC0050A726 /* Constants.m in Sources */,
@@ -7270,6 +7287,7 @@
 				4F99270516F02AEE003D784A /* ExfeeRsvpCell.m in Sources */,
 				4F99270D16F091FD003D784A /* Exfee+EXFE.m in Sources */,
 				4FA013A516F2F4AD00F40CB6 /* Invitation+EXFE.m in Sources */,
+				761165BC17B8E850005B248A /* EFTimestampAnnotationView.m in Sources */,
 				4FA013AB16F31B5400F40CB6 /* Identity+EXFE.m in Sources */,
 				4FA013AE16F3546A00F40CB6 /* ExfeeCollectionViewCell.m in Sources */,
 				4F29C92616F85F7B001BB176 /* EXMenu.m in Sources */,
@@ -7336,6 +7354,7 @@
 				76295DC0174B2112002F5CEF /* EFTabBarItemControl.m in Sources */,
 				76295DC3174B2112002F5CEF /* EFTabBarViewController.m in Sources */,
 				76073D04174F6241007CBFC3 /* EFPresentCardController.m in Sources */,
+				761165B017B8E842005B248A /* EFTimestampAnnotation.m in Sources */,
 				76073D0A174F6EA5007CBFC3 /* EFRomeViewController.m in Sources */,
 				4F05D43F175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
 				4F05D458175DAFAC0050A726 /* Constants.m in Sources */,

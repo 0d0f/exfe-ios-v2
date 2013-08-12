@@ -52,5 +52,6 @@ UIGestureRecognizerDelegate
 @property (nonatomic, strong)                       UIButton                *headingButton;
 
 - (void)removeSelectedPath;
+- (void)userLocationDidChange;
 
 @end
