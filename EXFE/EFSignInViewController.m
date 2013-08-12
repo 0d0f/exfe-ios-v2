@@ -999,7 +999,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                     }
                 }
             } failure:^(AFHTTPRequestOperation *operation, NSError *error){
-                if ([@"NSURLErrorDomain" isEqualToString:error.domain] || [@"AFNetworkingErrorDomain" isEqualToString:error.domain]) {
+                if ([NSURLErrorDomain isEqualToString:error.domain] || [AFNetworkingErrorDomain isEqualToString:error.domain]) {
                     switch (error.code) {
                         case NSURLErrorTimedOut: //-1001
                         case NSURLErrorCannotFindHost: //-1003
@@ -1091,7 +1091,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         sender.enabled = YES;
         [self hideIndicator];
         
-        if ([@"NSURLErrorDomain" isEqualToString:error.domain] || [@"AFNetworkingErrorDomain" isEqualToString:error.domain]) {
+        if ([NSURLErrorDomain isEqualToString:error.domain] || [AFNetworkingErrorDomain isEqualToString:error.domain]) {
             switch (error.code) {
                 case NSURLErrorTimedOut: //-1001
                 case NSURLErrorCannotFindHost: //-1003
@@ -1178,7 +1178,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         sender.enabled = YES;
         [self hideIndicator];
         
-        if ([@"NSURLErrorDomain" isEqualToString:error.domain] || [@"AFNetworkingErrorDomain" isEqualToString:error.domain]) {
+        if ([NSURLErrorDomain isEqualToString:error.domain] || [AFNetworkingErrorDomain isEqualToString:error.domain]) {
             switch (error.code) {
                 case NSURLErrorTimedOut: //-1001
                 case NSURLErrorCannotFindHost: //-1003
@@ -1291,7 +1291,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                                       }
                                                   }
                                               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                  if ([@"NSURLErrorDomain" isEqualToString:error.domain] || [@"AFNetworkingErrorDomain" isEqualToString:error.domain]) {
+                                                  if ([NSURLErrorDomain isEqualToString:error.domain] || [AFNetworkingErrorDomain isEqualToString:error.domain]) {
                                                       switch (error.code) {
                                                           case NSURLErrorTimedOut: //-1001
                                                           case NSURLErrorCannotFindHost: //-1003
@@ -1491,7 +1491,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         [sender.layer removeAllAnimations];
         sender.layer.transform = CATransform3DIdentity;
         [self hideIndicator];
-        if ([@"NSURLErrorDomain" isEqualToString:error.domain] || [@"AFNetworkingErrorDomain" isEqualToString:error.domain]) {
+        if ([NSURLErrorDomain isEqualToString:error.domain] || [AFNetworkingErrorDomain isEqualToString:error.domain]) {
             switch (error.code) {
                 case NSURLErrorTimedOut: //-1001
                 case NSURLErrorCannotFindHost: //-1003
@@ -1643,7 +1643,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
-                if ([@"NSURLErrorDomain" isEqualToString:error.domain] || [@"AFNetworkingErrorDomain" isEqualToString:error.domain]) {
+                if ([NSURLErrorDomain isEqualToString:error.domain] || [AFNetworkingErrorDomain isEqualToString:error.domain]) {
                     switch (error.code) {
                         case NSURLErrorTimedOut: // -1001
                         case NSURLErrorCannotFindHost: //-1003
@@ -1667,7 +1667,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             }];
         } else {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            if ([@"NSURLErrorDomain" isEqualToString:error.domain] || [@"AFNetworkingErrorDomain" isEqualToString:error.domain]) {
+            if ([NSURLErrorDomain isEqualToString:error.domain] || [AFNetworkingErrorDomain isEqualToString:error.domain]) {
                 switch (error.code) {
                     case NSURLErrorTimedOut: // -1001
                     case NSURLErrorCannotFindHost: //-1003

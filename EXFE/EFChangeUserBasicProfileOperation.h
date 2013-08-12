@@ -13,4 +13,6 @@
 @property (nonatomic, copy)   NSString      *name;
 @property (nonatomic, copy)   NSString      *bio;
 
+- (id)initWithModel:(EXFEModel *)model dupelicateFrom:(EFChangeUserBasicProfileOperation *)operation;
+
 @end

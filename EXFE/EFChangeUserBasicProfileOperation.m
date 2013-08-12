@@ -7,6 +7,7 @@
 //
 
 #import "EFChangeUserBasicProfileOperation.h"
+#import "Util.h"
 
 NSString *kEFNotificationChangeUserBasicProfileSuccess = @"notification.changeUserBasicProfile.success";
 NSString *kEFNotificationChangeUserBasicProfileFailure = @"notification.changeUserBasicProfile.failure";
@@ -21,6 +22,16 @@ NSString *kEFNotificationChangeUserBasicProfileFailure = @"notification.changeUs
         self.successNotificationName = kEFNotificationChangeUserBasicProfileSuccess;
         self.failureNotificationName = kEFNotificationChangeUserBasicProfileFailure;
     }
+    return self;
+}
+
+- (id)initWithModel:(EXFEModel *)model dupelicateFrom:(EFChangeUserBasicProfileOperation *)operation {
+    self = [super initWithModel:model dupelicateFrom:operation];
+    if (self) {
+        self.name = operation.name;
+        self.bio = operation.bio;
+    }
+    
     return self;
 }
 
@@ -66,6 +77,43 @@ NSString *kEFNotificationChangeUserBasicProfileFailure = @"notification.changeUs
                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                  self.state = kEFNetworkOperationStateFailure;
                                  self.error = error;
+                                 
+                                 if ([NSURLErrorDomain isEqualToString:error.domain] || [AFNetworkingErrorDomain isEqualToString:error.domain]) {
+                                     switch (error.code) {
+                                         case NSURLErrorCancelled: // -999
+                                         case NSURLErrorTimedOut: //-1001
+                                         case NSURLErrorCannotFindHost: //-1003
+                                         case NSURLErrorCannotConnectToHost: //-1004
+                                         case NSURLErrorNetworkConnectionLost: //-1005
+                                         case NSURLErrorDNSLookupFailed: //-1006
+                                         case NSURLErrorNotConnectedToInternet: //-1009
+                                         {// Retry
+                                             NSString *title = NSLocalizedString(@"##Alert Title##", nil);
+                                             NSString *message = [NSString stringWithFormat:NSLocalizedString(@"##Alert content content content content content content ##", nil)];
+                                             
+                                             [Util handleRetryBannerFor:self withTitle:title andMessage:message];
+                                             
+                                         }   break;
+                                         
+                                         case NSURLErrorHTTPTooManyRedirects: //-1007
+                                         case NSURLErrorResourceUnavailable: //-1008
+                                         case NSURLErrorRedirectToNonExistentLocation: //-1010
+                                         case NSURLErrorBadServerResponse: // -1011
+                                         case NSURLErrorServerCertificateUntrusted: //-1202
+                                             
+                                             
+                                             break;
+                                             
+                                         default:
+                                             break;
+                                     }
+                                 }
+                                 // op: self
+                                 // Error title: depends on error code/type
+                                 // Error Description: depends on error code/type
+                                 // ? Error Handler: retry/done
+                                 
+                                 
                                  
                                  [self finish];
                              }];

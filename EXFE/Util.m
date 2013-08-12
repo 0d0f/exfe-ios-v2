@@ -19,6 +19,7 @@
 #import "NBPhoneNumber.h"
 #import "NBPhoneNumberDefines.h"
 #import "CSqlite.h"
+#import "EFKit.h"
 
 // Notification Definition
 NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
@@ -26,6 +27,8 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 
 
 @implementation Util
+
+#pragma mark URL query param tool
 + (NSString*) decodeFromPercentEscapeString:(NSString*)string{
     CFStringRef sref = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL,(CFStringRef) string,CFSTR(""),kCFStringEncodingUTF8);
     NSString *s=[NSString stringWithFormat:@"%@", (__bridge NSString *)sref];
@@ -56,12 +59,35 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return (__bridge NSString *)urlString;
 }
 
-+ (NSString*) getBackgroundLink:(NSString*)imgname
-{
-    //    https://exfe.com/static/img/xbg/westlake.jpg
-    return [NSString stringWithFormat:@"%@/xbg/%@",IMG_ROOT,imgname];
++ (NSString*)concatenateQuery:(NSDictionary*)parameters {
+    if (!parameters || [parameters count] == 0){
+        return nil;
+    }
+    NSMutableString *query = [NSMutableString string];
+    for (NSString *parameter in [parameters allKeys]){
+        [query appendFormat:@"&%@=%@", [parameter stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding], [[parameters valueForKey:parameter] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
+    }
+    return [query substringFromIndex:1];
 }
 
++ (NSDictionary*)splitQuery:(NSString*)query {
+    if ([query length] == 0){
+        return nil;
+    }
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    for(NSString *parameter in [query componentsSeparatedByString:@"&"]) {
+        NSRange range = [parameter rangeOfString:@"="];
+        if(range.location != NSNotFound){
+            [parameters setValue:[[parameter substringFromIndex:range.location+range.length] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding]
+                          forKey:[[parameter substringToIndex:range.location] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
+        } else {
+            [parameters setValue:[[NSString alloc] init] forKey:[parameter stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
+        }
+    }
+    return parameters;
+}
+
+#pragma mark provider
 + (NSString*) findProvider:(NSString*)external_id{
     Provider p = [self matchedProvider:external_id];
     return [Identity getProviderString:p];
@@ -176,6 +202,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return @{@"external_username":raw, @"external_id": @"", @"provider": provider};
 }
 
+#pragma mark Telephone number helper
 + (NSString *)getDeviceCountryCode
 {
     CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
@@ -263,6 +290,8 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return normalized;
 }
 
+
+#pragma mark deprecated time date helper
 + (NSDate*) beginningOfWeek:(NSDate*)date{
     NSDate *today = [NSDate date];
     NSCalendar *gregorian = [NSCalendar currentCalendar];
@@ -448,6 +477,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return [components day];
 }
 
+#pragma mark sign out. should move to another place
 + (void) signout{
     AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     
@@ -466,6 +496,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     
 }
 
+#pragma mark error handler
 + (void) showErrorWithMetaObject:(Meta*)meta delegate:(id)delegate{
     
     for (UIWindow* window in [UIApplication sharedApplication].windows) {
@@ -506,6 +537,70 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         [alert show];
     }
 }
+
++ (void) handleRetryBannerFor:(EFNetworkOperation *)operation withTitle:(NSString *)title andMessage:(NSString *)message {
+    EFNetworkOperation *op = [[operation class] operationWithModel:((EFNetworkOperation * )operation).model dupelicatedFrom:operation];
+
+    if (op.retryCount < op.maxRetry || op.maxRetry == 0) {
+        
+        EFErrorMessage *errorMessage = [EFErrorMessage errorMessageWithStyle:kEFErrorMessageStyleBanner
+                                                                       title:title
+                                                                     message:message
+                                                                 buttonTitle:NSLocalizedString(@"Retry", nil)
+                                                         buttonActionHandler:^{
+                                                             EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:op];
+                                                             
+                                                             [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+                                                         }];
+        
+        [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:errorMessage];
+        
+    } else {
+        // tryCount upto max limited
+        EFErrorMessage *errorMessage = [EFErrorMessage errorMessageWithStyle:kEFErrorMessageStyleBanner
+                                                                       title:NSLocalizedString(@"##Alert Title##", nil)
+                                                                     message:[NSString stringWithFormat:NSLocalizedString(@"##Alert content content content content content content ##", nil)]
+                                                                 buttonTitle:NSLocalizedString(@"OK", nil)
+                                                         buttonActionHandler:nil];
+        
+        [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:errorMessage];
+    }
+}
+
++ (void) handleDefaultRetryBannerFor:(EFNetworkOperation *)operation withError:(NSError *)error {
+    if ([NSURLErrorDomain isEqualToString:error.domain] || [AFNetworkingErrorDomain isEqualToString:error.domain]) {
+        switch (error.code) {
+            case NSURLErrorCancelled: // -999
+            case NSURLErrorTimedOut: //-1001
+            case NSURLErrorCannotFindHost: //-1003
+            case NSURLErrorCannotConnectToHost: //-1004
+            case NSURLErrorNetworkConnectionLost: //-1005
+            case NSURLErrorDNSLookupFailed: //-1006
+//            case NSURLErrorNotConnectedToInternet: //-1009
+//            {// Retry
+//                NSString *title = NSLocalizedString(@"##Alert Title##", nil);
+//                NSString *message = [NSString stringWithFormat:NSLocalizedString(@"##Alert content content content content content content ##", nil)];
+//                
+//                [Util handleRetryBannerFor:self withTitle:title andMessage:message];
+//                
+//            }   break;
+                
+            case NSURLErrorHTTPTooManyRedirects: //-1007
+            case NSURLErrorResourceUnavailable: //-1008
+            case NSURLErrorRedirectToNonExistentLocation: //-1010
+            case NSURLErrorBadServerResponse: // -1011
+            case NSURLErrorServerCertificateUntrusted: //-1202
+                
+                
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
+#pragma mark Rect Expander
 + (CGRect)expandRect:(CGRect)rect{
     return [Util expandRect:rect with:CGRectNull];
 }
@@ -534,6 +629,13 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 
 + (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2  with:(CGRect)rect3{
     return [Util expandRect:rect1 with:[Util expandRect:rect2 with:rect3]];
+}
+
+#pragma mark others
++ (NSString*) getBackgroundLink:(NSString*)imgname
+{
+    //    https://exfe.com/static/img/xbg/westlake.jpg
+    return [NSString stringWithFormat:@"%@/xbg/%@",IMG_ROOT,imgname];
 }
 
 + (void)checkUpdate
@@ -589,36 +691,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     }
 }
 
-
-// URL query param tool
-+ (NSString*)concatenateQuery:(NSDictionary*)parameters {
-    if (!parameters || [parameters count] == 0){
-       return nil; 
-    }
-    NSMutableString *query = [NSMutableString string];
-    for (NSString *parameter in [parameters allKeys]){
-        [query appendFormat:@"&%@=%@", [parameter stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding], [[parameters valueForKey:parameter] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
-    }
-    return [query substringFromIndex:1];
-}
-
-+ (NSDictionary*)splitQuery:(NSString*)query {
-    if ([query length] == 0){
-        return nil;
-    }
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    for(NSString *parameter in [query componentsSeparatedByString:@"&"]) {
-        NSRange range = [parameter rangeOfString:@"="];
-        if(range.location != NSNotFound){
-            [parameters setValue:[[parameter substringFromIndex:range.location+range.length] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding]
-                          forKey:[[parameter substringToIndex:range.location] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
-        } else {
-            [parameters setValue:[[NSString alloc] init] forKey:[parameter stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
-        }
-    }
-    return parameters;
-}
-
+#pragma mark other
 + (CSqlite *)gpsSqlite {
     static CSqlite *Sqlite = nil;
     static dispatch_once_t onceToken;
