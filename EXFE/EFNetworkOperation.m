@@ -14,6 +14,10 @@
     return [[self alloc] initWithModel:model];
 }
 
++ (instancetype)operationWithModel:(EXFEModel *)model dupelicatedFrom:(EFNetworkOperation *)op {
+    return [[self alloc] initWithModel:model dupelicateFrom:op];
+}
+
 - (id)init {
     self = [self initWithModel:nil];
     return self;
@@ -24,6 +28,16 @@
     if (self) {
         self.model = model;
         self.state = kEFNetworkOperationStateInited;
+        self.maxRetry = 3;
+    }
+    
+    return self;
+}
+
+- (id)initWithModel:(EXFEModel *)model dupelicateFrom:(EFNetworkOperation *)operation {
+    self = [self initWithModel:model];
+    if (self) {
+        self.retryCount = operation.retryCount + 1;
     }
     
     return self;

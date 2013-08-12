@@ -73,47 +73,53 @@ extern NSString *const EXCrossListDidChangeNotification;
 #define MERCATOR_OFFSET 268435456
 #define MERCATOR_RADIUS 85445659.44705395
 
+@class EFNetworkOperation;
+
 @interface Util : NSObject
 
-+ (NSString*) getBackgroundLink:(NSString*)imgname;
++ (NSString *) getBackgroundLink:(NSString*)imgname;
 
 // Provider and Identity
-+ (NSString*) findProvider:(NSString*)external_id;
-+ (Provider)candidateProvider:(NSString*)raw;
-+ (Provider)matchedProvider:(NSString*)raw;
-+ (NSDictionary*)parseIdentityString:(NSString*)raw;
-+ (NSDictionary*)parseIdentityString:(NSString*)raw byProvider:(Provider)p;
++ (NSString *) findProvider:(NSString*)external_id __attribute__ ((deprecated));
++ (Provider) candidateProvider:(NSString *)raw;
++ (Provider) matchedProvider:(NSString *)raw;
++ (NSDictionary *) parseIdentityString:(NSString *)raw;
++ (NSDictionary *) parseIdentityString:(NSString *)raw byProvider:(Provider)p;
 
 // PhoneNumber
-+ (NSString *)getDeviceCountryCode;
-+ (BOOL)isAcceptedPhoneNumber:(NSString*)phonenumber;
-+ (NSString*)getTelephoneCountryCode:(NSString*)isocode;
-+ (NSString*)getTelephoneCountryCode;
-+ (BOOL)isValidPhoneNumber:(NSString*)phonenumber;
-+ (NSString*) formatPhoneNumber:(NSString*)phonenumber;
++ (NSString *) getDeviceCountryCode;
++ (BOOL) isAcceptedPhoneNumber:(NSString*)phonenumber;
++ (NSString *) getTelephoneCountryCode:(NSString*)isocode;
++ (NSString *) getTelephoneCountryCode;
++ (BOOL) isValidPhoneNumber:(NSString*)phonenumber;
++ (NSString *) formatPhoneNumber:(NSString*)phonenumber;
 
 // Deprecated Time tool in Conversation
-+ (NSString*) EXRelativeFromDateStr:(NSString*)datestr TimeStr:(NSString*)timestr type:(NSString*)type localTime:(BOOL)localtime __attribute__ ((deprecated));
-+ (NSDate*) beginningOfWeek:(NSDate*)date __attribute__ ((deprecated));
++ (NSString *) EXRelativeFromDateStr:(NSString *)datestr TimeStr:(NSString *)timestr type:(NSString *)type localTime:(BOOL)localtime __attribute__ ((deprecated));
++ (NSDate *) beginningOfWeek:(NSDate*)date __attribute__ ((deprecated));
 
 
-+ (void) showErrorWithMetaObject:(Meta*)meta delegate:(id)delegate __attribute__ ((deprecated));
-+ (void) showConnectError:(NSError*)err delegate:(id)delegate;
++ (void) showErrorWithMetaObject:(Meta *)meta delegate:(id)delegate __attribute__ ((deprecated));
++ (void) showConnectError:(NSError *)err delegate:(id)delegate;
++ (void) handleRetryBannerFor:(EFNetworkOperation *)operation withTitle:(NSString *)title andMessage:(NSString *)message;
++ (void) handleDefaultRetryBannerFor:(EFNetworkOperation *)operation withError:(NSError *)error;
+
 + (void) signout;
 
-+ (CGRect)expandRect:(CGRect)rect;
-+ (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2;
-+ (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2  with:(CGRect)rect3;
++ (CGRect) expandRect:(CGRect)rect;
++ (CGRect) expandRect:(CGRect)rect1 with:(CGRect)rect2;
++ (CGRect) expandRect:(CGRect)rect1 with:(CGRect)rect2  with:(CGRect)rect3;
+
 
 + (void)checkUpdate;
 
-+ (int)daysBetween:(NSDate *)dt1 and:(NSDate *)dt2;
++ (int) daysBetween:(NSDate *)dt1 and:(NSDate *)dt2;
 
 // URL query param tool
-+ (NSString*)concatenateQuery:(NSDictionary*)parameters;
-+ (NSDictionary*)splitQuery:(NSString*)query;
-+ (NSString*) decodeFromPercentEscapeString:(NSString*)string;
-+ (NSString*) encodeToPercentEscapeString:(NSString*)string;
++ (NSString *) concatenateQuery:(NSDictionary *)parameters;
++ (NSDictionary *) splitQuery:(NSString *)query;
++ (NSString *) decodeFromPercentEscapeString:(NSString *)string;
++ (NSString *) encodeToPercentEscapeString:(NSString *)string;
 + (NSString *) EFPercentEscapedQueryStringPairMemberFromString:(NSString *)string;
 
 @end

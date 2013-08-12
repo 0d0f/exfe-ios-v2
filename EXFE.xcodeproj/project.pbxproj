@@ -176,6 +176,7 @@
 		4F39249C17A782E200EDB441 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F39249B17A782E200EDB441 /* Cross.m */; };
 		4F39249D17A782E200EDB441 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F39249B17A782E200EDB441 /* Cross.m */; };
 		4F39249E17A782E200EDB441 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F39249B17A782E200EDB441 /* Cross.m */; };
+		4F5AF02317B5F64600AAE817 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FE5611702E8B70098B9B9 /* libBlocksKit.a */; };
 		4F63DA7C17172AA600136B7E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E971560F832009E0806 /* main.m */; };
 		4F63DA7D17172AA600136B7E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E9B1560F832009E0806 /* AppDelegate.m */; };
 		4F63DA7F17172AA600136B7E /* CrossesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E88740156244E70026D197 /* CrossesViewController.m */; };
@@ -2192,14 +2193,14 @@
 			remoteGlobalIDString = 25160D1514564E810060A5C5;
 			remoteInfo = RestKit;
 		};
-		4F63DA7817172AA600136B7E /* PBXContainerItemProxy */ = {
+		4F5AF02117B5F63400AAE817 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4F9FE5581702E8B60098B9B9 /* BlocksKit.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 6C3DBF8C1382F1BA00E6C9AA;
 			remoteInfo = "iOS Library";
 		};
-		4F63DC4717172B0700136B7E /* PBXContainerItemProxy */ = {
+		4F63DA7817172AA600136B7E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4F9FE5581702E8B60098B9B9 /* BlocksKit.xcodeproj */;
 			proxyType = 1;
@@ -3309,7 +3310,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				761165A517B88FDA005B248A /* libBlocksKit.a in Frameworks */,
+				4F5AF02317B5F64600AAE817 /* libBlocksKit.a in Frameworks */,
 				4F38E9E717B542FA00B850B6 /* libRestKit.a in Frameworks */,
 				76B124511798ECFD00A73E59 /* libicucore.dylib in Frameworks */,
 				4F63DCDD17172B0700136B7E /* MobileCoreServices.framework in Frameworks */,
@@ -4762,8 +4763,8 @@
 		78A98E7C1560F832009E0806 = {
 			isa = PBXGroup;
 			children = (
-				4F38E9D617B5422600B850B6 /* RestKit.xcodeproj */,
 				4F9FE5581702E8B60098B9B9 /* BlocksKit.xcodeproj */,
+				4F38E9D617B5422600B850B6 /* RestKit.xcodeproj */,
 				78A98E911560F832009E0806 /* EXFE */,
 				4F1142DA16AE40B000C30179 /* EXFETests */,
 				78A98E8A1560F832009E0806 /* Frameworks */,
@@ -5165,8 +5166,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				4F5AF02217B5F63400AAE817 /* PBXTargetDependency */,
 				4F38E9E617B5428F00B850B6 /* PBXTargetDependency */,
-				4F63DC4617172B0700136B7E /* PBXTargetDependency */,
 			);
 			name = Pilot;
 			productName = EXFE;
@@ -7442,15 +7443,15 @@
 			name = RestKit;
 			targetProxy = 4F38E9E517B5428F00B850B6 /* PBXContainerItemProxy */;
 		};
+		4F5AF02217B5F63400AAE817 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "iOS Library";
+			targetProxy = 4F5AF02117B5F63400AAE817 /* PBXContainerItemProxy */;
+		};
 		4F63DA7717172AA600136B7E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "iOS Library";
 			targetProxy = 4F63DA7817172AA600136B7E /* PBXContainerItemProxy */;
-		};
-		4F63DC4617172B0700136B7E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "iOS Library";
-			targetProxy = 4F63DC4717172B0700136B7E /* PBXContainerItemProxy */;
 		};
 		4F9FE56B1702EA490098B9B9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
