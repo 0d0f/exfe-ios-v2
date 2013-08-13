@@ -21,12 +21,14 @@
 #import "EFPersonAnnotation.h"
 #import "EFPersonAnnotationView.h"
 #import "EFCrumPath.h"
+#import "EFTimestampAnnotation.h"
 
-#define kStreamingDataTypeLocaionts     @"/v3/crosses/routex/breadcrumbs"
-#define kStreamingDataTypeRoute         @"/v3/crosses/routex/geomarks"
+#define kTimestampDuration  (5.0f * 60.0f)
+#define kTimestampBlank     (15.0f)
 
-#define DegreesToRadians(x) (M_PI * x / 180.0)
-#define RadiandsToDegrees(x) (x * 180.0 / M_PI)
+#define DegreesToRadians(x)     (M_PI * x / 180.0)
+#define RadiandsToDegrees(x)    (x * 180.0 / M_PI)
+#define LengthBetweenPoints(point1, point2)     sqrt(fabs((point1).x - (point2).x) * fabs((point1).x - (point2).x) + fabs((point1).y - (point2).y) * fabs((point1).y - (point2).y))
 
 NSString *EFNotificationRoutePathDidChange = @"notification.routePath.didChange";
 NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.didChange";
@@ -55,6 +57,8 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
 @property (nonatomic, strong) NSMutableDictionary   *routeLocationAnnotationMap;
 
 @property (nonatomic, strong) NSMutableDictionary   *breadcrumPathMap;
+
+@property (nonatomic, strong) NSMutableDictionary   *timestampMap;
 
 @property (nonatomic, strong) NSMutableDictionary   *personAnnotationMap;
 
@@ -169,6 +173,7 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
         self.routeLocationAnnotationMap = [[NSMutableDictionary alloc] init];
         self.personAnnotationMap = [[NSMutableDictionary alloc] init];
         self.breadcrumPathMap = [[NSMutableDictionary alloc] init];
+        self.timestampMap = [[NSMutableDictionary alloc] init];
     }
     
     return self;
@@ -210,7 +215,7 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
                                                               if (path.positions.count > 1) {
                                                                   NSArray *positions = [path.positions subarrayWithRange:(NSRange){0, path.positions.count - 1}];
                                                                   [person.locations addObjectsFromArray:positions];
-                                                                  person.lastLocation = [path.positions lastObject];
+                                                                  person.lastLocation = path.positions[0];
                                                               } else {
                                                                   [person.locations addObjectsFromArray:path.positions];
                                                               }
@@ -575,6 +580,61 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
         }
         
         [pathView setNeedsDisplay];
+    }
+}
+
+#pragma mark - Timestamp
+
+- (void)removeAllTimestampToMapView:(MKMapView *)mapView {
+    NSParameterAssert(mapView);
+    
+    [self.timestampMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+        NSArray *timestamps = (NSArray *)obj;
+        [mapView removeAnnotations:timestamps];
+    }];
+    
+    [self.timestampMap removeAllObjects];
+}
+
+- (void)updateTimestampForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView {
+    NSParameterAssert(person);
+    NSParameterAssert(mapView);
+    
+    [self removeAllTimestampToMapView:mapView];
+    
+    if (kEFMapPersonConnectStateOffline == person.connectState) {
+        EFLocation *lastLocation = person.lastLocation;
+        NSArray *locations = person.locations;
+        NSMutableArray *annotations = [[NSMutableArray alloc] init];
+        
+        EFTimestampAnnotation *firstTimestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:lastLocation.coordinate
+                                                                                        timestamp:lastLocation.timestamp];
+        [annotations addObject:firstTimestamp];
+        
+        EFLocation *preLocation = lastLocation;
+        
+        for (EFLocation *location in locations) {
+            NSTimeInterval timeInterval = [preLocation.timestamp timeIntervalSinceDate:location.timestamp];
+            if (timeInterval >= kTimestampDuration) {
+                CGPoint viewPoint = [mapView convertCoordinate:location.coordinate toPointToView:mapView];
+                
+                CGFloat length = HUGE_VALF;
+                for (EFTimestampAnnotation *preTimestamp in annotations) {
+                    CGPoint preViewPoint = [mapView convertCoordinate:preTimestamp.coordinate toPointToView:mapView];
+                    length = MIN(length, LengthBetweenPoints(viewPoint, preViewPoint));
+                }
+                
+                if (length > kTimestampBlank) {
+                    EFTimestampAnnotation *timestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:location.coordinate
+                                                                                               timestamp:location.timestamp];
+                    [annotations addObject:timestamp];
+                    preLocation = location;
+                }
+            }
+        }
+        
+        [self.timestampMap setObject:annotations forKey:[NSValue valueWithNonretainedObject:person]];
+        [mapView addAnnotations:annotations];
     }
 }
 

@@ -10,6 +10,7 @@
 
 @implementation EFTimestampAnnotation
 
+
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate
                timestamp:(NSDate *)timestamp {
     self = [super init];
