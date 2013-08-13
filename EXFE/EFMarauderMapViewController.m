@@ -25,6 +25,8 @@
 #import "EFMapPopMenu.h"
 #import "EFLocationManager.h"
 #import "EFUserLocationAnnotationView.h"
+#import "EFTimestampAnnotation.h"
+#import "EFTimestampAnnotationView.h"
 
 #define kAnnotationOffsetY  (-50.0f)
 #define kShadowOffset       (3.0f)
@@ -417,6 +419,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     }
     
     locations = person.locations;
+    self.mapDataSource.selectedPerson = person;
     
     if (!locations || !locations.count) {
         return;
@@ -424,6 +427,9 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     // add overlay
     [self.mapDataSource updateBreadcrumPathForPerson:person toMapView:self.mapView];
+    
+    // timestamp
+    [self.mapDataSource updateTimestampForPerson:person toMapView:self.mapView];
     
     [self _zoomToCoordinate:person.lastLocation.coordinate];
 }
@@ -605,6 +611,10 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+    if (self.mapDataSource.selectedPerson) {
+        [self.mapDataSource updateTimestampForPerson:self.mapDataSource.selectedPerson toMapView:mapView];
+    }
+    
     [self.mapStrokeView reloadData];
     self.mapStrokeView.hidden = NO;
 }
@@ -696,9 +706,21 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             personAnnotationView = [[EFPersonAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:Identifier];
             personAnnotationView.canShowCallout = NO;
         }
+        
         personAnnotationView.annotation = annotation;
         
         return personAnnotationView;
+    } else if ([annotation isKindOfClass:[EFTimestampAnnotation class]]) {
+        static NSString *Identifier = @"Timestamp";
+        
+        EFTimestampAnnotationView *timestampAnnotationView = (EFTimestampAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:Identifier];
+        if (nil == timestampAnnotationView) {
+            timestampAnnotationView = [[EFTimestampAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:Identifier];
+        }
+        
+        timestampAnnotationView.annotation = annotation;
+        
+        return timestampAnnotationView;
     }
     
     return nil;
