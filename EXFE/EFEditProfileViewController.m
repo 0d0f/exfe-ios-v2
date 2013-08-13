@@ -172,7 +172,7 @@
 
     
     // View port layer
-    CGFloat headerHeight = 60;
+    CGFloat headerHeight = 80;
     if ([UIScreen mainScreen].ratio == UIScreenRatioLong) {
         headerHeight = 95;
     }
@@ -181,7 +181,7 @@
     header.backgroundColor = [UIColor clearColor];
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = header.bounds;
-    gradient.colors = [NSArray arrayWithObjects:(id)[[[UIColor blackColor] colorWithAlphaComponent:0.6f] CGColor], (id)[[[UIColor blackColor] colorWithAlphaComponent:0.3f] CGColor], nil];
+    gradient.colors = [NSArray arrayWithObjects:(id)[[[UIColor blackColor] colorWithAlphaComponent:0.66f] CGColor], (id)[[[UIColor blackColor] colorWithAlphaComponent:0.33f] CGColor], nil];
     [header.layer insertSublayer:gradient atIndex:0];
     CALayer *line1 = [CALayer layer];
     line1.backgroundColor = [UIColor COLOR_WA(0xFF, 0x33)].CGColor;
@@ -275,9 +275,11 @@
         if (self.activeInputView) {
             switch (self.activeInputView.tag) {
                 case kTagName:
+                    self.body.hidden = YES;
                     [self.activeInputView resignFirstResponder];
                     break;
                 case kTagBio:
+                    self.body.hidden = YES;
                     [self.activeInputView resignFirstResponder];
                     break;
                 default:
@@ -306,18 +308,6 @@
     
     CGFloat hintHeight = 0;
     CGFloat marginBottom = 10;
-    if ([UIScreen mainScreen].ratio == UIScreenRatioLong) {
-        UILabel *hint = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(footer.bounds) - 15 * 2, hintHeight)];
-        hint.text = NSLocalizedString(@"Cropped area displays as portrait.", nil);
-        hint.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
-        hint.textColor = [UIColor COLOR_WA(0xCC, 0xFF)];
-        hint.backgroundColor = [UIColor clearColor];
-        [hint sizeToFit];
-        hintHeight = CGRectGetHeight(hint.bounds);
-        hint.center = CGPointMake(CGRectGetWidth(self.view.bounds) / 2, CGRectGetHeight(self.view.bounds) - marginBottom - CGRectGetHeight(hint.bounds) / 2);
-        [self.view addSubview:hint];
-    }
-    
     SSTextView *bio = [[SSTextView alloc] initWithFrame:CGRectMake(20 - 8, CGRectGetMaxY(bioTitle.frame), CGRectGetWidth(footer.bounds) - (20 - 8) * 2, CGRectGetHeight(footer.bounds) - CGRectGetMaxY(bioTitle.frame) - hintHeight - marginBottom)];
     bio.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
     bio.placeholder = NSLocalizedString(@"Bio is empty, yet.", nil);
@@ -332,6 +322,18 @@
     
     [self.view addSubview:footer];
     self.footer = footer;
+    
+    if ([UIScreen mainScreen].ratio == UIScreenRatioLong) {
+        UILabel *hint = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(footer.bounds) - 15 * 2, hintHeight)];
+        hint.text = NSLocalizedString(@"Cropped area displays as portrait.", nil);
+        hint.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
+        hint.textColor = [UIColor COLOR_WA(0xCC, 0xFF)];
+        hint.backgroundColor = [UIColor clearColor];
+        [hint sizeToFit];
+        hintHeight = CGRectGetHeight(hint.bounds);
+        hint.center = CGPointMake(CGRectGetWidth(self.view.bounds) / 2, CGRectGetHeight(self.view.bounds) - marginBottom - CGRectGetHeight(hint.bounds) / 2);
+        [self.view addSubview:hint];
+    }
     
     
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -676,7 +678,7 @@
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
     NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
     UIScrollView *scrollView = (UIScrollView *)self.view;
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
@@ -687,9 +689,9 @@
     // Your application might not need or want this behavior.
     CGRect aRect = self.view.bounds;
     aRect.size.height -= kbSize.height;
-    CGPoint origin = [self.view convertPoint:self.activeInputView.frame.origin fromView:self.activeInputView.superview];
+    CGPoint origin = [self.view convertPoint:CGPointMake(self.activeInputView.frame.origin.x, self.activeInputView.frame.origin.y + self.activeInputView.frame.size.height) fromView:self.activeInputView.superview];
     if (!CGRectContainsPoint(aRect, origin) ) {
-        CGPoint scrollPoint = CGPointMake(0.0, origin.y-kbSize.height);
+        CGPoint scrollPoint = CGPointMake(0.0, kbSize.height);
         [scrollView setContentOffset:scrollPoint animated:YES];
     }
 }
@@ -754,7 +756,7 @@
     picker.delegate = self;
     
     UIActionSheet *sheet = [UIActionSheet actionSheetWithTitle:NSLocalizedString(@"Choose your action:", nil)];
-    [sheet addButtonWithTitle:NSLocalizedString(@"Take a photo", nil) handler:^{
+    [sheet addButtonWithTitle:NSLocalizedString(@"Take Photo", nil) handler:^{
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
             [self presentModalViewController:picker animated:YES];
@@ -763,7 +765,7 @@
         }
         
     }];
-    [sheet addButtonWithTitle:NSLocalizedString(@"Choose a photo", nil) handler:^{
+    [sheet addButtonWithTitle:NSLocalizedString(@"Choose Photo", nil) handler:^{
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentModalViewController:picker animated:YES];
     }];
@@ -777,14 +779,17 @@
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
     switch (textView.tag) {
-        case kTagName:
+        case kTagName:{
             self.activeInputView = nil;
             self.imageScrollView.scrollEnabled = !self.readonly;
             textView.hidden = YES;
             self.name.hidden = NO;
             self.identityId.hidden = YES;
-            [self.data setValue:textView.text forKey:kModelKeyName];
-            break;
+            NSString *content = textView.text;
+            if (content.length > 0) {
+                [self.data setValue:textView.text forKey:kModelKeyName];
+            }
+        }  break;
         case kTagBio:
             self.activeInputView = nil;
             self.imageScrollView.scrollEnabled = !self.readonly;
@@ -1028,14 +1033,35 @@
         
         
         
-        if (!CGRectIsEmpty(fullRect)) {
-            UIImage *img = [self imageFromImageView:self.imageScrollRange withCropRect:fullRect];
-            [dict setValue:img forKey:kKeyImageFull];
-        }
-        if (!CGRectIsEmpty(largeRect)) {
-            UIImage *img = [self imageFromImageView:self.imageScrollRange withCropRect:largeRect];
-            [dict setValue:img forKey:kKeyImageLarge];
-        }
+//        if (!CGRectIsEmpty(fullRect)) {
+//            UIImage *img = [self imageFromImageView:self.imageScrollRange withCropRect:fullRect];
+//            [dict setValue:img forKey:kKeyImageFull];
+//        }
+//        if (!CGRectIsEmpty(largeRect)) {
+//            UIImage *img = [self imageFromImageView:self.imageScrollRange withCropRect:largeRect];
+//            [dict setValue:img forKey:kKeyImageLarge];
+//        }
+        
+        
+        UIGraphicsBeginImageContextWithOptions(self.imageScrollRange.bounds.size, YES, 0.0);
+        [self.imageScrollRange.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIImage * largeImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        CGFloat scale = [UIScreen mainScreen].scale;
+        
+        CGRect newCropRect1 = CGRectMake(CGRectGetMinX(fullRect) * scale, CGRectGetMinY(fullRect) * scale, CGRectGetWidth(fullRect) * scale, CGRectGetHeight(fullRect) * scale);
+        CGImageRef imageRef1 = CGImageCreateWithImageInRect([largeImage CGImage], newCropRect1);
+        UIImage* img1 = [UIImage imageWithCGImage:imageRef1];
+        CGImageRelease(imageRef1);
+        [dict setValue:img1 forKey:kKeyImageFull];
+        
+        CGRect newCropRect2 = CGRectMake(CGRectGetMinX(largeRect) * scale, CGRectGetMinY(largeRect) * scale, CGRectGetWidth(largeRect) * scale, CGRectGetHeight(largeRect) * scale);
+        CGImageRef imageRef2 = CGImageCreateWithImageInRect([largeImage CGImage], newCropRect2);
+        UIImage* img2 = [UIImage imageWithCGImage:imageRef2];
+        CGImageRelease(imageRef2);
+        [dict setValue:img2 forKey:kKeyImageLarge];
+        
     }
     return [dict copy];
 }

@@ -12,6 +12,7 @@
 #import "EFAPI.h"
 #import "RecursiveDeleteOperation.h"
 #import "ModelMapping.h"
+#import "AFHTTPClient.h"
 
 @interface EXFEModel ()
 
@@ -496,6 +497,8 @@ static NSString * kExtension           = @"exfe";
         self.exfeContext = managedObjectStore.persistentStoreManagedObjectContext;
         self.apiServer = [[EFAPIServer alloc] initWithModel:self];
         
+        
+        
         // Configure a managed object cache to ensure we do not create duplicate objects
         managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
         
@@ -504,6 +507,7 @@ static NSString * kExtension           = @"exfe";
             [ModelMapping buildMapping];
         }
         
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkChanged:) name:AFNetworkingReachabilityDidChangeNotification object:self];
         
         // Subscribe to the context changed notification so that we can auto-save.
         
@@ -529,6 +533,23 @@ static NSString * kExtension           = @"exfe";
     }
     return success;
 }
+
+//- (void)networkChanged:(NSNotification *)note
+//{
+//    NSString *name = notificaiton.name;
+//    
+//    if ([name isEqualToString:AFNetworkingReachabilityDidChangeNotification]) {
+//        NSDictionary *userInfo = notificaiton.userInfo;
+//        NSNumber *status = [userInfo valueForKey:AFNetworkingReachabilityNotificationStatusItem];
+//        NSUInteger *state = [status integerValue];
+//        if ((state + 1) / 2 > 0) {
+//            // Network ok
+//        } else {
+//            // Network unreachable
+//        }
+//        
+//    }
+//}
 
 - (void)start
 // See comment in header.
