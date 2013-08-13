@@ -925,6 +925,11 @@
         
         [self.data setValue:image forKey:kModelKeyOriginal];
         
+        id num = [self.data valueForKey:kModelKeyImageDirty];
+        if (!num) {
+            [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
+        }
+        
         picker.navigationBar.hidden = YES;
     }
     
