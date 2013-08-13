@@ -133,13 +133,13 @@
     // root view
     CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
     UIScrollView *contentView = [[UIScrollView alloc] initWithFrame:applicationFrame];
-    contentView.backgroundColor = [UIColor clearColor];
+    contentView.backgroundColor = [UIColor COLOR_WA(0x4C, 0xFF)]; //[UIColor clearColor];
     contentView.scrollEnabled = NO;
     
-    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-    gradientLayer.frame = contentView.bounds;
-    gradientLayer.colors = [NSArray arrayWithObjects:(id)[UIColor COLOR_WA(0x4C, 0xFF)].CGColor, (id)[UIColor COLOR_WA(0xB2, 0xFF)].CGColor, nil];
-    [contentView.layer insertSublayer:gradientLayer atIndex:0];
+//    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+//    gradientLayer.frame = contentView.bounds;
+//    gradientLayer.colors = [NSArray arrayWithObjects:(id)[UIColor COLOR_WA(0x4C, 0xFF)].CGColor, (id)[UIColor COLOR_WA(0xB2, 0xFF)].CGColor, nil];
+//    [contentView.layer insertSublayer:gradientLayer atIndex:0];
 
     self.view = contentView;
     
@@ -174,14 +174,14 @@
     // View port layer
     CGFloat headerHeight = 80;
     if ([UIScreen mainScreen].ratio == UIScreenRatioLong) {
-        headerHeight = 95;
+        headerHeight = 100;
     }
     
     UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), headerHeight)];
     header.backgroundColor = [UIColor clearColor];
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = header.bounds;
-    gradient.colors = [NSArray arrayWithObjects:(id)[[[UIColor blackColor] colorWithAlphaComponent:0.66f] CGColor], (id)[[[UIColor blackColor] colorWithAlphaComponent:0.33f] CGColor], nil];
+    gradient.colors = [NSArray arrayWithObjects:(id)[[[UIColor COLOR_BLACK_19] colorWithAlphaComponent:0.85f] CGColor], (id)[[[UIColor COLOR_BLACK_19] colorWithAlphaComponent:0.75f] CGColor], nil];
     [header.layer insertSublayer:gradient atIndex:0];
     CALayer *line1 = [CALayer layer];
     line1.backgroundColor = [UIColor COLOR_WA(0xFF, 0x33)].CGColor;
@@ -292,39 +292,21 @@
     self.body = body;
     
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(body.frame), CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(body.frame))];
-    footer.backgroundColor = [UIColor COLOR_WA(0x00, 0xA9)];
+    footer.backgroundColor = [UIColor clearColor];
+    CAGradientLayer *gradientF = [CAGradientLayer layer];
+    gradientF.frame = footer.bounds;
+    gradientF.colors = [NSArray arrayWithObjects:(id)[[[UIColor COLOR_BLACK_19] colorWithAlphaComponent:0.75f] CGColor], (id)[[[UIColor COLOR_BLACK_19] colorWithAlphaComponent:1.00f] CGColor], nil];
+    [footer.layer insertSublayer:gradientF atIndex:0];
     CALayer *line2 = [CALayer layer];
     line2.backgroundColor = [UIColor COLOR_WA(0xFF, 0x33)].CGColor;
     line2.frame = CGRectMake(0, 0, 320, 1);
     [footer.layer insertSublayer:line2 atIndex:0];
     
-    UILabel *bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(20, 15, CGRectGetWidth(footer.bounds) - 15 * 2, 30)];
-    bioTitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
-    bioTitle.text = NSLocalizedString(@"Bio:", nil);
-    bioTitle.backgroundColor = [UIColor clearColor];
-    bioTitle.textColor = [UIColor COLOR_WHITE];
-    [bioTitle sizeToFit];
-    [footer addSubview:bioTitle];
-    
     CGFloat hintHeight = 0;
     CGFloat marginBottom = 10;
-    SSTextView *bio = [[SSTextView alloc] initWithFrame:CGRectMake(20 - 8, CGRectGetMaxY(bioTitle.frame), CGRectGetWidth(footer.bounds) - (20 - 8) * 2, CGRectGetHeight(footer.bounds) - CGRectGetMaxY(bioTitle.frame) - hintHeight - marginBottom)];
-    bio.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
-    bio.placeholder = NSLocalizedString(@"Bio is empty, yet.", nil);
-    bio.placeholderTextColor = [UIColor COLOR_ALUMINUM];
-    bio.textColor = [UIColor whiteColor];
-    bio.backgroundColor = [UIColor clearColor];
-    bio.delegate = self;
-    bio.tag = kTagBio;
-    bio.editable = !self.readonly;
-    [footer insertSubview:bio belowSubview:bioTitle];
-    self.bio = bio;
-    
-    [self.view addSubview:footer];
-    self.footer = footer;
-    
+    UILabel *hint = nil;
     if ([UIScreen mainScreen].ratio == UIScreenRatioLong) {
-        UILabel *hint = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(footer.bounds) - 15 * 2, hintHeight)];
+        hint = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(footer.bounds) - 15 * 2, hintHeight)];
         hint.text = NSLocalizedString(@"Cropped area displays as portrait.", nil);
         hint.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
         hint.textColor = [UIColor COLOR_WA(0xCC, 0xFF)];
@@ -334,6 +316,27 @@
         hint.center = CGPointMake(CGRectGetWidth(self.view.bounds) / 2, CGRectGetHeight(self.view.bounds) - marginBottom - CGRectGetHeight(hint.bounds) / 2);
         [self.view addSubview:hint];
     }
+    
+    SSTextView *bio = [[SSTextView alloc] initWithFrame:CGRectMake(20 - 8, 10 - 8, CGRectGetWidth(footer.bounds) - (20 - 8) * 2, CGRectGetHeight(footer.bounds) - 2 - hintHeight - marginBottom)];
+    bio.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+    bio.placeholder = NSLocalizedString(@"Bio...", nil);
+    bio.placeholderTextColor = [UIColor COLOR_ALUMINUM];
+    bio.textColor = [UIColor whiteColor];
+    bio.backgroundColor = [UIColor clearColor];
+    bio.delegate = self;
+    bio.tag = kTagBio;
+    bio.editable = !self.readonly;
+    [footer addSubview:bio];
+    self.bio = bio;
+    
+    if (hint) {
+        [self.view insertSubview:footer belowSubview:hint];
+    } else {
+        [self.view addSubview:footer];
+    }
+    self.footer = footer;
+    
+    
     
     
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -585,67 +588,38 @@
     
     float paddingRatio = 0.5;
     
-    [self.imageScrollView setMinimumZoomScale:1.0];
-    [self.imageScrollView setMaximumZoomScale:1.0];
-    [self.imageScrollView setZoomScale:1.0];
-    
     CGSize imageSize = image.size;
-    
     CGSize size = CGSizeZero;
+    CGFloat ratio = 0;
     
-    CGFloat ratio = 1.0;
+    // Enlarge scroll View
+    CGFloat longAspect = MAX(image.size.height, image.size.width);
+    CGFloat shortAspect = MIN(image.size.height, image.size.width);
+    BOOL isPortrait = image.size.height >= image.size.width;
     
-    // Enhance content range
-    size.width = imageSize.width * (1 + paddingRatio * 2);
-    if (size.width >= 320) {
-        // Large
-        size.height = size.width / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds);
-        BOOL widthFillFlag = YES;
-        CGPoint center = CGPointZero;
-        if (imageSize.height > size.height) {
-            // fix for long long vertical pic
-            size.height = imageSize.height;
-            // resign width
-            size.width = size.height / CGRectGetHeight(self.view.bounds) * CGRectGetWidth(self.view.bounds);
-            widthFillFlag = NO;
-            center = CGPointMake(size.width / (1 + paddingRatio * 2), size.height / 2);
-        } else {
-            center = CGPointMake(size.width / (1 + paddingRatio * 2), size.height * ((CGRectGetHeight(self.header.bounds) + 320 / 2) /  CGRectGetHeight(self.view.bounds)));
-        }
-        self.imageScrollRange.frame = (CGRect){CGPointZero, size};
-        self.avatar.frame = (CGRect){CGPointZero, imageSize};
-        self.avatar.center = center;
-        self.avatar.image = image;
+    if (longAspect >= 640) {
+        ratio = 320 / shortAspect;
         
-        if (widthFillFlag) {
-            ratio = CGRectGetWidth(self.imageScrollView.bounds) / (size.width / (1 + paddingRatio * 2));
+        CGFloat la = longAspect * (1 + paddingRatio * 2);
+        CGFloat sa = shortAspect * (1 + paddingRatio * 2);
+        if (isPortrait) {
+            size = CGSizeMake(MAX(sa, la * 320 / 568), MAX(la, sa * 568 / 320));
         } else {
-            ratio = CGRectGetHeight(self.imageScrollView.bounds) / size.height ;
-        }
+            size = CGSizeMake(MAX(la, sa * 320 / 568), MAX(sa, la * 568 / 320));
+        }        
     } else {
-        // small
-        size.width = 320;
-        size.height = size.width / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds);
-        
-        CGPoint center = CGPointZero;
-        
-        center = CGPointMake(size.width / (1 + paddingRatio * 2), size.height * ((CGRectGetHeight(self.header.bounds) + 320 / 2) /  CGRectGetHeight(self.view.bounds)));
-        
-        self.imageScrollRange.frame = (CGRect){CGPointZero, size};
-//        self.imageScrollRange.backgroundColor = [UIColor lightGrayColor];
-        self.avatar.frame = (CGRect){CGPointZero, imageSize};
-        self.avatar.center = center;
-        self.avatar.image = image;
-        
-        ratio = CGRectGetWidth(self.imageScrollView.bounds) / (size.width / (1 + paddingRatio * 2));
-        
+        ratio = 1;
+        size = CGSizeMake(640 * (1 + paddingRatio * 2), 568 * (1 + paddingRatio * 2));
     }
+    
+    self.imageScrollRange.frame = (CGRect){CGPointZero, size};
+    self.avatar.frame = (CGRect){CGPointZero, imageSize};
+    self.avatar.center = CGPointMake(size.width / 2, size.height / 2);;
+    self.avatar.image = image;
     
     CGFloat scale = ratio;
     [self.imageScrollView setMinimumZoomScale:scale / (1 + paddingRatio * 2)];
     [self.imageScrollView setMaximumZoomScale:scale * 8];
-    [self.imageScrollView setZoomScale:scale];
-    
     [self bestZoomWithAnimation:NO];
     
     self.fillAvatarFlag = NO;
@@ -669,8 +643,6 @@
     if (!num) {
         [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
     }
-    
-    
 }
 
 #pragma mark Keyboard
@@ -1052,16 +1024,19 @@
         
         CGRect newCropRect1 = CGRectMake(CGRectGetMinX(fullRect) * scale, CGRectGetMinY(fullRect) * scale, CGRectGetWidth(fullRect) * scale, CGRectGetHeight(fullRect) * scale);
         CGImageRef imageRef1 = CGImageCreateWithImageInRect([largeImage CGImage], newCropRect1);
-        UIImage* img1 = [UIImage imageWithCGImage:imageRef1];
-        CGImageRelease(imageRef1);
-        [dict setValue:img1 forKey:kKeyImageFull];
+        if (imageRef1) {
+            UIImage* img1 = [UIImage imageWithCGImage:imageRef1];
+            CGImageRelease(imageRef1);
+            [dict setValue:img1 forKey:kKeyImageFull];
+        }
         
         CGRect newCropRect2 = CGRectMake(CGRectGetMinX(largeRect) * scale, CGRectGetMinY(largeRect) * scale, CGRectGetWidth(largeRect) * scale, CGRectGetHeight(largeRect) * scale);
         CGImageRef imageRef2 = CGImageCreateWithImageInRect([largeImage CGImage], newCropRect2);
-        UIImage* img2 = [UIImage imageWithCGImage:imageRef2];
-        CGImageRelease(imageRef2);
-        [dict setValue:img2 forKey:kKeyImageLarge];
-        
+        if (imageRef2) {
+            UIImage* img2 = [UIImage imageWithCGImage:imageRef2];
+            CGImageRelease(imageRef2);
+            [dict setValue:img2 forKey:kKeyImageLarge];
+        }
     }
     return [dict copy];
 }
@@ -1077,19 +1052,37 @@
 
 - (void)bestZoomWithAnimation:(BOOL)animated
 {
-    if (CGRectGetWidth(self.avatar.frame) >= CGRectGetHeight(self.avatar.frame)) {
-        CGFloat d = CGRectGetHeight(self.avatar.frame);
-        CGFloat scale = 320 / d;
-        CGRect rect = CGRectMake(self.avatar.center.x - d / 2, self.avatar.center.y - d / 2 + (CGRectGetHeight(self.view.bounds) / 2 - 320 / 2 - CGRectGetHeight(self.header.bounds)) / scale, d, d);
-        [self.imageScrollView zoomToRect:rect animated:animated];
-    } else if (CGRectGetWidth(self.avatar.frame) * (CGRectGetHeight(self.header.bounds) * 2 + 320) > CGRectGetHeight(self.avatar.frame) * 320) {
-        CGFloat d = CGRectGetWidth(self.avatar.frame);
-        CGFloat scale = 320 / d;
-        CGRect rect = CGRectMake(self.avatar.center.x - d / 2, self.avatar.center.y - d / 2 + (CGRectGetHeight(self.view.bounds) / 2 - 320 / 2 - CGRectGetHeight(self.header.bounds)) / scale, d, d);
-        [self.imageScrollView zoomToRect:rect animated:animated];
+    
+    CGFloat ratio = 0;
+    CGFloat longAspect = MAX(self.avatar.frame.size.height, self.avatar.frame.size.width);
+    CGFloat shortAspect = MIN(self.avatar.frame.size.height, self.avatar.frame.size.width);
+//    BOOL isPortrait = image.size.height >= image.size.width;
+    
+    if (longAspect >= 640) {
+        ratio = 320 / shortAspect;
     } else {
-        [self.imageScrollView zoomToRect:self.avatar.frame animated:animated];
+        ratio = 1;
     }
+    CGFloat d = MAX(shortAspect, 320);
+    CGFloat hh = self.avatar.frame.size.height * ratio ;
+    CGFloat y_fix = 0;
+    
+    if ([UIScreen mainScreen].ratio == UIScreenRatioLong) {
+        if (hh >= 520 && hh <= 616){
+            y_fix = 0;
+        } else {
+            y_fix = 24 / ratio;
+        }
+    } else {
+        if (hh >= 520 && hh <= 616){
+            y_fix = - 24 / ratio;
+        } else {
+            y_fix = 0;
+        }
+    }
+    
+    CGRect rect = CGRectMake(self.avatar.center.x -  d/ 2, self.avatar.center.y - d / 2 + (y_fix), d, d);
+    [self.imageScrollView zoomToRect:rect animated:animated];
 }
 
 
