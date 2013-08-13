@@ -61,6 +61,8 @@
 - (void)_openStreaming;
 - (void)_closeStreaming;
 
+- (void)_zoomToCoordinate:(CLLocationCoordinate2D)coordinate;
+
 @end
 
 @implementation EFMarauderMapViewController (Private)
@@ -78,6 +80,32 @@
 
 - (void)_closeStreaming {
     [self.mapDataSource closeStreaming];
+}
+
+- (void)_zoomToCoordinate:(CLLocationCoordinate2D)coordinate {
+    // center
+    EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+    if (destination) {
+        MKMapPoint lastMapPoint = MKMapPointForCoordinate(coordinate);
+        MKMapPoint destinationMapPoint = MKMapPointForCoordinate(destination.coordinate);
+        
+        CGFloat width = fabs(lastMapPoint.x - destinationMapPoint.x);
+        CGFloat height = fabsf(lastMapPoint.y - destinationMapPoint.y);
+        CGFloat x = lastMapPoint.x - width * 2;
+        CGFloat y = lastMapPoint.y - height * 2;
+        
+        MKMapRect visibleRect = MKMapRectMake(x, y, width * 4, height * 4);
+        [self.mapView setVisibleMapRect:visibleRect animated:YES];
+    } else {
+        MKMapRect visibleMapRect = self.mapView.visibleMapRect;
+        CGFloat width = visibleMapRect.size.width;
+        if (fabsf(width) - 9800 >= 0 && fabsf(width) - 9800 <= 200) {
+            [self.mapView setCenterCoordinate:coordinate animated:YES];
+        } else {
+            MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(coordinate, 5000.0f, 5000.0f);
+            [self.mapView setRegion:region animated:YES];
+        }
+    }
 }
 
 @end
@@ -111,6 +139,8 @@
     mapStrokeView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self.view insertSubview:mapStrokeView belowSubview:self.leftBaseView];
     self.mapStrokeView = mapStrokeView;
+    
+    self.mapView.delegate = self;
     
     // tableView baseView
     self.leftBaseView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.6f];
@@ -158,8 +188,6 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.mapView.delegate = self;
-    
     self.invitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
     
     NSMutableArray *identityIds = [[NSMutableArray alloc] initWithCapacity:self.invitations.count];
@@ -206,7 +234,7 @@
                                             context:NULL];
     [[EFLocationManager defaultManager] addObserver:self
                                          forKeyPath:@"userLocation"
-                                            options:NSKeyValueObservingOptionNew
+                                            options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                                             context:nil];
 }
 
@@ -397,31 +425,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     // add overlay
     [self.mapDataSource updateBreadcrumPathForPerson:person toMapView:self.mapView];
     
-    EFLocation *lastLocation = (EFLocation *)locations[0];
-    
-    // center
-    EFRouteLocation *destination = self.mapDataSource.destinationLocation;
-    if (destination) {
-        MKMapPoint lastMapPoint = MKMapPointForCoordinate(lastLocation.coordinate);
-        MKMapPoint destinationMapPoint = MKMapPointForCoordinate(destination.coordinate);
-        
-        CGFloat width = fabs(lastMapPoint.x - destinationMapPoint.x);
-        CGFloat height = fabsf(lastMapPoint.y - destinationMapPoint.y);
-        CGFloat x = lastMapPoint.x - width * 2;
-        CGFloat y = lastMapPoint.y - height * 2;
-        
-        MKMapRect visibleRect = MKMapRectMake(x, y, width * 4, height * 4);
-        [self.mapView setVisibleMapRect:visibleRect animated:YES];
-    } else {
-        MKMapRect visibleMapRect = self.mapView.visibleMapRect;
-        CGFloat width = visibleMapRect.size.width;
-        if (fabsf(width) - 9800 >= 0 && fabsf(width) - 9800 <= 200) {
-            [self.mapView setCenterCoordinate:lastLocation.coordinate animated:YES];
-        } else {
-            MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(lastLocation.coordinate, 5000.0f, 5000.0f);
-            [self.mapView setRegion:region animated:YES];
-        }
-    }
+    [self _zoomToCoordinate:person.lastLocation.coordinate];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -589,6 +593,13 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 #pragma mark - MKMapViewDelegate
 
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+    [self _zoomToCoordinate:userLocation.coordinate];
+    
+    EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[mapView viewForAnnotation:mapView.userLocation];
+    userLocationView.annotation = mapView.userLocation;
+}
+
 - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
     self.mapStrokeView.hidden = YES;
 }
@@ -628,6 +639,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             userLocationView.image = [UIImage imageNamed:@"map_arrow_ring.png"];
             userLocationView.canShowCallout = NO;
         }
+        
+        userLocationView.annotation = annotation;
         
         return userLocationView;
     } else if ([annotation isKindOfClass:[EFAnnotation class]]) {
