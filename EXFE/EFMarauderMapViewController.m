@@ -40,6 +40,8 @@
 @property (nonatomic) BOOL                          isEditing;
 @property (nonatomic, assign) BOOL                  isInited;
 
+@property (nonatomic, strong) NSTimer               *breadcrumbUpdateTimer;
+
 @property (nonatomic, assign) NSTimeInterval        annotationAnimationDelay;
 
 @property (nonatomic, weak)   UIImageView           *tableViewShadowView;
@@ -52,6 +54,9 @@
 
 - (void)_openStreaming;
 - (void)_closeStreaming;
+
+- (void)_fireBreadcrumbUpdateTimer;
+- (void)_invalidBreadcrumbUpdateTimer;
 
 - (void)_zoomToCoordinate:(CLLocationCoordinate2D)coordinate;
 
@@ -72,6 +77,24 @@
 
 - (void)_closeStreaming {
     [self.mapDataSource closeStreaming];
+}
+
+- (void)_fireBreadcrumbUpdateTimer {
+    [self _invalidBreadcrumbUpdateTimer];
+    self.breadcrumbUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:60.0f
+                                                                  target:self
+                                                                selector:@selector(breadcrumbTimerRunloop:)
+                                                                userInfo:nil
+                                                                 repeats:YES];
+}
+
+- (void)_invalidBreadcrumbUpdateTimer {
+    if (self.breadcrumbUpdateTimer) {
+        if ([self.breadcrumbUpdateTimer isValid]) {
+            [self.breadcrumbUpdateTimer invalidate];
+        }
+        self.breadcrumbUpdateTimer = nil;
+    }
 }
 
 - (void)_zoomToCoordinate:(CLLocationCoordinate2D)coordinate {
@@ -211,6 +234,7 @@
     if ([EFLocationManager defaultManager].userLocation) {
         [self userLocationDidChange];
     }
+    [self _fireBreadcrumbUpdateTimer];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -223,6 +247,8 @@
                                             forKeyPath:@"userHeading"];
     [[EFLocationManager defaultManager] stopUpdatingHeading];
     [self _closeStreaming];
+    
+    [self _invalidBreadcrumbUpdateTimer];
     
     [super viewDidDisappear:animated];
 }
@@ -244,6 +270,15 @@
         [userLocationView.superview bringSubviewToFront:userLocationView];
     } else {
         [self.mapView addAnnotation:[EFLocationManager defaultManager].userLocation];
+    }
+}
+
+#pragma mark - Timer
+
+- (void)breadcrumbTimerRunloop:(NSTimer *)timer {
+    if (self.mapDataSource.selectedPerson) {
+        // timestamp
+        [self.mapDataSource updateTimestampForPerson:self.mapDataSource.selectedPerson toMapView:self.mapView];
     }
 }
 
@@ -419,13 +454,14 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         return;
     }
     
-    // add overlay
+    // update overlay
     [self.mapDataSource updateBreadcrumPathForPerson:person toMapView:self.mapView];
     
     // timestamp
     [self.mapDataSource updateTimestampForPerson:person toMapView:self.mapView];
     
     [self _zoomToCoordinate:person.lastLocation.coordinate];
+    [self _fireBreadcrumbUpdateTimer];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -515,6 +551,9 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         
         if (person != [self.mapDataSource me]) {
             [self.mapDataSource updatePersonAnnotationForPerson:person toMapView:self.mapView];
+        }
+        if (person == self.mapDataSource.selectedPerson) {
+            [self.mapDataSource updateBreadcrumPathForPerson:person toMapView:self.mapView];
         }
     });
 }
