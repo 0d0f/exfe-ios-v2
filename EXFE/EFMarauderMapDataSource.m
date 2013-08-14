@@ -255,8 +255,7 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
     NSParameterAssert(routeLocation);
     NSParameterAssert(mapView);
     
-    NSInteger index = [self.routeLocations indexOfObject:routeLocation];
-    if (NSNotFound != index) {
+    if ([self routeLocationForRouteLocationId:routeLocation.locationId]) {
         [self updateRouteLocation:routeLocation inMapView:mapView shouldPostToServer:NO];
         return;
     }
@@ -293,11 +292,6 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
     NSParameterAssert(routeLocation);
     NSParameterAssert(mapView);
     
-#ifdef DEBUG
-    NSUInteger index = [self.routeLocations indexOfObject:routeLocation];
-    NSAssert(index != NSNotFound, @"RouteLocation MUST in the array");
-#endif
-    
     EFAnnotation *annotation = [self.routeLocationAnnotationMap objectForKey:routeLocation.locationId];
     annotation.coordinate = routeLocation.coordinate;
     annotation.title = routeLocation.title;
@@ -312,6 +306,10 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
             annotation.style = kEFAnnotationStyleParkBlue;
         }
     }
+    
+    EFRouteLocation *cachedRouteLocation = [self routeLocationForRouteLocationId:routeLocation.locationId];
+    NSInteger cachedIndex = [self.routeLocations indexOfObject:cachedRouteLocation];
+    [self.routeLocations replaceObjectAtIndex:cachedIndex withObject:routeLocation];
     
     annotation.markTitle = routeLocation.markTitle;
     
@@ -338,13 +336,18 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
 - (EFRouteLocation *)routeLocationForAnnotation:(EFAnnotation *)annotation {
     NSParameterAssert(annotation);
     
-    __block EFRouteLocation *routeLocation = nil;
+    __block NSString *locationId = nil;
     [self.routeLocationAnnotationMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
         if (obj == annotation) {
-            routeLocation = [key nonretainedObjectValue];
+            locationId = key;
             *stop = YES;
         }
     }];
+    
+    EFRouteLocation *routeLocation = nil;
+    if (locationId) {
+        routeLocation = [self routeLocationForRouteLocationId:locationId];
+    }
     
     return routeLocation;
 }
@@ -366,7 +369,7 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
 - (EFAnnotation *)annotationForRouteLocation:(EFRouteLocation *)routeLocation {
     NSParameterAssert(routeLocation);
     
-    return [self.routeLocationAnnotationMap objectForKey:[NSValue valueWithNonretainedObject:routeLocation]];
+    return [self.routeLocationAnnotationMap objectForKey:routeLocation.locationId];
 }
 
 - (void)removeRouteLocation:(EFRouteLocation *)routeLocation fromMapView:(MKMapView *)mapView {
