@@ -177,6 +177,7 @@
 		4F39249D17A782E200EDB441 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F39249B17A782E200EDB441 /* Cross.m */; };
 		4F39249E17A782E200EDB441 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F39249B17A782E200EDB441 /* Cross.m */; };
 		4F5AF02317B5F64600AAE817 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FE5611702E8B70098B9B9 /* libBlocksKit.a */; };
+		4F5AF03817BB6C1500AAE817 /* libFlurry_4.2.3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 760851A617BB3DCB00D5352C /* libFlurry_4.2.3.a */; };
 		4F63DA7C17172AA600136B7E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E971560F832009E0806 /* main.m */; };
 		4F63DA7D17172AA600136B7E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E9B1560F832009E0806 /* AppDelegate.m */; };
 		4F63DA7F17172AA600136B7E /* CrossesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E88740156244E70026D197 /* CrossesViewController.m */; };
@@ -1442,7 +1443,6 @@
 		76073D11174F8802007CBFC3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76073D10174F8802007CBFC3 /* MessageUI.framework */; };
 		76073D12174F880B007CBFC3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76073D10174F8802007CBFC3 /* MessageUI.framework */; };
 		76073D13174F8811007CBFC3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76073D10174F8802007CBFC3 /* MessageUI.framework */; };
-		760851A717BB3DCB00D5352C /* libFlurry_4.2.3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 760851A617BB3DCB00D5352C /* libFlurry_4.2.3.a */; };
 		760851A817BB3DCB00D5352C /* libFlurry_4.2.3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 760851A617BB3DCB00D5352C /* libFlurry_4.2.3.a */; };
 		760851A917BB3DCB00D5352C /* libFlurry_4.2.3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 760851A617BB3DCB00D5352C /* libFlurry_4.2.3.a */; };
 		760F2B2917B4F81B009C6A7E /* map_arrow_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = 760F2B2717B4F81B009C6A7E /* map_arrow_ring.png */; };
@@ -3353,6 +3353,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F5AF03817BB6C1500AAE817 /* libFlurry_4.2.3.a in Frameworks */,
 				761165A717B8910D005B248A /* libRestKit.a in Frameworks */,
 				76B1244F1798ECF100A73E59 /* libicucore.dylib in Frameworks */,
 				78A98EF3156110FB009E0806 /* MobileCoreServices.framework in Frameworks */,
@@ -3367,7 +3368,6 @@
 				788C736016D6292100BDD594 /* CoreTelephony.framework in Frameworks */,
 				7882F80316A68372004309DF /* CoreImage.framework in Frameworks */,
 				78C6BA0116634C6F00483D23 /* AddressBook.framework in Frameworks */,
-				760851A717BB3DCB00D5352C /* libFlurry_4.2.3.a in Frameworks */,
 				78AA793615CFB94C00883025 /* CoreText.framework in Frameworks */,
 				78F058041599C30200F360F2 /* CoreLocation.framework in Frameworks */,
 				78F058021599B1BE00F360F2 /* MapKit.framework in Frameworks */,
@@ -7596,9 +7596,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/EXFE/Flurry\\\"",
-					"\\\"$(SRCROOT)/EXFE/SDKExport\\\"",
-					/Users/0day/Dev/exfeiosv2/EXFE/Flurry,
+					"\"$(SRCROOT)/EXFE/Flurry\"",
+					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -7631,9 +7630,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/EXFE/Flurry\\\"",
-					"\\\"$(SRCROOT)/EXFE/SDKExport\\\"",
-					/Users/0day/Dev/exfeiosv2/EXFE/Flurry,
+					"\"$(SRCROOT)/EXFE/Flurry\"",
+					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -7662,13 +7660,13 @@
 					PILOT,
 				);
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				"HEADER_SEARCH_PATHS[arch=*]" = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Pilot-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/EXFE/Flurry\\\"",
-					"\\\"$(SRCROOT)/EXFE/SDKExport\\\"",
-					/Users/0day/Dev/exfeiosv2/EXFE/Flurry,
+					"\"$(SRCROOT)/EXFE/Flurry\"",
+					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -7701,9 +7699,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/EXFE/Flurry\\\"",
-					"\\\"$(SRCROOT)/EXFE/SDKExport\\\"",
-					/Users/0day/Dev/exfeiosv2/EXFE/Flurry,
+					"\"$(SRCROOT)/EXFE/Flurry\"",
+					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -7810,9 +7807,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/EXFE/Flurry\\\"",
-					"\\\"$(SRCROOT)/EXFE/SDKExport\\\"",
-					/Users/0day/Dev/exfeiosv2/EXFE/Flurry,
+					"\"$(SRCROOT)/EXFE/Flurry\"",
+					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -7841,9 +7837,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/EXFE/Flurry\\\"",
-					"\\\"$(SRCROOT)/EXFE/SDKExport\\\"",
-					/Users/0day/Dev/exfeiosv2/EXFE/Flurry,
+					"\"$(SRCROOT)/EXFE/Flurry\"",
+					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
