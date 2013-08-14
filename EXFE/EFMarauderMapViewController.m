@@ -170,14 +170,10 @@
                                              selector:@selector(enterForeground)
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
-}
-
-- (void)enterBackground {
-    [self _closeStreaming];
-}
-
-- (void)enterForeground {
-    [self _openStreaming];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(userLocationDidChange)
+                                                 name:EFNotificationUserLocationDidChange
+                                               object:nil];
 }
 
 - (void)viewDidUnload {
@@ -234,15 +230,13 @@
                                          forKeyPath:@"userHeading"
                                             options:NSKeyValueObservingOptionNew
                                             context:NULL];
-    [[EFLocationManager defaultManager] addObserver:self
-                                         forKeyPath:@"userLocation"
-                                            options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                                            context:nil];
+    
+    if ([EFLocationManager defaultManager].userLocation) {
+        [self userLocationDidChange];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    [[EFLocationManager defaultManager] removeObserver:self
-                                            forKeyPath:@"userLocation"];
     [[EFLocationManager defaultManager] removeObserver:self
                                             forKeyPath:@"userHeading"];
     [[EFLocationManager defaultManager] stopUpdatingHeading];
@@ -251,19 +245,36 @@
     [super viewDidDisappear:animated];
 }
 
-#pragma mark - KVO
+#pragma mark - Notification Handler
+
+- (void)enterBackground {
+    [self _closeStreaming];
+}
+
+- (void)enterForeground {
+    [self _openStreaming];
+}
+
+- (void)userLocationDidChange {
+    EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
+    if (userLocationView) {
+        userLocationView.annotation = [EFLocationManager defaultManager].userLocation;
+    } else {
+        [self.mapView addAnnotation:[EFLocationManager defaultManager].userLocation];
+    }
+}
+
+#pragma mark - KVO  
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (object == [EFLocationManager defaultManager]) {
         if ([keyPath isEqualToString:@"userHeading"]) {
-            if (self.mapView && self.mapView.userLocation) {
-                EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:self.mapView.userLocation];
+            if (self.mapView && [EFLocationManager defaultManager].userLocation) {
+                EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
                 if (userLocationView) {
                     userLocationView.userHeading = [EFLocationManager defaultManager].userHeading;
                 }
             }
-        } else if ([keyPath isEqualToString:@"userLocation"]) {
-            [self.mapView userLocationDidChange];
         }
     }
 }
@@ -600,9 +611,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     [self _zoomToCoordinate:userLocation.coordinate];
-    
-    EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[mapView viewForAnnotation:mapView.userLocation];
-    userLocationView.annotation = mapView.userLocation;
 }
 
 - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
@@ -640,7 +648,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
-    if (annotation ==  mapView.userLocation) {
+    if (annotation ==  [EFLocationManager defaultManager].userLocation) {
         static NSString *Identifier = @"UserLocation";
         EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:Identifier];
         if (nil == userLocationView) {

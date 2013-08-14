@@ -9,13 +9,24 @@
 #import <Foundation/Foundation.h>
 
 #import <CoreLocation/CoreLocation.h>
+#import <MapKit/MapKit.h>
+
+@interface EFUserLocation : NSObject
+<
+MKAnnotation
+>
+
+@property (nonatomic, strong) CLLocation    *location;
+@property (nonatomic, assign) CGPoint       offset;     // x -> latitudeOffset, y -> longitudeOffset
+
+@end
 
 @interface EFLocationManager : NSObject
 <
 CLLocationManagerDelegate
 >
 
-@property (nonatomic, readonly) CLLocation  *userLocation;      // KVO
+@property (nonatomic, readonly) EFUserLocation  *userLocation;
 @property (nonatomic, readonly) CLHeading   *userHeading;       // KVO
 
 + (instancetype)defaultManager;

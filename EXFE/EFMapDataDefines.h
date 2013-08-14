@@ -36,4 +36,6 @@ typedef enum {
 extern NSString *EFNotificationRoutePathDidChange;
 extern NSString *EFNotificationRouteLocationDidChange;
 
+extern NSString *EFNotificationUserLocationDidChange;
+
 #endif
