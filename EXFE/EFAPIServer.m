@@ -1059,12 +1059,16 @@
                                                                       for (NSString *name in names) {
                                                                           UIImage *img = [images valueForKey:name];
                                                                           if (img) {
-                                                                              //NSData *imageData = UIImagePNGRepresentation(img);
-                                                                              NSData *imageData = UIImageJPEGRepresentation(img, 1);
+                                                                              NSData *imageData = UIImagePNGRepresentation(img);
                                                                               [formData appendPartWithFileData:imageData
                                                                                                           name:name
-                                                                                                      fileName:[NSString stringWithFormat:@"%@.jpg", name]
-                                                                                                      mimeType:@"image/jpeg"];
+                                                                                                      fileName:[NSString stringWithFormat:@"%@.png", name]
+                                                                                                      mimeType:@"image/png"];
+//                                                                              NSData *imageData = UIImageJPEGRepresentation(img, 1);
+//                                                                              [formData appendPartWithFileData:imageData
+//                                                                                                          name:name
+//                                                                                                      fileName:[NSString stringWithFormat:@"%@.jpg", name]
+//                                                                                                      mimeType:@"image/jpeg"];
                                                                           }
                                                                       }
                                                                   }];
