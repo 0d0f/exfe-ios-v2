@@ -22,6 +22,10 @@ NSString *EFNotificationUserLocationDidChange = @"notification.userLocation.didC
     return CLLocationCoordinate2DMake(self.location.coordinate.latitude + self.offset.x, self.location.coordinate.longitude + self.offset.y);
 }
 
+- (CLLocationCoordinate2D)coordinateWithoutOffset {
+    return self.location.coordinate;
+}
+
 @end
 
 @interface EFLocationManager ()
@@ -56,7 +60,7 @@ NSString *EFNotificationUserLocationDidChange = @"notification.userLocation.didC
 
 - (void)_postUserLocation {
     EFLocation *breadcrum = [[EFLocation alloc] init];
-    breadcrum.coordinate = self.userLocation.coordinate;
+    breadcrum.coordinate = self.userLocation.coordinateWithoutOffset;
     breadcrum.accuracy = MAX(self.userLocation.location.verticalAccuracy, self.userLocation.location.horizontalAccuracy);
     breadcrum.timestamp = [NSDate date];
     
@@ -96,7 +100,7 @@ NSString *EFNotificationUserLocationDidChange = @"notification.userLocation.didC
     __block BOOL isOver = NO;
     
     EFLocation *breadcrum = [[EFLocation alloc] init];
-    breadcrum.coordinate = self.userLocation.coordinate;
+    breadcrum.coordinate = self.userLocation.coordinateWithoutOffset;
     breadcrum.accuracy = MAX(self.userLocation.location.verticalAccuracy, self.userLocation.location.horizontalAccuracy);
     breadcrum.timestamp = [NSDate date];
     

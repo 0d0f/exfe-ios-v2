@@ -18,6 +18,7 @@ MKAnnotation
 
 @property (nonatomic, strong) CLLocation    *location;
 @property (nonatomic, assign) CGPoint       offset;     // x -> latitudeOffset, y -> longitudeOffset
+@property (nonatomic, readonly) CLLocationCoordinate2D coordinateWithoutOffset;
 
 @end
 

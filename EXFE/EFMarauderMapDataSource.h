@@ -52,8 +52,10 @@ EFHTTPStreamingDelegate
 - (void)addRouteLocation:(EFRouteLocation *)routeLocation toMapView:(MKMapView *)mapView;
 - (void)updateRouteLocation:(EFRouteLocation *)routeLocation inMapView:(MKMapView *)mapView shouldPostToServer:(BOOL)shouldPost;
 - (void)updateRouteLocation:(EFRouteLocation *)routeLocation inMapView:(MKMapView *)mapView;
+
 - (EFRouteLocation *)routeLocationForAnnotation:(EFAnnotation *)annotation;
 - (EFRouteLocation *)routeLocationForRouteLocationId:(NSString *)routeLocationId;
+
 - (EFAnnotation *)annotationForRouteLocation:(EFRouteLocation *)routeLocation;
 - (void)removeRouteLocation:(EFRouteLocation *)routeLocation fromMapView:(MKMapView *)mapView;
 - (NSArray *)allRouteLocations;

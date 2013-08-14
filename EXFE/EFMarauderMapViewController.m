@@ -236,6 +236,11 @@
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self _zoomToCoordinate:[EFLocationManager defaultManager].userLocation.coordinate];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [[EFLocationManager defaultManager] removeObserver:self
                                             forKeyPath:@"userHeading"];
@@ -538,7 +543,9 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         [self.tableView reloadData];
         [self.mapStrokeView reloadData];
         
-        [self.mapDataSource updatePersonAnnotationForPerson:person toMapView:self.mapView];
+        if (person != [self.mapDataSource me]) {
+            [self.mapDataSource updatePersonAnnotationForPerson:person toMapView:self.mapView];
+        }
     });
 }
 
@@ -616,10 +623,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 #pragma mark - MKMapViewDelegate
-
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    [self _zoomToCoordinate:userLocation.coordinate];
-}
 
 - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
     self.mapStrokeView.hidden = YES;
