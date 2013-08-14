@@ -259,6 +259,7 @@
     EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
     if (userLocationView) {
         userLocationView.annotation = [EFLocationManager defaultManager].userLocation;
+        [userLocationView.superview bringSubviewToFront:userLocationView];
     } else {
         [self.mapView addAnnotation:[EFLocationManager defaultManager].userLocation];
     }
@@ -551,6 +552,13 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
 }
 
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource needDeleteRouteLocation:(NSString *)routeLocationId {
+    EFRouteLocation *routeLocation = [dataSource routeLocationForRouteLocationId:routeLocationId];
+    if (routeLocation) {
+        [dataSource removeRouteLocation:routeLocation fromMapView:self.mapView];
+    }
+}
+
 #pragma mark - EFMapViewDelegate
 
 - (void)mapView:(EFMapView *)mapView isChangingSelectedAnnotationTitle:(NSString *)title {
@@ -743,13 +751,18 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             dropAnimation.duration = 0.233f;
             dropAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
             [view.layer addAnimation:dropAnimation forKey:nil];
-        } else if (view.annotation == mapView.userLocation) {
+        } else if (view.annotation == [EFLocationManager defaultManager].userLocation) {
             CLHeading *userHeading = [EFLocationManager defaultManager].userHeading;
             if (userHeading) {
                 CLLocationDirection direction = userHeading.trueHeading;
                 view.layer.transform = CATransform3DMakeRotation((M_PI / 160.0f) * direction, 0.0f, 0.0f, 1.0f);
             }
         }
+    }
+    
+    EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
+    if (userLocationView) {
+        [userLocationView.superview bringSubviewToFront:userLocationView];
     }
 }
 

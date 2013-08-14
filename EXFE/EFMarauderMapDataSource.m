@@ -317,8 +317,6 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
     
     [self.routeLocationAnnotationMap setObject:annotation forKey:[NSValue valueWithNonretainedObject:routeLocation]];
     
-    [mapView addAnnotation:annotation];
-    
     EFAnnotationView *annotationView = (EFAnnotationView *)[mapView viewForAnnotation:annotation];
     [annotationView reloadWithAnnotation:annotation];
     
@@ -347,6 +345,20 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
             *stop = YES;
         }
     }];
+    
+    return routeLocation;
+}
+
+- (EFRouteLocation *)routeLocationForRouteLocationId:(NSString *)routeLocationId {
+    NSParameterAssert(routeLocationId);
+    
+    EFRouteLocation *routeLocation = nil;
+    for (EFRouteLocation *location in self.routeLocations) {
+        if ([location.locationId isEqualToString:routeLocationId]) {
+            routeLocation = location;
+            break;
+        }
+    }
     
     return routeLocation;
 }
@@ -488,6 +500,22 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
             }
         } else {
             // Action Commond
+            NSString *action = [jsonDictionary valueForKey:@"action"];
+            if ([action isEqualToString:@"delete"]) {
+                if ([type isEqualToString:@"location"]) {
+                    NSString *routeLocationId = [jsonDictionary valueForKey:@"id"];
+                    if ([self.delegate respondsToSelector:@selector(mapDataSource:needDeleteRouteLocation:)]) {
+                        [self.delegate mapDataSource:self needDeleteRouteLocation:routeLocationId];
+                    }
+                }
+            } else if ([action isEqualToString:@"update"]) {
+                if ([type isEqualToString:@"location"]) {
+                    EFRouteLocation *routeLocation = [[EFRouteLocation alloc] initWithDictionary:jsonDictionary];
+                    if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateRouteLocations:)]) {
+                        [self.delegate mapDataSource:self didUpdateRouteLocations:@[routeLocation]];
+                    }
+                }
+            }
         }
     }
 }
