@@ -168,8 +168,6 @@
     self.imageScrollView = imageScrollView;
     self.imageScrollView.userInteractionEnabled = !self.readonly;
     self.imageScrollView.scrollEnabled = !self.readonly;
-
-
     
     // View port layer
     CGFloat headerHeight = 80;
@@ -335,9 +333,6 @@
         [self.view addSubview:footer];
     }
     self.footer = footer;
-    
-    
-    
     
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     indicator.center = [self.view convertPoint:body.center fromView:body.superview];
@@ -508,7 +503,6 @@
                                            placeHolder:nil
                                                    key:imageKey
                                        completeHandler:^(BOOL hasLoaded) {
-                                           NSLog(@"hide it");
                                            [self.indicatorView stopAnimating];
                                            self.indicatorView.hidden = YES;
                                        }];
@@ -623,8 +617,6 @@
     [self bestZoomWithAnimation:NO];
     
     self.fillAvatarFlag = NO;
-    
-    NSLog(@"fillAvatar done");
 }
 
 - (void)fillBio:(NSString *)bio
@@ -1000,29 +992,31 @@
         }
     }
     if (original) {
-        CGRect fullRect = [self convertToScalableViewFromViewPortFull:self.view.bounds];
-        CGRect largeRect = [self convertToScalableViewFromViewPortFull:CGRectMake(0, CGRectGetHeight(self.header.bounds), 320, 320)];
-        
-        
-        
-//        if (!CGRectIsEmpty(fullRect)) {
-//            UIImage *img = [self imageFromImageView:self.imageScrollRange withCropRect:fullRect];
-//            [dict setValue:img forKey:kKeyImageFull];
-//        }
-//        if (!CGRectIsEmpty(largeRect)) {
-//            UIImage *img = [self imageFromImageView:self.imageScrollRange withCropRect:largeRect];
-//            [dict setValue:img forKey:kKeyImageLarge];
-//        }
-        
-        
-        UIGraphicsBeginImageContextWithOptions(self.imageScrollRange.bounds.size, YES, 0.0);
-        [self.imageScrollRange.layer renderInContext:UIGraphicsGetCurrentContext()];
-        UIImage * largeImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
         
         CGFloat scale = [UIScreen mainScreen].scale;
         
-        CGRect newCropRect1 = CGRectMake(CGRectGetMinX(fullRect) * scale, CGRectGetMinY(fullRect) * scale, CGRectGetWidth(fullRect) * scale, CGRectGetHeight(fullRect) * scale);
+        CGRect fullRect = CGRectMake(0, 0, 320 * scale, 568 * scale);
+        CGRect largeRect = CGRectMake(0, CGRectGetHeight(self.header.bounds) * scale, 320 * scale, 320 * scale);
+        
+        CGSize viewPortSize = CGSizeMake(self.imageScrollView.layer.frame.size.width * scale, self.imageScrollView.layer.frame.size.height * scale);
+//        CGRect fullRect = CGRectMake(0, 0, 320 * scale, 568 * scale);
+//        CGRect largeRect = CGRectMake(0, CGRectGetHeight(self.header.bounds) * scale, 320 * scale, 320 * scale);
+//
+//        CGSize viewPortSize = CGSizeMake(self.imageScrollView.layer.frame.size.width, self.imageScrollView.layer.frame.size.height);
+        CGPoint offset = self.imageScrollView.contentOffset;
+        
+        UIGraphicsBeginImageContextWithOptions(viewPortSize, NO, 0.0);
+        CGContextRef ctx = UIGraphicsGetCurrentContext();
+        [[UIColor clearColor] set];
+        CGContextFillRect(ctx, (CGRect){CGPointZero, viewPortSize});        
+//        self.imageScrollView.layer.backgroundColor = [UIColor redColor].CGColor;
+//        [self.imageScrollView setNeedsDisplay];
+        [self.imageScrollView.layer renderInContext:ctx];
+        UIImage * largeImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+//        self.imageScrollView.layer.backgroundColor = [UIColor clearColor].CGColor;
+        
+        CGRect newCropRect1 = CGRectMake(CGRectGetMinX(fullRect) + offset.x * scale , CGRectGetMinY(fullRect) + offset.y * scale, CGRectGetWidth(fullRect), CGRectGetHeight(fullRect));
         CGImageRef imageRef1 = CGImageCreateWithImageInRect([largeImage CGImage], newCropRect1);
         if (imageRef1) {
             UIImage* img1 = [UIImage imageWithCGImage:imageRef1];
@@ -1030,7 +1024,7 @@
             [dict setValue:img1 forKey:kKeyImageFull];
         }
         
-        CGRect newCropRect2 = CGRectMake(CGRectGetMinX(largeRect) * scale, CGRectGetMinY(largeRect) * scale, CGRectGetWidth(largeRect) * scale, CGRectGetHeight(largeRect) * scale);
+        CGRect newCropRect2 = CGRectMake(CGRectGetMinX(largeRect) + offset.x * scale, CGRectGetMinY(largeRect) + offset.y * scale, CGRectGetWidth(largeRect), CGRectGetHeight(largeRect));
         CGImageRef imageRef2 = CGImageCreateWithImageInRect([largeImage CGImage], newCropRect2);
         if (imageRef2) {
             UIImage* img2 = [UIImage imageWithCGImage:imageRef2];
