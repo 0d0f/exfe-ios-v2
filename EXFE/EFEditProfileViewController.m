@@ -341,17 +341,15 @@
     self.indicatorView = indicator;
     
 #ifdef DEBUG
-    UIImageView *preview = [[UIImageView alloc] initWithFrame:CGRectMake(100, 5, 80, 80 / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds))];
-    preview.backgroundColor = [UIColor yellowColor];
-    [footer addSubview:preview];
-    self.preview = preview;
-    
-    UIImageView *previewTh = [[UIImageView alloc] initWithFrame:CGRectMake(200, 5 + CGRectGetHeight(self.header.bounds) * 80 / CGRectGetWidth(self.view.bounds), 80, 80 )];
-    previewTh.backgroundColor = [UIColor yellowColor];
-    [footer addSubview:previewTh];
-    self.previewTh = previewTh;
-    
-//    imageScrollRange.backgroundColor = [UIColor lightGrayColor];
+//    UIImageView *preview = [[UIImageView alloc] initWithFrame:CGRectMake(100, 5, 80, 80 / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds))];
+//    preview.backgroundColor = [UIColor yellowColor];
+//    [footer addSubview:preview];
+//    self.preview = preview;
+//    
+//    UIImageView *previewTh = [[UIImageView alloc] initWithFrame:CGRectMake(200, 5 + CGRectGetHeight(self.header.bounds) * 80 / CGRectGetWidth(self.view.bounds), 80, 80 )];
+//    previewTh.backgroundColor = [UIColor yellowColor];
+//    [footer addSubview:previewTh];
+//    self.previewTh = previewTh;
 #endif
     
 }
@@ -850,11 +848,11 @@
         }
     }
     
-    if (self.preview) {
-        NSDictionary *dict = [self cropedImages];
-        self.preview.image = [dict valueForKey:kKeyImageFull];
-        self.previewTh.image = [self imageWithImage:[dict valueForKey:kKeyImageLarge] scaledToSize:self.previewTh.bounds.size];
-    }
+//    if (self.preview) {
+//        NSDictionary *dict = [self cropedImages];
+//        self.preview.image = [dict valueForKey:kKeyImageFull];
+//        self.previewTh.image = [self imageWithImage:[dict valueForKey:kKeyImageLarge] scaledToSize:self.previewTh.bounds.size];
+//    }
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
@@ -866,11 +864,11 @@
         }
     }
     
-    if (self.preview) {
-        NSDictionary *dict = [self cropedImages];
-        self.preview.image = [dict valueForKey:kKeyImageFull];
-        self.previewTh.image = [self imageWithImage:[dict valueForKey:kKeyImageLarge] scaledToSize:self.previewTh.bounds.size];
-    }
+//    if (self.preview) {
+//        NSDictionary *dict = [self cropedImages];
+//        self.preview.image = [dict valueForKey:kKeyImageFull];
+//        self.previewTh.image = [self imageWithImage:[dict valueForKey:kKeyImageLarge] scaledToSize:self.previewTh.bounds.size];
+//    }
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
