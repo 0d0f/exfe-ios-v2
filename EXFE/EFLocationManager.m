@@ -14,9 +14,19 @@
 #define kHasPostUserLocationKey     @"key.hasPostUserLocation"
 #define kDefaultBackgroundDuration  (1200.0f)
 
+NSString *EFNotificationUserLocationDidChange = @"notification.userLocation.didChange";
+
+@implementation EFUserLocation
+
+- (CLLocationCoordinate2D)coordinate {
+    return CLLocationCoordinate2DMake(self.location.coordinate.latitude + self.offset.x, self.location.coordinate.longitude + self.offset.y);
+}
+
+@end
+
 @interface EFLocationManager ()
 
-@property (nonatomic, strong) CLLocation        *userLocation;            // rewrite property
+@property (nonatomic, strong) EFUserLocation    *userLocation;            // rewrite property
 @property (nonatomic, strong) CLHeading         *userHeading;             // rewrite property
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
@@ -47,13 +57,23 @@
 - (void)_postUserLocation {
     EFLocation *breadcrum = [[EFLocation alloc] init];
     breadcrum.coordinate = self.userLocation.coordinate;
-    breadcrum.accuracy = self.userLocation.verticalAccuracy;
+    breadcrum.accuracy = MAX(self.userLocation.location.verticalAccuracy, self.userLocation.location.horizontalAccuracy);
     breadcrum.timestamp = [NSDate date];
     
     AppDelegate *delelgate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [delelgate.model.apiServer postRouteXBreadcrumbs:@[breadcrum]
                                    isEarthCoordinate:YES
                                              success:^(CGFloat latOffset, CGFloat lngOffset){
+                                                 BOOL isOffsetChanged = NO;
+                                                 if (self.userLocation.offset.x != latOffset || self.userLocation.offset.y != lngOffset) {
+                                                     isOffsetChanged = YES;
+                                                 }
+                                                 
+                                                 self.userLocation.offset = (CGPoint){latOffset, lngOffset};
+                                                 
+                                                 if (isOffsetChanged) {
+                                                     [[NSNotificationCenter defaultCenter] postNotificationName:EFNotificationUserLocationDidChange object:nil];
+                                                 }
                                              }
                                              failure:^(NSError *error){
                                              }];
@@ -77,7 +97,7 @@
     
     EFLocation *breadcrum = [[EFLocation alloc] init];
     breadcrum.coordinate = self.userLocation.coordinate;
-    breadcrum.accuracy = MAX(self.userLocation.verticalAccuracy, self.userLocation.horizontalAccuracy);
+    breadcrum.accuracy = MAX(self.userLocation.location.verticalAccuracy, self.userLocation.location.horizontalAccuracy);
     breadcrum.timestamp = [NSDate date];
     
     AppDelegate *delelgate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -142,6 +162,8 @@
         locationManager.distanceFilter = 5.0f;
         self.locationManager = locationManager;
         
+        self.userLocation = [[EFUserLocation alloc] init];
+        
         self.crossMap = [[NSMutableDictionary alloc] init];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -172,18 +194,14 @@
     }
 }
 
-#pragma mark - Property Accessor
-
-- (CLLocation *)userLocation {
-    return self.locationManager.location;
-}
-
 #pragma mark - CLLocationManagerDelegate
 
 - (void)locationManager:(CLLocationManager *)manager
 	 didUpdateLocations:(NSArray *)locations {
     CLLocation *location = [locations lastObject];
-    self.userLocation = location;
+    self.userLocation.location = location;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:EFNotificationUserLocationDidChange object:nil];
     
     BOOL isInBackground = NO;
     

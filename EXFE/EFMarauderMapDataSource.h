@@ -18,6 +18,7 @@
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(EFMapPerson *)person;
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations;
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRoutePaths:(NSArray *)paths;
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource needDeleteRouteLocation:(NSString *)routeLocationId;
 
 @end
 
@@ -52,6 +53,7 @@ EFHTTPStreamingDelegate
 - (void)updateRouteLocation:(EFRouteLocation *)routeLocation inMapView:(MKMapView *)mapView shouldPostToServer:(BOOL)shouldPost;
 - (void)updateRouteLocation:(EFRouteLocation *)routeLocation inMapView:(MKMapView *)mapView;
 - (EFRouteLocation *)routeLocationForAnnotation:(EFAnnotation *)annotation;
+- (EFRouteLocation *)routeLocationForRouteLocationId:(NSString *)routeLocationId;
 - (EFAnnotation *)annotationForRouteLocation:(EFRouteLocation *)routeLocation;
 - (void)removeRouteLocation:(EFRouteLocation *)routeLocation fromMapView:(MKMapView *)mapView;
 - (NSArray *)allRouteLocations;
