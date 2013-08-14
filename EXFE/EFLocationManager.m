@@ -68,16 +68,10 @@ NSString *EFNotificationUserLocationDidChange = @"notification.userLocation.didC
     [delelgate.model.apiServer postRouteXBreadcrumbs:@[breadcrum]
                                    isEarthCoordinate:YES
                                              success:^(CGFloat latOffset, CGFloat lngOffset){
-                                                 BOOL isOffsetChanged = NO;
-                                                 if (self.userLocation.offset.x != latOffset || self.userLocation.offset.y != lngOffset) {
-                                                     isOffsetChanged = YES;
-                                                 }
-                                                 
                                                  self.userLocation.offset = (CGPoint){latOffset, lngOffset};
-                                                 
-                                                 if (isOffsetChanged) {
+                                                 dispatch_async(dispatch_get_main_queue(), ^{
                                                      [[NSNotificationCenter defaultCenter] postNotificationName:EFNotificationUserLocationDidChange object:nil];
-                                                 }
+                                                 });
                                              }
                                              failure:^(NSError *error){
                                              }];
@@ -205,7 +199,10 @@ NSString *EFNotificationUserLocationDidChange = @"notification.userLocation.didC
     CLLocation *location = [locations lastObject];
     self.userLocation.location = location;
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:EFNotificationUserLocationDidChange object:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:EFNotificationUserLocationDidChange
+                                                            object:nil];
+    });
     
     BOOL isInBackground = NO;
     

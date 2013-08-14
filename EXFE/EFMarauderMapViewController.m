@@ -35,22 +35,14 @@
 
 @property (nonatomic, strong) EFMarauderMapDataSource *mapDataSource;
 
-@property (nonatomic, strong) NSMutableDictionary   *personDictionary;
-@property (nonatomic, strong) MKAnnotationView      *meAnnotationView;
-@property (nonatomic, strong) NSArray               *invitations;
-@property (nonatomic, strong) NSMutableArray        *identityIds;
-
 @property (nonatomic, strong) EFCalloutAnnotation   *currentCalloutAnnotation;
-
-@property (nonatomic, strong) NSRecursiveLock       *lock;
 
 @property (nonatomic) BOOL                          isEditing;
 @property (nonatomic, assign) BOOL                  isInited;
 
-@property (nonatomic, strong) EFLocation            *lastUpdatedLocation;
-@property (nonatomic, strong) NSTimer               *updateLocationTimer;
+@property (nonatomic, strong) NSTimer               *breadcrumbUpdateTimer;
 
-@property (nonatomic, assign) BOOL                  hasGotOffset;
+@property (nonatomic, assign) NSTimeInterval        annotationAnimationDelay;
 
 @property (nonatomic, weak)   UIImageView           *tableViewShadowView;
 
@@ -62,6 +54,9 @@
 
 - (void)_openStreaming;
 - (void)_closeStreaming;
+
+- (void)_fireBreadcrumbUpdateTimer;
+- (void)_invalidBreadcrumbUpdateTimer;
 
 - (void)_zoomToCoordinate:(CLLocationCoordinate2D)coordinate;
 
@@ -82,6 +77,24 @@
 
 - (void)_closeStreaming {
     [self.mapDataSource closeStreaming];
+}
+
+- (void)_fireBreadcrumbUpdateTimer {
+    [self _invalidBreadcrumbUpdateTimer];
+    self.breadcrumbUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:60.0f
+                                                                  target:self
+                                                                selector:@selector(breadcrumbTimerRunloop:)
+                                                                userInfo:nil
+                                                                 repeats:YES];
+}
+
+- (void)_invalidBreadcrumbUpdateTimer {
+    if (self.breadcrumbUpdateTimer) {
+        if ([self.breadcrumbUpdateTimer isValid]) {
+            [self.breadcrumbUpdateTimer invalidate];
+        }
+        self.breadcrumbUpdateTimer = nil;
+    }
 }
 
 - (void)_zoomToCoordinate:(CLLocationCoordinate2D)coordinate {
@@ -117,12 +130,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.personDictionary = [[NSMutableDictionary alloc] initWithCapacity:6];
-        
-        self.lock = [[NSRecursiveLock alloc] init];
-        
         self.isInited = YES;
-        self.hasGotOffset = NO;
     }
     
     return self;
@@ -162,6 +170,8 @@
     self.mapDataSource = [[EFMarauderMapDataSource alloc] initWithCross:self.cross];
     self.mapDataSource.delegate = self;
     
+    self.annotationAnimationDelay = 0.233f;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(enterBackground)
                                                  name:UIApplicationDidEnterBackgroundNotification
@@ -186,17 +196,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.invitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
-    
-    NSMutableArray *identityIds = [[NSMutableArray alloc] initWithCapacity:self.invitations.count];
-    for (Invitation *invitation in self.invitations) {
-        Identity *identity = invitation.identity;
-        [identityIds addObject:[identity identityIdValue].identity_id];
-    }
-    
-    self.identityIds = identityIds;
-    
-    CGFloat height = self.invitations.count * [EFMapPersonCell defaultCellHeight];
+    CGFloat height = [self.mapDataSource numberOfPeople] * [EFMapPersonCell defaultCellHeight];
     if (height + 100 > CGRectGetHeight(self.view.frame)) {
         height = CGRectGetHeight(self.view.frame) - 100.0f;
         self.tableView.scrollEnabled = YES;
@@ -234,6 +234,7 @@
     if ([EFLocationManager defaultManager].userLocation) {
         [self userLocationDidChange];
     }
+    [self _fireBreadcrumbUpdateTimer];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -246,6 +247,8 @@
                                             forKeyPath:@"userHeading"];
     [[EFLocationManager defaultManager] stopUpdatingHeading];
     [self _closeStreaming];
+    
+    [self _invalidBreadcrumbUpdateTimer];
     
     [super viewDidDisappear:animated];
 }
@@ -267,6 +270,15 @@
         [userLocationView.superview bringSubviewToFront:userLocationView];
     } else {
         [self.mapView addAnnotation:[EFLocationManager defaultManager].userLocation];
+    }
+}
+
+#pragma mark - Timer
+
+- (void)breadcrumbTimerRunloop:(NSTimer *)timer {
+    if (self.mapDataSource.selectedPerson) {
+        // timestamp
+        [self.mapDataSource updateTimestampForPerson:self.mapDataSource.selectedPerson toMapView:self.mapView];
     }
 }
 
@@ -382,7 +394,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == self.tableView) {
-        return self.identityIds.count - 1;
+        return [self.mapDataSource numberOfPeople] - 1;
     } else if (tableView == self.selfTableView) {
         return 1;
     }
@@ -442,35 +454,18 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         return;
     }
     
-    // add overlay
+    // update overlay
     [self.mapDataSource updateBreadcrumPathForPerson:person toMapView:self.mapView];
     
     // timestamp
     [self.mapDataSource updateTimestampForPerson:person toMapView:self.mapView];
     
     [self _zoomToCoordinate:person.lastLocation.coordinate];
+    [self _fireBreadcrumbUpdateTimer];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return [EFMapPersonCell defaultCellHeight];
-}
-
-#pragma mark - Timer Runloop
-
-- (void)timerRunloop:(NSTimer *)timer {
-//    [self.model.apiServer updateLocation:self.lastUpdatedLocation
-//                             withCrossId:[self.cross.cross_id integerValue]
-//                                 isEarth:YES
-//                                 success:^(AFHTTPRequestOperation *operation, id responseObject){
-//                                     CGFloat latitudeOffset = [[responseObject valueForKey:@"earth_to_mars_latitude"] doubleValue];
-//                                     CGFloat longtitudeOffset = [[responseObject valueForKey:@"earth_to_mars_longitude"] doubleValue];
-//                                     
-//                                     CGPoint offset = (CGPoint){latitudeOffset, longtitudeOffset};
-//                                     
-//                                     self.mapDataSource.offset = offset;
-//                                     self.hasGotOffset = YES;
-//                                 }
-//                                 failure:nil];
 }
 
 #pragma mark - EFMapStrokeViewDataSource
@@ -537,6 +532,17 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 #pragma mark - EFMarauderMapDataSourceDelegate
 
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didGetRouteLocations:(NSArray *)locations {
+    for (EFRouteLocation *routeLocation in locations) {
+        double delayInSeconds = self.annotationAnimationDelay;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [dataSource addRouteLocation:routeLocation toMapView:self.mapView];
+        });
+        self.annotationAnimationDelay += 0.233f;
+    }
+}
+
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(EFMapPerson *)person {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.selfTableView reloadData];
@@ -545,6 +551,9 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         
         if (person != [self.mapDataSource me]) {
             [self.mapDataSource updatePersonAnnotationForPerson:person toMapView:self.mapView];
+        }
+        if (person == self.mapDataSource.selectedPerson) {
+            [self.mapDataSource updateBreadcrumPathForPerson:person toMapView:self.mapView];
         }
     });
 }
@@ -753,6 +762,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             dropAnimation.toValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
             dropAnimation.duration = 0.233f;
             dropAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+            dropAnimation.fillMode = kCAFillModeForwards;
             [view.layer addAnimation:dropAnimation forKey:nil];
         } else if (view.annotation == [EFLocationManager defaultManager].userLocation) {
             CLHeading *userHeading = [EFLocationManager defaultManager].userHeading;

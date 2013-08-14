@@ -376,9 +376,9 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
     NSParameterAssert(routeLocation);
     NSParameterAssert(mapView);
     
-    EFAnnotation *annotation = [self.routeLocationAnnotationMap objectForKey:[NSValue valueWithNonretainedObject:routeLocation]];
+    EFAnnotation *annotation = [self.routeLocationAnnotationMap valueForKey:routeLocation.locationId];
     [mapView removeAnnotation:annotation];
-    [self.routeLocationAnnotationMap removeObjectForKey:[NSValue valueWithNonretainedObject:routeLocation]];
+    [self.routeLocationAnnotationMap removeObjectForKey:routeLocation.locationId];
     [self.routeLocations removeObject:routeLocation];
     
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -498,7 +498,7 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
             } else if ([type isEqualToString:@"location"]) {
                 EFRouteLocation *routeLocation = [[EFRouteLocation alloc] initWithDictionary:jsonDictionary];
                 if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateRouteLocations:)]) {
-                    [self.delegate mapDataSource:self didUpdateRouteLocations:@[routeLocation]];
+                    [self.delegate mapDataSource:self didGetRouteLocations:@[routeLocation]];
                 }
             }
         } else {
