@@ -11,6 +11,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "EFMapColorButton.h"
 
+#define kDefaultCharactor   @"P"
+
 @interface EFLetterPickerView : UIView
 
 @property (nonatomic, strong) UILabel *label;
@@ -87,11 +89,23 @@
 @property (nonatomic, strong) UIView            *panView;
 @property (nonatomic, strong) UILabel           *label;
 
+@property (nonatomic, strong) NSMutableArray    *charactorArray;
+@property (nonatomic, assign) NSInteger         selectedIndex;
+
 @end
 
 @implementation EFMapEditingAnnotationView
 
 - (void)_init {
+    self.charactorArray = [[NSMutableArray alloc] init];
+    [self.charactorArray addObject:@" "];
+    for (int i = 0; i < 26; i++) {
+        NSString *string = [NSString stringWithFormat:@"%c", 'A' + i];
+        [self.charactorArray addObject:string];
+    }
+    
+    self.selectedIndex = [self.charactorArray indexOfObject:kDefaultCharactor];
+    
     CGRect viewBounds = self.bounds;
     CGRect panViewFrame = (CGRect){CGPointZero, {30.0f, 30.0f}};
     
@@ -105,21 +119,33 @@
     UILabel *label = [[UILabel alloc] initWithFrame:panView.bounds];
     label.backgroundColor = [UIColor clearColor];
     label.textAlignment = NSTextAlignmentCenter;
-    label.text = @"P";
+    label.text = kDefaultCharactor;
     label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
     label.textColor = [UIColor whiteColor];
+    label.userInteractionEnabled = YES;
     [panView addSubview:label];
     self.label = label;
     
-    self.markLetter = @"P";
+    // gesture
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                action:@selector(handleSingleTap:)];
+    singleTap.numberOfTapsRequired = 1;
+    singleTap.numberOfTouchesRequired = 1;
+    [self.label addGestureRecognizer:singleTap];
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.backgroundColor = [UIColor clearColor];
-    button.frame = panView.frame;
-    [button addTarget:self action:@selector(touchDown:withEvent:) forControlEvents:UIControlEventTouchDown];
-    [button addTarget:self action:@selector(touchDrag:withEvent:) forControlEvents:UIControlEventTouchDragInside | UIControlEventTouchDragOutside];
-    [button addTarget:self action:@selector(touchUp:withEvent:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
-    [self addSubview:button];
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                          action:@selector(handlePan:)];
+    [self.label addGestureRecognizer:pan];
+    
+    self.markLetter = kDefaultCharactor;
+    
+//    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+//    button.backgroundColor = [UIColor clearColor];
+//    button.frame = panView.frame;
+//    [button addTarget:self action:@selector(touchDown:withEvent:) forControlEvents:UIControlEventTouchDown];
+//    [button addTarget:self action:@selector(touchDrag:withEvent:) forControlEvents:UIControlEventTouchDragInside | UIControlEventTouchDragOutside];
+//    [button addTarget:self action:@selector(touchUp:withEvent:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
+//    [self addSubview:button];
     
     CGRect buttonFrame = (CGRect){CGPointZero, {CGRectGetMidX(viewBounds) - 20.0f, CGRectGetHeight(viewBounds)}};
     EFMapColorButton *blueButton = [EFMapColorButton buttonWithColor:[UIColor colorWithRed:0.0f green:(123.0f / 255.0f) blue:1.0f alpha:1.0f]];
@@ -153,6 +179,64 @@
     return self;
 }
 
+#pragma mark - Gesture
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)tap {
+    self.selectedIndex = (self.selectedIndex + 1) % self.charactorArray.count;
+    self.markLetter = [self.charactorArray objectAtIndex:self.selectedIndex];
+    
+    if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
+        [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
+    }
+}
+
+- (void)handlePan:(UIPanGestureRecognizer *)pan {
+    static NSInteger s_count = 0;
+    static CGPoint preTranslation = (CGPoint){0.0f, 0.0f};
+    CGPoint translation = [pan translationInView:self.label];
+    NSInteger count = (NSInteger)(translation.x - preTranslation.x) / 5.0f;
+    
+    if (s_count != count && count) {
+        s_count = count;
+        preTranslation = translation;
+        self.selectedIndex += (count > 0) ? 1 : -1;
+        if (self.selectedIndex < 0) {
+            self.selectedIndex = 0;
+        } else if (self.selectedIndex >= self.charactorArray.count) {
+            self.selectedIndex = self.charactorArray.count - 1;
+        }
+        
+        self.markLetter = [self.charactorArray objectAtIndex:self.selectedIndex];
+    }
+    
+    UIGestureRecognizerState state = pan.state;
+    switch (state) {
+        case UIGestureRecognizerStateBegan:
+            if (!self.letterPickerView) {
+                CGRect viewBounds = self.bounds;
+                viewBounds.origin.y -= (CGRectGetHeight(viewBounds) + 12.0f);
+                self.letterPickerView = [[EFLetterPickerView alloc] initWithFrame:viewBounds];
+                self.letterPickerView.hidden = YES;
+                [self addSubview:self.letterPickerView];
+            }
+            self.letterPickerView.hidden = NO;
+            break;
+        case UIGestureRecognizerStateChanged:
+            if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:isChangingToTitle:)]) {
+                [self.delegate mapEditingAnnotationView:self isChangingToTitle:self.markLetter];
+            }
+            break;
+        case UIGestureRecognizerStateEnded:
+            if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
+                [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
+            }
+            self.letterPickerView.hidden = YES;
+            break;
+        default:
+            break;
+    }
+}
+
 #pragma mark - Property Accessor
 
 - (void)setMarkLetter:(NSString *)markLetter {
@@ -174,61 +258,6 @@
             [self.delegate mapEditingAnnotationView:self didChangeToStyle:kEFAnnotationStyleParkRed];
         }
     }
-}
-
-#pragma mark - Event Handler
-
-static CGPoint startPoint;
-static char startChar;
-static char endChar;
-
-- (void)touchDown:(id)sender withEvent:(UIEvent *)event {
-    if (!self.letterPickerView) {
-        CGRect viewBounds = self.bounds;
-        viewBounds.origin.y -= (CGRectGetHeight(viewBounds) + 12.0f);
-        self.letterPickerView = [[EFLetterPickerView alloc] initWithFrame:viewBounds];
-        self.letterPickerView.hidden = YES;
-        [self addSubview:self.letterPickerView];
-    }
-    
-    startPoint = [[[event allTouches] anyObject] locationInView:self];
-    startChar = [self.markLetter cStringUsingEncoding:NSUTF8StringEncoding][0];
-    
-    self.letterPickerView.label.text = self.markLetter;
-    self.letterPickerView.hidden = NO;
-}
-
-- (void)touchDrag:(id)sender withEvent:(UIEvent *)event {
-    CGPoint location = [[[event allTouches] anyObject] locationInView:self];
-    CGFloat offsetX = location.x - startPoint.x;
-    CGRect viewBounds = self.bounds;
-    CGFloat width = CGRectGetWidth(viewBounds);
-    
-    CGFloat factor = (offsetX / width) * 26;
-    char c = (int)factor + startChar;
-    
-    if (c < 'A') {
-        self.markLetter = @"A";
-        endChar = 'A';
-    } else if (c > 'Z') {
-        self.markLetter = @"Z";
-        endChar = 'Z';
-    } else {
-        self.markLetter = [NSString stringWithFormat:@"%c", c];
-        endChar = c;
-    }
-    
-    if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:isChangingToTitle:)]) {
-        [self.delegate mapEditingAnnotationView:self isChangingToTitle:self.markLetter];
-    }
-}
-
-- (void)touchUp:(id)sender withEvent:(UIEvent *)event {
-    if (startChar != endChar && [self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
-        [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
-    }
-    
-    self.letterPickerView.hidden = YES;
 }
 
 @end

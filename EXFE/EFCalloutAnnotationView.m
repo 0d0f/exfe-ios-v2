@@ -10,6 +10,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "EFCalloutAnnotation.h"
+#import "Util.h"
 
 #define kTitleHeight    (25.0f)
 #define kTitleFont      [UIFont fontWithName:@"HelveticaNeue-Light" size:21]
@@ -22,8 +23,9 @@
 
 @property (nonatomic, strong) UITextField   *titleTextField;
 @property (nonatomic, strong) UILabel       *titleLabel;
-@property (nonatomic, strong) UITextField   *subtitleTextField;
+@property (nonatomic, strong) UITextView    *subtitleTextView;
 @property (nonatomic, strong) UILabel       *subtitleLabel;
+@property (nonatomic, strong) UIView        *lineView;
 
 @property (nonatomic, strong) UIButton  *closeButton;
 @property (nonatomic, strong) CAGradientLayer *gradientLayer;
@@ -57,9 +59,9 @@
         [self.titleTextField removeFromSuperview];
         self.titleTextField = nil;
     }
-    if (self.subtitleTextField) {
-        [self.subtitleTextField removeFromSuperview];
-        self.subtitleTextField = nil;
+    if (self.subtitleTextView) {
+        [self.subtitleTextView removeFromSuperview];
+        self.subtitleTextView = nil;
     }
     if (self.titleLabel) {
         [self.titleLabel removeFromSuperview];
@@ -70,66 +72,62 @@
         self.subtitleLabel = nil;
     }
     
-    if (self.annotation.title) {
-        UITextField *titleTextField = [[UITextField alloc] initWithFrame:(CGRect){{5.0f, 5.0f}, {kDefaultWidth - 10.0f, kTitleHeight}}];
-        titleTextField.delegate = self;
-        titleTextField.returnKeyType = UIReturnKeyNext;
-        titleTextField.hidden = YES;
-        titleTextField.borderStyle = UITextBorderStyleNone;
-        titleTextField.font = kTitleFont;
-        titleTextField.backgroundColor = [UIColor clearColor];
-        titleTextField.text = self.annotation.title;
-        self.titleTextField = titleTextField;
-        [self addSubview:self.titleTextField];
-        
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:(CGRect){{5.0f, 2.0f}, {kDefaultWidth - 10.0f, kTitleHeight}}];
-        titleLabel.font = kTitleFont;
-        titleLabel.backgroundColor = [UIColor clearColor];
-        titleLabel.text = self.annotation.title;
-        titleLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
-        titleLabel.shadowOffset = (CGSize){0.0f, 1.0f};
-        titleLabel.userInteractionEnabled = YES;
-        self.titleLabel = titleLabel;
-        [self addSubview:self.titleLabel];
-        
-        UITapGestureRecognizer *titleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_handleTitleTap:)];
-        titleTap.numberOfTapsRequired = 1;
-        [titleLabel addGestureRecognizer:titleTap];
-    }
+    UITextField *titleTextField = [[UITextField alloc] initWithFrame:(CGRect){{5.0f, 2.0f}, {kDefaultWidth - 10.0f, kTitleHeight}}];
+    titleTextField.delegate = self;
+    titleTextField.returnKeyType = UIReturnKeyNext;
+    titleTextField.hidden = YES;
+    titleTextField.borderStyle = UITextBorderStyleNone;
+    titleTextField.font = kTitleFont;
+    titleTextField.backgroundColor = [UIColor clearColor];
+    titleTextField.text = self.annotation.title;
+    self.titleTextField = titleTextField;
+    [self addSubview:self.titleTextField];
     
-    if (self.annotation.subtitle) {
-        UITextField *subtileTextField = [[UITextField alloc] initWithFrame:(CGRect){{5.0f, kTitleHeight + 5.0f}, {kDefaultWidth - 10.0f, kSubtileHeight}}];
-        subtileTextField.delegate = self;
-        subtileTextField.returnKeyType = UIReturnKeyDone;
-        subtileTextField.hidden = YES;
-        subtileTextField.borderStyle = UITextBorderStyleNone;
-        subtileTextField.font = kSubtileFont;
-        subtileTextField.backgroundColor = [UIColor clearColor];
-        subtileTextField.text = self.annotation.subtitle;
-        [self addSubview:subtileTextField];
-        self.subtitleTextField = subtileTextField;
-        
-        UILabel *subtileLabel = [[UILabel alloc] initWithFrame:(CGRect){{5.0f, kTitleHeight}, {kDefaultWidth - 10.0f, kSubtileHeight}}];
-        subtileLabel.font = kSubtileFont;
-        subtileLabel.backgroundColor = [UIColor clearColor];
-        subtileLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
-        subtileLabel.shadowOffset = (CGSize){0.0f, 1.0f};
-        subtileLabel.text = self.annotation.subtitle;
-        subtileLabel.userInteractionEnabled = YES;
-        self.subtitleLabel = subtileLabel;
-        [self addSubview:self.subtitleLabel];
-        
-        UITapGestureRecognizer *subtitleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSubtitleTap:)];
-        subtitleTap.numberOfTapsRequired = 1;
-        [subtileLabel addGestureRecognizer:subtitleTap];
-    }
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:(CGRect){{5.0f, 2.0f}, {kDefaultWidth - 10.0f, kTitleHeight}}];
+    titleLabel.font = kTitleFont;
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.text = self.annotation.title;
+    titleLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
+    titleLabel.shadowOffset = (CGSize){0.0f, 1.0f};
+    titleLabel.userInteractionEnabled = YES;
+    self.titleLabel = titleLabel;
+    [self addSubview:self.titleLabel];
+    
+    UITapGestureRecognizer *titleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_handleTitleTap:)];
+    titleTap.numberOfTapsRequired = 1;
+    [titleLabel addGestureRecognizer:titleTap];
+    
+    UITextView *subtitleTextView = [[UITextView alloc] initWithFrame:(CGRect){{0.0f, kTitleHeight + 10.0f}, {kDefaultWidth, kSubtileHeight}}];
+    subtitleTextView.delegate = self;
+    subtitleTextView.returnKeyType = UIReturnKeyDone;
+    subtitleTextView.hidden = YES;
+    subtitleTextView.font = kSubtileFont;
+    subtitleTextView.backgroundColor = [UIColor clearColor];
+    subtitleTextView.text = self.annotation.subtitle;
+    [self addSubview:subtitleTextView];
+    self.subtitleTextView = subtitleTextView;
+    
+    UILabel *subtileLabel = [[UILabel alloc] initWithFrame:(CGRect){{5.0f, kTitleHeight}, {kDefaultWidth - 10.0f, kSubtileHeight}}];
+    subtileLabel.font = kSubtileFont;
+    subtileLabel.backgroundColor = [UIColor clearColor];
+    subtileLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
+    subtileLabel.shadowOffset = (CGSize){0.0f, 1.0f};
+    subtileLabel.text = self.annotation.subtitle;
+    subtileLabel.userInteractionEnabled = YES;
+    subtileLabel.numberOfLines = 2;
+    self.subtitleLabel = subtileLabel;
+    [self addSubview:self.subtitleLabel];
+    
+    UITapGestureRecognizer *subtitleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSubtitleTap:)];
+    subtitleTap.numberOfTapsRequired = 1;
+    [subtileLabel addGestureRecognizer:subtitleTap];
 }
 
 - (void)_prepareFrame {
     CGFloat height = 0.0f;
     
     if (self.annotation.title) {
-        height += kTitleHeight;
+        height += kTitleHeight + 4.0f;
     }
     if (self.annotation.subtitle) {
         height += kSubtileHeight;
@@ -216,14 +214,23 @@
         self.layer.shadowRadius = 2.0f;
         self.layer.borderColor = [UIColor whiteColor].CGColor;
         self.layer.borderWidth = 0.5f;
+        
+        self.lineView = [[UIView alloc] initWithFrame:(CGRect){{0.0f, 33.0f}, {kDefaultWidth, 0.5f}}];
+        self.lineView.backgroundColor = [UIColor COLOR_RGB(0xCC, 0xCC, 0xCC)];
+        self.lineView.layer.shadowColor = [UIColor whiteColor].CGColor;
+        self.lineView.layer.shadowOffset = (CGSize){0.0f, 0.5f};
+        self.lineView.layer.shadowRadius = 0.5f;
+        self.lineView.layer.shadowOpacity = 1.0f;
+        self.lineView.hidden = YES;
+        [self addSubview:self.lineView];
     }
     
     return self;
 }
 
-- (void)layoutSubviews {
-    self.gradientLayer.frame = self.bounds;
-}
+//- (void)layoutSubviews {
+//    self.gradientLayer.frame = self.bounds;
+//}
 
 - (void)didMoveToSuperview {
     [self.superview bringSubviewToFront:self];
@@ -234,6 +241,8 @@
     [self _prepareFrame];
     [self _prepareLabels];
     [self _prepareOffset];
+    
+    self.editing = NO;
 }
 
 - (void)reloadAnnotation:(EFCalloutAnnotation *)annotation {
@@ -256,13 +265,14 @@
     
     if (!editing) {
         self.titleTextField.hidden = YES;
-        self.subtitleTextField.hidden = YES;
+        self.subtitleTextView.hidden = YES;
         self.titleLabel.hidden = NO;
         self.subtitleLabel.hidden = NO;
         self.closeButton.hidden = YES;
+        self.lineView.hidden = YES;
         
         ((EFCalloutAnnotation *)self.annotation).title = self.titleTextField.text;
-        ((EFCalloutAnnotation *)self.annotation).subtitle = self.subtitleTextField.text;
+        ((EFCalloutAnnotation *)self.annotation).subtitle = self.subtitleTextView.text;
         
         CGRect frame = [self.originalSuperView convertRect:self.frame fromView:self.editingBaseView];
         [self removeFromSuperview];
@@ -272,7 +282,10 @@
         [UIView setAnimationsEnabled:animated];
         [UIView animateWithDuration:0.233f
                          animations:^{
-                             self.frame = self.originalFrame;
+                             [self _prepareFrame];
+                             [self _prepareLabels];
+                             [self _prepareOffset];
+//                             self.frame = self.originalFrame;
                              self.editingMaskView.alpha = 0.0f;
                          }
                          completion:^(BOOL finished){
@@ -287,6 +300,26 @@
                              
                              [UIView setAnimationsEnabled:YES];
                          }];
+        
+        CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
+        positionAnimation.duration = 0.233f;
+        positionAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        positionAnimation.fromValue = [self.gradientLayer valueForKey:@"position"];
+        positionAnimation.toValue = [NSValue valueWithCGPoint:(CGPoint){self.originalFrame.size.width * 0.5f, self.originalFrame.size.height * 0.5f}];
+        positionAnimation.fillMode = kCAFillModeForwards;
+        [self.gradientLayer addAnimation:positionAnimation forKey:@"position"];
+        self.gradientLayer.position = (CGPoint){self.originalFrame.size.width * 0.5f, self.originalFrame.size.height * 0.5f};
+        
+        CGRect bounds = (CGRect){{0.0f, 0.0f}, self.originalFrame.size};
+        
+        CABasicAnimation *boundsAnimation = [CABasicAnimation animationWithKeyPath:@"bounds"];
+        boundsAnimation.duration = 0.233f;
+        boundsAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        boundsAnimation.fromValue = [self.gradientLayer valueForKey:@"bounds"];
+        boundsAnimation.toValue = [NSValue valueWithCGRect:bounds];
+        boundsAnimation.fillMode = kCAFillModeForwards;
+        [self.gradientLayer addAnimation:boundsAnimation forKey:@"bounds"];
+        self.gradientLayer.bounds = bounds;
     } else {
         if (_editingWillStartHandler) {
             __weak typeof(self) weakSelf = self;
@@ -294,10 +327,11 @@
         }
         
         self.titleTextField.hidden = NO;
-        self.subtitleTextField.hidden = NO;
+        self.subtitleTextView.hidden = NO;
         self.titleLabel.hidden = YES;
         self.subtitleLabel.hidden = YES;
         self.closeButton.hidden = NO;
+        self.lineView.hidden = NO;
         
         UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
         UIView *editingBaseView = [[UIView alloc] initWithFrame:rootView.bounds];
@@ -323,7 +357,23 @@
         self.frame = frame;
         [self.editingBaseView addSubview:self];
         
-        frame = (CGRect){{60.0f, 200.0f}, {200.0f, 69}};
+        frame.size = (CGSize){200.0f, 69.0f};
+        
+        if (!CGRectContainsRect(self.editingBaseView.bounds, frame)) {
+            if (frame.origin.x < 0) {
+                frame.origin.x = 5.0f;
+            }
+            if (frame.origin.y < 0) {
+                frame.origin.y = 5.0f;
+            }
+            if (CGRectGetMaxX(frame) > CGRectGetWidth(self.editingBaseView.bounds)) {
+                frame.origin.x = CGRectGetWidth(self.editingBaseView.bounds) - (CGRectGetWidth(frame) + 5.0f);
+            }
+            if (CGRectGetMaxY(frame) > CGRectGetHeight(self.editingBaseView.bounds)) {
+                frame.origin.y = CGRectGetHeight(self.editingBaseView.bounds) - (CGRectGetHeight(frame) + 5.0f);
+            }
+        }
+        
         [UIView setAnimationsEnabled:animated];
         [UIView animateWithDuration:0.233f
                          animations:^{
@@ -333,6 +383,24 @@
                          completion:^(BOOL finished){
                              [UIView setAnimationsEnabled:YES];
                          }];
+        
+        CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
+        positionAnimation.duration = 0.233f;
+        positionAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        positionAnimation.fromValue = [self.gradientLayer valueForKey:@"position"];
+        positionAnimation.toValue = [NSValue valueWithCGPoint:(CGPoint){100, 34.5f}];
+        positionAnimation.fillMode = kCAFillModeForwards;
+        [self.gradientLayer addAnimation:positionAnimation forKey:@"position"];
+        self.gradientLayer.position = (CGPoint){100, 34.5f};
+        
+        CABasicAnimation *boundsAnimation = [CABasicAnimation animationWithKeyPath:@"bounds"];
+        boundsAnimation.duration = 0.233f;
+        boundsAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        boundsAnimation.fromValue = [self.gradientLayer valueForKey:@"bounds"];
+        boundsAnimation.toValue = [NSValue valueWithCGRect:self.bounds];
+        boundsAnimation.fillMode = kCAFillModeForwards;
+        [self.gradientLayer addAnimation:boundsAnimation forKey:@"bounds"];
+        self.gradientLayer.bounds = self.bounds;
         
         [self.titleTextField becomeFirstResponder];
     }
@@ -361,20 +429,33 @@
     [self setEditing:NO animated:YES];
 }
 
+#pragma mark - UITextViewDelegate
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    self.subtitleLabel.text = self.subtitleTextView.text;
+    ((EFCalloutAnnotation *)self.annotation).subtitle = self.subtitleTextView.text;
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    if ([text hasSuffix:@"\n"]) {
+        [self.subtitleTextView resignFirstResponder];
+        [self setEditing:NO animated:YES];
+    }
+    
+    return YES;
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     self.titleLabel.text = self.titleTextField.text;
-    self.subtitleLabel.text = self.subtitleTextField.text;
+    ((EFCalloutAnnotation *)self.annotation).title = self.titleTextField.text;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == self.titleTextField) {
         [textField resignFirstResponder];
-        [self.subtitleTextField becomeFirstResponder];
-    } else if (textField == self.subtitleTextField) {
-        [self.subtitleTextField resignFirstResponder];
-        [self setEditing:NO animated:YES];
+        [self.subtitleTextView becomeFirstResponder];
     }
     
     return YES;

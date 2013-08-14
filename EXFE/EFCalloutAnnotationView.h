@@ -14,6 +14,7 @@
 @interface EFCalloutAnnotationView : MKAnnotationView
 <
 UITextFieldDelegate,
+UITextViewDelegate,
 UIGestureRecognizerDelegate
 >
 

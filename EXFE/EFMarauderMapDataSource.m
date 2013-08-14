@@ -289,7 +289,7 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
     [mapView addAnnotation:annotation];
 }
 
-- (void)updateRouteLocation:(EFRouteLocation *)routeLocation inMapView:(MKMapView *)mapView {
+- (void)updateRouteLocation:(EFRouteLocation *)routeLocation inMapView:(MKMapView *)mapView shouldPostToServer:(BOOL)shouldPost {
     NSParameterAssert(routeLocation);
     NSParameterAssert(mapView);
     
@@ -322,13 +322,19 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
     EFAnnotationView *annotationView = (EFAnnotationView *)[mapView viewForAnnotation:annotation];
     [annotationView reloadWithAnnotation:annotation];
     
-    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [delegate.model.apiServer putRouteXUpdateGeomark:routeLocation
-                                             inCross:self.cross
-                                                type:@"location"
-                                   isEarthCoordinate:NO
-                                             success:^{}
-                                             failure:^(NSError *error){}];
+    if (shouldPost) {
+        AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [delegate.model.apiServer putRouteXUpdateGeomark:routeLocation
+                                                 inCross:self.cross
+                                                    type:@"location"
+                                       isEarthCoordinate:NO
+                                                 success:^{}
+                                                 failure:^(NSError *error){}];
+    }
+}
+
+- (void)updateRouteLocation:(EFRouteLocation *)routeLocation inMapView:(MKMapView *)mapView {
+    [self updateRouteLocation:routeLocation inMapView:mapView shouldPostToServer:YES];
 }
 
 - (EFRouteLocation *)routeLocationForAnnotation:(EFAnnotation *)annotation {

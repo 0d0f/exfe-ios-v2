@@ -548,7 +548,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
     routeLocation.markTitle = title;
     
-    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView shouldPostToServer:NO];
 }
 
 - (void)mapView:(EFMapView *)mapView didChangeSelectedAnnotationTitle:(NSString *)title {
@@ -559,7 +559,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     [routeLocation updateIconURL];
     
     [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
-//    [self _postRoute];
 }
 
 - (void)mapView:(EFMapView *)mapView didChangeSelectedAnnotationStyle:(EFAnnotationStyle)style {
