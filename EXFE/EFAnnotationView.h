@@ -8,10 +8,11 @@
 
 #import <MapKit/MapKit.h>
 
-@class EFAnnotation;
+@class EFAnnotation, EFMarauderMapDataSource;
 @interface EFAnnotationView : MKAnnotationView
 
 @property (nonatomic, weak) MKMapView *mapView;
+@property (nonatomic, weak) EFMarauderMapDataSource *mapDataSource;
 
 - (void)reloadWithAnnotation:(EFAnnotation *)annotatoin;
 

@@ -7,7 +7,11 @@
 //
 
 #import "EFAnnotationView.h"
+
 #import "EFAnnotation.h"
+#import "EFMarauderMapDataSource.h"
+
+#define kUnpinOffset    (CGPoint){0.0f, -20.0f}
 
 @interface EFAnnotationView ()
 
@@ -21,6 +25,8 @@
 {
     self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
     if (self) {
+//        self.draggable = YES;
+//        
         UILabel *markTitleLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {24, 26}}];
         markTitleLabel.textAlignment = NSTextAlignmentCenter;
         markTitleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
@@ -54,6 +60,44 @@
         } else {
             [self.mapView selectAnnotation:self.annotation animated:YES];
         }
+    }
+}
+
+- (void)handleLongPress:(UILongPressGestureRecognizer *)gesture {
+    static CGPoint startPoint;
+    static CGPoint lastPoint;
+    
+    CGPoint location = [gesture locationInView:self.mapView];
+    location = (CGPoint){location.x + kUnpinOffset.x, location.y + kUnpinOffset.y};
+    
+    UIGestureRecognizerState state = gesture.state;
+    
+    switch (state) {
+        case UIGestureRecognizerStateBegan:
+        {
+            [self.mapView deselectAnnotation:self.annotation animated:YES];
+            startPoint = location;
+        }
+            break;
+        case UIGestureRecognizerStateChanged:
+        {
+            CATransform3D transform = CATransform3DMakeTranslation(location.x - startPoint.x, location.y - startPoint.y, 0.0f);
+            self.layer.transform = transform;
+            lastPoint = location;
+        }
+            break;
+        case UIGestureRecognizerStateEnded:
+        {
+            self.layer.transform = CATransform3DIdentity;
+            CLLocationCoordinate2D coordinate = [self.mapView convertPoint:lastPoint toCoordinateFromView:self.mapView];
+            EFAnnotation *annotation = (EFAnnotation *)self.annotation;
+            EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
+            routeLocation.coordinate = coordinate;
+            [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+        }
+            break;
+        default:
+            break;
     }
 }
 

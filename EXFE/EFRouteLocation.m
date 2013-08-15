@@ -125,7 +125,7 @@
                 self.iconUrl = [NSURL URLWithString:iconString];
             } else if ([key isEqualToString:@"title"]) {
                 self.title = obj;
-            } else if ([key isEqualToString:@"desc"]) {
+            } else if ([key isEqualToString:@"description"]) {
                 self.subtitle = obj;
             } else if ([key isEqualToString:@"acc"]) {
                 self.accuracy = [obj doubleValue];
@@ -187,7 +187,7 @@
     [dict setValue:tags forKey:@"tags"];
     [dict setValue:[self.iconUrl absoluteString] forKey:@"icon"];
     [dict setValue:self.title ? self.title : @"" forKey:@"title"];
-    [dict setValue:self.subtitle ? self.subtitle : @"" forKey:@"desc"];
+    [dict setValue:self.subtitle ? self.subtitle : @"" forKey:@"description"];
     [dict setValue:[NSNumber numberWithDouble:self.accuracy] forKey:@"acc"];
     [dict setValue:[NSNumber numberWithDouble:self.coordinate.longitude] forKey:@"lng"];
     [dict setValue:[NSNumber numberWithDouble:self.coordinate.latitude] forKey:@"lat"];
