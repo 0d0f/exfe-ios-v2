@@ -45,6 +45,10 @@
 @property (nonatomic, assign) NSTimeInterval        annotationAnimationDelay;
 
 @property (nonatomic, weak)   UIImageView           *tableViewShadowView;
+@property (nonatomic, assign) BOOL                  isMapBeenMoved;
+
+@property (nonatomic, weak)   EFMapPerson           *recentZoomedPerson;
+@property (nonatomic, assign) EFMapZoomType         mapZoomType;
 
 @end
 
@@ -58,7 +62,8 @@
 - (void)_fireBreadcrumbUpdateTimer;
 - (void)_invalidBreadcrumbUpdateTimer;
 
-- (void)_zoomToCoordinate:(CLLocationCoordinate2D)coordinate;
+- (void)_zoomToPerson:(EFMapPerson *)person;
+- (void)_zoomToPersonLocation:(EFMapPerson *)person;
 
 @end
 
@@ -97,30 +102,62 @@
     }
 }
 
-- (void)_zoomToCoordinate:(CLLocationCoordinate2D)coordinate {
+- (void)_zoomToPerson:(EFMapPerson *)person {
+    self.mapZoomType = kEFMapZoomTypePersonAndDestination;
+    
     // center
     EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+    BOOL isMe = (person == [self.mapDataSource me]);
+    CLLocationCoordinate2D coordinate = isMe ? [EFLocationManager defaultManager].userLocation.coordinate : person.lastLocation.coordinate;
+    
     if (destination) {
         MKMapPoint lastMapPoint = MKMapPointForCoordinate(coordinate);
         MKMapPoint destinationMapPoint = MKMapPointForCoordinate(destination.coordinate);
         
-        CGFloat width = fabs(lastMapPoint.x - destinationMapPoint.x);
-        CGFloat height = fabsf(lastMapPoint.y - destinationMapPoint.y);
-        CGFloat x = lastMapPoint.x - width * 2;
-        CGFloat y = lastMapPoint.y - height * 2;
-        
-        MKMapRect visibleRect = MKMapRectMake(x, y, width * 4, height * 4);
-        [self.mapView setVisibleMapRect:visibleRect animated:YES];
+        if (isMe) {
+            CGFloat width = fabs(lastMapPoint.x - destinationMapPoint.x);
+            CGFloat height = fabs(lastMapPoint.y - destinationMapPoint.y);
+            
+            CGFloat factor = 0.45f;
+            CGFloat widthOffset = width * factor;
+            CGFloat heightOffset = height * factor;
+            
+            CGFloat x = lastMapPoint.x - (1.4f * widthOffset + width);
+            CGFloat y = lastMapPoint.y - (heightOffset + height);
+            
+            MKMapRect visibleRect = MKMapRectMake(x, y, (width + widthOffset) * 2, (height + heightOffset) * 2);
+            [self.mapView setVisibleMapRect:visibleRect animated:YES];
+        } else {
+            CGFloat width = fabs(lastMapPoint.x - destinationMapPoint.x);
+            CGFloat height = fabs(lastMapPoint.y - destinationMapPoint.y);
+            
+            CGFloat factor = 0.35f;
+            CGFloat widthOffset = width * factor;
+            CGFloat heightOffset = height * factor;
+            
+            CGFloat x = MIN(lastMapPoint.x, destinationMapPoint.x) - (1.3f * widthOffset);
+            CGFloat y = MIN(lastMapPoint.y, destinationMapPoint.y) - heightOffset;
+            
+            MKMapRect visibleRect = MKMapRectMake(x, y, width + widthOffset * 2, height + heightOffset * 2);
+            [self.mapView setVisibleMapRect:visibleRect animated:YES];
+        }
     } else {
-        MKMapRect visibleMapRect = self.mapView.visibleMapRect;
-        CGFloat width = visibleMapRect.size.width;
-        if (fabsf(width) - 9800 >= 0 && fabsf(width) - 9800 <= 200) {
+        int zoomLevel = self.mapView.zoomLevel;
+        NSLog(@"Current Map Zoom Level: %d", zoomLevel);
+        if (zoomLevel >= 17 && zoomLevel <= 18) {
             [self.mapView setCenterCoordinate:coordinate animated:YES];
         } else {
-            MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(coordinate, 5000.0f, 5000.0f);
-            [self.mapView setRegion:region animated:YES];
+            [self.mapView setCenterCoordinate:coordinate zoomLevel:17 animated:YES];
         }
     }
+}
+
+- (void)_zoomToPersonLocation:(EFMapPerson *)person {
+    self.mapZoomType = kEFMapZoomTypePersonLocation;
+    
+    BOOL isMe = (person == [self.mapDataSource me]);
+    CLLocationCoordinate2D coordinate = isMe ? [EFLocationManager defaultManager].userLocation.coordinate : person.lastLocation.coordinate;
+    [self.mapView setCenterCoordinate:coordinate zoomLevel:17 animated:YES];
 }
 
 @end
@@ -239,7 +276,9 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self _zoomToCoordinate:[EFLocationManager defaultManager].userLocation.coordinate];
+    
+    [self _zoomToPerson:[self.mapDataSource me]];
+    self.recentZoomedPerson = [self.mapDataSource me];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -264,13 +303,15 @@
 }
 
 - (void)userLocationDidChange {
-    EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
-    if (userLocationView) {
-        userLocationView.annotation = [EFLocationManager defaultManager].userLocation;
-        [userLocationView.superview bringSubviewToFront:userLocationView];
-    } else {
-        [self.mapView addAnnotation:[EFLocationManager defaultManager].userLocation];
-    }
+    [self.mapView removeAnnotation:[EFLocationManager defaultManager].userLocation];
+    [self.mapView addAnnotation:[EFLocationManager defaultManager].userLocation];
+//    EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
+//    if (userLocationView) {
+//        userLocationView.annotation = [EFLocationManager defaultManager].userLocation;
+//        [userLocationView.superview bringSubviewToFront:userLocationView];
+//    } else {
+//        [self.mapView addAnnotation:[EFLocationManager defaultManager].userLocation];
+//    }
 }
 
 #pragma mark - Timer
@@ -460,7 +501,17 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     // timestamp
     [self.mapDataSource updateTimestampForPerson:person toMapView:self.mapView];
     
-    [self _zoomToCoordinate:person.lastLocation.coordinate];
+    if (self.recentZoomedPerson == person) {
+        if (kEFMapZoomTypePersonAndDestination == self.mapZoomType) {
+            [self _zoomToPersonLocation:person];
+        } else {
+            [self _zoomToPerson:person];
+        }
+    } else {
+        [self _zoomToPerson:person];
+        self.recentZoomedPerson = person;
+    }
+    
     [self _fireBreadcrumbUpdateTimer];
 }
 
@@ -576,6 +627,10 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 #pragma mark - EFMapViewDelegate
+
+- (void)mapViewDidScroll:(EFMapView *)mapView {
+    self.mapZoomType = kEFMapZoomTypeUnknow;
+}
 
 - (void)mapView:(EFMapView *)mapView isChangingSelectedAnnotationTitle:(NSString *)title {
     EFCalloutAnnotationView *calloutView = (EFCalloutAnnotationView *)[self.mapView viewForAnnotation:self.currentCalloutAnnotation];
@@ -722,7 +777,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             [routeLocation updateIconURL];
             
             [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
-//            [self _postRoute];
         };
         
         return callout;

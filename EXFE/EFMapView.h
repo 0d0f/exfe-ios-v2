@@ -9,6 +9,7 @@
 #import <MapKit/MapKit.h>
 
 #import "EFMapEditingAnnotationView.h"
+#import "MKMapView+ZoomLevel.h"
 
 typedef enum {
     kEFMapOperationStyleRightHand = 0,

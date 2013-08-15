@@ -1671,6 +1671,9 @@
 		769794FC177C26AD0052A1DC /* EFLoadSuggestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794F9177C26AD0052A1DC /* EFLoadSuggestOperation.m */; };
 		76A150BF1717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76A150C01717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
+		76A8371117BCA59400CE5D54 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A8371017BCA59400CE5D54 /* MKMapView+ZoomLevel.m */; };
+		76A8371217BCA59400CE5D54 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A8371017BCA59400CE5D54 /* MKMapView+ZoomLevel.m */; };
+		76A8371317BCA59400CE5D54 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A8371017BCA59400CE5D54 /* MKMapView+ZoomLevel.m */; };
 		76B123761796470C00A73E59 /* EFAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123461796470C00A73E59 /* EFAnnotation.m */; };
 		76B123771796470C00A73E59 /* EFAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123461796470C00A73E59 /* EFAnnotation.m */; };
 		76B123781796470C00A73E59 /* EFAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123461796470C00A73E59 /* EFAnnotation.m */; };
@@ -2794,6 +2797,8 @@
 		769794F9177C26AD0052A1DC /* EFLoadSuggestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLoadSuggestOperation.m; sourceTree = "<group>"; };
 		76A150BC1717D23400751C92 /* EXAddressBookService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXAddressBookService.h; sourceTree = "<group>"; };
 		76A150BD1717D23500751C92 /* EXAddressBookService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAddressBookService.m; sourceTree = "<group>"; };
+		76A8370F17BCA59400CE5D54 /* MKMapView+ZoomLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKMapView+ZoomLevel.h"; sourceTree = "<group>"; };
+		76A8371017BCA59400CE5D54 /* MKMapView+ZoomLevel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKMapView+ZoomLevel.m"; sourceTree = "<group>"; };
 		76B123451796470C00A73E59 /* EFAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAnnotation.h; sourceTree = "<group>"; };
 		76B123461796470C00A73E59 /* EFAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFAnnotation.m; sourceTree = "<group>"; };
 		76B123471796470C00A73E59 /* EFAnnotationDataDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAnnotationDataDefines.h; sourceTree = "<group>"; };
@@ -3974,6 +3979,16 @@
 			name = Service;
 			sourceTree = "<group>";
 		};
+		76A8370E17BCA59400CE5D54 /* MKMapViewZoom */ = {
+			isa = PBXGroup;
+			children = (
+				76A8370F17BCA59400CE5D54 /* MKMapView+ZoomLevel.h */,
+				76A8371017BCA59400CE5D54 /* MKMapView+ZoomLevel.m */,
+			);
+			name = MKMapViewZoom;
+			path = Vendor/MKMapViewZoom;
+			sourceTree = SOURCE_ROOT;
+		};
 		76B123BF179647DD00A73E59 /* Annotation */ = {
 			isa = PBXGroup;
 			children = (
@@ -4570,6 +4585,7 @@
 		785FD54E158065610056590D /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				76A8370E17BCA59400CE5D54 /* MKMapViewZoom */,
 				76555B51179E78D600BCC5A7 /* WeixinSDK */,
 				76B1240B1796F44900A73E59 /* Sqlite */,
 				4F8507C417841ADA00BB86FA /* LibPhoneNumber */,
@@ -6938,6 +6954,7 @@
 				76B1245F179932A000A73E59 /* EFPersonAnnotation.m in Sources */,
 				766C982A179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 				766C984C179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
+				76A8371217BCA59400CE5D54 /* MKMapView+ZoomLevel.m in Sources */,
 				4FA01BD2179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
 				4F0E3552179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
 				76555B21179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
@@ -7190,6 +7207,7 @@
 				76B12460179932A000A73E59 /* EFPersonAnnotation.m in Sources */,
 				766C982B179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 				766C984D179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
+				76A8371317BCA59400CE5D54 /* MKMapView+ZoomLevel.m in Sources */,
 				4FA01BD3179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
 				4F0E3553179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
 				76555B22179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
@@ -7442,6 +7460,7 @@
 				76B1245E179932A000A73E59 /* EFPersonAnnotation.m in Sources */,
 				766C9829179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 				766C984B179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
+				76A8371117BCA59400CE5D54 /* MKMapView+ZoomLevel.m in Sources */,
 				4FA01BD1179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
 				4F0E3551179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
 				76555B20179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,

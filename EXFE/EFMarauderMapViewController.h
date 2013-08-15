@@ -15,6 +15,12 @@
 #import "EFMarauderMapDataSource.h"
 #import "EFMapStrokeView.h"
 
+typedef enum {
+    kEFMapZoomTypeUnknow = 0,
+    kEFMapZoomTypePersonAndDestination,
+    kEFMapZoomTypePersonLocation
+} EFMapZoomType;
+
 @class EFMapPerson, EXFEModel, Cross;
 
 @interface EFMarauderMapViewController : UIViewController

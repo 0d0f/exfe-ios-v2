@@ -212,7 +212,7 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
                                                           if (person.lastLocation) {
                                                               [person.locations addObjectsFromArray:path.positions];
                                                           } else {
-                                                              if (path.positions.count > 1) {
+                                                              if (path.positions.count >= 1) {
                                                                   NSArray *positions = [path.positions subarrayWithRange:(NSRange){0, path.positions.count - 1}];
                                                                   [person.locations addObjectsFromArray:positions];
                                                                   person.lastLocation = path.positions[0];
@@ -286,6 +286,10 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
     
     [self.routeLocationAnnotationMap setValue:annotation forKey:routeLocation.locationId];
     [mapView addAnnotation:annotation];
+    
+    for (EFMapPerson *person in self.people) {
+        [self _updatePersonState:person];
+    }
 }
 
 - (void)updateRouteLocation:(EFRouteLocation *)routeLocation inMapView:(MKMapView *)mapView shouldPostToServer:(BOOL)shouldPost {
@@ -326,6 +330,10 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
                                        isEarthCoordinate:NO
                                                  success:^{}
                                                  failure:^(NSError *error){}];
+    }
+    
+    for (EFMapPerson *person in self.people) {
+        [self _updatePersonState:person];
     }
 }
 
@@ -406,6 +414,10 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
     
     NSInteger crossId = [self.cross.cross_id integerValue];
     NSURL *streamingURL = [NSURL URLWithString:[NSString stringWithFormat:@"/v3/routex/crosses/%d?_method=WATCH&coordinate=mars&token=%@", crossId, userToken] relativeToURL:baseURL];
+    
+#ifdef DEBUG
+    NSLog(@"STREAMING: %@", streamingURL.absoluteString);
+#endif
     
     self.httpStreaming = [[EFHTTPStreaming alloc] initWithURL:streamingURL];
     self.httpStreaming.delegate = self;
@@ -497,6 +509,7 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
                 }
             } else if ([type isEqualToString:@"location"]) {
                 EFRouteLocation *routeLocation = [[EFRouteLocation alloc] initWithDictionary:jsonDictionary];
+                
                 if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateRouteLocations:)]) {
                     [self.delegate mapDataSource:self didGetRouteLocations:@[routeLocation]];
                 }
