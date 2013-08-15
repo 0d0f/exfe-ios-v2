@@ -8,6 +8,7 @@
 
 #import "EFAnnotationView.h"
 
+#import <QuartzCore/QuartzCore.h>
 #import "EFAnnotation.h"
 #import "EFMarauderMapDataSource.h"
 
