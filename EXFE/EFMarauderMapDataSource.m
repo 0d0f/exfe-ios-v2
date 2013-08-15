@@ -27,25 +27,38 @@
 #define kTimestampBlank     (15.0f)
 
 #define DegreesToRadians(x)     (M_PI * x / 180.0)
-#define RadiandsToDegrees(x)    (x * 180.0 / M_PI)
+#define RadiansToDegrees(x)    (x * 180.0 / M_PI)
 #define LengthBetweenPoints(point1, point2)     sqrt(fabs((point1).x - (point2).x) * fabs((point1).x - (point2).x) + fabs((point1).y - (point2).y) * fabs((point1).y - (point2).y))
 
 NSString *EFNotificationRoutePathDidChange = @"notification.routePath.didChange";
 NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.didChange";
 
-CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationCoordinate2D locationCoordinate) {
-    float fLat = DegreesToRadians(locationCoordinate.latitude);
-    float fLng = DegreesToRadians(locationCoordinate.longitude);
-    float tLat = DegreesToRadians(destinationCoordinate.latitude);
-    float tLng = DegreesToRadians(destinationCoordinate.longitude);
+// cosa＝（b^2+c^2-a^2)/2bc
+CGFloat RadianAWithLine(CGFloat a, CGFloat b, CGFloat c) {
+    CGFloat cosa = (b * b + c * c - a * a) / (2 * b * c);
+    CGFloat A = acos(cosa);
+    return A;
+}
+
+CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocationCoordinate2D locationCoordinate) {
+    CGFloat offset = fabs(destinationCoordinate.longitude - locationCoordinate.longitude);
+    CLLocationCoordinate2D another = CLLocationCoordinate2DMake(locationCoordinate.latitude + offset, locationCoordinate.longitude);
     
-    float degree = RadiandsToDegrees(atan2(sin(tLng-fLng)*cos(tLat), cos(fLat)*sin(tLat)-sin(fLat)*cos(tLat)*cos(tLng-fLng)));
+    CLLocation *destinationLocation = [[CLLocation alloc] initWithLatitude:destinationCoordinate.latitude longitude:destinationCoordinate.longitude];
+    CLLocation *locationLocation = [[CLLocation alloc] initWithLatitude:locationCoordinate.latitude longitude:locationCoordinate.longitude];
+    CLLocation *anotherLocation = [[CLLocation alloc] initWithLatitude:another.latitude longitude:another.longitude];
     
-    if (degree >= 0.0f) {
-        return degree;
-    } else {
-        return 360.0f + degree;
+    CGFloat a = [anotherLocation distanceFromLocation:destinationLocation];
+    CGFloat b = [anotherLocation distanceFromLocation:locationLocation];
+    CGFloat c = [destinationLocation distanceFromLocation:locationLocation];
+    
+    CGFloat angle = RadianAWithLine(a, b, c);
+    
+    if (destinationCoordinate.longitude <= locationCoordinate.longitude) {
+        angle = 2 * M_PI - angle;
     }
+    
+    return angle;
 }
 
 @interface EFMarauderMapDataSource ()
@@ -155,7 +168,7 @@ CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationC
         person.locationState = kEFMapPersonLocationStateUnknow;
     }
     
-    person.angle = HeadingInAngle(destination.coordinate, person.lastLocation.coordinate);
+    person.angle = HeadingInRadian(destination.coordinate, person.lastLocation.coordinate);
 }
 
 @end
