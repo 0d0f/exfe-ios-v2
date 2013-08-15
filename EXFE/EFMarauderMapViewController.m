@@ -688,6 +688,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             annotationView = [[EFAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:Identifier];
             annotationView.canShowCallout = NO;
             annotationView.mapView = self.mapView;
+            annotationView.mapDataSource = self.mapDataSource;
         }
         
         [annotationView reloadWithAnnotation:annotation];
