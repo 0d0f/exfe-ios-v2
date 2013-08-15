@@ -481,6 +481,20 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     return routelocation;
 }
 
+#pragma mark - Application Event
+
+- (void)applicationDidEnterBackground {
+    for (EFMapPerson *person in self.people) {
+        [person.locations removeAllObjects];
+        person.lastLocation = nil;
+    }
+}
+
+- (void)applicationDidEnterForeground {
+    [self registerToUpdateLocation];
+    [self getPeopleBreadcrumbs];
+}
+
 #pragma mark - EFHTTPStreamingDelegate
 
 - (void)completedRead:(NSString *)string {

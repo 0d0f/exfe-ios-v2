@@ -56,9 +56,6 @@
 
 - (void)_hideCalloutView;
 
-- (void)_openStreaming;
-- (void)_closeStreaming;
-
 - (void)_fireBreadcrumbUpdateTimer;
 - (void)_invalidBreadcrumbUpdateTimer;
 
@@ -74,14 +71,6 @@
         [self.mapView removeAnnotation:self.currentCalloutAnnotation];
         self.currentCalloutAnnotation = nil;
     }
-}
-
-- (void)_openStreaming {
-    [self.mapDataSource openStreaming];
-}
-
-- (void)_closeStreaming {
-    [self.mapDataSource closeStreaming];
 }
 
 - (void)_fireBreadcrumbUpdateTimer {
@@ -245,7 +234,7 @@
     
     [self.mapStrokeView reloadData];
     
-    [self _openStreaming];
+    [self.mapDataSource openStreaming];
     
     if ([[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
 #warning !!! 文本替换
@@ -285,7 +274,7 @@
     [[EFLocationManager defaultManager] removeObserver:self
                                             forKeyPath:@"userHeading"];
     [[EFLocationManager defaultManager] stopUpdatingHeading];
-    [self _closeStreaming];
+    [self.mapDataSource closeStreaming];
     
     [self _invalidBreadcrumbUpdateTimer];
     
@@ -295,23 +284,35 @@
 #pragma mark - Notification Handler
 
 - (void)enterBackground {
-    [self _closeStreaming];
+    [self _invalidBreadcrumbUpdateTimer];
+    [self.mapDataSource closeStreaming];
+    [self.mapDataSource applicationDidEnterBackground];
 }
 
 - (void)enterForeground {
-    [self _openStreaming];
+    [self.mapDataSource openStreaming];
+    if ([[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
+#warning !!! 文本替换
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"第一次使用活点地图"
+                                                            message:@"是否启用"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"残忍的拒绝"
+                                                  otherButtonTitles:@"欣然的接受", nil];
+        [alertView show];
+    } else {
+        // register to update location
+        [self.mapDataSource applicationDidEnterForeground];
+    }
+    
+    if ([EFLocationManager defaultManager].userLocation) {
+        [self userLocationDidChange];
+    }
+    [self _fireBreadcrumbUpdateTimer];
 }
 
 - (void)userLocationDidChange {
     [self.mapView removeAnnotation:[EFLocationManager defaultManager].userLocation];
     [self.mapView addAnnotation:[EFLocationManager defaultManager].userLocation];
-//    EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
-//    if (userLocationView) {
-//        userLocationView.annotation = [EFLocationManager defaultManager].userLocation;
-//        [userLocationView.superview bringSubviewToFront:userLocationView];
-//    } else {
-//        [self.mapView addAnnotation:[EFLocationManager defaultManager].userLocation];
-//    }
 }
 
 #pragma mark - Timer

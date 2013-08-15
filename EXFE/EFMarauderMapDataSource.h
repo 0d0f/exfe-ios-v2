@@ -102,6 +102,12 @@ EFHTTPStreamingDelegate
 - (void)unregisterToUpdateLocation;
 
 /**
+ * Application Event
+ */
+- (void)applicationDidEnterBackground;
+- (void)applicationDidEnterForeground;
+
+/**
  * Factory
  */
 - (EFRouteLocation *)createRouteLocationWithCoordinate:(CLLocationCoordinate2D)coordinate;
