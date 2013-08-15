@@ -22,3 +22,6 @@
 [submodule "Vendor/RestKit"]
 	path = Vendor/RestKit
 	url = https://github.com/stonyw/RestKit.git
+[submodule "Vendor/MKMapViewZoom"]
+	path = Vendor/MKMapViewZoom
+	url = https://github.com/0day2010/MKMapViewZoom.git
