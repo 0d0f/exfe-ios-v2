@@ -386,20 +386,20 @@ static UIView * ReverseSubviews(UIView *view) {
     
     self.editingState = kEFMapViewEditingStateNormal;
     
-    // touch down gesture
-//    self.touchDownGestureRecognizer = [[EFTouchDownGestureRecognizer alloc] init];
-//    self.touchDownGestureRecognizer.minimumNumberOfTouches = 1;
-//    self.touchDownGestureRecognizer.maximumNumberOfTouches = 1;
-//    
-//    __weak typeof(self) weakSelf = self;
-//    
-//    self.touchDownGestureRecognizer.touchesMovedCallback = ^(NSSet *touches, UIEvent *event){
-//        if ([weakSelf.delegate respondsToSelector:@selector(mapViewDidScroll:)]) {
-//            [weakSelf.delegate mapViewDidScroll:weakSelf];
-//        }
-//    };
-//    
-//    [self.gestureView addGestureRecognizer:self.touchDownGestureRecognizer];
+    // touch gesture
+    self.touchDownGestureRecognizer = [[EFTouchDownGestureRecognizer alloc] init];
+    self.touchDownGestureRecognizer.minimumNumberOfTouches = 1;
+    self.touchDownGestureRecognizer.maximumNumberOfTouches = 1;
+    
+    __weak typeof(self) weakSelf = self;
+    
+    self.touchDownGestureRecognizer.touchesMovedCallback = ^(NSSet *touches, UIEvent *event){
+        if ([weakSelf.delegate respondsToSelector:@selector(mapViewDidScroll:)]) {
+            [weakSelf.delegate mapViewDidScroll:weakSelf];
+        }
+    };
+    
+    [self.gestureView addGestureRecognizer:self.touchDownGestureRecognizer];
     
     self.lines = [[NSMutableArray alloc] initWithCapacity:20];
     self.strokeColors = [[NSMutableArray alloc] initWithCapacity:20];

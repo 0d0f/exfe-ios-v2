@@ -17,7 +17,7 @@
 @property (nonatomic, strong) NSString                  *identityString;
 @property (nonatomic, strong) NSString                  *userIdString;
 @property (nonatomic, assign) CGFloat                   distance;
-@property (nonatomic, assign) CGFloat                   angle;
+@property (nonatomic, assign) CGFloat                   angle;          // 0 ~ 2Pi
 @property (nonatomic, assign) EFMapPersonConnectState   connectState;
 @property (nonatomic, assign) EFMapPersonLocationState  locationState;
 

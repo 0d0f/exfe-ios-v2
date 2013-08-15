@@ -37,5 +37,6 @@ extern NSString *EFNotificationRoutePathDidChange;
 extern NSString *EFNotificationRouteLocationDidChange;
 
 extern NSString *EFNotificationUserLocationDidChange;
+extern NSString *EFNotificationUserLocationOffsetDidGet;
 
 #endif
