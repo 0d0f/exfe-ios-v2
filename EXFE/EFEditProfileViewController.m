@@ -277,11 +277,9 @@
         if (self.activeInputView) {
             switch (self.activeInputView.tag) {
                 case kTagName:
-                    self.body.hidden = YES;
                     [self.activeInputView resignFirstResponder];
                     break;
                 case kTagBio:
-                    self.body.hidden = YES;
                     [self.activeInputView resignFirstResponder];
                     break;
                 default:
@@ -610,11 +608,12 @@
     CGFloat ratio = 0;
     
     // Enlarge scroll View
-    CGFloat longAspect = MAX(image.size.height, image.size.width);
-    CGFloat shortAspect = MIN(image.size.height, image.size.width);
+    CGFloat imageScale = image.scale;
+    CGFloat longAspect = MAX(image.size.height * imageScale, image.size.width * imageScale);
+    CGFloat shortAspect = MIN(image.size.height * imageScale, image.size.width * imageScale);
     BOOL isPortrait = image.size.height >= image.size.width;
     
-    if (longAspect >= 640) {
+    if (longAspect >= 320) {
         ratio = 320 / shortAspect;
         
         CGFloat la = longAspect * (1 + paddingRatio * 2);
@@ -770,6 +769,7 @@
     switch (textView.tag) {
         case kTagName:{
             self.activeInputView = nil;
+            self.body.hidden = YES;
             self.imageScrollView.scrollEnabled = !self.readonly;
             textView.hidden = YES;
             self.name.hidden = NO;
@@ -785,6 +785,7 @@
         }  break;
         case kTagBio:{
             self.activeInputView = nil;
+            self.body.hidden = YES;
             self.imageScrollView.scrollEnabled = !self.readonly;
             
             NSString *original = [self getBio];
@@ -1121,7 +1122,7 @@
 //    BOOL isPortrait = image.size.height >= image.size.width;
     BOOL large = YES;
     
-    if (longAspect >= 640) {
+    if (longAspect >= 320) {
         ratio = 320 / shortAspect;
         large = YES;
     } else {
