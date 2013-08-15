@@ -200,7 +200,7 @@
     
     UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 190, 97)];
     name.backgroundColor = [UIColor clearColor];
-    name.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:21];
+    name.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
     name.textColor = [UIColor whiteColor];
     name.textAlignment = NSTextAlignmentCenter;
     name.shadowColor = [UIColor blackColor];
@@ -483,7 +483,6 @@
     } else if ([keyPath isEqual:kModelKeyName]) {
         [self fillUI];
     } else if ([keyPath isEqual:kModelKeyBio]) {
-        id num = [self.data valueForKey:kModelKeyImageDirty];
         [self fillUI];
     } else {
         // fallback
@@ -666,7 +665,6 @@
     self.avatar.image = image;
     
     CGFloat scale = ratio;
-//    [self.imageScrollView setMinimumZoomScale:scale / 8];
     [self.imageScrollView setMinimumZoomScale:scale / (1 + paddingRatio * 2)];
     [self.imageScrollView setMaximumZoomScale:scale * 8];
     [self bestZoomWithAnimation:NO];
@@ -1132,8 +1130,8 @@
             
             CGRect fullRect = CGRectMake(0, 0, 320, height);
             CGRect largeRect = CGRectMake(0, CGRectGetHeight(self.header.bounds), 320, 320);
-            
-            CGSize viewPortSize = CGSizeMake(self.imageScrollView.contentSize.width / self.imageScrollView.contentScaleFactor, self.imageScrollView.contentSize.height / self.imageScrollView.contentScaleFactor);
+            CGFloat zoomScale = self.imageScrollView.zoomScale;
+            CGSize viewPortSize = CGSizeMake(self.imageScrollView.contentSize.width, self.imageScrollView.contentSize.height);
             CGPoint offset = self.imageScrollView.contentOffset;
             
             UIGraphicsBeginImageContextWithOptions(viewPortSize, NO, scale);
@@ -1144,10 +1142,16 @@
             UIImage * largeImage = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
             
-            CGRect newCropRect1 = CGRectMake((CGRectGetMinX(fullRect) + offset.x) * scale , (CGRectGetMinY(fullRect) + offset.y) * scale, CGRectGetWidth(fullRect) * scale, CGRectGetHeight(fullRect) * scale);
+//            if (self.previewScreen) {
+//                self.previewScreen.image = largeImage;
+//            }
             
-            BOOL hasFullSize = CGRectContainsRect(self.avatar.frame, newCropRect1);
+            CGRect fullRectOffset = CGRectOffset(fullRect, offset.x, offset.y);
             
+            CGRect newCropRect1 = CGRectMake(CGRectGetMinX(fullRectOffset) * scale , CGRectGetMinY(fullRectOffset) * scale, CGRectGetWidth(fullRectOffset) * scale, CGRectGetHeight(fullRectOffset) * scale);
+            CGRect avatarMirror = CGRectMake(CGRectGetMinX(self.avatar.frame) * zoomScale, CGRectGetMinY(self.avatar.frame) * zoomScale, CGRectGetWidth(self.avatar.frame) * zoomScale, CGRectGetHeight(self.avatar.frame) * zoomScale);
+            
+            BOOL hasFullSize = CGRectContainsRect(avatarMirror, fullRectOffset);
             if (hasFullSize) {
                 CGImageRef imageRef1 = CGImageCreateWithImageInRect([largeImage CGImage], newCropRect1);
                 if (imageRef1) {
