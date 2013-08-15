@@ -31,6 +31,7 @@
 #define kTagName          233
 #define kTagBio           234
 #define kTagZoom          100
+#define kTagImageScroll   235
 
 #define ZOOM_STEP 1.5
 
@@ -147,7 +148,7 @@
     // Lower layer
     UIScrollView *imageScrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     imageScrollView.delegate = self;
-    
+    imageScrollView.tag = kTagImageScroll;
     
     UIView * imageScrollRange = [[UIView alloc] initWithFrame:CGRectZero];
     [imageScrollView addSubview:imageScrollRange];
@@ -406,6 +407,7 @@
             [alertView addButtonWithTitle:NSLocalizedString(@"Revert", nil) handler:^{
                 [_data removeAllObjects];
                 [self fillUI];
+                [self fillAvatar];
             }];
             [alertView setCancelButtonWithTitle:NSLocalizedString(@"Cancel", nil) handler:nil];
             [alertView show];
@@ -635,8 +637,8 @@
     self.avatar.image = image;
     
     CGFloat scale = ratio;
-    [self.imageScrollView setMinimumZoomScale:scale / 8];
-//    [self.imageScrollView setMinimumZoomScale:scale / (1 + paddingRatio * 2)];
+//    [self.imageScrollView setMinimumZoomScale:scale / 8];
+    [self.imageScrollView setMinimumZoomScale:scale / (1 + paddingRatio * 2)];
     [self.imageScrollView setMaximumZoomScale:scale * 8];
     [self bestZoomWithAnimation:NO];
     
@@ -831,7 +833,7 @@
             [newText replaceOccurrencesOfString:@"\n" withString:@" " options:NSCaseInsensitiveSearch range:NSMakeRange(0, text.length)];
             [newText replaceOccurrencesOfString:@"\t" withString:@" " options:NSCaseInsensitiveSearch range:NSMakeRange(0, text.length)];
             [newText replaceOccurrencesOfString:@"\r" withString:@" " options:NSCaseInsensitiveSearch range:NSMakeRange(0, text.length)];
-            NSString *result = [NSString stringWithFormat:@"%@%@%@", [original substringToIndex:range.location], text, [original substringFromIndex:(range.location + range.length) ]];
+            NSString *result = [NSString stringWithFormat:@"%@%@%@", [original substringToIndex:range.location], newText, [original substringFromIndex:(range.location + range.length) ]];
             if (result) {
                 NSData *asciiData = [result dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
                 if (asciiData.length > 40) {
@@ -839,8 +841,17 @@
                 }
             }
         }  break;
-        case kTagBio:
-            break;
+        case kTagBio:{
+            NSString *original = textView.text;
+            
+            NSString *result = [NSString stringWithFormat:@"%@%@%@", [original substringToIndex:range.location], text, [original substringFromIndex:(range.location + range.length) ]];
+            if (result) {
+                NSData *asciiData = [result dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+                if (asciiData.length > 233) {
+                    return NO;
+                }
+            }
+        }  break;
             
         default:
             break;
@@ -872,43 +883,77 @@
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
-//    return [scrollView viewWithTag:kTagZoom];
-    return self.imageScrollRange;
+    switch (scrollView.tag) {
+        case kTagName:
+        case kTagBio:
+            break;
+        case kTagImageScroll:
+            return self.imageScrollRange;
+        default:
+            break;
+    }
+    return nil;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    if (!self.readonly && !self.fillAvatarFlag) {
-        id num = [self.data valueForKey:kModelKeyImageDirty];
-        if (!num) {
-            [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
-        }
+    switch (scrollView.tag) {
+        case kTagName:
+        case kTagBio:
+            break;
+        case kTagImageScroll:
+            if (!self.readonly && !self.fillAvatarFlag) {
+                id num = [self.data valueForKey:kModelKeyImageDirty];
+                if (!num) {
+                    [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
+                }
+            }
+        default:
+            break;
     }
 }
 
 //- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 //{
-//    if (self.preview) {
-//        NSDictionary *dict = [self cropedImages];
-//        self.preview.image = [dict valueForKey:kKeyImageFull];
-//        self.previewTh.image = [self imageWithImage:[dict valueForKey:kKeyImageLarge] scaledToSize:self.previewTh.bounds.size];
+//    switch (scrollView.tag) {
+//        case kTagName:
+//        case kTagBio:
+//            break;
+//        case kTagImageScroll:
+//            if (self.preview) {
+//                NSDictionary *dict = [self cropedImages];
+//                self.preview.image = [dict valueForKey:kKeyImageFull];
+//                self.previewTh.image = [self imageWithImage:[dict valueForKey:kKeyImageLarge] scaledToSize:self.previewTh.bounds.size];
+//            }
+//        default:
+//            break;
 //    }
 //}
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
-    if (!self.readonly && !self.fillAvatarFlag) {
-        id num = [self.data valueForKey:kModelKeyImageDirty];
-        if (!num) {
-            [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
-        }
+    switch (scrollView.tag) {
+        case kTagName:
+        case kTagBio:
+            break;
+        case kTagImageScroll:
+            if (!self.readonly && !self.fillAvatarFlag) {
+                id num = [self.data valueForKey:kModelKeyImageDirty];
+                if (!num) {
+                    [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
+                }
+            }
+            
+//            if (self.preview) {
+//                NSDictionary *dict = [self cropedImages];
+//                self.preview.image = [dict valueForKey:kKeyImageFull];
+//                self.previewTh.image = [self imageWithImage:[dict valueForKey:kKeyImageLarge] scaledToSize:self.previewTh.bounds.size];
+//            }
+        default:
+            break;
     }
     
-//    if (self.preview) {
-//        NSDictionary *dict = [self cropedImages];
-//        self.preview.image = [dict valueForKey:kKeyImageFull];
-//        self.previewTh.image = [self imageWithImage:[dict valueForKey:kKeyImageLarge] scaledToSize:self.previewTh.bounds.size];
-//    }
+
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
