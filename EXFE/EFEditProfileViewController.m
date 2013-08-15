@@ -589,7 +589,7 @@
     }
     
     CGFloat offset = CGRectGetHeight(self.name.bounds) / 2 - CGRectGetHeight(self.identityId.bounds) / 2;
-    self.name.center = CGPointMake(self.header.center.x, self.header.center.y - offset / 2);
+    self.name.center = CGPointMake(self.header.center.x, self.header.center.y + offset - CGRectGetHeight(self.name.bounds) / 2);
     self.identityId.center = CGPointMake(self.header.center.x, CGRectGetMaxY(self.name.frame) + CGRectGetHeight(self.identityId.bounds) / 2);
     
     [self fillBio:[self getBio]];
@@ -786,7 +786,7 @@
     picker.delegate = self;
     
     UIActionSheet *sheet = [UIActionSheet actionSheetWithTitle:nil];
-    [sheet addButtonWithTitle:NSLocalizedString(@"Take Photo", nil) handler:^{
+    [sheet addButtonWithTitle:NSLocalizedString(@"Take photo", nil) handler:^{
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
             [self presentModalViewController:picker animated:YES];
@@ -795,7 +795,7 @@
         }
         
     }];
-    [sheet addButtonWithTitle:NSLocalizedString(@"Choose Photo", nil) handler:^{
+    [sheet addButtonWithTitle:NSLocalizedString(@"Choose photo", nil) handler:^{
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentModalViewController:picker animated:YES];
     }];
