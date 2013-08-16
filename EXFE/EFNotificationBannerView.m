@@ -98,6 +98,8 @@ typedef void (^ActionHandlerBlock)(void);
                 titleLabelFrame.size.width = maxWidth;
                 self.titleLabel.frame = titleLabelFrame;
             }
+            
+            self.titleLabel.center = (CGPoint){self.titleLabel.center.x, CGRectGetHeight(self.bounds) * 0.5f};
         }
         
         self.bannerPressedHandler = bannerHandler;
