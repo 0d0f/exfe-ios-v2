@@ -52,21 +52,46 @@ NSString *kEFNotificationChangeUserBasicProfileFailure = @"notification.changeUs
                                      if(code){
                                          NSInteger c = [code integerValue];
                                          NSInteger t = c / 100;
-                                         if (t == 2) {
-                                             self.state = kEFNetworkOperationStateSuccess;
-                                             
-                                             NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"response"]];
-                                             
-                                             self.successUserInfo = userInfo;
-                                             
-                                             [self finish];
-                                             return;
-                                         } else {
-                                             self.state = kEFNetworkOperationStateFailure;
-                                             NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"meta"]];
-                                             self.failureUserInfo = userInfo;
-                                             [self finish];
-                                             return;
+                                         switch (t) {
+                                             case 2:{
+                                                 self.state = kEFNetworkOperationStateSuccess;
+                                                 NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"response"]];
+                                                 self.successUserInfo = userInfo;
+                                                 
+                                                 [self finish];
+                                                 return;
+                                             }  break;
+                                                 
+                                             case 4:{
+                                                 self.state = kEFNetworkOperationStateFailure;
+                                                 
+                                                 if (c == 401) {
+                                                     NSString *errorType = [body valueForKeyPath:@"meta.errorType"];
+                                                     if ([@"not_allowed" isEqualToString:errorType]) {
+                                                         
+                                                         NSString *title = NSLocalizedString(@"Failed to update profile.", nil);
+                                                         NSString *message = nil;
+                                                         if (self.name) {
+                                                             message = [NSString stringWithFormat:NSLocalizedString(@"\"%@\"", nil), self.name];
+                                                         } else {
+                                                             message = [NSString stringWithFormat:NSLocalizedString(@"\"%@\"", nil), self.bio];
+                                                         }
+                                                         [Util handleRetryBannerFor:self withTitle:title andMessage:message andRetry:NO];
+                                                     }
+                                                 }
+                                                 
+                                                 NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"meta"]];
+                                                 self.failureUserInfo = userInfo;
+                                                 [self finish];
+                                                 return;
+                                             }
+                                             default:{
+                                                 self.state = kEFNetworkOperationStateFailure;
+                                                 NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"meta"]];
+                                                 self.failureUserInfo = userInfo;
+                                                 [self finish];
+                                                 return;
+                                             }  break;
                                          }
                                      }
                                  }
@@ -80,29 +105,31 @@ NSString *kEFNotificationChangeUserBasicProfileFailure = @"notification.changeUs
                                  
                                  if ([NSURLErrorDomain isEqualToString:error.domain] || [AFNetworkingErrorDomain isEqualToString:error.domain]) {
                                      switch (error.code) {
-                                         case NSURLErrorCancelled: // -999
-                                         case NSURLErrorTimedOut: //-1001
-                                         case NSURLErrorCannotFindHost: //-1003
-                                         case NSURLErrorCannotConnectToHost: //-1004
-                                         case NSURLErrorNetworkConnectionLost: //-1005
-                                         case NSURLErrorDNSLookupFailed: //-1006
-                                         case NSURLErrorNotConnectedToInternet: //-1009
+                                         case NSURLErrorCancelled:
+                                         case NSURLErrorTimedOut:
+                                         case NSURLErrorCannotFindHost:
+                                         case NSURLErrorCannotConnectToHost:
+                                         case NSURLErrorNetworkConnectionLost:
+                                         case NSURLErrorDNSLookupFailed:
+                                         case NSURLErrorNotConnectedToInternet:
+                                         case NSURLErrorHTTPTooManyRedirects:
+                                         case NSURLErrorResourceUnavailable:
+                                         case NSURLErrorRedirectToNonExistentLocation:
+                                         case NSURLErrorBadServerResponse:
+                                         case NSURLErrorZeroByteResource:
+                                         case NSURLErrorServerCertificateUntrusted:
                                          {// Retry
-                                             NSString *title = NSLocalizedString(@"###Failed to update profile###", nil);
-                                             NSString *message = [NSString stringWithFormat:NSLocalizedString(@"###%@ & %@ ###", nil), self.name, self.bio];
+                                             NSString *title = NSLocalizedString(@"Failed to update profile.", nil);
+                                             NSString *message = nil;
+                                             if (self.name) {
+                                                 message = [NSString stringWithFormat:NSLocalizedString(@"\"%@\"", nil), self.name];
+                                             } else {
+                                                 message = [NSString stringWithFormat:NSLocalizedString(@"\"%@\"", nil), self.bio];
+                                             }
                                              
-                                             [Util handleRetryBannerFor:self withTitle:title andMessage:message];
+                                             [Util handleRetryBannerFor:self withTitle:title andMessage:message andRetry:YES];
                                              
                                          }   break;
-                                         
-                                         case NSURLErrorHTTPTooManyRedirects: //-1007
-                                         case NSURLErrorResourceUnavailable: //-1008
-                                         case NSURLErrorRedirectToNonExistentLocation: //-1010
-                                         case NSURLErrorBadServerResponse: // -1011
-                                         case NSURLErrorServerCertificateUntrusted: //-1202
-                                             
-                                             
-                                             break;
                                              
                                          default:
                                              break;

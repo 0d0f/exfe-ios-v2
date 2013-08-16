@@ -56,21 +56,44 @@ NSString *kEFNotificationUpdateIdentityAvatarFailure = @"notification.updateIden
                                                if(code){
                                                    NSInteger c = [code integerValue];
                                                    NSInteger t = c / 100;
-                                                   if (t == 2) {
-                                                       self.state = kEFNetworkOperationStateSuccess;
-                                                       
-                                                       NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"response"]];
-                                                       
-                                                       self.successUserInfo = userInfo;
-                                                       
-                                                       [self finish];
-                                                       return;
-                                                   } else {
-                                                       self.state = kEFNetworkOperationStateFailure;
-                                                       NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"meta"]];
-                                                       self.failureUserInfo = userInfo;
-                                                       [self finish];
-                                                       return;
+                                                   switch (t) {
+                                                       case 2:{
+                                                           self.state = kEFNetworkOperationStateSuccess;
+                                                           NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"response"]];
+                                                           self.successUserInfo = userInfo;
+                                                           
+                                                           [self finish];
+                                                           return;
+                                                       }  break;
+                                                           
+                                                       case 4:{
+                                                           self.state = kEFNetworkOperationStateFailure;
+                                                           
+                                                           if (c == 401) {
+                                                               NSString *errorType = [body valueForKeyPath:@"meta.errorType"];
+                                                               if ([@"not_allowed" isEqualToString:errorType]) {
+                                                                   
+                                                                   NSString *title = NSLocalizedString(@"Failed to update portrait.", nil);
+                                                                   NSString *message = nil;
+                                                                   if (!self.original) {
+                                                                       //title = NSLocalizedString(@"###Failed to remove Identity Avatar###", nil);
+                                                                   }
+                                                                   [Util handleRetryBannerFor:self withTitle:title andMessage:message andRetry:NO];
+                                                               }
+                                                           }
+                                                           
+                                                           NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"meta"]];
+                                                           self.failureUserInfo = userInfo;
+                                                           [self finish];
+                                                           return;
+                                                       }
+                                                       default:{
+                                                           self.state = kEFNetworkOperationStateFailure;
+                                                           NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"meta"]];
+                                                           self.failureUserInfo = userInfo;
+                                                           [self finish];
+                                                           return;
+                                                       }  break;
                                                    }
                                                }
                                            }
@@ -84,33 +107,29 @@ NSString *kEFNotificationUpdateIdentityAvatarFailure = @"notification.updateIden
                                            
                                            if ([NSURLErrorDomain isEqualToString:error.domain] || [AFNetworkingErrorDomain isEqualToString:error.domain]) {
                                                switch (error.code) {
-                                                   case NSURLErrorCancelled: // -999
-                                                   case NSURLErrorTimedOut: //-1001
-                                                   case NSURLErrorCannotFindHost: //-1003
-                                                   case NSURLErrorCannotConnectToHost: //-1004
-                                                   case NSURLErrorNetworkConnectionLost: //-1005
-                                                   case NSURLErrorDNSLookupFailed: //-1006
-                                                   case NSURLErrorNotConnectedToInternet: //-1009
+                                                   case NSURLErrorCancelled:
+                                                   case NSURLErrorTimedOut:
+                                                   case NSURLErrorCannotFindHost:
+                                                   case NSURLErrorCannotConnectToHost:
+                                                   case NSURLErrorNetworkConnectionLost:
+                                                   case NSURLErrorDNSLookupFailed:
+                                                   case NSURLErrorNotConnectedToInternet:
+                                                   case NSURLErrorHTTPTooManyRedirects:
+                                                   case NSURLErrorResourceUnavailable:
+                                                   case NSURLErrorRedirectToNonExistentLocation:
+                                                   case NSURLErrorBadServerResponse:
+                                                   case NSURLErrorZeroByteResource:
+                                                   case NSURLErrorServerCertificateUntrusted:
                                                    {// Retry
-                                                       NSString *title = NSLocalizedString(@"###Failed to update Identity Avatar###", nil);
-                                                       NSString *message = [NSString stringWithFormat:NSLocalizedString(@"###????###", nil)];
+                                                       NSString *title = NSLocalizedString(@"Failed to update portrait.", nil);
+                                                       NSString *message = nil;
                                                        if (!self.original) {
-                                                            title = NSLocalizedString(@"###Failed to remove Identity Avatar###", nil);
+                                                            //title = NSLocalizedString(@"###Failed to remove Identity Avatar###", nil);
                                                        }
                                                        
-                                                       
-                                                       [Util handleRetryBannerFor:self withTitle:title andMessage:message];
+                                                       [Util handleRetryBannerFor:self withTitle:title andMessage:message andRetry:YES];
                                                        
                                                    }   break;
-                                                       
-                                                   case NSURLErrorHTTPTooManyRedirects: //-1007
-                                                   case NSURLErrorResourceUnavailable: //-1008
-                                                   case NSURLErrorRedirectToNonExistentLocation: //-1010
-                                                   case NSURLErrorBadServerResponse: // -1011
-                                                   case NSURLErrorServerCertificateUntrusted: //-1202
-                                                       
-                                                       
-                                                       break;
                                                        
                                                    default:
                                                        break;

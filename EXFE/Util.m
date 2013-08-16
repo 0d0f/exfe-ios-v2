@@ -540,7 +540,8 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     }
 }
 
-+ (void) handleRetryBannerFor:(EFNetworkOperation *)operation withTitle:(NSString *)title andMessage:(NSString *)message {
++ (void) handleRetryBannerFor:(EFNetworkOperation *)operation withTitle:(NSString *)title andMessage:(NSString *)message andRetry:(BOOL)retry
+{
     EFNetworkOperation *op = [[operation class] operationWithModel:((EFNetworkOperation * )operation).model dupelicatedFrom:operation];
 
     if (op.retryCount < op.maxRetry || op.maxRetry == 0) {
@@ -552,18 +553,18 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
                                                                          [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
                                                                      }
                                                                      buttonPressedHandler:nil
-                                                                                needRetry:YES];
+                                                                                needRetry:retry];
         
         [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:errorMessage];
     } else {
         // tryCount upto max limited
-        EFErrorMessage *errorMessage = [[EFErrorMessage alloc] initBannerMessageWithTitle:NSLocalizedString(@"##Alert Title##", nil)
-                                                                                  message:[NSString stringWithFormat:NSLocalizedString(@"##Alert content content content content content content ##", nil)]
-                                                                     bannerPressedHandler:nil
-                                                                     buttonPressedHandler:nil
-                                                                                needRetry:YES];
-        
-        [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:errorMessage];
+//        EFErrorMessage *errorMessage = [[EFErrorMessage alloc] initBannerMessageWithTitle:NSLocalizedString(@"##Alert Title##", nil)
+//                                                                                  message:[NSString stringWithFormat:NSLocalizedString(@"##Alert content content content content content content ##", nil)]
+//                                                                     bannerPressedHandler:nil
+//                                                                     buttonPressedHandler:nil
+//                                                                                needRetry:NO];
+//        
+//        [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:errorMessage];
     }
 }
 
