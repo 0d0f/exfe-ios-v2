@@ -129,6 +129,7 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
 - (void)open {
     NSURL *serverurl = self.url;
     CFHTTPMessageRef message = CFHTTPMessageCreateRequest(kCFAllocatorDefault, (CFStringRef)@"POST", (__bridge CFURLRef)serverurl, kCFHTTPVersion1_1);
+    CFHTTPMessageSetHeaderFieldValue(message, (CFStringRef)@"Accept-Encoding", (CFStringRef)@"gzip, deflate");
     
     _stream = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, message);
     CFRelease(message);

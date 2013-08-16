@@ -12,7 +12,7 @@
 #import "EFAPI.h"
 #import "RecursiveDeleteOperation.h"
 #import "ModelMapping.h"
-#import "AFHTTPClient.h"
+//#import "AFHTTPClient.h"
 
 @interface EXFEModel ()
 
