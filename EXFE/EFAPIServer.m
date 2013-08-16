@@ -996,8 +996,6 @@
                  success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                  failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-    NSParameterAssert(fullImage != nil);
-    
     NSMutableDictionary *images = [NSMutableDictionary dictionaryWithCapacity:3];
     if (fullImage) {
         [images setValue:fullImage forKey:@"original"];
@@ -1012,15 +1010,13 @@
     [self updateAvatar:images for:nil success:success failure:failure];
 }
 
-- (void)updateIdentityAvatar:(NSArray *)fullImage
+- (void)updateIdentityAvatar:(UIImage *)fullImage
              withLargeAvatar:(UIImage *)largeImage
              withSmallAvatar:(UIImage *)smallImage
                          for:(Identity *)identity
                      success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                      failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-    NSParameterAssert(fullImage != nil);
-    
     NSMutableDictionary *images = [NSMutableDictionary dictionaryWithCapacity:3];
     if (fullImage) {
         [images setValue:fullImage forKey:@"original"];
@@ -1050,33 +1046,32 @@
     RKObjectManager *objectManager = self.model.objectManager;
     objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     
-    NSMutableURLRequest *request = [objectManager.HTTPClient multipartFormRequestWithMethod:@"POST"
-                                                                                       path:endpoint
-                                                                                 parameters:params
-                                                                  constructingBodyWithBlock: ^(id <AFMultipartFormData>formData) {
-                                                                      
-                                                                      NSArray *names = @[@"original", @"320_320", @"80_80"];
-                                                                      for (NSString *name in names) {
-                                                                          UIImage *img = [images valueForKey:name];
-                                                                          if (img) {
-                                                                              NSData *imageData = UIImagePNGRepresentation(img);
-                                                                              [formData appendPartWithFileData:imageData
-                                                                                                          name:name
-                                                                                                      fileName:[NSString stringWithFormat:@"%@.png", name]
-                                                                                                      mimeType:@"image/png"];
-//                                                                              NSData *imageData = UIImageJPEGRepresentation(img, 1);
-//                                                                              [formData appendPartWithFileData:imageData
-//                                                                                                          name:name
-//                                                                                                      fileName:[NSString stringWithFormat:@"%@.jpg", name]
-//                                                                                                      mimeType:@"image/jpeg"];
+    if (images.count == 0) {
+        [objectManager.HTTPClient postPath:endpoint parameters:params success:success failure:failure];
+    } else {
+        NSMutableURLRequest *request = [objectManager.HTTPClient multipartFormRequestWithMethod:@"POST"
+                                                                                           path:endpoint
+                                                                                     parameters:params
+                                                                      constructingBodyWithBlock: ^(id <AFMultipartFormData>formData) {
+                                                                          
+                                                                          NSArray *names = @[@"original", @"320_320", @"80_80"];
+                                                                          for (NSString *name in names) {
+                                                                              UIImage *img = [images valueForKey:name];
+                                                                              if (img) {
+                                                                                  NSData *imageData = UIImagePNGRepresentation(img);
+                                                                                  [formData appendPartWithFileData:imageData
+                                                                                                              name:name
+                                                                                                          fileName:[NSString stringWithFormat:@"%@.png", name]
+                                                                                                          mimeType:@"image/png"];
+                                                                              }
                                                                           }
-                                                                      }
-                                                                  }];
-    AFHTTPRequestOperation *operation = [objectManager.HTTPClient HTTPRequestOperationWithRequest:request success:success failure:failure];
-    [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-//        NSLog(@"Sent %lld of %lld bytes", totalBytesWritten, totalBytesExpectedToWrite);
-    }];
-    [objectManager.HTTPClient.operationQueue addOperation:operation];
+                                                                      }];
+        AFHTTPRequestOperation *operation = [objectManager.HTTPClient HTTPRequestOperationWithRequest:request success:success failure:failure];
+        [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+            //        NSLog(@"Sent %lld of %lld bytes", totalBytesWritten, totalBytesExpectedToWrite);
+        }];
+        [objectManager.HTTPClient.operationQueue addOperation:operation];
+    }
 }
 
 
