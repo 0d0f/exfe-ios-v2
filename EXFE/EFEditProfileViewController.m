@@ -198,7 +198,7 @@
     [btnBack addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
     [header addSubview:btnBack];
     
-    UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 190, 97)];
+    UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 97)];
     name.backgroundColor = [UIColor clearColor];
     name.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
     name.textColor = [UIColor whiteColor];
@@ -215,21 +215,13 @@
             if (self.name.hidden == NO) {
                 self.name.hidden = YES;
                 self.identityId.hidden = YES;
-                NSString *dataName = [self.data valueForKey:kModelKeyName];
-                if (dataName) {
-                    self.inputName.text = dataName;
-                } else {
-                    if (self.isEditUser) {
-                        self.inputName.text = self.user.name;
-                    } else {
-                        self.inputName.text = self.identity.name;
-                    }
-                }
-                CGSize size = [self.inputName sizeThatFits:CGSizeMake(CGRectGetWidth(self.inputName.bounds), MAXFLOAT)];
+                self.inputName.text = [self getName];
+                CGFloat w = CGRectGetWidth(self.name.frame)  + 8 * 2;
+                CGSize size = [self.inputName sizeThatFits:CGSizeMake(w, MAXFLOAT)];
                 if (size.height > 70) {
                     size.height = 70;
                 }
-                self.inputName.bounds = (CGRect){CGPointZero, {190 + 8 * 2, size.height}};
+                self.inputName.bounds = (CGRect){CGPointZero, {w, size.height}};
                 self.inputName.center = self.header.center;
                 self.inputName.hidden = NO;
                 [self.inputName becomeFirstResponder];
@@ -239,7 +231,7 @@
     name.userInteractionEnabled = !self.readonly;
     [name addGestureRecognizer:tap];
     
-    UILabel *identityId = [[UILabel alloc] initWithFrame:CGRectMake(30, CGRectGetHeight(header.bounds) / 2, 260, 30)];
+    UILabel *identityId = [[UILabel alloc] initWithFrame:CGRectMake(30, CGRectGetHeight(header.bounds) / 2, 200, 30)];
     identityId.backgroundColor = [UIColor clearColor];
     identityId.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:14];
     identityId.textColor = [UIColor whiteColor];
@@ -249,7 +241,7 @@
     [header addSubview:identityId];
     self.identityId = identityId;
     
-    SSTextView *inputName = [[SSTextView alloc] initWithFrame:CGRectMake(0, 0, 190 + 8 * 2, 70 + 8 * 2)];
+    SSTextView *inputName = [[SSTextView alloc] initWithFrame:CGRectMake(0, 0, 200 + 8 * 2, 70 + 8 * 2)];
     inputName.backgroundColor = [UIColor clearColor];
     inputName.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:21];
     inputName.returnKeyType = UIReturnKeyDone;
@@ -597,17 +589,19 @@
 - (void)fillName:(NSString *)name
 {
     self.name.text = name;
-    CGSize size = [self.name sizeThatFits:CGSizeMake(190, 50)];
+    CGFloat w = 200;
+    CGSize size = [self.name sizeThatFits:CGSizeMake(w, 50)];
     CGPoint p = self.header.center;
-    self.name.frame = (CGRect){{p.x - 190 / 2, p.y - size.height / 2},{190, size.height}};
+    self.name.frame = (CGRect){{p.x - w / 2, p.y - size.height / 2},{w, size.height}};
 }
 
 - (void)fillIdentityDisplayName:(NSString *)displayName
 {
     self.identityId.text = displayName;
-    CGSize size = [self.identityId sizeThatFits:CGSizeMake(260, 50)];
+    CGFloat w = 200;
+    CGSize size = [self.identityId sizeThatFits:CGSizeMake(200, 50)];
     CGPoint p = self.header.center;
-    self.identityId.frame = (CGRect){{p.x - 190 / 2, p.y + size.height / 2},{190, size.height}};
+    self.identityId.frame = (CGRect){{p.x - w / 2, p.y + size.height / 2},{w, size.height}};
 }
 
 - (void)fillAvatar:(UIImage *)image
