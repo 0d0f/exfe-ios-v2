@@ -109,7 +109,7 @@ typedef void (^ActionHandlerBlock)(void);
             self.autoDismissTimeInterval = kDefaultAutoDismissTimeIntervalWithButton;
             
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            button.frame = (CGRect){{276, 3}, {44, 33}};
+            button.frame = (CGRect){{320 - 32, 4}, {32, 32}};
             [button setImage:[UIImage imageNamed:@"cautionbar_cancel.png"] forState:UIControlStateNormal];
             [button setImage:[UIImage imageNamed:@"cautionbar_cancel_pressed.png"] forState:UIControlStateHighlighted];
             [button addTarget:self

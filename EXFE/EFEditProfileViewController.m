@@ -725,7 +725,7 @@
 - (void)goBack:(id)view
 {
     if (!self.readonly) {
-        if ([self.name isFirstResponder]) {
+        if ([self.inputName isFirstResponder]) {
             [self textViewDidEndEditing:self.inputName];
         }
         
