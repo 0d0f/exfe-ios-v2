@@ -28,7 +28,7 @@
     if (self) {
         self.model = model;
         self.state = kEFNetworkOperationStateInited;
-        self.maxRetry = 3;
+        self.maxRetry = 0;
     }
     
     return self;

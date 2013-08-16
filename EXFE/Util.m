@@ -559,7 +559,8 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         // tryCount upto max limited
         EFErrorMessage *errorMessage = [[EFErrorMessage alloc] initBannerMessageWithTitle:NSLocalizedString(@"##Alert Title##", nil)
                                                                                   message:[NSString stringWithFormat:NSLocalizedString(@"##Alert content content content content content content ##", nil)]
-                                                                     bannerPressedHandler:nil                                                                     buttonPressedHandler:nil
+                                                                     bannerPressedHandler:nil
+                                                                     buttonPressedHandler:nil
                                                                                 needRetry:YES];
         
         [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:errorMessage];

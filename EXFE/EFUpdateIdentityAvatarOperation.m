@@ -8,6 +8,8 @@
 
 #import "EFUpdateIdentityAvatarOperation.h"
 
+#import "Util.h"
+
 NSString *kEFNotificationUpdateIdentityAvatarSuccess = @"notification.updateIdentityAvatar.success";
 NSString *kEFNotificationUpdateIdentityAvatarFailure = @"notification.updateIdentityAvatar.failure";
 
@@ -24,6 +26,17 @@ NSString *kEFNotificationUpdateIdentityAvatarFailure = @"notification.updateIden
     return self;
 }
 
+- (id)initWithModel:(EXFEModel *)model dupelicateFrom:(EFUpdateIdentityAvatarOperation *)operation {
+    self = [super initWithModel:model dupelicateFrom:operation];
+    if (self) {
+        self.original = operation.original;
+        self.avatar_2x = operation.avatar_2x;
+        self.avatar = operation.avatar;
+        self.identity = operation.identity;
+    }
+    
+    return self;
+}
 
 - (void)operationDidStart {
     [super operationDidStart];
@@ -68,6 +81,41 @@ NSString *kEFNotificationUpdateIdentityAvatarFailure = @"notification.updateIden
                                        failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                            self.state = kEFNetworkOperationStateFailure;
                                            self.error = error;
+                                           
+                                           if ([NSURLErrorDomain isEqualToString:error.domain] || [AFNetworkingErrorDomain isEqualToString:error.domain]) {
+                                               switch (error.code) {
+                                                   case NSURLErrorCancelled: // -999
+                                                   case NSURLErrorTimedOut: //-1001
+                                                   case NSURLErrorCannotFindHost: //-1003
+                                                   case NSURLErrorCannotConnectToHost: //-1004
+                                                   case NSURLErrorNetworkConnectionLost: //-1005
+                                                   case NSURLErrorDNSLookupFailed: //-1006
+                                                   case NSURLErrorNotConnectedToInternet: //-1009
+                                                   {// Retry
+                                                       NSString *title = NSLocalizedString(@"###Failed to update Identity Avatar###", nil);
+                                                       NSString *message = [NSString stringWithFormat:NSLocalizedString(@"###????###", nil)];
+                                                       if (!self.original) {
+                                                            title = NSLocalizedString(@"###Failed to remove Identity Avatar###", nil);
+                                                       }
+                                                       
+                                                       
+                                                       [Util handleRetryBannerFor:self withTitle:title andMessage:message];
+                                                       
+                                                   }   break;
+                                                       
+                                                   case NSURLErrorHTTPTooManyRedirects: //-1007
+                                                   case NSURLErrorResourceUnavailable: //-1008
+                                                   case NSURLErrorRedirectToNonExistentLocation: //-1010
+                                                   case NSURLErrorBadServerResponse: // -1011
+                                                   case NSURLErrorServerCertificateUntrusted: //-1202
+                                                       
+                                                       
+                                                       break;
+                                                       
+                                                   default:
+                                                       break;
+                                               }
+                                           }
                                            
                                            [self finish];
                                        }];
