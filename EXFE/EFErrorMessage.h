@@ -24,9 +24,12 @@ NSCopying
 @property (nonatomic, copy) NSString *message;
 @property (nonatomic, assign) EFErrorMessageStyle errorMessageStyle;
 @property (nonatomic, copy) NSString *buttonTitle;
-@property (nonatomic, copy) EFErrorMessageActionBlock actionHandler;
+@property (nonatomic, copy) EFErrorMessageActionBlock bannerPressedHandler;
+@property (nonatomic, copy) EFErrorMessageActionBlock buttonPressedHandler;
+@property (nonatomic, assign) BOOL  needRetry;
 
-+ (EFErrorMessage *)errorMessageWithStyle:(EFErrorMessageStyle)style title:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)buttonTitle buttonActionHandler:(EFErrorMessageActionBlock)handler;
-- (id)initWithStyle:(EFErrorMessageStyle)style title:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)buttonTitle buttonActionHandler:(EFErrorMessageActionBlock)handler;
+- (id)initWithStyle:(EFErrorMessageStyle)style title:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)buttonTitle bannerPressedHandler:(EFErrorMessageActionBlock)bannerHandler buttonPressedHandler:(EFErrorMessageActionBlock)handler needRetry:(BOOL)needRetry;
+- (id)initAlertMessageWithTitle:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)buttonTitle buttonPressedHandler:(EFErrorMessageActionBlock)buttonPressedHandler;
+- (id)initBannerMessageWithTitle:(NSString *)title message:(NSString *)message bannerPressedHandler:(EFErrorMessageActionBlock)bannerHandler buttonPressedHandler:(EFErrorMessageActionBlock)handler needRetry:(BOOL)needRetry;
 
 @end

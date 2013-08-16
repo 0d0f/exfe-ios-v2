@@ -15,31 +15,32 @@
 #define kDefaultAutoDismissTimeIntervalWithButton       (-1.0f)
 #define kDefaultAutoDismissTimeIntervalWithoutButton    (4.33f)
 
-typedef void (^ButtonPressedHandlerBlock)(void);
+typedef void (^ActionHandlerBlock)(void);
 
 @interface EFNotificationBannerView ()
 
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *messageLabel;
+@property (nonatomic, strong) UILabel *retryLabel;
 @property (nonatomic, strong) UIView *maskView;
 @property (nonatomic, strong) UIButton *button;
-@property (nonatomic, copy) ButtonPressedHandlerBlock buttonPressedHandler;
+@property (nonatomic, copy) ActionHandlerBlock bannerPressedHandler;
+@property (nonatomic, copy) ActionHandlerBlock buttonPressedHandler;
 @property (nonatomic, strong) NSTimer *timer;
 
 @end
 
 @implementation EFNotificationBannerView
 
-- (id)initWithTitle:(NSString *)title message:(NSString *)message {
-    self = [self initWithTitle:title
-                       message:message
-                   buttonTitle:nil
-          buttonPressedHandler:nil];
-    return self;
+- (id)initWithTitle:(NSString *)title message:(NSString *)message bannerPressedHandler:(void (^)(void))bannerHandler buttonPressedHandler:(void (^)(void))handler {
+    return [[EFNotificationBannerView alloc] initWithTitle:title message:message bannerPressedHandler:bannerHandler buttonPressedHandler:handler needRetry:YES];
+}
+- (id)initWithTitle:(NSString *)title message:(NSString *)message bannerPressedHandler:(void (^)(void))bannerHandler {
+    return [[EFNotificationBannerView alloc] initWithTitle:title message:message bannerPressedHandler:bannerHandler buttonPressedHandler:nil needRetry:NO];
 }
 
-- (id)initWithTitle:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)buttonTitle buttonPressedHandler:(void (^)(void))handler {
+- (id)initWithTitle:(NSString *)title message:(NSString *)message bannerPressedHandler:(void (^)(void))bannerHandler buttonPressedHandler:(void (^)(void))handler needRetry:(BOOL)needRetry {
     CGRect windowBounds = [UIScreen mainScreen].bounds;
     self = [super initWithFrame:(CGRect){{0, 0}, {CGRectGetWidth(windowBounds), kViewHeight}}];
     if (self) {
@@ -48,52 +49,73 @@ typedef void (^ButtonPressedHandlerBlock)(void);
         [self addSubview:maskView];
         self.maskView = maskView;
         
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:(CGRect){{10, 4}, {260, 21}}];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:(CGRect){{10, 1}, {260, 21}}];
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.textColor = [UIColor whiteColor];
         titleLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
         titleLabel.shadowOffset = (CGSize){0.0f, 0.5f};
-        titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:14];
+        titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:14];
         titleLabel.text = title;
         [self addSubview:titleLabel];
         self.titleLabel = titleLabel;
         
-        UILabel *messageLabel = [[UILabel alloc] initWithFrame:(CGRect){{10, 18}, {260, 18}}];
+        if (needRetry) {
+            [titleLabel sizeToFit];
+            CGRect labelFrame = self.titleLabel.frame;
+            CGFloat labelMaxX = CGRectGetMaxX(labelFrame);
+            CGFloat retryLabelX = labelMaxX + 2.0f;
+            
+            CGFloat maxWidth = 190.0f;
+            
+            if (labelMaxX >= maxWidth) {
+                labelFrame.size.width = maxWidth;
+                retryLabelX = CGRectGetMaxX(labelFrame) + 2.0f;
+                self.titleLabel.frame = labelFrame;
+            }
+            
+            UILabel *retryLabel = [[UILabel alloc] initWithFrame:(CGRect){{retryLabelX, 0}, {80, 21}}];
+            retryLabel.backgroundColor = [UIColor clearColor];
+            retryLabel.textColor = [UIColor whiteColor];
+            retryLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+            retryLabel.shadowOffset = (CGSize){0.0f, 0.5f};
+            retryLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+            retryLabel.text = NSLocalizedString(@"Tap to retry.", nil);
+            [self addSubview:retryLabel];
+            self.retryLabel = retryLabel;
+        }
+        
+        UILabel *messageLabel = [[UILabel alloc] initWithFrame:(CGRect){{10, 18}, {260, 21}}];
         messageLabel.backgroundColor = [UIColor clearColor];
         messageLabel.textColor = [UIColor whiteColor];
         messageLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
         messageLabel.shadowOffset = (CGSize){0.0f, 0.5f};
-        messageLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10];
+        messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
         messageLabel.text = message;
         [self addSubview:messageLabel];
         self.messageLabel = messageLabel;
         
-        if (buttonTitle && buttonTitle.length) {
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            button.frame = (CGRect){{271, 3}, {45, 33}};
-            UIImage *buttonBackgroundImage = [UIImage imageNamed:@"btn_white_30"];
-            buttonBackgroundImage = [buttonBackgroundImage resizableImageWithCapInsets:(UIEdgeInsets){0, 10, 0, 10}];
-            [button setBackgroundImage:buttonBackgroundImage forState:UIControlStateNormal];
-            [button setTitleColor:[UIColor COLOR_RED_MEXICAN] forState:UIControlStateNormal];
-            [button setTitle:buttonTitle forState:UIControlStateNormal];
+        self.bannerPressedHandler = bannerHandler;
+        self.buttonPressedHandler = handler;
+        
+        if (needRetry) {
+            self.autoDismissTimeInterval = kDefaultAutoDismissTimeIntervalWithButton;
+            
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.frame = (CGRect){{276, 3}, {44, 33}};
+            [button setImage:[UIImage imageNamed:@"cautionbar_cancel.png"] forState:UIControlStateNormal];
+            [button setImage:[UIImage imageNamed:@"cautionbar_cancel_pressed.png"] forState:UIControlStateHighlighted];
             [button addTarget:self
                        action:@selector(buttonPressed:)
              forControlEvents:UIControlEventTouchUpInside];
             [self addSubview:button];
             self.button = button;
-            
-            self.autoDismissTimeInterval = kDefaultAutoDismissTimeIntervalWithButton;
         } else {
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            button.frame = self.bounds;
-            button.backgroundColor = [UIColor clearColor];
-            [button addTarget:self
-                       action:@selector(bannerPressed:)
-             forControlEvents:UIControlEventTouchUpInside];
-            [self addSubview:button];
-            
             self.autoDismissTimeInterval = kDefaultAutoDismissTimeIntervalWithoutButton;
         }
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                              action:@selector(handleTap:)];
+        [self addGestureRecognizer:tap];
         
         UIWindow *window = [[UIWindow alloc] initWithFrame:(CGRect){{0, 0}, {CGRectGetWidth(windowBounds), kViewHeight}}];
         window.backgroundColor = [UIColor clearColor];
@@ -115,16 +137,21 @@ typedef void (^ButtonPressedHandlerBlock)(void);
     [backgroundImage drawInRect:(CGRect){{0, 0}, {CGRectGetWidth(windowBounds), kViewHeight}}];
 }
 
+#pragma mark - Gesture
+
+- (void)handleTap:(UITapGestureRecognizer *)tap {
+    if (_bannerPressedHandler) {
+        self.bannerPressedHandler();
+    }
+    [self dismiss];
+}
+
 #pragma mark - Action
 
 - (void)buttonPressed:(id)sender {
     if (_buttonPressedHandler) {
         self.buttonPressedHandler();
     }
-    [self dismiss];
-}
-
-- (void)bannerPressed:(id)sender {
     [self dismiss];
 }
 

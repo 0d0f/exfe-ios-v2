@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ * @note You will NEVER use this class directly. This is private for you!
+ */
+
 @class EFNotificationBannerView;
 @protocol EFNotificationBannerViewDelegate <NSObject>
 @optional
@@ -19,8 +23,10 @@
 @property (nonatomic, assign) NSTimeInterval autoDismissTimeInterval;   // when has button, default as -1; otherwise, 4.33 secs
 @property (nonatomic, weak) id<EFNotificationBannerViewDelegate> delegate;
 
-- (id)initWithTitle:(NSString *)title message:(NSString *)message;
-- (id)initWithTitle:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)buttonTitle buttonPressedHandler:(void (^)(void))handler;
+- (id)initWithTitle:(NSString *)title message:(NSString *)message bannerPressedHandler:(void (^)(void))bannerHandler buttonPressedHandler:(void (^)(void))handler needRetry:(BOOL)needRetry;
+- (id)initWithTitle:(NSString *)title message:(NSString *)message bannerPressedHandler:(void (^)(void))bannerHandler buttonPressedHandler:(void (^)(void))handler;  // retry
+- (id)initWithTitle:(NSString *)title message:(NSString *)message bannerPressedHandler:(void (^)(void))bannerHandler;    // no retry
+
 
 - (void)show;
 - (void)dismiss;
