@@ -88,8 +88,8 @@ NSString *kEFNotificationChangeUserBasicProfileFailure = @"notification.changeUs
                                          case NSURLErrorDNSLookupFailed: //-1006
                                          case NSURLErrorNotConnectedToInternet: //-1009
                                          {// Retry
-                                             NSString *title = NSLocalizedString(@"##Alert Title##", nil);
-                                             NSString *message = [NSString stringWithFormat:NSLocalizedString(@"##Alert content content content content content content ##", nil)];
+                                             NSString *title = NSLocalizedString(@"###Failed to update profile###", nil);
+                                             NSString *message = [NSString stringWithFormat:NSLocalizedString(@"###%@ & %@ ###", nil), self.name, self.bio];
                                              
                                              [Util handleRetryBannerFor:self withTitle:title andMessage:message];
                                              

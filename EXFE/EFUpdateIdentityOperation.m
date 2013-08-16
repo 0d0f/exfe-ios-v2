@@ -8,6 +8,8 @@
 
 #import "EFUpdateIdentityOperation.h"
 
+#import "Util.h"
+
 NSString *kEFNotificationUpdateIdentitySuccess = @"notification.updateIdentity.success";
 NSString *kEFNotificationUpdateIdentityFailure = @"notification.updateIdentity.failure";
 
@@ -24,6 +26,16 @@ NSString *kEFNotificationUpdateIdentityFailure = @"notification.updateIdentity.f
     return self;
 }
 
+- (id)initWithModel:(EXFEModel *)model dupelicateFrom:(EFUpdateIdentityOperation *)operation {
+    self = [super initWithModel:model dupelicateFrom:operation];
+    if (self) {
+        self.name = operation.name;
+        self.bio = operation.bio;
+        self.identity = operation.identity;
+    }
+    
+    return self;
+}
 
 - (void)operationDidStart {
     [super operationDidStart];
@@ -67,6 +79,37 @@ NSString *kEFNotificationUpdateIdentityFailure = @"notification.updateIdentity.f
                                  failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                      self.state = kEFNetworkOperationStateFailure;
                                      self.error = error;
+                                     
+                                     if ([NSURLErrorDomain isEqualToString:error.domain] || [AFNetworkingErrorDomain isEqualToString:error.domain]) {
+                                         switch (error.code) {
+                                             case NSURLErrorCancelled: // -999
+                                             case NSURLErrorTimedOut: //-1001
+                                             case NSURLErrorCannotFindHost: //-1003
+                                             case NSURLErrorCannotConnectToHost: //-1004
+                                             case NSURLErrorNetworkConnectionLost: //-1005
+                                             case NSURLErrorDNSLookupFailed: //-1006
+                                             case NSURLErrorNotConnectedToInternet: //-1009
+                                             {// Retry
+                                                 NSString *title = NSLocalizedString(@"###Failed to update identity###", nil);
+                                                 NSString *message = [NSString stringWithFormat:NSLocalizedString(@"###%@ & %@ ###", nil), self.name, self.bio];
+                                                 
+                                                 [Util handleRetryBannerFor:self withTitle:title andMessage:message];
+                                                 
+                                             }   break;
+                                                 
+                                             case NSURLErrorHTTPTooManyRedirects: //-1007
+                                             case NSURLErrorResourceUnavailable: //-1008
+                                             case NSURLErrorRedirectToNonExistentLocation: //-1010
+                                             case NSURLErrorBadServerResponse: // -1011
+                                             case NSURLErrorServerCertificateUntrusted: //-1202
+                                                 
+                                                 
+                                                 break;
+                                                 
+                                             default:
+                                                 break;
+                                         }
+                                     }
                                      
                                      [self finish];
                                  }];

@@ -8,6 +8,7 @@
 
 #import "EFUpdateUserAvatarOperation.h"
 
+#import "Util.h"
 NSString *kEFNotificationUpdateUserAvatarSuccess = @"notification.updateUserAvatar.success";
 NSString *kEFNotificationUpdateUserAvatarFailure = @"notification.updateUserAvatar.failure";
 
@@ -24,6 +25,16 @@ NSString *kEFNotificationUpdateUserAvatarFailure = @"notification.updateUserAvat
     return self;
 }
 
+- (id)initWithModel:(EXFEModel *)model dupelicateFrom:(EFUpdateUserAvatarOperation *)operation {
+    self = [super initWithModel:model dupelicateFrom:operation];
+    if (self) {
+        self.original = operation.original;
+        self.avatar_2x = operation.avatar_2x;
+        self.avatar = operation.avatar;
+    }
+    
+    return self;
+}
 
 - (void)operationDidStart {
     [super operationDidStart];
@@ -67,6 +78,40 @@ NSString *kEFNotificationUpdateUserAvatarFailure = @"notification.updateUserAvat
                                    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                        self.state = kEFNetworkOperationStateFailure;
                                        self.error = error;
+                                       
+                                       if ([NSURLErrorDomain isEqualToString:error.domain] || [AFNetworkingErrorDomain isEqualToString:error.domain]) {
+                                           switch (error.code) {
+                                               case NSURLErrorCancelled: // -999
+                                               case NSURLErrorTimedOut: //-1001
+                                               case NSURLErrorCannotFindHost: //-1003
+                                               case NSURLErrorCannotConnectToHost: //-1004
+                                               case NSURLErrorNetworkConnectionLost: //-1005
+                                               case NSURLErrorDNSLookupFailed: //-1006
+                                               case NSURLErrorNotConnectedToInternet: //-1009
+                                               {// Retry
+                                                   NSString *title = NSLocalizedString(@"###Failed to update User Avatar###", nil);
+                                                   NSString *message = [NSString stringWithFormat:NSLocalizedString(@"###????###", nil)];
+                                                   if (!self.original) {
+                                                       NSString *title = NSLocalizedString(@"###Failed to remove user Avatar###", nil);
+                                                   }
+                                                   
+                                                   [Util handleRetryBannerFor:self withTitle:title andMessage:message];
+                                                   
+                                               }   break;
+                                                   
+                                               case NSURLErrorHTTPTooManyRedirects: //-1007
+                                               case NSURLErrorResourceUnavailable: //-1008
+                                               case NSURLErrorRedirectToNonExistentLocation: //-1010
+                                               case NSURLErrorBadServerResponse: // -1011
+                                               case NSURLErrorServerCertificateUntrusted: //-1202
+                                                   
+                                                   
+                                                   break;
+                                                   
+                                               default:
+                                                   break;
+                                           }
+                                       }
                                        
                                        [self finish];
                                    }];
