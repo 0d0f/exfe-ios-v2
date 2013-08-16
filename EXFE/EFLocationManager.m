@@ -15,6 +15,7 @@
 #define kDefaultBackgroundDuration  (1200.0f)
 
 NSString *EFNotificationUserLocationDidChange = @"notification.userLocation.didChange";
+NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet";
 
 @implementation EFUserLocation
 
@@ -71,6 +72,7 @@ NSString *EFNotificationUserLocationDidChange = @"notification.userLocation.didC
                                                  self.userLocation.offset = (CGPoint){latOffset, lngOffset};
                                                  dispatch_async(dispatch_get_main_queue(), ^{
                                                      [[NSNotificationCenter defaultCenter] postNotificationName:EFNotificationUserLocationDidChange object:nil];
+                                                     [[NSNotificationCenter defaultCenter] postNotificationName:EFNotificationUserLocationOffsetDidGet object:nil];
                                                  });
                                              }
                                              failure:^(NSError *error){

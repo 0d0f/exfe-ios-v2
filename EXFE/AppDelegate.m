@@ -194,6 +194,28 @@
         [[EFLocationManager defaultManager] startUpdatingLocation];
     }
     
+    EFErrorMessage *message = [[EFErrorMessage alloc] initBannerMessageWithTitle:@"Failed to post message. Long long long long long Test."
+                                                                         message:@"“Com’ in 5 mins.”"
+                                                            bannerPressedHandler:^{
+                                                                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Banner Pressed"
+                                                                                                                    message:@"ha"
+                                                                                                                   delegate:nil
+                                                                                                          cancelButtonTitle:@"OK"
+                                                                                                          otherButtonTitles:nil];
+                                                                [alertView show];
+                                                            }
+                                                            buttonPressedHandler:^{
+                                                                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Button Pressed"
+                                                                                                                    message:@"ha"
+                                                                                                                   delegate:nil
+                                                                                                          cancelButtonTitle:@"OK"
+                                                                                                          otherButtonTitles:nil];
+                                                                [alertView show];
+                                                            }
+                                                                       needRetry:YES];
+    
+    [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:message];
+    
     return YES;
 }
 

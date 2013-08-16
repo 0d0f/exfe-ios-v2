@@ -103,8 +103,9 @@
                 {
                     EFNotificationBannerView *bannerView = [[EFNotificationBannerView alloc] initWithTitle:errorMessage.title
                                                                                                    message:errorMessage.message
-                                                                                               buttonTitle:errorMessage.buttonTitle
-                                                                                      buttonPressedHandler:errorMessage.actionHandler];
+                                                                                      bannerPressedHandler:errorMessage.bannerPressedHandler
+                                                                                      buttonPressedHandler:errorMessage.buttonPressedHandler
+                                                                                                 needRetry:errorMessage.needRetry];
                     bannerView.delegate = self;
                     [bannerView show];
                 }
@@ -118,10 +119,6 @@
 }
 
 - (void)_showNextErrorMessage {
-    if (self.presentingErrorMessage.actionHandler) {
-        self.presentingErrorMessage.actionHandler();
-    }
-    
     if (_presentingErrorMessage) {
         _presentingErrorMessage = nil;
     }

@@ -544,26 +544,23 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     EFNetworkOperation *op = [[operation class] operationWithModel:((EFNetworkOperation * )operation).model dupelicatedFrom:operation];
 
     if (op.retryCount < op.maxRetry || op.maxRetry == 0) {
-        
-        EFErrorMessage *errorMessage = [EFErrorMessage errorMessageWithStyle:kEFErrorMessageStyleBanner
-                                                                       title:title
-                                                                     message:message
-                                                                 buttonTitle:NSLocalizedString(@"Retry", nil)
-                                                         buttonActionHandler:^{
-                                                             EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:op];
-                                                             
-                                                             [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
-                                                         }];
+        EFErrorMessage *errorMessage = [[EFErrorMessage alloc] initBannerMessageWithTitle:title
+                                                                                  message:message
+                                                                     bannerPressedHandler:^{
+                                                                         EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:op];
+                                                                         
+                                                                         [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+                                                                     }
+                                                                     buttonPressedHandler:nil
+                                                                                needRetry:YES];
         
         [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:errorMessage];
-        
     } else {
         // tryCount upto max limited
-        EFErrorMessage *errorMessage = [EFErrorMessage errorMessageWithStyle:kEFErrorMessageStyleBanner
-                                                                       title:NSLocalizedString(@"##Alert Title##", nil)
-                                                                     message:[NSString stringWithFormat:NSLocalizedString(@"##Alert content content content content content content ##", nil)]
-                                                                 buttonTitle:NSLocalizedString(@"OK", nil)
-                                                         buttonActionHandler:nil];
+        EFErrorMessage *errorMessage = [[EFErrorMessage alloc] initBannerMessageWithTitle:NSLocalizedString(@"##Alert Title##", nil)
+                                                                                  message:[NSString stringWithFormat:NSLocalizedString(@"##Alert content content content content content content ##", nil)]
+                                                                     bannerPressedHandler:nil                                                                     buttonPressedHandler:nil
+                                                                                needRetry:YES];
         
         [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:errorMessage];
     }
