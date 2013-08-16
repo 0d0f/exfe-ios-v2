@@ -56,21 +56,44 @@ NSString *kEFNotificationUpdateIdentityAvatarFailure = @"notification.updateIden
                                                if(code){
                                                    NSInteger c = [code integerValue];
                                                    NSInteger t = c / 100;
-                                                   if (t == 2) {
-                                                       self.state = kEFNetworkOperationStateSuccess;
-                                                       
-                                                       NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"response"]];
-                                                       
-                                                       self.successUserInfo = userInfo;
-                                                       
-                                                       [self finish];
-                                                       return;
-                                                   } else {
-                                                       self.state = kEFNetworkOperationStateFailure;
-                                                       NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"meta"]];
-                                                       self.failureUserInfo = userInfo;
-                                                       [self finish];
-                                                       return;
+                                                   switch (t) {
+                                                       case 2:{
+                                                           self.state = kEFNetworkOperationStateSuccess;
+                                                           NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"response"]];
+                                                           self.successUserInfo = userInfo;
+                                                           
+                                                           [self finish];
+                                                           return;
+                                                       }  break;
+                                                           
+                                                       case 4:{
+                                                           self.state = kEFNetworkOperationStateFailure;
+                                                           
+                                                           if (c == 401) {
+                                                               NSString *errorType = [body valueForKeyPath:@"meta.errorType"];
+                                                               if ([@"not_allowed" isEqualToString:errorType]) {
+                                                                   
+                                                                   NSString *title = NSLocalizedString(@"Failed to update portrait.", nil);
+                                                                   NSString *message = nil;
+                                                                   if (!self.original) {
+                                                                       //title = NSLocalizedString(@"###Failed to remove Identity Avatar###", nil);
+                                                                   }
+                                                                   [Util handleRetryBannerFor:self withTitle:title andMessage:message andRetry:NO];
+                                                               }
+                                                           }
+                                                           
+                                                           NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"meta"]];
+                                                           self.failureUserInfo = userInfo;
+                                                           [self finish];
+                                                           return;
+                                                       }
+                                                       default:{
+                                                           self.state = kEFNetworkOperationStateFailure;
+                                                           NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"meta"]];
+                                                           self.failureUserInfo = userInfo;
+                                                           [self finish];
+                                                           return;
+                                                       }  break;
                                                    }
                                                }
                                            }
