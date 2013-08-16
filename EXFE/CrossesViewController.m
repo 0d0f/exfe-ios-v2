@@ -1007,6 +1007,7 @@
     exfeeViewController.tabBarStyle = kEFTabBarStyleNormal;
     exfeeViewController.shadowImage = [UIImage imageNamed:@"tabshadow_x.png"];
     
+#ifdef DEBUG
     // MadaurerMapViewController
     EFMarauderMapViewController *mapViewController = [[EFMarauderMapViewController alloc] initWithNibName:@"EFMarauderMapViewController" bundle:nil];
     
@@ -1018,9 +1019,14 @@
     mapViewController.shadowImage = nil;
     mapViewController.cross = cross;
     mapViewController.model = model;
+#endif
     
     // Init TabBarViewController
+#ifdef DEBUG
     EFTabBarViewController *tabBarViewController = [[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController, mapViewController]];
+#else
+    EFTabBarViewController *tabBarViewController = [[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController]];
+#endif
     
     __weak EFTabBarViewController *weakTab = tabBarViewController;
     tabBarViewController.titlePressedHandler = ^{
