@@ -22,6 +22,7 @@
 #import "EFAuthenticationViewController.h"
 #import "AYUIButton.h"
 #import "OAuthLoginViewController.h"
+#import "Avatar.h"
 
 #define DECTOR_HEIGHT                    (100)
 
@@ -220,7 +221,8 @@
         FullScreenViewController *viewcontroller = [[FullScreenViewController alloc] initWithNibName:@"FullScreenViewController" bundle:nil];
         viewcontroller.wantsFullScreenLayout = YES;
         viewcontroller.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        viewcontroller.image = useravatar.image;
+        viewcontroller.defaultImage = useravatar.image;
+        viewcontroller.imageUrl = self.user.avatar.original;
         [self presentModalViewController:viewcontroller animated:YES];
     }
     
