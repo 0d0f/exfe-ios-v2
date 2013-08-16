@@ -15,6 +15,7 @@
 
 #define kTopInset       (2.0f)
 #define kBottomInset    (0.0f)
+#define kBlank          (2.0f)
 #define kTitleHeight    (25.0f)
 #define kTitleFont      [UIFont fontWithName:@"HelveticaNeue-Light" size:21]
 #define kSubtileHeight  (20.0f)
@@ -22,13 +23,38 @@
 #define kDefaultWidth   (200.0f)
 #define kCornerRadius   (3.0f)
 
+@interface EFCalloutAnnotationGradientView : UIView
+
+@end
+
+@implementation EFCalloutAnnotationGradientView
+
+- (void)drawRect:(CGRect)rect {
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    
+    CGGradientRef gradient = NULL;
+    NSArray *colors = @[(id)[UIColor colorWithRed:(250.0f / 255.0f) green:(250.0f / 255.0f) blue:(250.0f / 255.0f) alpha:1.0f].CGColor,
+                        (id)[UIColor colorWithRed:(235.0f / 255.0f) green:(235.0f / 255.0f) blue:(235.0f / 255.0f) alpha:1.0f].CGColor];
+    CGFloat gradientLocations[] = {0, 1};
+    gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)colors, gradientLocations);
+    
+    CGContextDrawLinearGradient(context, gradient, (CGPoint){CGRectGetWidth(self.frame) * 0.5f, 0.0f}, (CGPoint){CGRectGetWidth(self.frame) * 0.5f, CGRectGetHeight(self.frame)}, 0);
+    
+    CGGradientRelease(gradient);
+    CGColorSpaceRelease(colorSpace);
+}
+
+@end
+
 @interface EFCalloutAnnotationView ()
 
 @property (nonatomic, strong) UITextField   *titleTextField;
 @property (nonatomic, strong) UITextView    *subtitleTextView;
 @property (nonatomic, strong) UIView        *lineView;
 
-@property (nonatomic, strong) CAGradientLayer *gradientLayer;
+//@property (nonatomic, strong) CAGradientLayer *gradientLayer;
+@property (nonatomic, strong) EFCalloutAnnotationGradientView *gradientView;
 
 @property (nonatomic, assign) CGRect    originalFrame;
 @property (nonatomic, weak)   UIView    *originalSuperView;
@@ -75,8 +101,8 @@
     self.titleTextField = titleTextField;
     [self addSubview:self.titleTextField];
     
-    UITextView *subtitleTextView = [[UITextView alloc] initWithFrame:(CGRect){{0.0f, CGRectGetMaxY(titleTextField.frame)}, {kDefaultWidth, kSubtileHeight}}];
-    subtitleTextView.contentInset = (UIEdgeInsets){-5.0f, -8.0f, 0.0f, 0.0f};
+    UITextView *subtitleTextView = [[UITextView alloc] initWithFrame:(CGRect){{5.0f, CGRectGetMaxY(titleTextField.frame) + kBlank}, {kDefaultWidth + 5.0f, kSubtileHeight}}];
+    subtitleTextView.contentInset = (UIEdgeInsets){-7.0f, -8.0f, 0.0f, 0.0f};
     subtitleTextView.delegate = self;
     subtitleTextView.returnKeyType = UIReturnKeyDone;
     subtitleTextView.font = kSubtileFont;
@@ -91,17 +117,18 @@
     self.subtitleTextView = subtitleTextView;
     
     // resize subtitle textview
-//    [subtitleTextView sizeToFit];
-//    CGRect subtitleTextViewFrame = subtitleTextView.frame;
-//    CGFloat subtitleTextViewHeight = CGRectGetHeight(subtitleTextViewFrame);
-//    
-//    if (subtitleTextViewHeight >= 2 * kSubtileHeight) {
-//        subtitleTextViewFrame.size.height = 2 * kSubtileHeight;
-//    } else if (subtitleTextViewHeight < kSubtileHeight) {
-//        subtitleTextViewFrame.size.height = kSubtileHeight;
-//    }
-//    
-//    subtitleTextView.frame = subtitleTextViewFrame;
+    [subtitleTextView sizeToFit];
+    
+    CGRect subtitleTextViewFrame = subtitleTextView.frame;
+    CGFloat subtitleTextViewHeight = CGRectGetHeight(subtitleTextViewFrame);
+    
+    if (subtitleTextViewHeight >= 2 * kSubtileHeight) {
+        subtitleTextViewFrame.size.height = 2 * kSubtileHeight;
+    } else if (subtitleTextViewHeight < kSubtileHeight) {
+        subtitleTextViewFrame.size.height = kSubtileHeight;
+    }
+    
+    subtitleTextView.frame = subtitleTextViewFrame;
 }
 
 - (void)_prepareFrame {
@@ -111,7 +138,7 @@
         height += CGRectGetHeight(self.titleTextField.frame);
     }
     if (self.annotation.subtitle) {
-        height += CGRectGetHeight(self.subtitleTextView.frame);
+        height += CGRectGetHeight(self.subtitleTextView.frame) + kBlank;
     }
     
     CGRect frame = self.frame;
@@ -177,13 +204,12 @@
         self.enabled = NO;
         self.backgroundColor = [UIColor whiteColor];
         
-        CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-        gradientLayer.colors = @[(id)[UIColor colorWithRed:(250.0f / 255.0f) green:(250.0f / 255.0f) blue:(250.0f / 255.0f) alpha:1.0f].CGColor,
-                                 (id)[UIColor colorWithRed:(235.0f / 255.0f) green:(235.0f / 255.0f) blue:(235.0f / 255.0f) alpha:1.0f].CGColor];
-        gradientLayer.frame = self.layer.bounds;
-        gradientLayer.cornerRadius = 6.0f;
-        [self.layer addSublayer:gradientLayer];
-        self.gradientLayer = gradientLayer;
+        EFCalloutAnnotationGradientView *gradientView = [[EFCalloutAnnotationGradientView alloc] initWithFrame:self.bounds];
+        gradientView.layer.cornerRadius = 6.0f;
+        gradientView.layer.masksToBounds = YES;
+        gradientView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
+        [self insertSubview:gradientView atIndex:0];
+        self.gradientView = gradientView;
         
         self.layer.cornerRadius = 6.0f;
         self.layer.shadowColor = [UIColor blackColor].CGColor;
@@ -193,7 +219,7 @@
         self.layer.borderColor = [UIColor whiteColor].CGColor;
         self.layer.borderWidth = 0.5f;
         
-        self.lineView = [[UIView alloc] initWithFrame:(CGRect){{0.0f, 33.0f}, {kDefaultWidth, 0.5f}}];
+        self.lineView = [[UIView alloc] initWithFrame:(CGRect){{0.0f, 28.0f}, {kDefaultWidth, 0.5f}}];
         self.lineView.backgroundColor = [UIColor COLOR_RGB(0xCC, 0xCC, 0xCC)];
         self.lineView.layer.shadowColor = [UIColor whiteColor].CGColor;
         self.lineView.layer.shadowOffset = (CGSize){0.0f, 0.5f};
@@ -204,10 +230,6 @@
     }
     
     return self;
-}
-
-- (void)layoutSubviews {
-    self.gradientLayer.frame = self.bounds;
 }
 
 - (void)didMoveToSuperview {
@@ -244,6 +266,9 @@
         self.subtitleTextView.editable = NO;
         self.lineView.hidden = YES;
         
+        [self.subtitleTextView scrollsToTop];
+        self.subtitleTextView.scrollEnabled = NO;
+        
         ((EFCalloutAnnotation *)self.annotation).title = self.titleTextField.text;
         ((EFCalloutAnnotation *)self.annotation).subtitle = self.subtitleTextView.text;
         
@@ -256,6 +281,7 @@
         [UIView animateWithDuration:0.233f
                          animations:^{
                              self.frame = self.originalFrame;
+                             self.gradientView.frame = self.bounds;
                              self.editingMaskView.alpha = 0.0f;
                          }
                          completion:^(BOOL finished){
@@ -279,6 +305,8 @@
         self.titleTextField.enabled = YES;
         self.subtitleTextView.editable = YES;
         self.lineView.hidden = NO;
+        
+        self.subtitleTextView.scrollEnabled = YES;
         
         UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
         
@@ -331,6 +359,7 @@
                          animations:^{
                              self.editingMaskView.alpha = 1.0f;
                              self.frame = frame;
+                             self.gradientView.frame = self.bounds;
                          }
                          completion:^(BOOL finished){
                              [UIView setAnimationsEnabled:YES];
