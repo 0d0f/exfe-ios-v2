@@ -1837,6 +1837,9 @@
 		76C9318217BDDA3600536383 /* cautionbar_cancel_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76C9318117BDDA3600536383 /* cautionbar_cancel_pressed@2x.png */; };
 		76C9318317BDDA3600536383 /* cautionbar_cancel_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76C9318117BDDA3600536383 /* cautionbar_cancel_pressed@2x.png */; };
 		76C9318417BDDA3600536383 /* cautionbar_cancel_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76C9318117BDDA3600536383 /* cautionbar_cancel_pressed@2x.png */; };
+		76C9318717BE144400536383 /* UITextView+NumberOfLines.m in Sources */ = {isa = PBXBuildFile; fileRef = 76C9318617BE144400536383 /* UITextView+NumberOfLines.m */; };
+		76C9318817BE144400536383 /* UITextView+NumberOfLines.m in Sources */ = {isa = PBXBuildFile; fileRef = 76C9318617BE144400536383 /* UITextView+NumberOfLines.m */; };
+		76C9318917BE144400536383 /* UITextView+NumberOfLines.m in Sources */ = {isa = PBXBuildFile; fileRef = 76C9318617BE144400536383 /* UITextView+NumberOfLines.m */; };
 		76D1A80C171D610C00A35BBD /* exfee_22ga.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A80A171D610C00A35BBD /* exfee_22ga.png */; };
 		76D1A80D171D610C00A35BBD /* exfee_22ga.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A80A171D610C00A35BBD /* exfee_22ga.png */; };
 		76D1A80E171D610C00A35BBD /* exfee_22ga.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A80A171D610C00A35BBD /* exfee_22ga.png */; };
@@ -2902,6 +2905,8 @@
 		76C29C1F1754E9D10084C27F /* tabshadow_conv@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabshadow_conv@2x.png"; sourceTree = "<group>"; };
 		76C9317617BDD7BB00536383 /* cautionbar_cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cautionbar_cancel@2x.png"; sourceTree = "<group>"; };
 		76C9318117BDDA3600536383 /* cautionbar_cancel_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cautionbar_cancel_pressed@2x.png"; sourceTree = "<group>"; };
+		76C9318517BE144400536383 /* UITextView+NumberOfLines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+NumberOfLines.h"; sourceTree = "<group>"; };
+		76C9318617BE144400536383 /* UITextView+NumberOfLines.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+NumberOfLines.m"; sourceTree = "<group>"; };
 		76D1A801171D5DFA00A35BBD /* EFChoosePeopleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewController.h; sourceTree = "<group>"; };
 		76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChoosePeopleViewController.m; sourceTree = "<group>"; };
 		76D1A803171D5DFA00A35BBD /* EFChoosePeopleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFChoosePeopleViewController.xib; sourceTree = "<group>"; };
@@ -3670,6 +3675,8 @@
 				7686099D17817BC700534731 /* NSString+Format.m */,
 				4F1BDB881795464600F7B786 /* UIScreen+EXFE.h */,
 				4F1BDB891795464700F7B786 /* UIScreen+EXFE.m */,
+				76C9318517BE144400536383 /* UITextView+NumberOfLines.h */,
+				76C9318617BE144400536383 /* UITextView+NumberOfLines.m */,
 			);
 			name = Extention;
 			sourceTree = "<group>";
@@ -6802,6 +6809,7 @@
 				4F63DAD517172AA600136B7E /* EXCurveView.m in Sources */,
 				4F63DAD717172AA600136B7E /* Exfee.m in Sources */,
 				4F63DAD917172AA600136B7E /* UIUnderlinedButton.m in Sources */,
+				76C9318817BE144400536383 /* UITextView+NumberOfLines.m in Sources */,
 				4F63DADA17172AA600136B7E /* LocalContact.m in Sources */,
 				4F63DADB17172AA600136B7E /* SSTextView.m in Sources */,
 				4F63DADC17172AA600136B7E /* UIBorderLabel.m in Sources */,
@@ -7055,6 +7063,7 @@
 				4F63DCA417172B0700136B7E /* EXCurveView.m in Sources */,
 				4F63DCA617172B0700136B7E /* Exfee.m in Sources */,
 				4F63DCA817172B0700136B7E /* UIUnderlinedButton.m in Sources */,
+				76C9318917BE144400536383 /* UITextView+NumberOfLines.m in Sources */,
 				4F63DCA917172B0700136B7E /* LocalContact.m in Sources */,
 				4F63DCAA17172B0700136B7E /* SSTextView.m in Sources */,
 				4F63DCAB17172B0700136B7E /* UIBorderLabel.m in Sources */,
@@ -7308,6 +7317,7 @@
 				4FB501A0169FC504005328BE /* EXCurveView.m in Sources */,
 				78FA8C3316B7CD1000D9E876 /* Exfee.m in Sources */,
 				78F45F5816BBBB1200F364FE /* UIUnderlinedButton.m in Sources */,
+				76C9318717BE144400536383 /* UITextView+NumberOfLines.m in Sources */,
 				7879B47916BE77B200D3BE3C /* LocalContact.m in Sources */,
 				4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */,
 				4F9105E616C2349400E524AC /* UIBorderLabel.m in Sources */,

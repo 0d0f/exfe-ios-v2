@@ -54,33 +54,21 @@ typedef void (^ActionHandlerBlock)(void);
         titleLabel.textColor = [UIColor whiteColor];
         titleLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
         titleLabel.shadowOffset = (CGSize){0.0f, 0.5f};
-        titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:14];
+        titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         titleLabel.text = title;
         [self addSubview:titleLabel];
         self.titleLabel = titleLabel;
         
         if (needRetry) {
-            [titleLabel sizeToFit];
-            CGRect labelFrame = self.titleLabel.frame;
-            CGFloat labelMaxX = CGRectGetMaxX(labelFrame);
-            CGFloat retryLabelX = labelMaxX + 2.0f;
-            
-            CGFloat maxWidth = 190.0f;
-            
-            if (labelMaxX >= maxWidth) {
-                labelFrame.size.width = maxWidth;
-                retryLabelX = CGRectGetMaxX(labelFrame) + 2.0f;
-                self.titleLabel.frame = labelFrame;
-            }
-            
-            UILabel *retryLabel = [[UILabel alloc] initWithFrame:(CGRect){{retryLabelX, 0}, {80, 21}}];
+            UILabel *retryLabel = [[UILabel alloc] initWithFrame:(CGRect){{0.0f, 0.0f}, {320.0f, kViewHeight}}];
+            retryLabel.textAlignment = NSTextAlignmentCenter;
             retryLabel.backgroundColor = [UIColor clearColor];
-            retryLabel.textColor = [UIColor whiteColor];
-            retryLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
-            retryLabel.shadowOffset = (CGSize){0.0f, 0.5f};
-            retryLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
-            retryLabel.text = NSLocalizedString(@"Tap to retry.", nil);
-            [self addSubview:retryLabel];
+            retryLabel.textColor = [UIColor colorWithWhite:1.0f alpha:0.12f];
+            retryLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:24];
+            retryLabel.text = NSLocalizedString(@"TAP TO RETRY", nil);
+            [retryLabel sizeToFit];
+            retryLabel.center = (CGPoint){CGRectGetWidth(self.bounds) * 0.5f, CGRectGetHeight(self.bounds) * 0.5f};
+            [self insertSubview:retryLabel belowSubview:self.maskView];
             self.retryLabel = retryLabel;
         }
         
@@ -93,6 +81,24 @@ typedef void (^ActionHandlerBlock)(void);
         messageLabel.text = message;
         [self addSubview:messageLabel];
         self.messageLabel = messageLabel;
+        
+        BOOL hasMessage = YES;
+        if (!message || 0 == message.length) {
+            hasMessage = NO;
+        }
+        
+        if (!hasMessage) {
+            self.titleLabel.numberOfLines = 2;
+            [self.titleLabel sizeToFit];
+            
+            CGFloat maxWidth = 290.0f;
+            
+            if (CGRectGetWidth(self.titleLabel.frame) > maxWidth) {
+                CGRect titleLabelFrame = self.titleLabel.frame;
+                titleLabelFrame.size.width = maxWidth;
+                self.titleLabel.frame = titleLabelFrame;
+            }
+        }
         
         self.bannerPressedHandler = bannerHandler;
         self.buttonPressedHandler = handler;
@@ -191,13 +197,12 @@ typedef void (^ActionHandlerBlock)(void);
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"opacity"];
     animation.fromValue = [NSNumber numberWithDouble:0.0f];
     animation.toValue = [NSNumber numberWithDouble:1.0f];
-    animation.duration = 1.0f;
+    animation.duration = 1.5f;
     animation.repeatCount = HUGE_VALF;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     animation.autoreverses = YES;
     
     [self.maskView.layer addAnimation:animation forKey:@"dissolve"];
-    
     
     if (self.autoDismissTimeInterval > 0) {
         self.timer = [NSTimer scheduledTimerWithTimeInterval:self.autoDismissTimeInterval
