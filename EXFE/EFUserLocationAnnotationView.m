@@ -71,12 +71,16 @@
 }
 
 - (void)setUserHeading:(CLHeading *)userHeading {
+    CLLocationDirection direction = _userHeading.trueHeading;
+    if (direction < 0) {
+        return;
+    }
+    
     [self willChangeValueForKey:@"userHeading"];
     
     _userHeading = userHeading;
     
-    CLLocationDirection direction = _userHeading.trueHeading;
-    self.arrowView.layer.transform = CATransform3DMakeRotation((M_PI / 160.0f) * direction, 0.0f, 0.0f, 1.0f);
+    self.arrowView.layer.transform = CATransform3DMakeRotation((M_PI / 180.0f) * direction, 0.0f, 0.0f, 1.0f);
     
     [self didChangeValueForKey:@"userHeading"];
 }

@@ -47,6 +47,10 @@
 @property (nonatomic, weak)   UIImageView           *tableViewShadowView;
 @property (nonatomic, assign) BOOL                  isMapBeenMoved;
 
+@property (nonatomic, assign) BOOL                  hasGotOffset;
+
+@property (nonatomic, assign) CLLocationCoordinate2D firstUserLocationCoordinate;
+
 @property (nonatomic, weak)   EFMapPerson           *recentZoomedPerson;
 @property (nonatomic, assign) EFMapZoomType         mapZoomType;
 
@@ -132,11 +136,11 @@
         }
     } else {
         int zoomLevel = self.mapView.zoomLevel;
-        NSLog(@"Current Map Zoom Level: %d", zoomLevel);
-        if (zoomLevel >= 17 && zoomLevel <= 18) {
+        
+        if (zoomLevel >= 15) {
             [self.mapView setCenterCoordinate:coordinate animated:YES];
         } else {
-            [self.mapView setCenterCoordinate:coordinate zoomLevel:17 animated:YES];
+            [self.mapView setCenterCoordinate:coordinate zoomLevel:15 animated:YES];
         }
     }
 }
@@ -198,6 +202,8 @@
     
     self.annotationAnimationDelay = 0.233f;
     
+    self.hasGotOffset = NO;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(enterBackground)
                                                  name:UIApplicationDidEnterBackgroundNotification
@@ -209,6 +215,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(userLocationDidChange)
                                                  name:EFNotificationUserLocationDidChange
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(userLocationOffsetDidGet)
+                                                 name:EFNotificationUserLocationOffsetDidGet
                                                object:nil];
 }
 
@@ -254,7 +264,7 @@
     
     [[EFLocationManager defaultManager] addObserver:self
                                          forKeyPath:@"userHeading"
-                                            options:NSKeyValueObservingOptionNew
+                                            options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                                             context:NULL];
     
     if ([EFLocationManager defaultManager].userLocation) {
@@ -311,8 +321,41 @@
 }
 
 - (void)userLocationDidChange {
-    [self.mapView removeAnnotation:[EFLocationManager defaultManager].userLocation];
-    [self.mapView addAnnotation:[EFLocationManager defaultManager].userLocation];
+    EFUserLocationAnnotationView *locationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
+    CLLocationCoordinate2D latestCoordinate = [EFLocationManager defaultManager].userLocation.coordinate;
+    CGPoint latestPoint = [self.mapView convertCoordinate:latestCoordinate toPointToView:self.mapView];
+    
+    if (locationView) {
+        if (CLLocationCoordinate2DIsValid(self.firstUserLocationCoordinate)) {
+            CGPoint firstPoint = [self.mapView convertCoordinate:self.firstUserLocationCoordinate toPointToView:self.mapView];
+            
+            CATransform3D newTransform = CATransform3DMakeTranslation(latestPoint.x - firstPoint.x, latestPoint.y - firstPoint.y, 0.0f);
+            
+            CABasicAnimation *translationAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
+            translationAnimation.fromValue = [locationView.layer valueForKey:@"transform"];
+            translationAnimation.toValue = [NSValue valueWithCATransform3D:newTransform];
+            translationAnimation.duration = 0.233f;
+            translationAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+            translationAnimation.fillMode = kCAFillModeForwards;
+            
+            [locationView.layer addAnimation:translationAnimation forKey:@"translation"];
+            locationView.layer.transform = newTransform;
+        }
+    } else {
+        [self.mapView addAnnotation:[EFLocationManager defaultManager].userLocation];
+    }
+}
+
+- (void)userLocationOffsetDidGet {
+    if (!self.hasGotOffset) {
+        self.hasGotOffset = YES;
+        
+        CLLocationCoordinate2D userCoordinate = [EFLocationManager defaultManager].userLocation.coordinate;
+        [self.mapView setCenterCoordinate:userCoordinate animated:YES];
+        self.firstUserLocationCoordinate = userCoordinate;
+        
+        [self userLocationDidChange];
+    }
 }
 
 #pragma mark - Timer
@@ -332,7 +375,9 @@
             if (self.mapView && [EFLocationManager defaultManager].userLocation) {
                 EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
                 if (userLocationView) {
-                    userLocationView.userHeading = [EFLocationManager defaultManager].userHeading;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        userLocationView.userHeading = [EFLocationManager defaultManager].userHeading;
+                    });
                 }
             }
         }
