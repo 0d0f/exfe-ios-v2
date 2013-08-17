@@ -332,12 +332,19 @@
         self.originalSuperView = self.superview;
         self.originalFrame = self.frame;
         
+        CGRect textViewFrame = self.subtitleTextView.frame;
+        textViewFrame.size.height = 2 * kSubtileHeight;
+        self.subtitleTextView.frame = textViewFrame;
+        
+        [self _prepareFrame];
+        [self _prepareOffset];
+        
         CGRect frame = [self.editingBaseView convertRect:self.frame fromView:self.superview];
         [self removeFromSuperview];
         self.frame = frame;
         [self.editingBaseView addSubview:self];
         
-        frame.size = (CGSize){200.0f, 69.0f};
+//        frame.size = (CGSize){200.0f, 69.0f};
         
         if (!CGRectContainsRect(self.editingBaseView.bounds, frame)) {
             if (frame.origin.x < 0) {
