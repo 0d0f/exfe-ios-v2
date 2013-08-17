@@ -807,11 +807,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         callout.parentAnnotationView = [mapView viewForAnnotation:mapView.selectedAnnotations[0]];
         
         __weak typeof(callout) weakCallout = callout;
-        callout.titlePressedHandler = ^{
-            [weakCallout setEditing:!weakCallout.isEditing animated:YES];
-        };
-        
-        callout.subtitlePressedHandler = ^{
+        callout.tapHandler = ^{
             [weakCallout setEditing:!weakCallout.isEditing animated:YES];
         };
         

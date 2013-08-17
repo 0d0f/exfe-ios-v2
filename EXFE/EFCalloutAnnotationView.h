@@ -21,8 +21,7 @@ UIGestureRecognizerDelegate
 @property (nonatomic, strong) MKAnnotationView  *parentAnnotationView;
 @property (nonatomic, strong) MKMapView         *mapView;
 
-@property (nonatomic, copy)   TouchEventBlock   titlePressedHandler;
-@property (nonatomic, copy)   TouchEventBlock   subtitlePressedHandler;
+@property (nonatomic, copy)   TouchEventBlock   tapHandler;
 
 @property (nonatomic, copy)   CallbackBlock     editingWillStartHandler;
 @property (nonatomic, copy)   CallbackBlock     editingDidEndHandler;
