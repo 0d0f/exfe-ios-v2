@@ -27,6 +27,7 @@
 #import "EFUserLocationAnnotationView.h"
 #import "EFTimestampAnnotation.h"
 #import "EFTimestampAnnotationView.h"
+#import "EFGeomarkGroupViewController.h"
 
 #define kAnnotationOffsetY  (-50.0f)
 #define kShadowOffset       (3.0f)
@@ -53,6 +54,8 @@
 
 @property (nonatomic, weak)   EFMapPerson           *recentZoomedPerson;
 @property (nonatomic, assign) EFMapZoomType         mapZoomType;
+
+@property (nonatomic, strong) EFGeomarkGroupViewController  *geomarkGroupViewController;
 
 @end
 
@@ -628,6 +631,17 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 #pragma mark - EFMarauderMapDataSourceDelegate
+
+- (void)mapView:(EFMapView *)mapView tappedAtCoordinate:(CLLocationCoordinate2D)coordinate {
+    CGPoint tapLocation = [mapView convertCoordinate:coordinate toPointToView:self.mapView];
+    
+    EFGeomarkGroupViewController *geomarkGroupViewController = [[EFGeomarkGroupViewController alloc] initWithGeomarks:[self.mapDataSource allRouteLocations]
+                                                                                                            andPeople:[self.mapDataSource allPeople]];
+    [geomarkGroupViewController presentFromViewController:self
+                                              tapLocation:tapLocation
+                                                 animated:YES];
+    self.geomarkGroupViewController = geomarkGroupViewController;
+}
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didGetRouteLocations:(NSArray *)locations {
     for (EFRouteLocation *routeLocation in locations) {

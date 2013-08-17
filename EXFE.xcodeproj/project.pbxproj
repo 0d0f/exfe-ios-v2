@@ -1648,6 +1648,15 @@
 		768DD35217A91F4A00E080C6 /* EFLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 768DD35117A91F4A00E080C6 /* EFLocationManager.m */; };
 		768DD35317A91F4A00E080C6 /* EFLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 768DD35117A91F4A00E080C6 /* EFLocationManager.m */; };
 		768DD35417A91F4A00E080C6 /* EFLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 768DD35117A91F4A00E080C6 /* EFLocationManager.m */; };
+		7690B57117BF850900C45101 /* EFGeomarkGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7690B57017BF850900C45101 /* EFGeomarkGroupViewController.m */; };
+		7690B57217BF850900C45101 /* EFGeomarkGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7690B57017BF850900C45101 /* EFGeomarkGroupViewController.m */; };
+		7690B57317BF850900C45101 /* EFGeomarkGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7690B57017BF850900C45101 /* EFGeomarkGroupViewController.m */; };
+		7690B57D17BF854300C45101 /* EFGeomarkLocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7690B57C17BF854300C45101 /* EFGeomarkLocationCell.m */; };
+		7690B57E17BF854300C45101 /* EFGeomarkLocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7690B57C17BF854300C45101 /* EFGeomarkLocationCell.m */; };
+		7690B57F17BF854300C45101 /* EFGeomarkLocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7690B57C17BF854300C45101 /* EFGeomarkLocationCell.m */; };
+		7690B58217BF854D00C45101 /* EFGeomarkPersonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7690B58117BF854D00C45101 /* EFGeomarkPersonCell.m */; };
+		7690B58317BF854D00C45101 /* EFGeomarkPersonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7690B58117BF854D00C45101 /* EFGeomarkPersonCell.m */; };
+		7690B58417BF854D00C45101 /* EFGeomarkPersonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7690B58117BF854D00C45101 /* EFGeomarkPersonCell.m */; };
 		769206131749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
 		769206141749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
 		769206151749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
@@ -2796,6 +2805,12 @@
 		7688C79517B0DE7E00CBB6E8 /* EFAccessInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFAccessInfo.m; sourceTree = "<group>"; };
 		768DD35017A91F4A00E080C6 /* EFLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLocationManager.h; sourceTree = "<group>"; };
 		768DD35117A91F4A00E080C6 /* EFLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLocationManager.m; sourceTree = "<group>"; };
+		7690B56F17BF850900C45101 /* EFGeomarkGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFGeomarkGroupViewController.h; sourceTree = "<group>"; };
+		7690B57017BF850900C45101 /* EFGeomarkGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFGeomarkGroupViewController.m; sourceTree = "<group>"; };
+		7690B57B17BF854300C45101 /* EFGeomarkLocationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFGeomarkLocationCell.h; sourceTree = "<group>"; };
+		7690B57C17BF854300C45101 /* EFGeomarkLocationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFGeomarkLocationCell.m; sourceTree = "<group>"; };
+		7690B58017BF854D00C45101 /* EFGeomarkPersonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFGeomarkPersonCell.h; sourceTree = "<group>"; };
+		7690B58117BF854D00C45101 /* EFGeomarkPersonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFGeomarkPersonCell.m; sourceTree = "<group>"; };
 		769206111749DB0700B3D64A /* EFHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFHeadView.h; sourceTree = "<group>"; };
 		769206121749DB0700B3D64A /* EFHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFHeadView.m; sourceTree = "<group>"; };
 		7692061D1749E08100B3D64A /* portrait_circle_clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_circle_clear.png; sourceTree = "<group>"; };
@@ -3856,6 +3871,8 @@
 				76B1236E1796470C00A73E59 /* EFMarauderMapViewController.h */,
 				76B1236F1796470C00A73E59 /* EFMarauderMapViewController.m */,
 				76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */,
+				7690B56F17BF850900C45101 /* EFGeomarkGroupViewController.h */,
+				7690B57017BF850900C45101 /* EFGeomarkGroupViewController.m */,
 			);
 			name = RouteX;
 			sourceTree = "<group>";
@@ -4727,6 +4744,10 @@
 				7601F5711727B94700032044 /* EFSearchIdentityCell.m */,
 				763A01A017202BBE0082CC9E /* EFPersonIdentityCell.h */,
 				763A01A117202BBF0082CC9E /* EFPersonIdentityCell.m */,
+				7690B57B17BF854300C45101 /* EFGeomarkLocationCell.h */,
+				7690B57C17BF854300C45101 /* EFGeomarkLocationCell.m */,
+				7690B58017BF854D00C45101 /* EFGeomarkPersonCell.h */,
+				7690B58117BF854D00C45101 /* EFGeomarkPersonCell.m */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -6809,6 +6830,7 @@
 				4F63DAC217172AA600136B7E /* UIImage+Alpha.m in Sources */,
 				4F63DAC317172AA600136B7E /* UIImage+Resize.m in Sources */,
 				4F63DAC417172AA600136B7E /* UIImage+RoundedCorner.m in Sources */,
+				7690B57E17BF854300C45101 /* EFGeomarkLocationCell.m in Sources */,
 				4F63DAC517172AA600136B7E /* ExfeeNumberView.m in Sources */,
 				4F63DAC617172AA600136B7E /* EXRSVPStatusView.m in Sources */,
 				4F63DAC717172AA600136B7E /* MapPin.m in Sources */,
@@ -6910,6 +6932,7 @@
 				76073D0B174F6EA5007CBFC3 /* EFRomeViewController.m in Sources */,
 				4F05D440175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
 				4F05D459175DAFAC0050A726 /* Constants.m in Sources */,
+				7690B57217BF850900C45101 /* EFGeomarkGroupViewController.m in Sources */,
 				765A82D5175F076C00448B64 /* EFContactDataSource.m in Sources */,
 				4FFD6FFF176300F1009836F5 /* IdentityId.m in Sources */,
 				765A82DA175F0D5700448B64 /* EFSearchContactDataSouce.m in Sources */,
@@ -6940,6 +6963,7 @@
 				76E96BC7177AF9B100C06ECD /* EXFEModel+Crosses.m in Sources */,
 				76E96BCD177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */,
 				769794D4177BEC820052A1DC /* EXFEModel+Place.m in Sources */,
+				7690B58317BF854D00C45101 /* EFGeomarkPersonCell.m in Sources */,
 				769794E0177BEC8C0052A1DC /* EXFEModel+Profile.m in Sources */,
 				769794E6177C01D50052A1DC /* EFReverseGeocodingOperation.m in Sources */,
 				769794EB177C01EF0052A1DC /* EFGetPlacesNearbyOperation.m in Sources */,
@@ -7063,6 +7087,7 @@
 				4F63DC9117172B0700136B7E /* UIImage+Alpha.m in Sources */,
 				4F63DC9217172B0700136B7E /* UIImage+Resize.m in Sources */,
 				4F63DC9317172B0700136B7E /* UIImage+RoundedCorner.m in Sources */,
+				7690B57F17BF854300C45101 /* EFGeomarkLocationCell.m in Sources */,
 				4F63DC9417172B0700136B7E /* ExfeeNumberView.m in Sources */,
 				4F63DC9517172B0700136B7E /* EXRSVPStatusView.m in Sources */,
 				4F63DC9617172B0700136B7E /* MapPin.m in Sources */,
@@ -7164,6 +7189,7 @@
 				76073D0C174F6EA5007CBFC3 /* EFRomeViewController.m in Sources */,
 				4F05D441175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
 				4F05D45A175DAFAC0050A726 /* Constants.m in Sources */,
+				7690B57317BF850900C45101 /* EFGeomarkGroupViewController.m in Sources */,
 				765A82D6175F076C00448B64 /* EFContactDataSource.m in Sources */,
 				4FFD7000176300F1009836F5 /* IdentityId.m in Sources */,
 				765A82DB175F0D5700448B64 /* EFSearchContactDataSouce.m in Sources */,
@@ -7194,6 +7220,7 @@
 				76E96BC3177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */,
 				76E96BC8177AF9B100C06ECD /* EXFEModel+Crosses.m in Sources */,
 				76E96BCE177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */,
+				7690B58417BF854D00C45101 /* EFGeomarkPersonCell.m in Sources */,
 				769794D5177BEC820052A1DC /* EXFEModel+Place.m in Sources */,
 				769794E1177BEC8C0052A1DC /* EXFEModel+Profile.m in Sources */,
 				769794E7177C01D50052A1DC /* EFReverseGeocodingOperation.m in Sources */,
@@ -7317,6 +7344,7 @@
 				4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */,
 				4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */,
 				4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */,
+				7690B57D17BF854300C45101 /* EFGeomarkLocationCell.m in Sources */,
 				78B91DD916882BE400BB98B1 /* ExfeeNumberView.m in Sources */,
 				78B91DED168AB0F600BB98B1 /* EXRSVPStatusView.m in Sources */,
 				4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */,
@@ -7418,6 +7446,7 @@
 				76073D0A174F6EA5007CBFC3 /* EFRomeViewController.m in Sources */,
 				4F05D43F175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
 				4F05D458175DAFAC0050A726 /* Constants.m in Sources */,
+				7690B57117BF850900C45101 /* EFGeomarkGroupViewController.m in Sources */,
 				765A82D4175F076C00448B64 /* EFContactDataSource.m in Sources */,
 				4FFD6FFE176300F1009836F5 /* IdentityId.m in Sources */,
 				765A82D9175F0D5700448B64 /* EFSearchContactDataSouce.m in Sources */,
@@ -7448,6 +7477,7 @@
 				76E96BC1177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */,
 				76E96BC6177AF9B100C06ECD /* EXFEModel+Crosses.m in Sources */,
 				76E96BCC177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */,
+				7690B58217BF854D00C45101 /* EFGeomarkPersonCell.m in Sources */,
 				769794D3177BEC820052A1DC /* EXFEModel+Place.m in Sources */,
 				769794DF177BEC8C0052A1DC /* EXFEModel+Profile.m in Sources */,
 				769794E5177C01D50052A1DC /* EFReverseGeocodingOperation.m in Sources */,

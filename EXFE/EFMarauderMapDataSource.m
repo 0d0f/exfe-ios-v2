@@ -262,6 +262,10 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     return self.people[index];
 }
 
+- (NSArray *)allPeople {
+    return self.people;
+}
+
 #pragma mark - RouteLocation
 
 - (void)addRouteLocation:(EFRouteLocation *)routeLocation toMapView:(MKMapView *)mapView {
