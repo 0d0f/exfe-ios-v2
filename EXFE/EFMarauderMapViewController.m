@@ -578,6 +578,11 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 - (void)geomarkGroupViewController:(EFGeomarkGroupViewController *)controller didSelectRouteLocation:(EFRouteLocation *)routeLocation {
     [controller dismissAnimated:YES];
+    
+    EFAnnotation *annotation = [self.mapDataSource annotationForRouteLocation:routeLocation];
+    NSAssert(annotation != nil, @"The annotation MUST be there.");
+    
+    [self.mapView selectAnnotation:annotation animated:YES];
 }
 
 - (void)geomarkGroupViewController:(EFGeomarkGroupViewController *)controller didSelectPerson:(EFMapPerson *)person {
