@@ -8,11 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
+@class EFGeomarkGroupViewController, EFRouteLocation, EFMapPerson;
+@protocol EFGeomarkGroupViewControllerDelegate <NSObject>
+
+@optional
+
+- (void)geomarkGroupViewController:(EFGeomarkGroupViewController *)controller didSelectRouteLocation:(EFRouteLocation *)routeLocation;
+- (void)geomarkGroupViewController:(EFGeomarkGroupViewController *)controller didSelectPerson:(EFMapPerson *)person;
+
+@end
+
 @interface EFGeomarkGroupViewController : UITableViewController
 <
 UIGestureRecognizerDelegate
 >
 
+@property (nonatomic, weak) id delegate;
 @property (nonatomic, readonly) UIViewController    *fromViewController;
 @property (nonatomic, readonly) CGPoint             tapLocation;
 

@@ -27,7 +27,6 @@
 #import "EFUserLocationAnnotationView.h"
 #import "EFTimestampAnnotation.h"
 #import "EFTimestampAnnotationView.h"
-#import "EFGeomarkGroupViewController.h"
 
 #define kAnnotationOffsetY  (-50.0f)
 #define kShadowOffset       (3.0f)
@@ -568,6 +567,16 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     return [EFMapPersonCell defaultCellHeight];
 }
 
+#pragma mark - EFGeomarkGroupViewControllerDelegate
+
+- (void)geomarkGroupViewController:(EFGeomarkGroupViewController *)controller didSelectRouteLocation:(EFRouteLocation *)routeLocation {
+    [controller dismissAnimated:YES];
+}
+
+- (void)geomarkGroupViewController:(EFGeomarkGroupViewController *)controller didSelectPerson:(EFMapPerson *)person {
+    [controller dismissAnimated:YES];
+}
+
 #pragma mark - EFMapStrokeViewDataSource
 
 - (NSUInteger)numberOfStrokesForMapStrokeView:(EFMapStrokeView *)strokeView {
@@ -637,6 +646,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     EFGeomarkGroupViewController *geomarkGroupViewController = [[EFGeomarkGroupViewController alloc] initWithGeomarks:[self.mapDataSource allRouteLocations]
                                                                                                             andPeople:[self.mapDataSource allPeople]];
+    geomarkGroupViewController.delegate = self;
     [geomarkGroupViewController presentFromViewController:self
                                               tapLocation:tapLocation
                                                  animated:YES];

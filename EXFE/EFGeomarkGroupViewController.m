@@ -142,6 +142,20 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (0 == indexPath.section) {
+        // route location
+        EFRouteLocation *routeLocation = self.geomarks[indexPath.row];
+        if ([self.delegate respondsToSelector:@selector(geomarkGroupViewController:didSelectRouteLocation:)]) {
+            [self.delegate geomarkGroupViewController:self didSelectRouteLocation:routeLocation];
+        }
+    } else {
+        // person
+        EFMapPerson *person = self.people[indexPath.row];
+        if ([self.delegate respondsToSelector:@selector(geomarkGroupViewController:didSelectPerson:)]) {
+            [self.delegate geomarkGroupViewController:self didSelectPerson:person];
+        }
+    }
 }
 
 #pragma mark - Table view data source
