@@ -10,5 +10,5 @@
 
 @interface EXFEModel (IdentityAPI)
 - (void)updateIdentity:(Identity *)identity withName:(NSString *)name withBio:(NSString *)bio;
-- (void)updateIdentity:(Identity *)identity withAvatar:(UIImage *)original withLarge:(UIImage *)avatar_2x withSmall:(UIImage *)avatar;
+- (void)updateIdentity:(Identity *)identity withAvatar:(UIImage *)original withLarge:(UIImage *)avatar_2x withSmall:(UIImage *)avatar withExt:(NSString *)ext;
 @end

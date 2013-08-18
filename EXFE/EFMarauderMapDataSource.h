@@ -11,7 +11,9 @@
 #import "EFMapData.h"
 #import "EFHTTPStreaming.h"
 
-@class EFMarauderMapDataSource, IdentityId;
+extern CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocationCoordinate2D locationCoordinate);
+
+@class EFMarauderMapDataSource, IdentityId, EFRouteLocation;
 @protocol EFMarauderMapDataSourceDelegate <NSObject>
 
 @optional
@@ -20,6 +22,7 @@
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations;   // action: update, type: location
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRoutePaths:(NSArray *)paths;
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource needDeleteRouteLocation:(NSString *)routeLocationId;    // action: delete, type: location
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource routeLocationDidGetGeomarkInfo:(EFRouteLocation *)routeLocation;
 
 @end
 
@@ -45,6 +48,7 @@ EFHTTPStreamingDelegate
 - (NSUInteger)numberOfPeople;
 - (EFMapPerson *)me;
 - (EFMapPerson *)personAtIndex:(NSUInteger)index;
+- (NSArray *)allPeople;
 
 /**
  * Route Location

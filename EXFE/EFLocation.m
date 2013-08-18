@@ -8,6 +8,8 @@
 
 #import "EFLocation.h"
 
+#define kDefaultAccuracy    (1.0f)
+
 @implementation EFLocation
 
 - (id)initWithDictionary:(NSDictionary *)param {
@@ -19,15 +21,18 @@
         __block CLLocationDegrees latitude = 0.0f;
         
         [param enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
-            if ([key isEqualToString:@"ts"]) {
+            if ([key isEqualToString:@"t"]) {
                 NSDate *timestamp = [NSDate dateWithTimeIntervalSince1970:[obj doubleValue]];
                 self.timestamp = timestamp;
-            } else if ([key isEqualToString:@"lng"]) {
-                longitude = [obj doubleValue];
-            } else if ([key isEqualToString:@"lat"]) {
-                latitude = [obj doubleValue];
-            } else if ([key isEqualToString:@"acc"]) {
-                self.accuracy = [obj doubleValue];
+            } else if ([key isEqualToString:@"gps"]) {
+                NSArray *valueArrary = (NSArray *)obj;
+                NSAssert(valueArrary.count == 3, @"gps should contain 3 params.");
+                
+                latitude = [valueArrary[0] doubleValue];
+                longitude = [valueArrary[1] doubleValue];
+                self.accuracy = [valueArrary[2] doubleValue];
+                
+                self.coordinate = CLLocationCoordinate2DMake(latitude, longitude);
             }
         }];
         
@@ -43,19 +48,22 @@
 
 - (NSDictionary *)dictionaryValue {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:4];
-    [dict setValue:[NSNumber numberWithLongLong:(long long)[self.timestamp timeIntervalSince1970]] forKey:@"ts"];
-    [dict setValue:[NSNumber numberWithDouble:self.accuracy] forKey:@"acc"];
-    [dict setValue:[NSNumber numberWithDouble:self.coordinate.longitude] forKey:@"lng"];
-    [dict setValue:[NSNumber numberWithDouble:self.coordinate.latitude] forKey:@"lat"];
+    [dict setValue:[NSNumber numberWithLongLong:(long long)[self.timestamp timeIntervalSince1970]] forKey:@"t"];
+    NSArray *gps = @[[NSNumber numberWithDouble:self.coordinate.latitude],
+                     [NSNumber numberWithDouble:self.coordinate.longitude],
+                     [NSNumber numberWithDouble:self.accuracy]];
+    [dict setValue:gps forKey:@"gps"];
     
     return dict;
 }
 
 - (NSDictionary *)dictionaryValueWitoutAccuracy {
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:3];
-    [dict setValue:[NSNumber numberWithLongLong:(long long)[self.timestamp timeIntervalSince1970]] forKey:@"ts"];
-    [dict setValue:[NSNumber numberWithDouble:self.coordinate.longitude] forKey:@"lng"];
-    [dict setValue:[NSNumber numberWithDouble:self.coordinate.latitude] forKey:@"lat"];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:4];
+    [dict setValue:[NSNumber numberWithLongLong:(long long)[self.timestamp timeIntervalSince1970]] forKey:@"t"];
+    NSArray *gps = @[[NSNumber numberWithDouble:self.coordinate.latitude],
+                     [NSNumber numberWithDouble:self.coordinate.longitude],
+                     [NSNumber numberWithDouble:kDefaultAccuracy]];
+    [dict setValue:gps forKey:@"gps"];
     
     return dict;
 }

@@ -44,6 +44,7 @@
     self = [super init];
     if (self) {
         self.avatarName = identity.avatar_filename;
+        self.name = identity.name;
         self.identityString = [identity identityIdValue].identity_id;
         self.userIdString = [NSString stringWithFormat:@"%d", [identity.connected_user_id integerValue]];
         self.distance = 0.0f;

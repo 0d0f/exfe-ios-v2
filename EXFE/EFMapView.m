@@ -32,6 +32,7 @@
 @property (nonatomic, strong) EFTouchDownGestureRecognizer  *touchDownGestureRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer        *tapGestureRecognizer;
 @property (nonatomic, strong) UIPanGestureRecognizer        *panGestureRecognizer;
+@property (nonatomic, strong) UITapGestureRecognizer        *normalTapGestureRecognizer;
 
 @property (nonatomic, weak)   UIView                        *editingBaseView;
 @property (nonatomic, weak)   EFMapEditingReadyView         *editingReadyView;
@@ -369,6 +370,7 @@ static UIView * ReverseSubviews(UIView *view) {
     NSAssert(self.gestureView, @"There should be a gesture view.");
     
     self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    self.tapGestureRecognizer.numberOfTapsRequired = 1;
     self.tapGestureRecognizer.delegate = self;
     
     [self.gestureView addGestureRecognizer:self.tapGestureRecognizer];
@@ -400,6 +402,11 @@ static UIView * ReverseSubviews(UIView *view) {
     };
     
     [self.gestureView addGestureRecognizer:self.touchDownGestureRecognizer];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                          action:@selector(handleTap:)];
+    [self.gestureView addGestureRecognizer:tap];
+    self.normalTapGestureRecognizer = tap;
     
     self.lines = [[NSMutableArray alloc] initWithCapacity:20];
     self.strokeColors = [[NSMutableArray alloc] initWithCapacity:20];
@@ -516,8 +523,6 @@ static UIView * ReverseSubviews(UIView *view) {
 }
 
 - (void)headingButtonPressed:(id)sender {
-    [self setCenterCoordinate:self.userLocation.coordinate animated:YES];
-    
     if ([self.delegate respondsToSelector:@selector(mapViewHeadingButtonPressed:)]) {
         [self.delegate mapViewHeadingButtonPressed:self];
     }
@@ -547,13 +552,28 @@ static UIView * ReverseSubviews(UIView *view) {
 #pragma mark - Gesture Hanlder
 
 - (void)handleTap:(UITapGestureRecognizer *)tap {
+    UIGestureRecognizerState state = tap.state;
+    
     if (tap == self.tapGestureRecognizer) {
-        UIGestureRecognizerState state = tap.state;
-        
         switch (state) {
             case UIGestureRecognizerStateEnded:
                 [self deselectAnnotation:[self selectedAnnotations][0] animated:YES];
                 break;
+            default:
+                break;
+        }
+    } else if (tap == self.normalTapGestureRecognizer) {
+        switch (state) {
+            case UIGestureRecognizerStateEnded:
+                if (self.selectedAnnotations.count) {
+                    [self deselectAnnotation:[self selectedAnnotations][0] animated:YES];
+                } else if ([self.delegate respondsToSelector:@selector(mapView:tappedAtCoordinate:)]) {
+                    CGPoint location = [tap locationInView:self.gestureView];
+                    CLLocationCoordinate2D coordinate = [self convertPoint:location toCoordinateFromView:self.gestureView];
+                    [self.delegate mapView:self tappedAtCoordinate:coordinate];
+                }
+                break;
+                
             default:
                 break;
         }
