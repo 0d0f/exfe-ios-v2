@@ -19,14 +19,14 @@
 #import "WildcardGestureRecognizer.h"
 #import "XQueryComponents.h"
 
-#define kModelKeyName       @"name"
-#define kModelKeyBio        @"bio"
-#define kModelKeyOriginal   @"original"
+#define kModelKeyName               @"name"
+#define kModelKeyBio                @"bio"
+#define kModelKeyOriginal           @"original"
 #define kModelKeyOriginalExt        @"ext"
-#define kModelKeyImageDirty @"dirty"
+#define kModelKeyImageDirty         @"dirty"
 
-#define kKeyImageFull      @"full"
-#define kKeyImageLarge     @"large"
+#define kKeyImageFull               @"full"
+#define kKeyImageLarge              @"large"
 
 
 
@@ -40,36 +40,34 @@
 #pragma mark -
 #pragma mark - Private Interface
 @interface EFEditProfileViewController ()
-
-#pragma mark Gloabel Application Model
-@property (nonatomic, weak) EXFEModel *model;
+{}
 #pragma mark Private ViewController Model
 @property (nonatomic, strong) NSMutableDictionary *data;
 
-@property (nonatomic, assign) CGPoint point;
-@property (nonatomic, assign) BOOL fillAvatarFlag;
+@property (nonatomic, assign) BOOL                fillAvatarFlag;
 
 #pragma mark Quick Access to UI Elements
-@property (nonatomic, strong) UILabel *name;
-@property (nonatomic, strong) UILabel *identityId;
-@property (nonatomic, strong) SSTextView *inputName;
-@property (nonatomic, strong) UIScrollView *imageScrollView;
-@property (nonatomic, strong) UIImageView *avatar;
-@property (nonatomic, strong) UIView *imageScrollRange;
-@property (nonatomic, strong) SSTextView *bio;
+@property (nonatomic, strong) UILabel       *name;
+@property (nonatomic, strong) UILabel       *identityId;
+@property (nonatomic, strong) SSTextView    *inputName;
+@property (nonatomic, strong) UIScrollView  *imageScrollView;
+@property (nonatomic, strong) UIImageView   *avatar;
+@property (nonatomic, strong) UIView        *imageScrollRange;
+@property (nonatomic, strong) SSTextView    *bio;
 
-@property (nonatomic, strong) UIView *camera;
-@property (nonatomic, strong) UIView *header;
-@property (nonatomic, strong) UIView *body;
-@property (nonatomic, strong) UIView *footer;
+@property (nonatomic, strong) UIView        *hint;
+@property (nonatomic, strong) UIView        *camera;
+@property (nonatomic, strong) UIView        *header;
+@property (nonatomic, strong) UIView        *body;
+@property (nonatomic, strong) UIView        *footer;
 
-@property (nonatomic, strong) UIView *activeInputView;
+@property (nonatomic, strong) UIView        *activeInputView;
 
 @property (nonatomic, strong) UIActivityIndicatorView *indicatorView;
 
-@property (nonatomic, strong) UIImageView *previewScreen;
-@property (nonatomic, strong) UIImageView *previewFull;
-@property (nonatomic, strong) UIImageView *previewTh;
+@property (nonatomic, strong) UIImageView   *previewScreen;
+@property (nonatomic, strong) UIImageView   *previewFull;
+@property (nonatomic, strong) UIImageView   *previewTh;
 
 
 @end
@@ -107,12 +105,14 @@
         [self.data removeAllObjects];
         
         self.camera.hidden = YES;
+        self.hint.hidden = YES;
         self.name.userInteractionEnabled = NO;
         self.bio.editable = YES;
         self.imageScrollView.userInteractionEnabled = NO;
         self.imageScrollView.scrollEnabled = NO;
     } else {
         self.camera.hidden = NO;
+        self.hint.hidden = NO;
         self.name.userInteractionEnabled = YES;
         self.bio.editable = NO;
         self.imageScrollView.userInteractionEnabled = YES;
@@ -123,7 +123,7 @@
 #pragma mark View Controller Life cycle
 - (id)initWithModel:(EXFEModel*)model
 {
-    self = [super init];
+    self = [super initWithModel:model];
     if (self) {
         self.model = model;
         self.data = [NSMutableDictionary dictionary];
@@ -139,14 +139,7 @@
     UIScrollView *contentView = [[UIScrollView alloc] initWithFrame:applicationFrame];
     contentView.backgroundColor = [UIColor COLOR_WA(0x4C, 0xFF)]; //[UIColor clearColor];
     contentView.scrollEnabled = NO;
-    
-//    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-//    gradientLayer.frame = contentView.bounds;
-//    gradientLayer.colors = [NSArray arrayWithObjects:(id)[UIColor COLOR_WA(0x4C, 0xFF)].CGColor, (id)[UIColor COLOR_WA(0xB2, 0xFF)].CGColor, nil];
-//    [contentView.layer insertSublayer:gradientLayer atIndex:0];
-
     self.view = contentView;
-    
     
     // Lower layer
     UIScrollView *imageScrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
@@ -312,7 +305,9 @@
         [hint sizeToFit];
         hintHeight = CGRectGetHeight(hint.bounds);
         hint.center = CGPointMake(CGRectGetWidth(self.view.bounds) / 2, CGRectGetHeight(self.view.bounds) - marginBottom - CGRectGetHeight(hint.bounds) / 2);
+        hint.hidden = self.readonly;
         [self.view addSubview:hint];
+        self.hint = hint;
     }
     
     SSTextView *bio = [[SSTextView alloc] initWithFrame:CGRectMake(20 - 8, 10 - 8, CGRectGetWidth(footer.bounds) - (20 - 8) * 2, CGRectGetHeight(footer.bounds) - 2 - hintHeight - marginBottom)];
@@ -405,10 +400,6 @@
     if (motion == UIEventSubtypeMotionShake)
     {
         if (self.data.count > 0) {
-            
-//            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Revert editing", nil) message:NSLocalizedString(@"Confirm reverting portrait and everything back?", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Revert", nil), nil];
-//            [alertView show];
-            
             UIAlertView *alertView = [UIAlertView alertViewWithTitle:NSLocalizedString(@"Revert editing", nil) message:NSLocalizedString(@"Confirm reverting portrait and everything back?", nil)];
             [alertView setCancelButtonWithTitle:NSLocalizedString(@"Cancel", nil) handler:nil];
             [alertView addButtonWithTitle:NSLocalizedString(@"Revert", nil) handler:^{
@@ -417,8 +408,6 @@
                 [self fillAvatar];
             }];
             [alertView show];
-            
-            
         }
     }
 }
@@ -1063,6 +1052,139 @@
 
 #pragma mark - Private methods
 
+- (void)bestZoomWithAnimation:(BOOL)animated
+{
+    
+    CGFloat ratio = 0;
+    CGFloat longAspect = MAX(self.avatar.frame.size.height, self.avatar.frame.size.width);
+    CGFloat shortAspect = MIN(self.avatar.frame.size.height, self.avatar.frame.size.width);
+    //    BOOL isPortrait = image.size.height >= image.size.width;
+    BOOL large = YES;
+    
+    if (longAspect >= 320) {
+        ratio = 320 / shortAspect;
+        large = YES;
+    } else {
+        ratio = 1;
+        large = NO;
+    }
+    CGFloat d = MAX(shortAspect, 320);
+    CGFloat hh = self.avatar.frame.size.height * ratio ;
+    CGFloat y_fix = 0;
+    
+    if ([UIScreen mainScreen].ratio == UIScreenRatioLong) {
+        if (hh >= 520 && hh <= 616){
+            y_fix = 0;
+        } else {
+            y_fix = 24 / ratio;
+        }
+    } else {
+        if (hh >= 520 && hh <= 616){
+            y_fix = - 24 / ratio;
+        } else {
+            y_fix = 0;
+        }
+    }
+    
+    CGRect rect = CGRectMake(self.avatar.center.x -  d/ 2, self.avatar.center.y - d / 2 + (y_fix), d, d);
+    [self.imageScrollView zoomToRect:rect animated:animated];
+}
+
+- (NSDictionary *)cropedImages
+{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
+    id original = [self.data valueForKey:kModelKeyOriginal];
+    if ([original isEqual:[NSNull null]]) {
+        // do nothing for remove the image
+    } else {
+        
+        //    if (!original) {
+        //        NSNumber *dirty = [self.data valueForKey:kModelKeyImageDirty];
+        //        if (dirty && [dirty boolValue]) {
+        //            NSString *imageKey = nil;
+        //            if (self.isEditUser) {
+        //                imageKey = self.user.avatar_filename;
+        //            } else {
+        //                imageKey = self.identity.avatar_filename;
+        //            }
+        //
+        //            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+        //                original = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+        //            }
+        //        }
+        //    }
+        
+        NSNumber *dirty = [self.data valueForKey:kModelKeyImageDirty];
+        if (dirty && [dirty boolValue]) {
+            
+            CGFloat scale = [UIScreen mainScreen].scale;
+            
+            CGFloat height = 0;
+            if ([UIScreen mainScreen].ratio == UIScreenRatioLong){
+                height = 568;
+            } else {
+                height = 480;
+            }
+            
+            CGRect fullRect = CGRectMake(0, 0, 320, height);
+            CGRect largeRect = CGRectMake(0, CGRectGetHeight(self.header.bounds), 320, 320);
+            CGFloat zoomScale = self.imageScrollView.zoomScale;
+            CGSize viewPortSize = CGSizeMake(self.imageScrollView.contentSize.width, self.imageScrollView.contentSize.height);
+            CGPoint offset = self.imageScrollView.contentOffset;
+            
+            UIGraphicsBeginImageContextWithOptions(viewPortSize, NO, scale);
+            CGContextRef ctx = UIGraphicsGetCurrentContext();
+            [[UIColor colorWithWhite:0 alpha:0] set];
+            CGContextFillRect(ctx, (CGRect){CGPointZero, viewPortSize});
+            [self.imageScrollView.layer renderInContext:ctx];
+            UIImage * largeImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            //            if (self.previewScreen) {
+            //                self.previewScreen.image = largeImage;
+            //            }
+            
+            CGRect fullRectOffset = CGRectOffset(fullRect, offset.x, offset.y);
+            
+            CGRect newCropRect1 = CGRectMake(CGRectGetMinX(fullRectOffset) * scale , CGRectGetMinY(fullRectOffset) * scale, CGRectGetWidth(fullRectOffset) * scale, CGRectGetHeight(fullRectOffset) * scale);
+            CGRect avatarMirror = CGRectMake(CGRectGetMinX(self.avatar.frame) * zoomScale, CGRectGetMinY(self.avatar.frame) * zoomScale, CGRectGetWidth(self.avatar.frame) * zoomScale, CGRectGetHeight(self.avatar.frame) * zoomScale);
+            
+            BOOL hasFullSize = CGRectContainsRect(avatarMirror, fullRectOffset);
+            if (hasFullSize) {
+                CGImageRef imageRef1 = CGImageCreateWithImageInRect([largeImage CGImage], newCropRect1);
+                if (imageRef1) {
+                    UIImage* img1 = [UIImage imageWithCGImage:imageRef1];
+                    CGImageRelease(imageRef1);
+                    [dict setValue:img1 forKey:kKeyImageFull];
+                }
+            }
+            
+            CGRect newCropRect2 = CGRectMake((CGRectGetMinX(largeRect) + offset.x) * scale, (CGRectGetMinY(largeRect) + offset.y) * scale, CGRectGetWidth(largeRect) * scale, CGRectGetHeight(largeRect) * scale);
+            CGImageRef imageRef2 = CGImageCreateWithImageInRect([largeImage CGImage], newCropRect2);
+            if (imageRef2) {
+                UIImage* img2 = [UIImage imageWithCGImage:imageRef2];
+                CGImageRelease(imageRef2);
+                [dict setValue:img2 forKey:kKeyImageLarge];
+                if (!hasFullSize) {
+                    [dict setValue:img2 forKey:kKeyImageFull];
+                }
+            }
+        }
+    }
+    return [dict copy];
+}
+
+
+- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    //UIGraphicsBeginImageContext(newSize);
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+#pragma mark Unused methods
 - (UIImage*) getSubImageFrom: (UIImage*) img withRect: (CGRect) rect __deprecated
 {
     
@@ -1118,138 +1240,6 @@
     
     return zoomRect;
 }
-
-- (NSDictionary *)cropedImages
-{
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
-    id original = [self.data valueForKey:kModelKeyOriginal];
-    if ([original isEqual:[NSNull null]]) {
-        // do nothing for remove the image
-    } else {
-    
-//    if (!original) {
-//        NSNumber *dirty = [self.data valueForKey:kModelKeyImageDirty];
-//        if (dirty && [dirty boolValue]) {
-//            NSString *imageKey = nil;
-//            if (self.isEditUser) {
-//                imageKey = self.user.avatar_filename;
-//            } else {
-//                imageKey = self.identity.avatar_filename;
-//            }
-//            
-//            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
-//                original = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
-//            }
-//        }
-//    }
-        
-        NSNumber *dirty = [self.data valueForKey:kModelKeyImageDirty];
-        if (dirty && [dirty boolValue]) {
-            
-            CGFloat scale = [UIScreen mainScreen].scale;
-            
-            CGFloat height = 0;
-            if ([UIScreen mainScreen].ratio == UIScreenRatioLong){
-                height = 568;
-            } else {
-                height = 480;
-            }
-            
-            CGRect fullRect = CGRectMake(0, 0, 320, height);
-            CGRect largeRect = CGRectMake(0, CGRectGetHeight(self.header.bounds), 320, 320);
-            CGFloat zoomScale = self.imageScrollView.zoomScale;
-            CGSize viewPortSize = CGSizeMake(self.imageScrollView.contentSize.width, self.imageScrollView.contentSize.height);
-            CGPoint offset = self.imageScrollView.contentOffset;
-            
-            UIGraphicsBeginImageContextWithOptions(viewPortSize, NO, scale);
-            CGContextRef ctx = UIGraphicsGetCurrentContext();
-            [[UIColor colorWithWhite:0 alpha:0] set];
-            CGContextFillRect(ctx, (CGRect){CGPointZero, viewPortSize});
-            [self.imageScrollView.layer renderInContext:ctx];
-            UIImage * largeImage = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            
-//            if (self.previewScreen) {
-//                self.previewScreen.image = largeImage;
-//            }
-            
-            CGRect fullRectOffset = CGRectOffset(fullRect, offset.x, offset.y);
-            
-            CGRect newCropRect1 = CGRectMake(CGRectGetMinX(fullRectOffset) * scale , CGRectGetMinY(fullRectOffset) * scale, CGRectGetWidth(fullRectOffset) * scale, CGRectGetHeight(fullRectOffset) * scale);
-            CGRect avatarMirror = CGRectMake(CGRectGetMinX(self.avatar.frame) * zoomScale, CGRectGetMinY(self.avatar.frame) * zoomScale, CGRectGetWidth(self.avatar.frame) * zoomScale, CGRectGetHeight(self.avatar.frame) * zoomScale);
-            
-            BOOL hasFullSize = CGRectContainsRect(avatarMirror, fullRectOffset);
-            if (hasFullSize) {
-                CGImageRef imageRef1 = CGImageCreateWithImageInRect([largeImage CGImage], newCropRect1);
-                if (imageRef1) {
-                    UIImage* img1 = [UIImage imageWithCGImage:imageRef1];
-                    CGImageRelease(imageRef1);
-                    [dict setValue:img1 forKey:kKeyImageFull];
-                }
-            }
-            
-            CGRect newCropRect2 = CGRectMake((CGRectGetMinX(largeRect) + offset.x) * scale, (CGRectGetMinY(largeRect) + offset.y) * scale, CGRectGetWidth(largeRect) * scale, CGRectGetHeight(largeRect) * scale);
-            CGImageRef imageRef2 = CGImageCreateWithImageInRect([largeImage CGImage], newCropRect2);
-            if (imageRef2) {
-                UIImage* img2 = [UIImage imageWithCGImage:imageRef2];
-                CGImageRelease(imageRef2);
-                [dict setValue:img2 forKey:kKeyImageLarge];
-                if (!hasFullSize) {
-                    [dict setValue:img2 forKey:kKeyImageFull];
-                }
-            }
-        }
-    }
-    return [dict copy];
-}
-
-- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
-    //UIGraphicsBeginImageContext(newSize);
-    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
-    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
-}
-
-- (void)bestZoomWithAnimation:(BOOL)animated
-{
-    
-    CGFloat ratio = 0;
-    CGFloat longAspect = MAX(self.avatar.frame.size.height, self.avatar.frame.size.width);
-    CGFloat shortAspect = MIN(self.avatar.frame.size.height, self.avatar.frame.size.width);
-//    BOOL isPortrait = image.size.height >= image.size.width;
-    BOOL large = YES;
-    
-    if (longAspect >= 320) {
-        ratio = 320 / shortAspect;
-        large = YES;
-    } else {
-        ratio = 1;
-        large = NO;
-    }
-    CGFloat d = MAX(shortAspect, 320);
-    CGFloat hh = self.avatar.frame.size.height * ratio ;
-    CGFloat y_fix = 0;
-    
-    if ([UIScreen mainScreen].ratio == UIScreenRatioLong) {
-        if (hh >= 520 && hh <= 616){
-            y_fix = 0;
-        } else {
-            y_fix = 24 / ratio;
-        }
-    } else {
-        if (hh >= 520 && hh <= 616){
-            y_fix = - 24 / ratio;
-        } else {
-            y_fix = 0;
-        }
-    }
-    
-    CGRect rect = CGRectMake(self.avatar.center.x -  d/ 2, self.avatar.center.y - d / 2 + (y_fix), d, d);
-    [self.imageScrollView zoomToRect:rect animated:animated];
-}
-
 
 // expand
 // w > h
