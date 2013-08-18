@@ -76,9 +76,6 @@
 
 - (void)_show;
 
-- (void)_handleTitleTap:(UITapGestureRecognizer *)tap;
-- (void)_handleSubtitleTap:(UITapGestureRecognizer *)tap;
-
 @end
 
 @implementation EFCalloutAnnotationView (Private)
