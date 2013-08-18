@@ -43,6 +43,7 @@
 @property (nonatomic, assign) CGPoint             tapLocation;            // rewrite
 
 @property (nonatomic, strong) UIView              *baseView;
+@property (nonatomic, strong) CALayer             *shadowLayer;
 
 @end
 
@@ -72,12 +73,19 @@
     
     self.view.layer.cornerRadius = 6.0f;
     self.view.layer.masksToBounds = YES;
-    self.view.layer.shadowColor = [UIColor blackColor].CGColor;
-    self.view.layer.shadowOffset = (CGSize){0.0f, 1.0f};
-    self.view.layer.shadowOpacity = 0.66f;
-    self.view.layer.shadowRadius = 2.0f;
     self.view.layer.borderColor = [UIColor whiteColor].CGColor;
     self.view.layer.borderWidth = 0.5f;
+    
+    CALayer *shadowLayer = [CALayer layer];
+    shadowLayer.backgroundColor = [UIColor grayColor].CGColor;
+    shadowLayer.cornerRadius = 6.0f;
+    shadowLayer.masksToBounds = NO;
+    shadowLayer.bounds = self.view.bounds;
+    shadowLayer.shadowColor = [UIColor blackColor].CGColor;
+    shadowLayer.shadowOffset = (CGSize){0.0f, 1.0f};
+    shadowLayer.shadowOpacity = 0.66f;
+    shadowLayer.shadowRadius = 2.0f;
+    self.shadowLayer = shadowLayer;
 }
 
 #pragma mark - Public
@@ -97,11 +105,17 @@
     
     self.baseView = baseView;
     
+    self.shadowLayer.position = locatoin;
+    self.shadowLayer.bounds = self.view.bounds;
+    [self.baseView.layer addSublayer:self.shadowLayer];
+    
     self.view.center = locatoin;
     [self.baseView addSubview:self.view];
 }
 
 - (void)dismissAnimated:(BOOL)animated {
+    [self.shadowLayer removeFromSuperlayer];
+    self.shadowLayer = nil;
     [self.baseView removeFromSuperview];
     self.baseView = nil;
     [self.view removeFromSuperview];
