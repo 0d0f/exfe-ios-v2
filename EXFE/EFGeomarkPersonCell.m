@@ -12,6 +12,7 @@
 #import "EFDataManager+Image.h"
 #import "EFMapPerson.h"
 #import "EFLocation.h"
+#import "Util.h"
 
 @interface EFGeomarkPersonCell ()
 
@@ -23,11 +24,44 @@
 
 @interface EFGeomarkPersonCell (Private)
 
+- (UIView *)_backgroundView;
+- (UIView *)_selectedBackgroundView;
+
 - (void)_personDidChange;
 
 @end
 
 @implementation EFGeomarkPersonCell (Private)
+
+- (UIView *)_backgroundView {
+    UIView *backgroundView = [[UIView alloc] initWithFrame:self.bounds];
+    backgroundView.backgroundColor = [UIColor clearColor];
+    
+    UIView *topLine = [[UIView alloc] initWithFrame:(CGRect){{0.0f, 0.0f}, {CGRectGetWidth(self.frame), 0.5f}}];
+    topLine.backgroundColor = [UIColor whiteColor];
+    [backgroundView addSubview:topLine];
+    
+    UIView *bottomLine = [[UIView alloc] initWithFrame:(CGRect){{0.0f, CGRectGetHeight(self.frame) - 0.5f}, {CGRectGetWidth(self.frame), 0.5f}}];
+    bottomLine.backgroundColor = [UIColor COLOR_RGB(0xCC, 0xCC, 0xCC)];
+    [backgroundView addSubview:bottomLine];
+    
+    return backgroundView;
+}
+
+- (UIView *)_selectedBackgroundView {
+    UIView *backgroundView = [[UIView alloc] initWithFrame:self.bounds];
+    backgroundView.backgroundColor = [[UIColor COLOR_BLUE_EXFE] colorWithAlphaComponent:0.08f];
+    
+    UIView *topLine = [[UIView alloc] initWithFrame:(CGRect){{0.0f, 0.0f}, {CGRectGetWidth(self.frame), 0.5f}}];
+    topLine.backgroundColor = [UIColor COLOR_RGB(0xCC, 0xCC, 0xCC)];
+    [backgroundView addSubview:topLine];
+    
+    UIView *bottomLine = [[UIView alloc] initWithFrame:(CGRect){{0.0f, CGRectGetHeight(self.frame) - 0.5f}, {CGRectGetWidth(self.frame), 0.5f}}];
+    bottomLine.backgroundColor = [UIColor whiteColor];
+    [backgroundView addSubview:bottomLine];
+    
+    return backgroundView;
+}
 
 - (void)_personDidChange {
     if (self.person) {
@@ -88,6 +122,9 @@
         locationInfoLabel.textAlignment = NSTextAlignmentRight;
         [self.contentView addSubview:locationInfoLabel];
         self.locationInfoLabel = locationInfoLabel;
+        
+        self.backgroundView = [self _backgroundView];
+        self.selectedBackgroundView = [self _selectedBackgroundView];
     }
     return self;
 }
