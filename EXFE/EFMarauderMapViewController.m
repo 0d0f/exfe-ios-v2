@@ -835,7 +835,18 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 - (void)mapViewHeadingButtonPressed:(EFMapView *)mapView {
-    [self _zoomToPersonLocation:[self.mapDataSource me]];
+    EFMapPerson *me = [self.mapDataSource me];
+    
+    if (self.recentZoomedPerson == me) {
+        if (kEFMapZoomTypePersonAndDestination == self.mapZoomType) {
+            [self _zoomToPersonLocation:me];
+        } else {
+            [self _zoomToPerson:me];
+        }
+    } else {
+        [self _zoomToPerson:me];
+        self.recentZoomedPerson = me;
+    }
 }
 
 #pragma mark - MKMapViewDelegate
