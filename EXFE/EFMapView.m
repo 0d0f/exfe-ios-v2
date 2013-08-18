@@ -523,8 +523,6 @@ static UIView * ReverseSubviews(UIView *view) {
 }
 
 - (void)headingButtonPressed:(id)sender {
-    [self setCenterCoordinate:self.userLocation.coordinate animated:YES];
-    
     if ([self.delegate respondsToSelector:@selector(mapViewHeadingButtonPressed:)]) {
         [self.delegate mapViewHeadingButtonPressed:self];
     }
