@@ -17,10 +17,12 @@
 #import "SSTextView.h"
 #import "Avatar.h"
 #import "WildcardGestureRecognizer.h"
+#import "XQueryComponents.h"
 
 #define kModelKeyName       @"name"
 #define kModelKeyBio        @"bio"
 #define kModelKeyOriginal   @"original"
+#define kModelKeyOriginalExt        @"ext"
 #define kModelKeyImageDirty @"dirty"
 
 #define kKeyImageFull      @"full"
@@ -527,7 +529,8 @@
     }
 }
 
-- (NSString *)getName{
+- (NSString *)getName
+{
     NSString *original = [self.data valueForKey:kModelKeyName];
     if (!original) {
         if (self.isEditUser) {
@@ -542,7 +545,8 @@
     return original;
 }
 
-- (NSString *)getBio{
+- (NSString *)getBio
+{
     NSString *original = [self.data valueForKey:kModelKeyBio];
     if (!original) {
         if (self.isEditUser) {
@@ -555,6 +559,22 @@
         }
     }
     return original;
+}
+
+- (NSString *)getImageExt
+{
+    NSString *ext = [self.data valueForKeyPath:kModelKeyOriginalExt];
+    if (!ext) {
+        if (self.isEditUser) {
+            ext = [self.user.avatar.original pathExtension];
+        } else {
+            ext = [self.identity.avatar.original pathExtension];
+        }
+        if (ext.length == 0) {
+            ext = @"JPG";
+        }
+    }
+    return ext;
 }
 
 - (void)fillUser:(User *)user
@@ -749,20 +769,21 @@
             if (dirty && [dirty boolValue]) {
                 NSDictionary *dict = [self cropedImages];
                 UIImage *full = [dict valueForKey:kKeyImageFull];
+                NSString *ext = [self getImageExt];
                 if (full) {
                     UIImage *large_raw = [dict valueForKey:kKeyImageLarge];
                     UIImage *large = [self imageWithImage:large_raw scaledToSize:CGSizeMake(320, 320)];
                     UIImage *small = [self imageWithImage:large_raw scaledToSize:CGSizeMake(80, 80)];
                     if (self.isEditUser) {
-                        [self.model updateUserAvatar:full withLarge:large withSmall:small];
+                        [self.model updateUserAvatar:full withLarge:large withSmall:small withExt:ext];
                     } else {
-                        [self.model updateIdentity:self.identity withAvatar:full withLarge:large withSmall:small];
+                        [self.model updateIdentity:self.identity withAvatar:full withLarge:large withSmall:small withExt:ext];
                     }
                 } else {
                     if (self.isEditUser) {
-                        [self.model updateUserAvatar:nil withLarge:nil withSmall:nil];
+                        [self.model updateUserAvatar:nil withLarge:nil withSmall:nil withExt:nil];
                     } else {
-                        [self.model updateIdentity:self.identity withAvatar:nil withLarge:nil withSmall:nil];
+                        [self.model updateIdentity:self.identity withAvatar:nil withLarge:nil withSmall:nil withExt:nil];
                     }
                 }
             }
@@ -1012,6 +1033,18 @@
         }
         
         [self.data setValue:image forKey:kModelKeyOriginal];
+        
+        NSString *referenceURL = [info objectForKey:UIImagePickerControllerReferenceURL];
+        if (referenceURL) {
+            NSURL *url = [NSURL URLWithString:referenceURL];
+            NSDictionary *params = [url queryComponents];
+            [params enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                if ([@"ext" isEqualToString:key]) {
+                    [self.data setValue:image forKey:kModelKeyOriginalExt];
+                }
+                
+            }];
+        }
         
         picker.navigationBar.hidden = YES;
     }

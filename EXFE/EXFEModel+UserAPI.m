@@ -49,12 +49,13 @@
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
 }
 
-- (void)updateUserAvatar:(UIImage *)original withLarge:(UIImage *)avatar_2x withSmall:(UIImage *)avatar
+- (void)updateUserAvatar:(UIImage *)original withLarge:(UIImage *)avatar_2x withSmall:(UIImage *)avatar withExt:(NSString *)ext
 {
     EFUpdateUserAvatarOperation *operation = [EFUpdateUserAvatarOperation operationWithModel:self];
     operation.original = original;
     operation.avatar = avatar;
     operation.avatar_2x = avatar_2x;
+    operation.ext = ext;
     
     EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
     
