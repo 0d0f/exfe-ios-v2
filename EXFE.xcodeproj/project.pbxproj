@@ -1612,6 +1612,9 @@
 		765E150E17745235003F4827 /* EFDataManager+Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 765E150D17745235003F4827 /* EFDataManager+Image.m */; };
 		765E150F17745235003F4827 /* EFDataManager+Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 765E150D17745235003F4827 /* EFDataManager+Image.m */; };
 		765E151017745235003F4827 /* EFDataManager+Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 765E150D17745235003F4827 /* EFDataManager+Image.m */; };
+		766032BB17C0D4A500B21A12 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 766032BA17C0D4A500B21A12 /* AddressBookUI.framework */; };
+		766032C317C0D4AC00B21A12 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 766032BA17C0D4A500B21A12 /* AddressBookUI.framework */; };
+		766032C417C0D4B400B21A12 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 766032BA17C0D4A500B21A12 /* AddressBookUI.framework */; };
 		7661C7EC1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7ED1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7EE1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
@@ -2784,6 +2787,7 @@
 		765BAC2B176AF683007ADD83 /* EFDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFDataManager.m; sourceTree = "<group>"; };
 		765E150C17745235003F4827 /* EFDataManager+Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFDataManager+Image.h"; sourceTree = "<group>"; };
 		765E150D17745235003F4827 /* EFDataManager+Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFDataManager+Image.m"; sourceTree = "<group>"; };
+		766032BA17C0D4A500B21A12 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		7661C7EA1738B15400133F10 /* EFErrorHandlerCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorHandlerCenter.h; sourceTree = "<group>"; };
 		7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorHandlerCenter.m; sourceTree = "<group>"; };
 		766C9827179933D00064B5BC /* EFPersonAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPersonAnnotationView.h; sourceTree = "<group>"; };
@@ -3326,6 +3330,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				766032C317C0D4AC00B21A12 /* AddressBookUI.framework in Frameworks */,
 				761165A617B89104005B248A /* libRestKit.a in Frameworks */,
 				76B124501798ECF800A73E59 /* libicucore.dylib in Frameworks */,
 				4F63DB0E17172AA600136B7E /* MobileCoreServices.framework in Frameworks */,
@@ -3360,6 +3365,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				766032BB17C0D4A500B21A12 /* AddressBookUI.framework in Frameworks */,
 				4F5AF02317B5F64600AAE817 /* libBlocksKit.a in Frameworks */,
 				4F38E9E717B542FA00B850B6 /* libRestKit.a in Frameworks */,
 				76B124511798ECFD00A73E59 /* libicucore.dylib in Frameworks */,
@@ -3394,6 +3400,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				766032C417C0D4B400B21A12 /* AddressBookUI.framework in Frameworks */,
 				4F5AF03817BB6C1500AAE817 /* libFlurry_4.2.3.a in Frameworks */,
 				761165A717B8910D005B248A /* libRestKit.a in Frameworks */,
 				76B1244F1798ECF100A73E59 /* libicucore.dylib in Frameworks */,
@@ -4863,6 +4870,7 @@
 		78A98E8A1560F832009E0806 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				766032BA17C0D4A500B21A12 /* AddressBookUI.framework */,
 				76B1244E1798ECF000A73E59 /* libicucore.dylib */,
 				76073D10174F8802007CBFC3 /* MessageUI.framework */,
 				4FB377FB173795C2001FA1B2 /* Accounts.framework */,

@@ -13,7 +13,7 @@
 
 extern CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocationCoordinate2D locationCoordinate);
 
-@class EFMarauderMapDataSource, IdentityId;
+@class EFMarauderMapDataSource, IdentityId, EFRouteLocation;
 @protocol EFMarauderMapDataSourceDelegate <NSObject>
 
 @optional
@@ -22,6 +22,7 @@ extern CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLL
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations;   // action: update, type: location
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRoutePaths:(NSArray *)paths;
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource needDeleteRouteLocation:(NSString *)routeLocationId;    // action: delete, type: location
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource routeLocationDidGetGeomarkInfo:(EFRouteLocation *)routeLocation;
 
 @end
 

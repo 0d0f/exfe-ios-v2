@@ -455,7 +455,29 @@
             routeLocation.coordinate = coordinate;
             [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
             
-            [self.mapView selectAnnotation:annotation animated:NO];
+            [self.mapView selectAnnotation:annotation animated:YES];
+            
+            CLLocation *location = [[CLLocation alloc] initWithLatitude:coordinate.latitude longitude:coordinate.longitude];
+            CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+            [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *geomarks, NSError *error){
+                if (geomarks && geomarks.count) {
+                    CLPlacemark *placemark = geomarks[0];
+                    routeLocation.title = placemark.name;
+                    routeLocation.subtitle = [placemark.addressDictionary valueForKey:@"FormattedAddressLines"][0];
+                    
+                    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+                    
+                    if (self.mapView.selectedAnnotations) {
+                        MKAnnotationView *annoationView = self.mapView.selectedAnnotations[0];
+                        if (annoationView.annotation == annotation) {
+                            [self.mapView deselectAnnotation:annotation animated:NO];
+                            [self.mapView selectAnnotation:annotation animated:NO];
+                        }
+                    }
+                } else {
+                    NSLog(@"%@", error);
+                }
+            }];
         }
             break;
         default:
@@ -748,6 +770,10 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             }
         }
     }
+}
+
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource routeLocationDidGetGeomarkInfo:(EFRouteLocation *)routeLocation {
+    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
 }
 
 #pragma mark - EFMapViewDelegate

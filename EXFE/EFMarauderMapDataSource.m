@@ -8,6 +8,7 @@
 
 #import "EFMarauderMapDataSource.h"
 
+#import <AddressBookUI/AddressBookUI.h>
 #import "EFAnnotation.h"
 #import "EFAnnotationView.h"
 #import "Util.h"
@@ -478,10 +479,9 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     EFRouteLocation *routelocation = [EFRouteLocation generateRouteLocationWithCoordinate:coordinate];
     routelocation.locationId = [self _generateRouteLocationId];
     
-#warning TEST only
-    routelocation.title = @"子时正刻";
-    routelocation.subtitle = @"233";
-    
+    routelocation.title = NSLocalizedString(@"街道信息", nil);
+    routelocation.subtitle = @"获取中...";
+        
     return routelocation;
 }
 
