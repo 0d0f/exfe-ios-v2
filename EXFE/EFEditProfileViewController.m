@@ -555,9 +555,9 @@
     NSString *ext = [self.data valueForKeyPath:kModelKeyOriginalExt];
     if (!ext) {
         if (self.isEditUser) {
-            ext = [self.user.avatar.original pathExtension];
+            ext = [[self.user.avatar.original pathExtension] uppercaseString];
         } else {
-            ext = [self.identity.avatar.original pathExtension];
+            ext = [[self.identity.avatar.original pathExtension] uppercaseString];
         }
         if (ext.length == 0) {
             ext = @"JPG";

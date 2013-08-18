@@ -1062,13 +1062,13 @@
                                                                               UIImage *img = (UIImage *)obj;
                                                                               if (img) {
                                                                                   if ([@"PNG" isEqualToString:ext]) {
-                                                                                      NSData *imageData = UIImageJPEGRepresentation(img, 0.8);
+                                                                                      NSData *imageData = UIImagePNGRepresentation(img);
                                                                                       [formData appendPartWithFileData:imageData
                                                                                                                   name:name
                                                                                                               fileName:[NSString stringWithFormat:@"%@.png", name]
                                                                                                               mimeType:@"image/png"];
                                                                                   } else {
-                                                                                      NSData *imageData = UIImagePNGRepresentation(img);
+                                                                                      NSData *imageData = UIImageJPEGRepresentation(img, 0.8);
                                                                                       [formData appendPartWithFileData:imageData
                                                                                                                   name:name
                                                                                                               fileName:[NSString stringWithFormat:@"%@.jpg", name]
