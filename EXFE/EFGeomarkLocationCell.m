@@ -77,15 +77,19 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:(CGRect){{8.0f, 5.0f}, {184.0f, 24.0f}}];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:(CGRect){{6.0f, 5.0f}, {190.0f, 24.0f}}];
         titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
         titleLabel.backgroundColor = [UIColor clearColor];
+        titleLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
+        titleLabel.shadowOffset = (CGSize){0.0f, 1.0f};
         [self.contentView addSubview:titleLabel];
         self.locationTitleLabel = titleLabel;
         
-        UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:(CGRect){{8.0f, 26.0f}, {184.0f, 14.0f}}];
-        descriptionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:9];
+        UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:(CGRect){{6.0f, 27.0f}, {190.0f, 14.0f}}];
+        descriptionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
         descriptionLabel.backgroundColor = [UIColor clearColor];
+        descriptionLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
+        descriptionLabel.shadowOffset = (CGSize){0.0f, 1.0f};
         [self.contentView addSubview:descriptionLabel];
         self.locationDescriptionLabel = descriptionLabel;
         

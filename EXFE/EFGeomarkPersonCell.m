@@ -84,7 +84,7 @@
                 time = time / 60;
                 isMinutes = NO;
             }
-            locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%d%@前所处方位 距离目的地%d米", nil), time, isMinutes ? @"分钟" : @"小时", (long)self.person.distance];
+            locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%d%@前 距离目的地%d米", nil), time, isMinutes ? @"分钟" : @"小时", (long)self.person.distance];
         }
         
         self.locationInfoLabel.text = locationInfo;
@@ -103,23 +103,28 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        UIImageView *avatarImageView = [[UIImageView alloc] initWithFrame:(CGRect){{8.0f, 7.0f}, {30.0f, 30.0f}}];
+        UIImageView *avatarImageView = [[UIImageView alloc] initWithFrame:(CGRect){{6.0f, 7.0f}, {30.0f, 30.0f}}];
         avatarImageView.layer.cornerRadius = 2.0f;
         avatarImageView.layer.masksToBounds = YES;
         [self.contentView addSubview:avatarImageView];
         self.avatarImageView = avatarImageView;
         
-        UILabel *nameLabel = [[UILabel alloc] initWithFrame:(CGRect){{40.0f, 5.0f}, {150.0f, 24.0f}}];
+        UILabel *nameLabel = [[UILabel alloc] initWithFrame:(CGRect){{38.0f, 5.0f}, {156.0f, 24.0f}}];
         nameLabel.backgroundColor = [UIColor clearColor];
+        nameLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
+        nameLabel.shadowOffset = (CGSize){0.0f, 1.0f};
         nameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
         nameLabel.textAlignment = NSTextAlignmentRight;
         [self.contentView addSubview:nameLabel];
         self.nameLabel = nameLabel;
         
-        UILabel *locationInfoLabel = [[UILabel alloc] initWithFrame:(CGRect){{40.0f, 26.0f}, {150.0f, 14.0f}}];
+        UILabel *locationInfoLabel = [[UILabel alloc] initWithFrame:(CGRect){{38.0f, 27.0f}, {156.0f, 14.0f}}];
         locationInfoLabel.backgroundColor = [UIColor clearColor];
-        locationInfoLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:9];
+        locationInfoLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
+        locationInfoLabel.shadowOffset = (CGSize){0.0f, 1.0f};
+        locationInfoLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
         locationInfoLabel.textAlignment = NSTextAlignmentRight;
+        locationInfoLabel.lineBreakMode = NSLineBreakByTruncatingHead;
         [self.contentView addSubview:locationInfoLabel];
         self.locationInfoLabel = locationInfoLabel;
         

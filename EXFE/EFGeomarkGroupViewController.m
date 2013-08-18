@@ -72,14 +72,14 @@
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    self.view.layer.cornerRadius = 6.0f;
+    self.view.layer.cornerRadius = 4.0f;
     self.view.layer.masksToBounds = YES;
     self.view.layer.borderColor = [UIColor whiteColor].CGColor;
     self.view.layer.borderWidth = 0.5f;
     
     CALayer *shadowLayer = [CALayer layer];
     shadowLayer.backgroundColor = [UIColor grayColor].CGColor;
-    shadowLayer.cornerRadius = 6.0f;
+    shadowLayer.cornerRadius = 4.0f;
     shadowLayer.masksToBounds = NO;
     shadowLayer.bounds = self.view.bounds;
     shadowLayer.shadowColor = [UIColor blackColor].CGColor;

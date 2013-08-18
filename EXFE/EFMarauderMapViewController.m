@@ -185,7 +185,12 @@
     self.mapView.delegate = self;
     
     // tableView baseView
-    self.leftBaseView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.6f];
+    self.leftBaseView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.88f];
+    
+    // shape layer
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    shapeLayer.path = [[UIBezierPath bezierPathWithRoundedRect:self.leftBaseView.bounds byRoundingCorners:UIRectCornerBottomRight cornerRadii:(CGSize){4.0f, 4.0f}] CGPath];
+    self.leftBaseView.layer.mask = shapeLayer;
     
     // tableView gradient
     UIImageView *tableViewShadowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_shadow_gap.png"]];
@@ -243,6 +248,8 @@
     }
     
     self.leftBaseView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, height}};
+    CAShapeLayer *shapeLayer = (CAShapeLayer *)self.leftBaseView.layer.mask;
+    shapeLayer.path = [[UIBezierPath bezierPathWithRoundedRect:self.leftBaseView.bounds byRoundingCorners:UIRectCornerBottomRight cornerRadii:(CGSize){4.0f, 4.0f}] CGPath];;
     
     [self.mapStrokeView reloadData];
     
