@@ -376,7 +376,7 @@
     }
 }
 
-#pragma mark - KVO  
+#pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (object == [EFLocationManager defaultManager]) {
@@ -671,6 +671,20 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             [dataSource addRouteLocation:routeLocation toMapView:self.mapView];
+            
+            if ([EFLocationManager defaultManager].userLocation) {
+                EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+                EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
+                if (userLocationView) {
+                    if (destination) {
+                        userLocationView.showNavigation = YES;
+                        CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
+                        userLocationView.radianBetweenDestination = radian;
+                    } else {
+                        userLocationView.showNavigation = NO;
+                    }
+                }
+            }
         });
         self.annotationAnimationDelay += 0.233f;
     }
@@ -695,6 +709,20 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     for (EFRouteLocation *routeLocation in locations) {
         [dataSource addRouteLocation:routeLocation toMapView:self.mapView];
     }
+    
+    if ([EFLocationManager defaultManager].userLocation) {
+        EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+        EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
+        if (userLocationView) {
+            if (destination) {
+                userLocationView.showNavigation = YES;
+                CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
+                userLocationView.radianBetweenDestination = radian;
+            } else {
+                userLocationView.showNavigation = NO;
+            }
+        }
+    }
 }
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRoutePaths:(NSArray *)paths {
@@ -705,6 +733,20 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     EFRouteLocation *routeLocation = [dataSource routeLocationForRouteLocationId:routeLocationId];
     if (routeLocation) {
         [dataSource removeRouteLocation:routeLocation fromMapView:self.mapView];
+    }
+    
+    if ([EFLocationManager defaultManager].userLocation) {
+        EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+        EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
+        if (userLocationView) {
+            if (destination) {
+                userLocationView.showNavigation = YES;
+                CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
+                userLocationView.radianBetweenDestination = radian;
+            } else {
+                userLocationView.showNavigation = NO;
+            }
+        }
     }
 }
 
@@ -752,7 +794,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     [routeLocation updateIconURL];
     
     [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
-//    [self _postRoute];
 }
 
 - (void)mapViewCancelButtonPressed:(EFMapView *)mapView {
@@ -766,6 +807,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 - (void)mapViewHeadingButtonPressed:(EFMapView *)mapView {
+    [self _zoomToPersonLocation:[self.mapDataSource me]];
 }
 
 #pragma mark - MKMapViewDelegate
@@ -810,11 +852,19 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:Identifier];
         if (nil == userLocationView) {
             userLocationView = [[EFUserLocationAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:Identifier];
-            userLocationView.image = [UIImage imageNamed:@"map_arrow_ring.png"];
             userLocationView.canShowCallout = NO;
         }
         
         userLocationView.annotation = annotation;
+        
+        EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+        if (destination) {
+            userLocationView.showNavigation = YES;
+            CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
+            userLocationView.radianBetweenDestination = radian;
+        } else {
+            userLocationView.showNavigation = NO;
+        }
         
         return userLocationView;
     } else if ([annotation isKindOfClass:[EFAnnotation class]]) {
@@ -900,8 +950,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         } else if (view.annotation == [EFLocationManager defaultManager].userLocation) {
             CLHeading *userHeading = [EFLocationManager defaultManager].userHeading;
             if (userHeading) {
-                CLLocationDirection direction = userHeading.trueHeading;
-                view.layer.transform = CATransform3DMakeRotation((M_PI / 160.0f) * direction, 0.0f, 0.0f, 1.0f);
+                ((EFUserLocationAnnotationView *)view).userHeading = userHeading;
             }
         }
     }

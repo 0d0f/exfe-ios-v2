@@ -44,7 +44,8 @@
 
 @interface EFUserLocationAnnotationView ()
 
-@property (nonatomic, strong) UIImageView *arrowView;
+@property (nonatomic, strong) UIImageView   *arrowView;
+@property (nonatomic, strong) UIImageView   *navigationView;
 @property (nonatomic, strong) EFUserLocationAnimationView *animationView;
 
 - (void)playAnimation;
@@ -58,17 +59,26 @@
     self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
     if (self) {
         self.frame = (CGRect){{0.0f, 0.0f}, {30.0f, 30.0f}};
+        
         self.arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_arrow_22blue.png"]];
         self.arrowView.frame = (CGRect){{4.0f, 4.0f}, self.arrowView.frame.size};
         [self addSubview:self.arrowView];
         
+        self.navigationView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_arrow_ring.png"]];
+        [self addSubview:self.navigationView];
+        
         self.animationView = [[EFUserLocationAnimationView alloc] initWithFrame:(CGRect){{0.0f, 0.0f}, {30.0f, 30.0f}}];
         self.animationView.backgroundColor = [UIColor clearColor];
         [self addSubview:self.animationView];
+        
+        self.showNavigation = NO;
+        self.radianBetweenDestination = 0.0f;
     }
     
     return self;
 }
+
+#pragma mark - Property Accessor
 
 - (void)setUserHeading:(CLHeading *)userHeading {
     CLLocationDirection direction = _userHeading.trueHeading;
@@ -85,6 +95,32 @@
     [self didChangeValueForKey:@"userHeading"];
 }
 
+- (void)setShowNavigation:(BOOL)showNavigation {
+    [self willChangeValueForKey:@"showNavigation"];
+    
+    _showNavigation = showNavigation;
+    
+    if (showNavigation) {
+        self.navigationView.hidden = NO;
+    } else {
+        self.navigationView.hidden = YES;
+    }
+    
+    [self didChangeValueForKey:@"showNavigation"];
+}
+
+- (void)setRadianBetweenDestination:(CGFloat)radianBetweenDestination {
+    [self willChangeValueForKey:@"radianBetweenDestination"];
+    
+    _radianBetweenDestination = radianBetweenDestination;
+    
+    self.navigationView.layer.transform = CATransform3DMakeRotation(radianBetweenDestination, 0.0f, 0.0f, 1.0f);
+    
+    [self didChangeValueForKey:@"radianBetweenDestination"];
+}
+
+#pragma mark - Override
+
 - (void)didMoveToSuperview {
     if (self.superview) {
         [self playAnimation];
@@ -92,6 +128,8 @@
         [self stopAnimation];
     }
 }
+
+#pragma mark -
 
 - (void)playAnimation {
     self.animationView.layer.transform = CATransform3DIdentity;

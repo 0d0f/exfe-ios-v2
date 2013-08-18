@@ -11,6 +11,8 @@
 #import "EFMapData.h"
 #import "EFHTTPStreaming.h"
 
+extern CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocationCoordinate2D locationCoordinate);
+
 @class EFMarauderMapDataSource, IdentityId;
 @protocol EFMarauderMapDataSourceDelegate <NSObject>
 
