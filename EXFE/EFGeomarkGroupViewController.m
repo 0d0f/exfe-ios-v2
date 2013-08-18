@@ -71,6 +71,7 @@
     self.tableView.showsHorizontalScrollIndicator = NO;
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.bounces = NO;
     
     self.view.layer.cornerRadius = 4.0f;
     self.view.layer.masksToBounds = YES;
