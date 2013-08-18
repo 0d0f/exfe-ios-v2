@@ -567,7 +567,9 @@ static UIView * ReverseSubviews(UIView *view) {
     } else if (tap == self.normalTapGestureRecognizer) {
         switch (state) {
             case UIGestureRecognizerStateEnded:
-                if ([self.delegate respondsToSelector:@selector(mapView:tappedAtCoordinate:)]) {
+                if (self.selectedAnnotations.count) {
+                    [self deselectAnnotation:[self selectedAnnotations][0] animated:YES];
+                } else if ([self.delegate respondsToSelector:@selector(mapView:tappedAtCoordinate:)]) {
                     CGPoint location = [tap locationInView:self.gestureView];
                     CLLocationCoordinate2D coordinate = [self convertPoint:location toCoordinateFromView:self.gestureView];
                     [self.delegate mapView:self tappedAtCoordinate:coordinate];
