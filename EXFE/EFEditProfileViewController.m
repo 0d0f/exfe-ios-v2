@@ -1023,13 +1023,14 @@
         
         [self.data setValue:image forKey:kModelKeyOriginal];
         
-        NSString *referenceURL = [info objectForKey:UIImagePickerControllerReferenceURL];
+        NSURL *referenceURL = [info objectForKey:UIImagePickerControllerReferenceURL];
         if (referenceURL) {
-            NSURL *url = [NSURL URLWithString:referenceURL];
-            NSDictionary *params = [url queryComponents];
+            NSDictionary *params = [referenceURL queryComponents];
             [params enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                 if ([@"ext" isEqualToString:key]) {
-                    [self.data setValue:image forKey:kModelKeyOriginalExt];
+//                    if ([obj isKindOfClass:[NSArray class]]) {
+                        [self.data setValue:[[obj objectAtIndex:0] uppercaseString] forKey:kModelKeyOriginalExt];
+//                    }
                 }
                 
             }];
