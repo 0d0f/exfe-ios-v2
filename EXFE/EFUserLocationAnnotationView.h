@@ -12,4 +12,7 @@
 
 @property (nonatomic, strong) CLHeading     *userHeading;
 
+@property (nonatomic, assign) BOOL          showNavigation;
+@property (nonatomic, assign) CGFloat       radianBetweenDestination;
+
 @end

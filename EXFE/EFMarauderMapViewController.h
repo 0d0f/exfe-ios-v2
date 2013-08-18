@@ -14,6 +14,7 @@
 #import "EFMapKit.h"
 #import "EFMarauderMapDataSource.h"
 #import "EFMapStrokeView.h"
+#import "EFGeomarkGroupViewController.h"
 
 typedef enum {
     kEFMapZoomTypeUnknow = 0,
@@ -34,7 +35,8 @@ EFTabBarDataSource,
 EFMapViewDelegate,
 EFMarauderMapDataSourceDelegate,
 EFMapStrokeViewDataSource,
-UIAlertViewDelegate
+UIAlertViewDelegate,
+EFGeomarkGroupViewControllerDelegate
 >
 
 @property (nonatomic, weak)     EXFEModel               *model;

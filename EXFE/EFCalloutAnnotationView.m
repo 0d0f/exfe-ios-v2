@@ -53,7 +53,8 @@
 @property (nonatomic, strong) UITextView    *subtitleTextView;
 @property (nonatomic, strong) UIView        *lineView;
 
-//@property (nonatomic, strong) CAGradientLayer *gradientLayer;
+@property (nonatomic, strong) UIView        *tapView;
+
 @property (nonatomic, strong) EFCalloutAnnotationGradientView *gradientView;
 
 @property (nonatomic, assign) CGRect    originalFrame;
@@ -67,18 +68,33 @@
 
 @interface EFCalloutAnnotationView (Private)
 
+- (CGRect)_calculateFrame;
+
 - (void)_prepareLabels;
 - (void)_prepareFrame;
 - (void)_prepareOffset;
 
 - (void)_show;
 
-- (void)_handleTitleTap:(UITapGestureRecognizer *)tap;
-- (void)_handleSubtitleTap:(UITapGestureRecognizer *)tap;
-
 @end
 
 @implementation EFCalloutAnnotationView (Private)
+
+- (CGRect)_calculateFrame {
+    CGFloat height = kTopInset + kBottomInset;
+    
+    if (self.annotation.title) {
+        height += CGRectGetHeight(self.titleTextField.frame);
+    }
+    if (self.annotation.subtitle) {
+        height += CGRectGetHeight(self.subtitleTextView.frame) + kBlank;
+    }
+    
+    CGRect frame = self.frame;
+    frame.size = (CGSize){kDefaultWidth, height};
+    
+    return frame;
+}
 
 - (void)_prepareLabels {
     if (self.titleTextField) {
@@ -104,14 +120,14 @@
     UITextView *subtitleTextView = [[UITextView alloc] initWithFrame:(CGRect){{5.0f, CGRectGetMaxY(titleTextField.frame) + kBlank}, {kDefaultWidth + 5.0f, kSubtileHeight}}];
     subtitleTextView.contentInset = (UIEdgeInsets){-7.0f, -8.0f, 0.0f, 0.0f};
     subtitleTextView.delegate = self;
-    subtitleTextView.returnKeyType = UIReturnKeyDone;
+    subtitleTextView.returnKeyType = UIReturnKeyDefault;
     subtitleTextView.font = kSubtileFont;
     subtitleTextView.backgroundColor = [UIColor clearColor];
     subtitleTextView.text = self.annotation.subtitle;
+    subtitleTextView.showsHorizontalScrollIndicator = NO;
+    subtitleTextView.showsVerticalScrollIndicator = NO;
+    subtitleTextView.bounces = NO;
     subtitleTextView.editable = NO;
-    
-    UITapGestureRecognizer *subtitleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSubtitleTap:)];
-    [subtitleTextView addGestureRecognizer:subtitleTap];
     
     [self addSubview:subtitleTextView];
     self.subtitleTextView = subtitleTextView;
@@ -132,18 +148,7 @@
 }
 
 - (void)_prepareFrame {
-    CGFloat height = kTopInset + kBottomInset;
-    
-    if (self.annotation.title) {
-        height += CGRectGetHeight(self.titleTextField.frame);
-    }
-    if (self.annotation.subtitle) {
-        height += CGRectGetHeight(self.subtitleTextView.frame) + kBlank;
-    }
-    
-    CGRect frame = self.frame;
-    frame.size = (CGSize){kDefaultWidth, height};
-    self.frame = frame;
+    self.frame = [self _calculateFrame];
 }
 
 - (void)_prepareOffset {
@@ -170,26 +175,6 @@
     animation.fillMode = kCAFillModeForwards;
     [self.layer addAnimation:animation forKey:nil];
     self.layer.transform = CATransform3DIdentity;
-}
-
-- (void)_handleTitleTap:(UITapGestureRecognizer *)tap {
-    UIGestureRecognizerState state = tap.state;
-    
-    if (UIGestureRecognizerStateEnded == state) {
-        if (self.titlePressedHandler) {
-            self.titlePressedHandler();
-        }
-    }
-}
-
-- (void)_handleSubtitleTap:(UITapGestureRecognizer *)tap {
-    UIGestureRecognizerState state = tap.state;
-    
-    if (UIGestureRecognizerStateEnded == state) {
-        if (self.subtitlePressedHandler) {
-            self.subtitlePressedHandler();
-        }
-    }
 }
 
 @end
@@ -227,13 +212,38 @@
         self.lineView.layer.shadowOpacity = 1.0f;
         self.lineView.hidden = YES;
         [self addSubview:self.lineView];
+        
+        UIView *tapView = [[UIView alloc] initWithFrame:self.bounds];
+        tapView.backgroundColor = [UIColor clearColor];
+        tapView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        [self addSubview:tapView];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+        [tapView addGestureRecognizer:tap];
+        
+        self.tapView = tapView;
     }
     
     return self;
 }
 
+#pragma mark - Override
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self bringSubviewToFront:self.tapView];
+}
+
 - (void)didMoveToSuperview {
-    [self.superview bringSubviewToFront:self];
+    if (self.superview) {
+        [self.superview bringSubviewToFront:self];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleKeyboardWillShowNotification:)
+                                                     name:UIKeyboardWillShowNotification
+                                                   object:nil];
+    } else {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+    }
 }
 
 - (void)setAnnotation:(id<MKAnnotation>)annotation {
@@ -242,6 +252,53 @@
     
     self.editing = NO;
 }
+
+#pragma mark - Tap Handler
+
+- (void)handleTap:(UITapGestureRecognizer *)tap {
+    UIGestureRecognizerState state = tap.state;
+    
+    if (UIGestureRecognizerStateEnded == state) {
+        if (_tapHandler) {
+            self.tapHandler();
+        }
+    }
+}
+
+#pragma mark - Notification Handler
+
+- (void)handleKeyboardWillShowNotification:(NSNotification *)notif {
+    NSDictionary *userinfo = notif.userInfo;
+    CGSize keyboradSize = [[userinfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    CGRect frame = self.frame;
+    CGRect visibleRect = self.editingBaseView.bounds;
+    visibleRect.size.height -= keyboradSize.height;
+    
+    if (!CGRectContainsRect(visibleRect, frame)) {
+        if (frame.origin.x < 0) {
+            frame.origin.x = 5.0f;
+        }
+        if (frame.origin.y < 0) {
+            frame.origin.y = 5.0f;
+        }
+        if (CGRectGetMaxX(frame) > CGRectGetWidth(visibleRect)) {
+            frame.origin.x = CGRectGetWidth(visibleRect) - (CGRectGetWidth(frame) + 5.0f);
+        }
+        if (CGRectGetMaxY(frame) > CGRectGetHeight(visibleRect)) {
+            frame.origin.y = CGRectGetHeight(visibleRect) - (CGRectGetHeight(frame) + 5.0f);
+        }
+    }
+    
+    [UIView animateWithDuration:0.233f
+                     animations:^{
+                         self.frame = frame;
+                     }
+                     completion:nil];
+    
+}
+
+#pragma mark - Public
 
 - (void)reloadAnnotation:(EFCalloutAnnotation *)annotation {
     self.annotation = (id<MKAnnotation>)annotation;
@@ -265,22 +322,47 @@
         self.titleTextField.enabled = NO;
         self.subtitleTextView.editable = NO;
         self.lineView.hidden = YES;
+        self.tapView.userInteractionEnabled = YES;
         
         [self.subtitleTextView scrollsToTop];
         self.subtitleTextView.scrollEnabled = NO;
         
+        // set text
         ((EFCalloutAnnotation *)self.annotation).title = self.titleTextField.text;
         ((EFCalloutAnnotation *)self.annotation).subtitle = self.subtitleTextView.text;
+        
+        // resize subtitle textview
+        [self.subtitleTextView sizeToFit];
+        
+        CGRect subtitleTextViewFrame = self.subtitleTextView.frame;
+        CGFloat subtitleTextViewHeight = CGRectGetHeight(subtitleTextViewFrame);
+        
+        if (subtitleTextViewHeight >= 2 * kSubtileHeight) {
+            subtitleTextViewFrame.size.height = 2 * kSubtileHeight;
+        } else if (subtitleTextViewHeight < kSubtileHeight) {
+            subtitleTextViewFrame.size.height = kSubtileHeight;
+        }
+        self.subtitleTextView.frame = subtitleTextViewFrame;
+        
+        CGRect newFrame = [self _calculateFrame];
+        
+        if (CGRectGetHeight(newFrame) != CGRectGetHeight(self.originalFrame)) {
+            CGFloat offsetY = CGRectGetHeight(self.originalFrame) - CGRectGetHeight(newFrame);
+            newFrame.origin = (CGPoint){CGRectGetMinX(self.originalFrame), CGRectGetMinY(self.originalFrame) + offsetY};
+        } else {
+            newFrame = self.originalFrame;
+        }
         
         CGRect frame = [self.originalSuperView convertRect:self.frame fromView:self.editingBaseView];
         [self removeFromSuperview];
         self.frame = frame;
         [self.originalSuperView addSubview:self];
         
+        // animation
         [UIView setAnimationsEnabled:animated];
         [UIView animateWithDuration:0.233f
                          animations:^{
-                             self.frame = self.originalFrame;
+                             self.frame = newFrame;
                              self.gradientView.frame = self.bounds;
                              self.editingMaskView.alpha = 0.0f;
                          }
@@ -305,14 +387,17 @@
         self.titleTextField.enabled = YES;
         self.subtitleTextView.editable = YES;
         self.lineView.hidden = NO;
+        self.tapView.userInteractionEnabled = NO;
         
         self.subtitleTextView.scrollEnabled = YES;
         
         UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
         
+        // editing base view
         UIView *editingBaseView = [[UIView alloc] initWithFrame:rootView.bounds];
         editingBaseView.backgroundColor = [UIColor clearColor];
         
+        // tap gesture
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleEditingBaseViewTap:)];
         tap.delegate = self;
         tap.numberOfTapsRequired = 1;
@@ -322,6 +407,7 @@
         
         self.editingBaseView = editingBaseView;
         
+        // mask view
         UIView *maskView = [[UIView alloc] initWithFrame:rootView.bounds];
         maskView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.33f];
         maskView.alpha = 0.0f;
@@ -329,15 +415,23 @@
         [editingBaseView addSubview:maskView];
         self.editingMaskView = maskView;
         
+        // cache original frame
         self.originalSuperView = self.superview;
         self.originalFrame = self.frame;
+        
+        // set 2 line height to text view
+        CGRect textViewFrame = self.subtitleTextView.frame;
+        textViewFrame.size.height = 2 * kSubtileHeight;
+        self.subtitleTextView.frame = textViewFrame;
+        
+        // resize frame
+        [self _prepareFrame];
+        [self _prepareOffset];
         
         CGRect frame = [self.editingBaseView convertRect:self.frame fromView:self.superview];
         [self removeFromSuperview];
         self.frame = frame;
         [self.editingBaseView addSubview:self];
-        
-        frame.size = (CGSize){200.0f, 69.0f};
         
         if (!CGRectContainsRect(self.editingBaseView.bounds, frame)) {
             if (frame.origin.x < 0) {
@@ -354,6 +448,7 @@
             }
         }
         
+        // animation
         [UIView setAnimationsEnabled:animated];
         [UIView animateWithDuration:0.233f
                          animations:^{
@@ -392,14 +487,14 @@
     ((EFCalloutAnnotation *)self.annotation).subtitle = self.subtitleTextView.text;
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    if ([text hasSuffix:@"\n"]) {
-        [self.subtitleTextView resignFirstResponder];
-        [self setEditing:NO animated:YES];
-    }
-    
-    return YES;
-}
+//- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+//    if ([text hasSuffix:@"\n"]) {
+//        [self.subtitleTextView resignFirstResponder];
+//        [self setEditing:NO animated:YES];
+//    }
+//    
+//    return YES;
+//}
 
 #pragma mark - UITextFieldDelegate
 
@@ -413,7 +508,7 @@
         [self.subtitleTextView becomeFirstResponder];
     }
     
-    return YES;
+    return NO;
 }
 
 @end
