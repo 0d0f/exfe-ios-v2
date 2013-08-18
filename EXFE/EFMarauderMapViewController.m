@@ -460,23 +460,25 @@
             CLLocation *location = [[CLLocation alloc] initWithLatitude:coordinate.latitude longitude:coordinate.longitude];
             CLGeocoder *geocoder = [[CLGeocoder alloc] init];
             [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *geomarks, NSError *error){
-                if (geomarks && geomarks.count) {
-                    CLPlacemark *placemark = geomarks[0];
-                    routeLocation.title = placemark.name;
-                    routeLocation.subtitle = [placemark.addressDictionary valueForKey:@"FormattedAddressLines"][0];
-                    
-                    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
-                    
-                    if (self.mapView.selectedAnnotations) {
-                        MKAnnotationView *annoationView = self.mapView.selectedAnnotations[0];
-                        if (annoationView.annotation == annotation) {
-                            [self.mapView deselectAnnotation:annotation animated:NO];
-                            [self.mapView selectAnnotation:annotation animated:NO];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (geomarks && geomarks.count) {
+                        CLPlacemark *placemark = geomarks[0];
+                        routeLocation.title = placemark.name;
+                        routeLocation.subtitle = [placemark.addressDictionary valueForKey:@"FormattedAddressLines"][0];
+                        
+                        [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+                        
+                        if (self.mapView.selectedAnnotations) {
+                            id<MKAnnotation> selectedAnnoation = self.mapView.selectedAnnotations[0];
+                            if (selectedAnnoation == annotation) {
+                                [self.mapView deselectAnnotation:annotation animated:NO];
+                                [self.mapView selectAnnotation:annotation animated:NO];
+                            }
                         }
+                    } else {
+                        NSLog(@"%@", error);
                     }
-                } else {
-                    NSLog(@"%@", error);
-                }
+                });
             }];
         }
             break;
