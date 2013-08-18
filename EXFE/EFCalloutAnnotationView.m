@@ -120,10 +120,13 @@
     UITextView *subtitleTextView = [[UITextView alloc] initWithFrame:(CGRect){{5.0f, CGRectGetMaxY(titleTextField.frame) + kBlank}, {kDefaultWidth + 5.0f, kSubtileHeight}}];
     subtitleTextView.contentInset = (UIEdgeInsets){-7.0f, -8.0f, 0.0f, 0.0f};
     subtitleTextView.delegate = self;
-    subtitleTextView.returnKeyType = UIReturnKeyDone;
+    subtitleTextView.returnKeyType = UIReturnKeyDefault;
     subtitleTextView.font = kSubtileFont;
     subtitleTextView.backgroundColor = [UIColor clearColor];
     subtitleTextView.text = self.annotation.subtitle;
+    subtitleTextView.showsHorizontalScrollIndicator = NO;
+    subtitleTextView.showsVerticalScrollIndicator = NO;
+    subtitleTextView.bounces = NO;
     subtitleTextView.editable = NO;
     
     [self addSubview:subtitleTextView];
@@ -484,14 +487,14 @@
     ((EFCalloutAnnotation *)self.annotation).subtitle = self.subtitleTextView.text;
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    if ([text hasSuffix:@"\n"]) {
-        [self.subtitleTextView resignFirstResponder];
-        [self setEditing:NO animated:YES];
-    }
-    
-    return YES;
-}
+//- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+//    if ([text hasSuffix:@"\n"]) {
+//        [self.subtitleTextView resignFirstResponder];
+//        [self setEditing:NO animated:YES];
+//    }
+//    
+//    return YES;
+//}
 
 #pragma mark - UITextFieldDelegate
 
