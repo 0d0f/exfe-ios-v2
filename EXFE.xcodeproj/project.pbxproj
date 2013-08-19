@@ -1618,6 +1618,9 @@
 		766032BB17C0D4A500B21A12 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 766032BA17C0D4A500B21A12 /* AddressBookUI.framework */; };
 		766032C317C0D4AC00B21A12 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 766032BA17C0D4A500B21A12 /* AddressBookUI.framework */; };
 		766032C417C0D4B400B21A12 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 766032BA17C0D4A500B21A12 /* AddressBookUI.framework */; };
+		766032D017C116EA00B21A12 /* libWeChatSDK.all.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 766032CF17C116EA00B21A12 /* libWeChatSDK.all.a */; };
+		766032D117C116EA00B21A12 /* libWeChatSDK.all.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 766032CF17C116EA00B21A12 /* libWeChatSDK.all.a */; };
+		766032D217C116EA00B21A12 /* libWeChatSDK.all.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 766032CF17C116EA00B21A12 /* libWeChatSDK.all.a */; };
 		7661C7EC1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7ED1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7EE1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
@@ -2793,6 +2796,9 @@
 		765E150C17745235003F4827 /* EFDataManager+Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFDataManager+Image.h"; sourceTree = "<group>"; };
 		765E150D17745235003F4827 /* EFDataManager+Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFDataManager+Image.m"; sourceTree = "<group>"; };
 		766032BA17C0D4A500B21A12 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		766032C617C1149500B21A12 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WXApi.h; path = SDKExport/WXApi.h; sourceTree = "<group>"; };
+		766032C717C1149500B21A12 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WXApiObject.h; path = SDKExport/WXApiObject.h; sourceTree = "<group>"; };
+		766032CF17C116EA00B21A12 /* libWeChatSDK.all.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWeChatSDK.all.a; path = SDKExport/libWeChatSDK.all.a; sourceTree = "<group>"; };
 		7661C7EA1738B15400133F10 /* EFErrorHandlerCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorHandlerCenter.h; sourceTree = "<group>"; };
 		7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorHandlerCenter.m; sourceTree = "<group>"; };
 		766C9827179933D00064B5BC /* EFPersonAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPersonAnnotationView.h; sourceTree = "<group>"; };
@@ -3354,6 +3360,7 @@
 				4F63DB0717172AA600136B7E /* CoreText.framework in Frameworks */,
 				4F63DB0817172AA600136B7E /* CoreLocation.framework in Frameworks */,
 				4F63DB0917172AA600136B7E /* MapKit.framework in Frameworks */,
+				766032D117C116EA00B21A12 /* libWeChatSDK.all.a in Frameworks */,
 				4F63DB0A17172AA600136B7E /* libxml2.dylib in Frameworks */,
 				4F63DB0B17172AA600136B7E /* QuartzCore.framework in Frameworks */,
 				4F63DB0C17172AA600136B7E /* SystemConfiguration.framework in Frameworks */,
@@ -3389,6 +3396,7 @@
 				4F63DCD617172B0700136B7E /* CoreText.framework in Frameworks */,
 				4F63DCD717172B0700136B7E /* CoreLocation.framework in Frameworks */,
 				4F63DCD817172B0700136B7E /* MapKit.framework in Frameworks */,
+				766032D217C116EA00B21A12 /* libWeChatSDK.all.a in Frameworks */,
 				4F63DCD917172B0700136B7E /* libxml2.dylib in Frameworks */,
 				4F63DCDA17172B0700136B7E /* QuartzCore.framework in Frameworks */,
 				4F63DCDB17172B0700136B7E /* SystemConfiguration.framework in Frameworks */,
@@ -3424,6 +3432,7 @@
 				78AA793615CFB94C00883025 /* CoreText.framework in Frameworks */,
 				78F058041599C30200F360F2 /* CoreLocation.framework in Frameworks */,
 				78F058021599B1BE00F360F2 /* MapKit.framework in Frameworks */,
+				766032D017C116EA00B21A12 /* libWeChatSDK.all.a in Frameworks */,
 				78A98EFB15611113009E0806 /* libxml2.dylib in Frameworks */,
 				78A98EF91561110C009E0806 /* QuartzCore.framework in Frameworks */,
 				78A98EF715611107009E0806 /* SystemConfiguration.framework in Frameworks */,
@@ -3946,6 +3955,9 @@
 		76555B51179E78D600BCC5A7 /* WeixinSDK */ = {
 			isa = PBXGroup;
 			children = (
+				766032CF17C116EA00B21A12 /* libWeChatSDK.all.a */,
+				766032C617C1149500B21A12 /* WXApi.h */,
+				766032C717C1149500B21A12 /* WXApiObject.h */,
 			);
 			name = WeixinSDK;
 			sourceTree = "<group>";
@@ -7777,10 +7789,7 @@
 					"\"$(SRCROOT)/EXFE/Flurry\"",
 					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Pilot;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -7811,10 +7820,7 @@
 					"\"$(SRCROOT)/EXFE/Flurry\"",
 					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Pilot;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -7919,10 +7925,7 @@
 					"\"$(SRCROOT)/EXFE/Flurry\"",
 					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -7949,10 +7952,7 @@
 					"\"$(SRCROOT)/EXFE/Flurry\"",
 					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";

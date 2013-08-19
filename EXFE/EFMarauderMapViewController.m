@@ -297,6 +297,10 @@
     
     [self _invalidBreadcrumbUpdateTimer];
     
+    if (self.geomarkGroupViewController) {
+        [self.geomarkGroupViewController dismissAnimated:NO];
+    }
+    
     [super viewDidDisappear:animated];
 }
 
