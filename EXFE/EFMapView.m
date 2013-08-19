@@ -395,6 +395,12 @@ static UIView * ReverseSubviews(UIView *view) {
     
     __weak typeof(self) weakSelf = self;
     
+    self.touchDownGestureRecognizer.touchesBeganCallback = ^(NSSet *touches, UIEvent *event){
+        if (weakSelf.selectedAnnotations.count) {
+            [weakSelf deselectAnnotation:[weakSelf selectedAnnotations][0] animated:YES];
+        }
+    };
+    
     self.touchDownGestureRecognizer.touchesMovedCallback = ^(NSSet *touches, UIEvent *event){
         if ([weakSelf.delegate respondsToSelector:@selector(mapViewDidScroll:)]) {
             [weakSelf.delegate mapViewDidScroll:weakSelf];
@@ -565,9 +571,7 @@ static UIView * ReverseSubviews(UIView *view) {
     } else if (tap == self.normalTapGestureRecognizer) {
         switch (state) {
             case UIGestureRecognizerStateEnded:
-                if (self.selectedAnnotations.count) {
-                    [self deselectAnnotation:[self selectedAnnotations][0] animated:YES];
-                } else if ([self.delegate respondsToSelector:@selector(mapView:tappedAtCoordinate:)]) {
+                if (!self.selectedAnnotations.count && [self.delegate respondsToSelector:@selector(mapView:tappedAtCoordinate:)]) {
                     CGPoint location = [tap locationInView:self.gestureView];
                     CLLocationCoordinate2D coordinate = [self convertPoint:location toCoordinateFromView:self.gestureView];
                     [self.delegate mapView:self tappedAtCoordinate:coordinate];
