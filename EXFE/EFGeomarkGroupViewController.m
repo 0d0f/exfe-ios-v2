@@ -97,7 +97,8 @@
     self.tapLocation = locatoin;
     
     // base view
-    UIView *baseView = [[UIView alloc] initWithFrame:controller.view.frame];
+    CGRect frame = [controller.view.window convertRect:controller.view.frame fromView:controller.view.superview];
+    UIView *baseView = [[UIView alloc] initWithFrame:frame];
     baseView.backgroundColor = [UIColor clearColor];
     [controller.view.window addSubview:baseView];
     
