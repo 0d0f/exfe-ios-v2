@@ -30,6 +30,7 @@
 
 #define kAnnotationOffsetY  (-50.0f)
 #define kShadowOffset       (3.0f)
+#define kTapRectHalfWidth   (50.0f)
 
 @interface EFMarauderMapViewController ()
 
@@ -684,13 +685,36 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 - (void)mapView:(EFMapView *)mapView tappedAtCoordinate:(CLLocationCoordinate2D)coordinate {
     CGPoint tapLocation = [mapView convertCoordinate:coordinate toPointToView:self.mapView];
     
-    EFGeomarkGroupViewController *geomarkGroupViewController = [[EFGeomarkGroupViewController alloc] initWithGeomarks:[self.mapDataSource allRouteLocations]
-                                                                                                            andPeople:[self.mapDataSource allPeople]];
-    geomarkGroupViewController.delegate = self;
-    [geomarkGroupViewController presentFromViewController:self
-                                              tapLocation:tapLocation
-                                                 animated:YES];
-    self.geomarkGroupViewController = geomarkGroupViewController;
+    CGRect tapRect = (CGRect){{tapLocation.x - kTapRectHalfWidth, tapLocation.y - kTapRectHalfWidth}, {2 * kTapRectHalfWidth, 2 * kTapRectHalfWidth}};
+    
+    NSMutableArray *filterdRouteLocations = [[NSMutableArray alloc] init];
+    NSMutableArray *filterdPeople = [[NSMutableArray alloc] init];
+    
+    for (EFRouteLocation *routeLocation in [self.mapDataSource allRouteLocations]) {
+        CGPoint location = [mapView convertCoordinate:routeLocation.coordinate toPointToView:self.mapView];
+        if (CGRectContainsPoint(tapRect, location)) {
+            [filterdRouteLocations addObject:routeLocation];
+        }
+    }
+    
+    for (EFMapPerson *person in [self.mapDataSource allPeople]) {
+        if (person != [self.mapDataSource me] && person.lastLocation) {
+            CGPoint location = [mapView convertCoordinate:person.lastLocation.coordinate toPointToView:self.mapView];
+            if (CGRectContainsPoint(tapRect, location)) {
+                [filterdPeople addObject:person];
+            }
+        }
+    }
+    
+    if (filterdRouteLocations.count || filterdPeople.count) {
+        EFGeomarkGroupViewController *geomarkGroupViewController = [[EFGeomarkGroupViewController alloc] initWithGeomarks:filterdRouteLocations
+                                                                                                                andPeople:filterdPeople];
+        geomarkGroupViewController.delegate = self;
+        [geomarkGroupViewController presentFromViewController:self
+                                                  tapLocation:tapLocation
+                                                     animated:YES];
+        self.geomarkGroupViewController = geomarkGroupViewController;
+    }
 }
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didGetRouteLocations:(NSArray *)locations {

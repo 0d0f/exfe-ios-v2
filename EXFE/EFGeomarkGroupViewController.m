@@ -13,6 +13,9 @@
 #import "EFGeomarkPersonCell.h"
 #import "Util.h"
 
+#define kDefaultCellHeight  (44.0f)
+#define kDefaultCellCount   (3)
+
 @interface EFGeomarkGoupBackgroundView : UIView
 
 @end
@@ -88,7 +91,12 @@
         self.geomarks = geomarks;
         self.people = people;
         
-        self.view.frame = (CGRect){CGPointZero, {200.0f, 132.0f}};
+        NSUInteger count = self.geomarks.count + self.people.count;
+        if (count > kDefaultCellCount) {
+            count = kDefaultCellCount;
+        }
+        
+        self.view.frame = (CGRect){CGPointZero, {200.0f, kDefaultCellHeight * count}};
     }
     
     return self;
@@ -131,13 +139,13 @@
     
     // base view
     CGRect frame = [controller.view.window convertRect:controller.view.frame fromView:controller.view.superview];
-    UIView *baseView = [[UIView alloc] initWithFrame:frame];
+    UIControl *baseView = [[UIControl alloc] initWithFrame:frame];
     baseView.backgroundColor = [UIColor clearColor];
-    [controller.view.window addSubview:baseView];
+    [baseView addTarget:self
+                 action:@selector(handleTouchDownEvent:)
+       forControlEvents:UIControlEventTouchDown];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    tap.delegate = self;
-    [baseView addGestureRecognizer:tap];
+    [controller.view.window addSubview:baseView];
     
     self.baseView = baseView;
     
@@ -159,9 +167,9 @@
     [self.view removeFromSuperview];
 }
 
-#pragma mark - Gesture
+#pragma mark - Touch Event Handler
 
-- (void)handleTap:(UITapGestureRecognizer *)gesture {
+- (void)handleTouchDownEvent:(id)sender {
     [self dismissAnimated:YES];
 }
 
