@@ -32,6 +32,7 @@ NSString *kEFNotificationUpdateIdentityAvatarFailure = @"notification.updateIden
         self.original = operation.original;
         self.avatar_2x = operation.avatar_2x;
         self.avatar = operation.avatar;
+        self.ext = operation.ext;
         self.identity = operation.identity;
     }
     
@@ -47,6 +48,7 @@ NSString *kEFNotificationUpdateIdentityAvatarFailure = @"notification.updateIden
     [self.model.apiServer updateIdentityAvatar:self.original
                                withLargeAvatar:self.avatar_2x
                                withSmallAvatar:self.avatar
+                                       withExt:self.ext
                                            for:self.identity
                                        success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                            

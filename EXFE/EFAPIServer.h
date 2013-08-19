@@ -26,7 +26,7 @@
 #pragma mark Token and User ID manager
 
 - (void)saveUserData;
-- (void)loaduserData;
+- (void)loadUserData;
 - (void)clearUserData;
 - (BOOL)isLoggedIn;
 
@@ -163,13 +163,21 @@
 - (void)updateUserAvatar:(UIImage *)fullImage
          withLargeAvatar:(UIImage *)largeImage
          withSmallAvatar:(UIImage *)smallImage
+                 withExt:(NSString *)ext
              success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
              failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 - (void)updateIdentityAvatar:(UIImage *)fullImage
              withLargeAvatar:(UIImage *)largeImage
              withSmallAvatar:(UIImage *)smallImage
+                     withExt:(NSString *)ext
                  for:(Identity *)identity
+             success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+             failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+- (void)updateAvatar:(NSDictionary *)images
+             withExt:(NSString *)ext
+                 for:(NSNumber *)identity_id
              success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
              failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 

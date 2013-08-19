@@ -168,6 +168,9 @@
 		4F2CF05317BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2CF04F17BEA43800E3A4B2 /* cautionbar_cancel.png */; };
 		4F2CF05417BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2CF04F17BEA43800E3A4B2 /* cautionbar_cancel.png */; };
 		4F2CF05517BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2CF04F17BEA43800E3A4B2 /* cautionbar_cancel.png */; };
+		4F2CF06E17BF54FF00E3A4B2 /* XQueryComponents.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2CF06D17BF54FE00E3A4B2 /* XQueryComponents.m */; };
+		4F2CF06F17BF54FF00E3A4B2 /* XQueryComponents.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2CF06D17BF54FE00E3A4B2 /* XQueryComponents.m */; };
+		4F2CF07017BF54FF00E3A4B2 /* XQueryComponents.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2CF06D17BF54FE00E3A4B2 /* XQueryComponents.m */; };
 		4F2D22D2176994EE00FEA139 /* EXFEModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22D1176994EE00FEA139 /* EXFEModel.m */; };
 		4F2D22D3176994EE00FEA139 /* EXFEModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22D1176994EE00FEA139 /* EXFEModel.m */; };
 		4F2D22D4176994EE00FEA139 /* EXFEModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22D1176994EE00FEA139 /* EXFEModel.m */; };
@@ -2419,6 +2422,8 @@
 		4F29C92F16F9A5B5001BB176 /* User+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "User+EXFE.m"; sourceTree = "<group>"; };
 		4F2CF04E17BEA43800E3A4B2 /* cautionbar_cancel_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cautionbar_cancel_pressed.png; sourceTree = "<group>"; };
 		4F2CF04F17BEA43800E3A4B2 /* cautionbar_cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cautionbar_cancel.png; sourceTree = "<group>"; };
+		4F2CF06C17BF54FE00E3A4B2 /* XQueryComponents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XQueryComponents.h; sourceTree = "<group>"; };
+		4F2CF06D17BF54FE00E3A4B2 /* XQueryComponents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XQueryComponents.m; sourceTree = "<group>"; };
 		4F2D22D0176994EE00FEA139 /* EXFEModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXFEModel.h; sourceTree = "<group>"; };
 		4F2D22D1176994EE00FEA139 /* EXFEModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXFEModel.m; sourceTree = "<group>"; };
 		4F2D22E2176AF32E00FEA139 /* RecursiveDeleteOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecursiveDeleteOperation.h; sourceTree = "<group>"; };
@@ -3716,6 +3721,8 @@
 				4F1BDB891795464700F7B786 /* UIScreen+EXFE.m */,
 				76C9318517BE144400536383 /* UITextView+NumberOfLines.h */,
 				76C9318617BE144400536383 /* UITextView+NumberOfLines.m */,
+				4F2CF06C17BF54FE00E3A4B2 /* XQueryComponents.h */,
+				4F2CF06D17BF54FE00E3A4B2 /* XQueryComponents.m */,
 			);
 			name = Extention;
 			sourceTree = "<group>";
@@ -7043,6 +7050,7 @@
 				4F0E3552179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
 				76555B21179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 				4F39249D17A782E200EDB441 /* Cross.m in Sources */,
+				4F2CF06F17BF54FF00E3A4B2 /* XQueryComponents.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7300,6 +7308,7 @@
 				4F0E3553179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
 				76555B22179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 				4F39249E17A782E200EDB441 /* Cross.m in Sources */,
+				4F2CF07017BF54FF00E3A4B2 /* XQueryComponents.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7557,6 +7566,7 @@
 				4F0E3551179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
 				76555B20179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 				4F39249C17A782E200EDB441 /* Cross.m in Sources */,
+				4F2CF06E17BF54FF00E3A4B2 /* XQueryComponents.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

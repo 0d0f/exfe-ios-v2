@@ -26,14 +26,14 @@
 }
 
 
-- (void)updateIdentity:(Identity *)identity withAvatar:(UIImage *)original withLarge:(UIImage *)avatar_2x withSmall:(UIImage *)avatar
+- (void)updateIdentity:(Identity *)identity withAvatar:(UIImage *)original withLarge:(UIImage *)avatar_2x withSmall:(UIImage *)avatar withExt:(NSString *)ext
 {
     EFUpdateIdentityAvatarOperation *operation = [EFUpdateIdentityAvatarOperation operationWithModel:self];
     operation.identity = identity;
     operation.original = original;
     operation.avatar = avatar;
     operation.avatar_2x = avatar_2x;
-    
+    operation.ext = ext;
     
     EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
     

@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EFViewController.h"
 #import "User+EXFE.h"
 #import "Identity+EXFE.h"
 
-@interface EFEditProfileViewController : UIViewController < UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate, UIScrollViewDelegate>
+@interface EFEditProfileViewController : EFViewController < UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, strong) User *user;
 @property (nonatomic, strong) Identity *identity;

@@ -14,5 +14,5 @@
 - (void)loadUserByUserId:(NSInteger)userId;
 - (void)loadUserByUserId:(NSInteger)userId andToken:(NSString *)token;
 - (void)updateUserName:(NSString *)name withBio:(NSString *)bio;
-- (void)updateUserAvatar:(UIImage *)original withLarge:(UIImage *)avatar_2x withSmall:(UIImage *)avatar;
+- (void)updateUserAvatar:(UIImage *)original withLarge:(UIImage *)avatar_2x withSmall:(UIImage *)avatar withExt:(NSString *)ext;
 @end

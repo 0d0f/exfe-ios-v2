@@ -991,8 +991,9 @@
 }
 
 - (void)updateUserAvatar:(UIImage *)fullImage
-          withLargeAvatar:(UIImage *)largeImage
+         withLargeAvatar:(UIImage *)largeImage
          withSmallAvatar:(UIImage *)smallImage
+                 withExt:(NSString *)ext
                  success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                  failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
@@ -1007,12 +1008,13 @@
         [images setValue:smallImage forKey:@"80_80"];
     }
     
-    [self updateAvatar:images for:nil success:success failure:failure];
+    [self updateAvatar:images withExt:ext for:nil success:success failure:failure];
 }
 
 - (void)updateIdentityAvatar:(UIImage *)fullImage
              withLargeAvatar:(UIImage *)largeImage
              withSmallAvatar:(UIImage *)smallImage
+                     withExt:(NSString *)ext
                          for:(Identity *)identity
                      success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                      failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
@@ -1028,10 +1030,11 @@
         [images setValue:smallImage forKey:@"80_80"];
     }
     
-    [self updateAvatar:images for:identity.identity_id success:success failure:failure];
+    [self updateAvatar:images withExt:ext for:identity.identity_id success:success failure:failure];
 }
 
 - (void)updateAvatar:(NSDictionary *)images
+             withExt:(NSString *)ext
                  for:(NSNumber *)identity_id
              success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
              failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
@@ -1054,17 +1057,25 @@
                                                                                      parameters:params
                                                                       constructingBodyWithBlock: ^(id <AFMultipartFormData>formData) {
                                                                           
-                                                                          NSArray *names = @[@"original", @"320_320", @"80_80"];
-                                                                          for (NSString *name in names) {
-                                                                              UIImage *img = [images valueForKey:name];
+                                                                          [images enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                                                                              NSString *name = (NSString *)key;
+                                                                              UIImage *img = (UIImage *)obj;
                                                                               if (img) {
-                                                                                  NSData *imageData = UIImagePNGRepresentation(img);
-                                                                                  [formData appendPartWithFileData:imageData
-                                                                                                              name:name
-                                                                                                          fileName:[NSString stringWithFormat:@"%@.png", name]
-                                                                                                          mimeType:@"image/png"];
+                                                                                  if ([@"PNG" isEqualToString:ext]) {
+                                                                                      NSData *imageData = UIImagePNGRepresentation(img);
+                                                                                      [formData appendPartWithFileData:imageData
+                                                                                                                  name:name
+                                                                                                              fileName:[NSString stringWithFormat:@"%@.png", name]
+                                                                                                              mimeType:@"image/png"];
+                                                                                  } else {
+                                                                                      NSData *imageData = UIImageJPEGRepresentation(img, 0.8);
+                                                                                      [formData appendPartWithFileData:imageData
+                                                                                                                  name:name
+                                                                                                              fileName:[NSString stringWithFormat:@"%@.jpg", name]
+                                                                                                              mimeType:@"image/jpeg"];
+                                                                                  }
                                                                               }
-                                                                          }
+                                                                          }];
                                                                       }];
         AFHTTPRequestOperation *operation = [objectManager.HTTPClient HTTPRequestOperationWithRequest:request success:success failure:failure];
         [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {

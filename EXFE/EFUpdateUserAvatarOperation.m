@@ -31,6 +31,7 @@ NSString *kEFNotificationUpdateUserAvatarFailure = @"notification.updateUserAvat
         self.original = operation.original;
         self.avatar_2x = operation.avatar_2x;
         self.avatar = operation.avatar;
+        self.ext = operation.ext;
     }
     
     return self;
@@ -45,6 +46,7 @@ NSString *kEFNotificationUpdateUserAvatarFailure = @"notification.updateUserAvat
     [self.model.apiServer updateUserAvatar:self.original
                            withLargeAvatar:self.avatar_2x
                            withSmallAvatar:self.avatar
+                                   withExt:self.ext
                                    success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                       
                                        if ([responseObject isKindOfClass:[NSDictionary class]]) {
