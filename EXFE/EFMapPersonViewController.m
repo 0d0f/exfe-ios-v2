@@ -20,7 +20,7 @@
 @property (nonatomic, strong) UIView            *lineView;
 
 @property (nonatomic, strong) UILabel           *nameLabel;
-@property (nonatomic, strong) UILabel           *updateDateLabel;
+@property (nonatomic, strong) UILabel           *personInfoLabel;
 @property (nonatomic, strong) UILabel           *destDistanceLabel;
 @property (nonatomic, strong) UILabel           *meDistanceLabel;
 
@@ -37,7 +37,17 @@
 @implementation EFMapPersonViewController (Private)
 
 - (void)_initLabels {
-
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {200.0f, 24.0f}}];
+    nameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
+    nameLabel.textColor = [UIColor COLOR_BLACK_19];
+    nameLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
+    nameLabel.shadowOffset = (CGSize){0.0f, 0.5f};
+    nameLabel.backgroundColor = [UIColor clearColor];
+    nameLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:nameLabel];
+    self.nameLabel = nameLabel;
+    
+    
 }
 
 - (void)_layoutSubviews {
@@ -46,6 +56,19 @@
 
 - (void)_personDidChange {
     [self _layoutSubviews];
+    // update name
+    self.nameLabel.text = self.person.name;
+    
+    if (self.person.lastLocation) {
+        NSString *personInfo = nil;
+        if (kEFMapPersonConnectStateOnline == self.person.connectState) {
+            
+        } else {
+            
+        }
+    } else {
+        
+    }
 }
 
 @end

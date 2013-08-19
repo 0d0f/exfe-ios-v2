@@ -1921,6 +1921,9 @@
 		76E96BCC177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BCB177AFA0D00C06ECD /* EFLoadCrossOperation.m */; };
 		76E96BCD177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BCB177AFA0D00C06ECD /* EFLoadCrossOperation.m */; };
 		76E96BCE177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BCB177AFA0D00C06ECD /* EFLoadCrossOperation.m */; };
+		76F3EEE617C2318E00D353FA /* NSDate+RouteXDateFormater.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F3EEE517C2318E00D353FA /* NSDate+RouteXDateFormater.m */; };
+		76F3EEE717C2318E00D353FA /* NSDate+RouteXDateFormater.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F3EEE517C2318E00D353FA /* NSDate+RouteXDateFormater.m */; };
+		76F3EEE817C2318E00D353FA /* NSDate+RouteXDateFormater.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F3EEE517C2318E00D353FA /* NSDate+RouteXDateFormater.m */; };
 		76F6B30C1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
 		76F6B30D1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
 		76F6B30E1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
@@ -2993,6 +2996,8 @@
 		76E96BC5177AF9B100C06ECD /* EXFEModel+Crosses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EXFEModel+Crosses.m"; sourceTree = "<group>"; };
 		76E96BCA177AFA0D00C06ECD /* EFLoadCrossOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLoadCrossOperation.h; sourceTree = "<group>"; };
 		76E96BCB177AFA0D00C06ECD /* EFLoadCrossOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLoadCrossOperation.m; sourceTree = "<group>"; };
+		76F3EEE417C2318E00D353FA /* NSDate+RouteXDateFormater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+RouteXDateFormater.h"; sourceTree = "<group>"; };
+		76F3EEE517C2318E00D353FA /* NSDate+RouteXDateFormater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+RouteXDateFormater.m"; sourceTree = "<group>"; };
 		76F6B30A1740A59A008B39C1 /* EFErrorMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorMessage.h; sourceTree = "<group>"; };
 		76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorMessage.m; sourceTree = "<group>"; };
 		76F6B3101740B5C1008B39C1 /* EFKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFKit.h; sourceTree = "<group>"; };
@@ -3733,6 +3738,8 @@
 				76C9318617BE144400536383 /* UITextView+NumberOfLines.m */,
 				4F2CF06C17BF54FE00E3A4B2 /* XQueryComponents.h */,
 				4F2CF06D17BF54FE00E3A4B2 /* XQueryComponents.m */,
+				76F3EEE417C2318E00D353FA /* NSDate+RouteXDateFormater.h */,
+				76F3EEE517C2318E00D353FA /* NSDate+RouteXDateFormater.m */,
 			);
 			name = Extention;
 			sourceTree = "<group>";
@@ -6857,6 +6864,7 @@
 				4F63DAA217172AA600136B7E /* EXOverlayView.m in Sources */,
 				4F63DAA417172AA600136B7E /* ConversationInputAccessoryView.m in Sources */,
 				4F63DAA517172AA600136B7E /* CTUtil.m in Sources */,
+				76F3EEE717C2318E00D353FA /* NSDate+RouteXDateFormater.m in Sources */,
 				4F63DAA617172AA600136B7E /* GatherExfeeInputCell.m in Sources */,
 				4F63DAA717172AA600136B7E /* EXBubbleButton.m in Sources */,
 				4F63DAA817172AA600136B7E /* EXBubbleScrollView.m in Sources */,
@@ -7117,6 +7125,7 @@
 				4F63DC7117172B0700136B7E /* EXOverlayView.m in Sources */,
 				4F63DC7317172B0700136B7E /* ConversationInputAccessoryView.m in Sources */,
 				4F63DC7417172B0700136B7E /* CTUtil.m in Sources */,
+				76F3EEE817C2318E00D353FA /* NSDate+RouteXDateFormater.m in Sources */,
 				4F63DC7517172B0700136B7E /* GatherExfeeInputCell.m in Sources */,
 				4F63DC7617172B0700136B7E /* EXBubbleButton.m in Sources */,
 				4F63DC7717172B0700136B7E /* EXBubbleScrollView.m in Sources */,
@@ -7377,6 +7386,7 @@
 				7809620015BDB70B0071E9D0 /* EXOverlayView.m in Sources */,
 				78FB79E815D0ECFC00DF9D73 /* ConversationInputAccessoryView.m in Sources */,
 				78FC07E015D224FC004BB482 /* CTUtil.m in Sources */,
+				76F3EEE617C2318E00D353FA /* NSDate+RouteXDateFormater.m in Sources */,
 				78D2BB0315D3A3C800716819 /* GatherExfeeInputCell.m in Sources */,
 				78FB6B8D15D6C64000EF83B3 /* EXBubbleButton.m in Sources */,
 				78FB6B8E15D6C64000EF83B3 /* EXBubbleScrollView.m in Sources */,
