@@ -74,15 +74,18 @@ SCHEME=$PROJECT
 PROJECT_FILE="$PROJECT.xcodeproj"
 BUILD="xcodebuild"
 BUILD_OUTPUT="build.output"
+echo Preparing output folder
+BUILD_PATH=`pwd`"/builds/"
+mkdir -p $BUILD_PATH
+echo Removing previous build
+IPA_PATH="$BUILD_PATH$PROJECT.ipa"
+rm -f $IPA_PATH
 echo Cleaning $PROJECT
 $BUILD -target $PROJECT -configuration Release -scheme $SCHEME clean > /dev/null
 echo $BUILD_ACTION-ing $PROJECT
 $BUILD -target $PROJECT -configuration Release -scheme $SCHEME $BUILD_ACTION > $BUILD_OUTPUT
 APP_PATH=`cat $BUILD_OUTPUT|grep Validate|awk '{print $2}'`
-BUILD_PATH=`pwd`"/builds/"
-mkdir -p $BUILD_PATH
-IPA_PATH="$BUILD_PATH$PROJECT.ipa"
 echo Package $PROJECT
 /usr/bin/xcrun -sdk iphoneos PackageApplication -v "$APP_PATH" -o "$IPA_PATH"
 echo Cleaning Log $BUILD_OUTPUT
-rm $BUILD_OUTPUT
+rm -f $BUILD_OUTPUT

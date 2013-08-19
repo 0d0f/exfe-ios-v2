@@ -7720,10 +7720,7 @@
 					"\"$(SRCROOT)/EXFE/Flurry\"",
 					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = 0d0f;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -7754,10 +7751,7 @@
 					"\"$(SRCROOT)/EXFE/Flurry\"",
 					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = 0d0f;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
