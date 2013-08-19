@@ -433,6 +433,7 @@
         return 10+62+44;
     return 1.0;
 }
+
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     if (section == 1){
         CGFloat padding = 10;
@@ -447,6 +448,18 @@
 //            [btn2Auth setFrame:CGRectMake(20, 40, 320 - 20 * 2, 30)];
 //            [btn2Auth addTarget:self action:@selector(twoStep:) forControlEvents:UIControlEventTouchUpInside];
 //            [footerView addSubview:btn2Auth];
+#ifdef DEBUG
+            UISegmentedControl *segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"0.5", @"0.55", @"0.6", @"0.65", @"0.7", @"0.75", @"0.8"]];
+            segmentedControl.frame = CGRectMake(0, 40, 320, 30);
+            segmentedControl.selectedSegmentIndex = 6;
+            [segmentedControl addTarget:self
+                                 action:@selector(action:)
+                       forControlEvents:UIControlEventValueChanged];
+            [footerView addSubview:segmentedControl];
+            NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+            [ud setObject:@"0.8" forKey:@"temp_jpg_type"];
+            [ud synchronize];
+#endif
             
             AYUIButton *btnSignOut = [AYUIButton buttonWithType:UIButtonTypeCustom];
             
@@ -502,6 +515,18 @@
     }
     return NO;
 }
+
+#ifdef DEBUG
+- (void)action:(UISegmentedControl *)sender
+{
+    UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
+    NSString *title = [segmentedControl titleForSegmentAtIndex: [segmentedControl selectedSegmentIndex]];
+    NSLog(@"compress rate for jpg: %@", title);
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:title forKey:@"temp_jpg_type"];
+    [ud synchronize];
+}
+#endif
 
 - (void)showRome {
     EFRomeViewController *romeViewController = [[EFRomeViewController alloc] init];
