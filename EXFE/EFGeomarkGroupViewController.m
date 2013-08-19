@@ -11,41 +11,18 @@
 #import <QuartzCore/QuartzCore.h>
 #import "EFGeomarkLocationCell.h"
 #import "EFGeomarkPersonCell.h"
+#import "EFGradientView.h"
 #import "Util.h"
 
 #define kDefaultCellHeight  (44.0f)
 #define kDefaultCellCount   (3)
-
-@interface EFGeomarkGoupBackgroundView : UIView
-
-@end
-
-@implementation EFGeomarkGoupBackgroundView
-
-- (void)drawRect:(CGRect)rect {
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    
-    CGGradientRef gradient = NULL;
-    NSArray *colors = @[(id)[UIColor COLOR_RGB(0xFA, 0xFA, 0xFA)].CGColor,
-                        (id)[UIColor COLOR_RGB(0xEA, 0xEA, 0xEA)].CGColor];
-    CGFloat gradientLocations[] = {0, 1};
-    gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)colors, gradientLocations);
-    
-    CGContextDrawLinearGradient(context, gradient, (CGPoint){CGRectGetWidth(self.frame) * 0.5f, 0.0f}, (CGPoint){CGRectGetWidth(self.frame) * 0.5f, CGRectGetHeight(self.frame)}, 0);
-    
-    CGGradientRelease(gradient);
-    CGColorSpaceRelease(colorSpace);
-}
-
-@end
 
 @interface EFGeomarkGroupViewController ()
 
 @property (nonatomic, weak)   UIViewController    *fromViewController;    // rewrite
 @property (nonatomic, assign) CGPoint             tapLocation;            // rewrite
 
-@property (nonatomic, strong) UIView              *baseView;
+@property (nonatomic, strong) UIControl           *baseView;
 @property (nonatomic, strong) CALayer             *shadowLayer;
 
 @end
@@ -106,7 +83,9 @@
 {
     [super viewDidLoad];
     
-    EFGeomarkGoupBackgroundView *backgroudnView = [[EFGeomarkGoupBackgroundView alloc] initWithFrame:self.view.bounds];
+    EFGradientView *backgroudnView = [[EFGradientView alloc] initWithFrame:self.view.bounds];
+    backgroudnView.colors = @[[UIColor COLOR_RGB(0xFA, 0xFA, 0xFA)],
+                              [UIColor COLOR_RGB(0xEA, 0xEA, 0xEA)]];
     self.tableView.backgroundView = backgroudnView;
     
     self.tableView.showsHorizontalScrollIndicator = NO;

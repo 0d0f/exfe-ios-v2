@@ -455,22 +455,20 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     EFAccessInfo *accessInfo = [[EFAccessInfo alloc] initWithCross:self.cross shouldSaveBreadcrumbs:YES];
     
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [delegate.model.apiServer postRouteXAccessInfo:@[accessInfo]
-                                           success:^{
-                                           }
-                                           failure:^(NSError *error){
-                                           }];
+    [delegate.model.apiServer postRouteXAccessInfo:accessInfo
+                                           inCross:self.cross
+                                           success:nil
+                                           failure:nil];
 }
 
 - (void)unregisterToUpdateLocation {
     EFAccessInfo *accessInfo = [[EFAccessInfo alloc] initWithCross:self.cross shouldSaveBreadcrumbs:NO];
     
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [delegate.model.apiServer postRouteXAccessInfo:@[accessInfo]
-                                           success:^{
-                                           }
-                                           failure:^(NSError *error){
-                                           }];
+    [delegate.model.apiServer postRouteXAccessInfo:accessInfo
+                                           inCross:self.cross
+                                           success:nil
+                                           failure:nil];
 }
 
 #pragma mark - Factory

@@ -1621,6 +1621,12 @@
 		766032D017C116EA00B21A12 /* libWeChatSDK.all.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 766032CF17C116EA00B21A12 /* libWeChatSDK.all.a */; };
 		766032D117C116EA00B21A12 /* libWeChatSDK.all.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 766032CF17C116EA00B21A12 /* libWeChatSDK.all.a */; };
 		766032D217C116EA00B21A12 /* libWeChatSDK.all.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 766032CF17C116EA00B21A12 /* libWeChatSDK.all.a */; };
+		766032FD17C21C1B00B21A12 /* EFMapPersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 766032FC17C21C1B00B21A12 /* EFMapPersonViewController.m */; };
+		766032FE17C21C1B00B21A12 /* EFMapPersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 766032FC17C21C1B00B21A12 /* EFMapPersonViewController.m */; };
+		766032FF17C21C1B00B21A12 /* EFMapPersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 766032FC17C21C1B00B21A12 /* EFMapPersonViewController.m */; };
+		7660330A17C21E0500B21A12 /* EFGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7660330917C21E0500B21A12 /* EFGradientView.m */; };
+		7660330B17C21E0500B21A12 /* EFGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7660330917C21E0500B21A12 /* EFGradientView.m */; };
+		7660330C17C21E0500B21A12 /* EFGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7660330917C21E0500B21A12 /* EFGradientView.m */; };
 		7661C7EC1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7ED1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7EE1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
@@ -2799,6 +2805,10 @@
 		766032C617C1149500B21A12 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WXApi.h; path = SDKExport/WXApi.h; sourceTree = "<group>"; };
 		766032C717C1149500B21A12 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WXApiObject.h; path = SDKExport/WXApiObject.h; sourceTree = "<group>"; };
 		766032CF17C116EA00B21A12 /* libWeChatSDK.all.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWeChatSDK.all.a; path = SDKExport/libWeChatSDK.all.a; sourceTree = "<group>"; };
+		766032FB17C21C1B00B21A12 /* EFMapPersonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapPersonViewController.h; sourceTree = "<group>"; };
+		766032FC17C21C1B00B21A12 /* EFMapPersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapPersonViewController.m; sourceTree = "<group>"; };
+		7660330817C21E0500B21A12 /* EFGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFGradientView.h; sourceTree = "<group>"; };
+		7660330917C21E0500B21A12 /* EFGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFGradientView.m; sourceTree = "<group>"; };
 		7661C7EA1738B15400133F10 /* EFErrorHandlerCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorHandlerCenter.h; sourceTree = "<group>"; };
 		7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorHandlerCenter.m; sourceTree = "<group>"; };
 		766C9827179933D00064B5BC /* EFPersonAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPersonAnnotationView.h; sourceTree = "<group>"; };
@@ -3896,6 +3906,8 @@
 				76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */,
 				7690B56F17BF850900C45101 /* EFGeomarkGroupViewController.h */,
 				7690B57017BF850900C45101 /* EFGeomarkGroupViewController.m */,
+				766032FB17C21C1B00B21A12 /* EFMapPersonViewController.h */,
+				766032FC17C21C1B00B21A12 /* EFMapPersonViewController.m */,
 			);
 			name = RouteX;
 			sourceTree = "<group>";
@@ -3998,10 +4010,20 @@
 			name = "Image (Category)";
 			sourceTree = "<group>";
 		};
+		7660330717C21DD800B21A12 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7660330817C21E0500B21A12 /* EFGradientView.h */,
+				7660330917C21E0500B21A12 /* EFGradientView.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		767012621729053400B5445E /* EFKit */ = {
 			isa = PBXGroup;
 			children = (
 				76F6B3101740B5C1008B39C1 /* EFKit.h */,
+				7660330717C21DD800B21A12 /* View */,
 				76B124521798F89F00A73E59 /* Streaming */,
 				7607AABE1796451200529F0D /* Map */,
 				76BC7B07176EAC27003F4FBA /* Queue */,
@@ -6821,6 +6843,7 @@
 				4F63DA9417172AA600136B7E /* Meta.m in Sources */,
 				4F63DA9517172AA600136B7E /* OAuthLoginViewController.m in Sources */,
 				4F63DA9617172AA600136B7E /* URLParser.m in Sources */,
+				766032FE17C21C1B00B21A12 /* EFMapPersonViewController.m in Sources */,
 				4F63DA9717172AA600136B7E /* EXImagesCollectionView.m in Sources */,
 				4F63DA9817172AA600136B7E /* PlaceViewController.m in Sources */,
 				4F63DA9A17172AA600136B7E /* PlaceAnnotation.m in Sources */,
@@ -6982,6 +7005,7 @@
 				76BC7B8F1772B925003F4FBA /* EFNetworkOperation.m in Sources */,
 				76BC7B9B1772B93A003F4FBA /* EFNetworkManagementOperation.m in Sources */,
 				76BC7BA51772EEA5003F4FBA /* EFLoadMeOperation.m in Sources */,
+				7660330B17C21E0500B21A12 /* EFGradientView.m in Sources */,
 				765E150F17745235003F4827 /* EFDataManager+Image.m in Sources */,
 				76E96BAE177AAD2500C06ECD /* EXFEModel+UserAPI.m in Sources */,
 				76E96BB7177AC29C00C06ECD /* EFLoadUserOperation.m in Sources */,
@@ -7079,6 +7103,7 @@
 				4F63DC6317172B0700136B7E /* Meta.m in Sources */,
 				4F63DC6417172B0700136B7E /* OAuthLoginViewController.m in Sources */,
 				4F63DC6517172B0700136B7E /* URLParser.m in Sources */,
+				766032FF17C21C1B00B21A12 /* EFMapPersonViewController.m in Sources */,
 				4F63DC6617172B0700136B7E /* EXImagesCollectionView.m in Sources */,
 				4F63DC6717172B0700136B7E /* PlaceViewController.m in Sources */,
 				4F63DC6917172B0700136B7E /* PlaceAnnotation.m in Sources */,
@@ -7240,6 +7265,7 @@
 				76BC7B901772B925003F4FBA /* EFNetworkOperation.m in Sources */,
 				76BC7B9C1772B93A003F4FBA /* EFNetworkManagementOperation.m in Sources */,
 				76BC7BA61772EEA5003F4FBA /* EFLoadMeOperation.m in Sources */,
+				7660330C17C21E0500B21A12 /* EFGradientView.m in Sources */,
 				765E151017745235003F4827 /* EFDataManager+Image.m in Sources */,
 				76D2DE151778061F00E8C53E /* EFDownloadOperation.m in Sources */,
 				76E96BAF177AAD2500C06ECD /* EXFEModel+UserAPI.m in Sources */,
@@ -7337,6 +7363,7 @@
 				78DABCE9158B236C004447B5 /* Meta.m in Sources */,
 				78D0A600158CFB4C00401BCA /* OAuthLoginViewController.m in Sources */,
 				78D0A601158CFB5F00401BCA /* URLParser.m in Sources */,
+				766032FD17C21C1B00B21A12 /* EFMapPersonViewController.m in Sources */,
 				789C8CAD1591D9B700580624 /* EXImagesCollectionView.m in Sources */,
 				78F057FF1599A57C00F360F2 /* PlaceViewController.m in Sources */,
 				78415346159C3F5C002B7A2E /* PlaceAnnotation.m in Sources */,
@@ -7498,6 +7525,7 @@
 				76BC7B8E1772B925003F4FBA /* EFNetworkOperation.m in Sources */,
 				76BC7B9A1772B93A003F4FBA /* EFNetworkManagementOperation.m in Sources */,
 				76BC7BA41772EEA5003F4FBA /* EFLoadMeOperation.m in Sources */,
+				7660330A17C21E0500B21A12 /* EFGradientView.m in Sources */,
 				765E150E17745235003F4827 /* EFDataManager+Image.m in Sources */,
 				76D2DE131778061F00E8C53E /* EFDownloadOperation.m in Sources */,
 				76E96BAD177AAD2500C06ECD /* EXFEModel+UserAPI.m in Sources */,

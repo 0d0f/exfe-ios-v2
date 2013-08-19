@@ -15,24 +15,22 @@
 /**
  * endpoint: /routex/users/crosses
  */
-- (void)postRouteXAccessInfo:(NSArray *)accessInfos
+- (void)postRouteXAccessInfo:(EFAccessInfo *)accessInfo
+                     inCross:(Cross *)cross
                      success:(void (^)(void))successHandler
                      failure:(void (^)(NSError *error))failureHandler {
-    NSParameterAssert(accessInfos);
-    NSParameterAssert(accessInfos.count);
+    NSParameterAssert(accessInfo);
+    NSParameterAssert(cross);
     
-    NSMutableArray *param = [[NSMutableArray alloc] init];
-    for (id accessInfo in accessInfos) {
-        [param addObject:[accessInfo dictionaryValue]];
-    }
+    NSDictionary *param = [accessInfo dictionaryValue];
     
-    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/users/crosses?token=%@", self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/users/crosses/%d?token=%@", [cross.cross_id integerValue], self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     
     [manager.HTTPClient postPath:endpoint
-                      parameters:(id)param
+                      parameters:param
                          success:^(AFHTTPRequestOperation *operation, id responseObject){
                              if (200 == operation.response.statusCode) {
                                  if (successHandler) {
