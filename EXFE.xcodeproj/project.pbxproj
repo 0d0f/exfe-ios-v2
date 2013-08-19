@@ -4100,7 +4100,7 @@
 				76B123561796470C00A73E59 /* EFMapData.h */,
 				76B123571796470C00A73E59 /* EFMapDataDefines.h */,
 				76B123C41796489000A73E59 /* Data Structure */,
-				76B123C5179648A700A73E59 /* DataSource */,
+				76B123C5179648A700A73E59 /* Data Source */,
 			);
 			name = Modal;
 			sourceTree = "<group>";
@@ -4154,7 +4154,7 @@
 			name = "Data Structure";
 			sourceTree = "<group>";
 		};
-		76B123C5179648A700A73E59 /* DataSource */ = {
+		76B123C5179648A700A73E59 /* Data Source */ = {
 			isa = PBXGroup;
 			children = (
 				76B123621796470C00A73E59 /* EFMapPeopleDataSource.h */,
@@ -4164,7 +4164,7 @@
 				768DD35017A91F4A00E080C6 /* EFLocationManager.h */,
 				768DD35117A91F4A00E080C6 /* EFLocationManager.m */,
 			);
-			name = DataSource;
+			name = "Data Source";
 			sourceTree = "<group>";
 		};
 		76B1240B1796F44900A73E59 /* Sqlite */ = {

@@ -47,6 +47,39 @@
 
 @end
 
+@interface EFGeomarkGroupViewController (Private)
+
+- (CGPoint)_fixTapLocation:(CGPoint)location;
+
+@end
+
+@implementation EFGeomarkGroupViewController (Private)
+
+- (CGPoint)_fixTapLocation:(CGPoint)location {
+    CGRect baseViewBounds = self.baseView.bounds;
+    CGRect viewFrame = self.view.frame;
+    CGFloat viewHalfWidth = CGRectGetWidth(viewFrame) * 0.5f;
+    CGFloat viewHalfHeight = CGRectGetHeight(viewFrame) * 0.5f;
+    
+    CGFloat blank = 5.0f;
+    
+    if (location.x - viewHalfWidth < blank) {
+        location.x = viewHalfWidth + blank;
+    } else if (location.x + viewHalfWidth > CGRectGetWidth(baseViewBounds)) {
+        location.x = CGRectGetWidth(baseViewBounds) - (viewHalfWidth + blank);
+    }
+    
+    if (location .y - viewHalfHeight < blank) {
+        location.y = viewHalfHeight + blank;
+    } else if (location.y + viewHalfHeight > CGRectGetHeight(baseViewBounds)) {
+        location.y = viewHalfHeight + blank;
+    }
+    
+    return location;
+}
+
+@end
+
 @implementation EFGeomarkGroupViewController
 
 - (id)initWithGeomarks:(NSArray *)geomarks andPeople:(NSArray *)people {
@@ -108,11 +141,13 @@
     
     self.baseView = baseView;
     
-    self.shadowLayer.position = locatoin;
+    CGPoint fixedLocation = [self _fixTapLocation:locatoin];
+    
+    self.shadowLayer.position = fixedLocation;
     self.shadowLayer.bounds = self.view.bounds;
     [self.baseView.layer addSublayer:self.shadowLayer];
     
-    self.view.center = locatoin;
+    self.view.center = fixedLocation;
     [self.baseView addSubview:self.view];
 }
 
