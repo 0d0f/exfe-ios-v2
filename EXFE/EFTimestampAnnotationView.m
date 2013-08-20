@@ -11,6 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "EFTimestampAnnotation.h"
 #import "Util.h"
+#import "NSDate+RouteXDateFormater.h"
 
 @interface EFTimestampAnnotationView ()
 
@@ -29,18 +30,11 @@
 
 - (void)_reloadData {
     EFTimestampAnnotation *annotation = (EFTimestampAnnotation *)self.annotation;
-    long timeInterval = (long)([[NSDate date] timeIntervalSinceDate:annotation.timestamp] / 60.0f);
-    NSString *time = NSLocalizedString(@"分钟前", nil);
     
-    if (timeInterval / 60) {
-        time = NSLocalizedString(@"小时前", nil);
-        timeInterval /= 60;
-    }
-    
-    self.timestampLabel.text = [NSString stringWithFormat:@"%ld", timeInterval];
+    self.timestampLabel.text = [NSString stringWithFormat:@"%u", [annotation.timestamp formatedTimeIntervalValueFromNow]];
     [self.timestampLabel sizeToFit];
     
-    self.meterLabel.text = time;
+    self.meterLabel.text = [annotation.timestamp formatedTimeIntervalUnitFromNow];
     [self.meterLabel sizeToFit];
     self.meterLabel.frame = (CGRect){{CGRectGetWidth(self.timestampLabel.frame) + 2, 1.0f}, self.meterLabel.frame.size};
     

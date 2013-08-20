@@ -11,38 +11,18 @@
 #import <QuartzCore/QuartzCore.h>
 #import "EFGeomarkLocationCell.h"
 #import "EFGeomarkPersonCell.h"
+#import "EFGradientView.h"
 #import "Util.h"
 
-@interface EFGeomarkGoupBackgroundView : UIView
-
-@end
-
-@implementation EFGeomarkGoupBackgroundView
-
-- (void)drawRect:(CGRect)rect {
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    
-    CGGradientRef gradient = NULL;
-    NSArray *colors = @[(id)[UIColor COLOR_RGB(0xFA, 0xFA, 0xFA)].CGColor,
-                        (id)[UIColor COLOR_RGB(0xEA, 0xEA, 0xEA)].CGColor];
-    CGFloat gradientLocations[] = {0, 1};
-    gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)colors, gradientLocations);
-    
-    CGContextDrawLinearGradient(context, gradient, (CGPoint){CGRectGetWidth(self.frame) * 0.5f, 0.0f}, (CGPoint){CGRectGetWidth(self.frame) * 0.5f, CGRectGetHeight(self.frame)}, 0);
-    
-    CGGradientRelease(gradient);
-    CGColorSpaceRelease(colorSpace);
-}
-
-@end
+#define kDefaultCellHeight  (44.0f)
+#define kDefaultCellCount   (3)
 
 @interface EFGeomarkGroupViewController ()
 
 @property (nonatomic, weak)   UIViewController    *fromViewController;    // rewrite
 @property (nonatomic, assign) CGPoint             tapLocation;            // rewrite
 
-@property (nonatomic, strong) UIView              *baseView;
+@property (nonatomic, strong) UIControl           *baseView;
 @property (nonatomic, strong) CALayer             *shadowLayer;
 
 @end
@@ -88,7 +68,12 @@
         self.geomarks = geomarks;
         self.people = people;
         
-        self.view.frame = (CGRect){CGPointZero, {200.0f, 132.0f}};
+        NSUInteger count = self.geomarks.count + self.people.count;
+        if (count > kDefaultCellCount) {
+            count = kDefaultCellCount;
+        }
+        
+        self.view.frame = (CGRect){CGPointZero, {200.0f, kDefaultCellHeight * count}};
     }
     
     return self;
@@ -98,7 +83,9 @@
 {
     [super viewDidLoad];
     
-    EFGeomarkGoupBackgroundView *backgroudnView = [[EFGeomarkGoupBackgroundView alloc] initWithFrame:self.view.bounds];
+    EFGradientView *backgroudnView = [[EFGradientView alloc] initWithFrame:self.view.bounds];
+    backgroudnView.colors = @[[UIColor COLOR_RGB(0xFA, 0xFA, 0xFA)],
+                              [UIColor COLOR_RGB(0xEA, 0xEA, 0xEA)]];
     self.tableView.backgroundView = backgroudnView;
     
     self.tableView.showsHorizontalScrollIndicator = NO;
@@ -131,13 +118,13 @@
     
     // base view
     CGRect frame = [controller.view.window convertRect:controller.view.frame fromView:controller.view.superview];
-    UIView *baseView = [[UIView alloc] initWithFrame:frame];
+    UIControl *baseView = [[UIControl alloc] initWithFrame:frame];
     baseView.backgroundColor = [UIColor clearColor];
-    [controller.view.window addSubview:baseView];
+    [baseView addTarget:self
+                 action:@selector(handleTouchDownEvent:)
+       forControlEvents:UIControlEventTouchDown];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    tap.delegate = self;
-    [baseView addGestureRecognizer:tap];
+    [controller.view.window addSubview:baseView];
     
     self.baseView = baseView;
     
@@ -159,9 +146,9 @@
     [self.view removeFromSuperview];
 }
 
-#pragma mark - Gesture
+#pragma mark - Touch Event Handler
 
-- (void)handleTap:(UITapGestureRecognizer *)gesture {
+- (void)handleTouchDownEvent:(id)sender {
     [self dismissAnimated:YES];
 }
 

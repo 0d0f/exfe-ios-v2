@@ -10,13 +10,14 @@
 
 #import "EFMapKit.h"
 
-@class Cross;
+@class Cross, EFAccessInfo;
 @interface EFAPIServer (MadaurerMap)
 
 /**
  * endpoint: /routex/users/crosses
  */
-- (void)postRouteXAccessInfo:(NSArray *)accessInfos
+- (void)postRouteXAccessInfo:(EFAccessInfo *)accessInfo
+                     inCross:(Cross *)cross
                      success:(void (^)(void))successHandler
                      failure:(void (^)(NSError *error))failureHandler;
 

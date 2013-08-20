@@ -31,7 +31,6 @@
 
 - (NSDictionary *)dictionaryValue {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    [dict setValue:self.cross.cross_id forKey:@"cross_id"];
     [dict setValue:[NSNumber numberWithBool:self.shouldSaveBreadcrumbs] forKey:@"save_breadcrumbs"];
     
     if (self.shouldSaveBreadcrumbs) {
