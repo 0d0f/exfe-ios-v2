@@ -1068,12 +1068,7 @@
                                                                                                               fileName:[NSString stringWithFormat:@"%@.png", name]
                                                                                                               mimeType:@"image/png"];
                                                                                   } else {
-                                                                                      CGFloat f = 0.8;
-#ifdef DEBUG
-                                                                                      NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-                                                                                      NSString *title = [ud objectForKey:@"temp_jpg_type"];
-                                                                                      f = [title floatValue];
-#endif
+                                                                                      CGFloat f = 0.6;
                                                                                       NSData *imageData = UIImageJPEGRepresentation(img, f);
                                                                                       [formData appendPartWithFileData:imageData
                                                                                                                   name:name
