@@ -17,6 +17,7 @@
 #import "EFMarauderMapDataSource.h"
 
 #define kDefaultWidth   (200.0f)
+#define kDistanceWidth  (150.0f)
 
 @interface EFMapPersonViewController ()
 
@@ -30,6 +31,8 @@
 @property (nonatomic, strong) UILabel           *destDistanceLabel;
 @property (nonatomic, strong) UILabel           *meDistanceLabel;
 @property (nonatomic, strong) UIButton          *requestButton;
+@property (nonatomic, strong) UIImageView       *destHeadingView;
+@property (nonatomic, strong) UIImageView       *meHeadingView;
 
 @end
 
@@ -63,25 +66,33 @@
     [self.view addSubview:personInfoLabel];
     self.personInfoLabel = personInfoLabel;
     
-    UILabel *destDistanceLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {200.0f, 18.0f}}];
+    UILabel *destDistanceLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {kDistanceWidth, 18.0f}}];
     destDistanceLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
     destDistanceLabel.textColor = [UIColor COLOR_BLACK_19];
     destDistanceLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
     destDistanceLabel.shadowOffset = (CGSize){0.0f, 0.5f};
     destDistanceLabel.backgroundColor = [UIColor clearColor];
-    destDistanceLabel.textAlignment = NSTextAlignmentCenter;
+    destDistanceLabel.textAlignment = NSTextAlignmentRight;
     [self.view addSubview:destDistanceLabel];
     self.destDistanceLabel = destDistanceLabel;
     
-    UILabel *meDistanceLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {200.0f, 18.0f}}];
+    UIImageView *destHeadingView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_arrow_14g5.png"]];
+    [self.view addSubview:destHeadingView];
+    self.destHeadingView = destHeadingView;
+    
+    UILabel *meDistanceLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {kDistanceWidth, 18.0f}}];
     meDistanceLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
     meDistanceLabel.textColor = [UIColor COLOR_BLACK_19];
     meDistanceLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
     meDistanceLabel.shadowOffset = (CGSize){0.0f, 0.5f};
     meDistanceLabel.backgroundColor = [UIColor clearColor];
-    meDistanceLabel.textAlignment = NSTextAlignmentCenter;
+    meDistanceLabel.textAlignment = NSTextAlignmentRight;
     [self.view addSubview:meDistanceLabel];
     self.meDistanceLabel = meDistanceLabel;
+    
+    UIImageView *meHeadingView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_arrow_14g5.png"]];
+    [self.view addSubview:meHeadingView];
+    self.meHeadingView = meHeadingView;
     
     UIButton *requestButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [requestButton setTitle:NSLocalizedString(@"请对方更新方位", nil) forState:UIControlStateNormal];
@@ -102,12 +113,15 @@
     self.nameLabel.text = self.person.name;
     
     height += CGRectGetHeight(self.nameLabel.frame);
+    CGFloat offsetY = -4.0f;
     
-    self.nameLabel.center = (CGPoint){kDefaultWidth * 0.5f, height};
+    self.nameLabel.center = (CGPoint){kDefaultWidth * 0.5f, height + offsetY};
     
     NSString *personInfo = nil;
     NSString *destDistanceInfo = nil;
     NSString *meDistanceInfo = nil;
+    CGFloat destRadian = 0.0f;
+    CGFloat meRadian = 0.0f;
     
     EFRouteLocation *destination = self.mapDataSource.destinationLocation;
     
@@ -129,7 +143,9 @@
                 distanceFromDest = ceil(distanceFromDest / 1000.0f);
                 unit = NSLocalizedString(@"千米", nil);
             }
-            destDistanceInfo = [NSString stringWithFormat:NSLocalizedString(@"与您相距 %ld%@", nil), (long)distanceFromDest, unit];
+            destDistanceInfo = [NSString stringWithFormat:NSLocalizedString(@"距目的地 %ld%@", nil), (long)distanceFromDest, unit];
+            
+            destRadian = HeadingInRadian(destination.coordinate, self.person.lastLocation.coordinate);
         }
         
         // update me distance info
@@ -142,6 +158,8 @@
                 unit = NSLocalizedString(@"千米", nil);
             }
             meDistanceInfo = [NSString stringWithFormat:NSLocalizedString(@"与您相距 %ld%@", nil), (long)distanceFromMe, unit];
+            
+            meRadian = HeadingInRadian([self.mapDataSource me].lastLocation.coordinate, self.person.lastLocation.coordinate);
         }
     } else {
         personInfo = NSLocalizedString(@"未知方位", nil);
@@ -149,32 +167,46 @@
     
     self.personInfoLabel.text = personInfo;
     height += CGRectGetHeight(self.personInfoLabel.frame);
-    self.personInfoLabel.center = (CGPoint){kDefaultWidth * 0.5f, height + 0.2f * CGRectGetHeight(self.personInfoLabel.frame)};
+    self.personInfoLabel.center = (CGPoint){kDefaultWidth * 0.5f, height + 0.25f * CGRectGetHeight(self.personInfoLabel.frame) + offsetY};
     
     if (destDistanceInfo) {
         self.destDistanceLabel.text = destDistanceInfo;
         height += CGRectGetHeight(self.destDistanceLabel.frame);
-        self.destDistanceLabel.center = (CGPoint){kDefaultWidth * 0.5f, height};
+        self.destDistanceLabel.center = (CGPoint){kDistanceWidth * 0.5f, height + offsetY};
         self.destDistanceLabel.hidden = NO;
+        
+        self.destHeadingView.center = (CGPoint){kDistanceWidth + 8.0f, height + offsetY};
+        self.destHeadingView.layer.transform = CATransform3DMakeRotation(destRadian, 0.0f, 0.0f, 1.0f);
+        self.destHeadingView.hidden = NO;
     } else {
         self.destDistanceLabel.hidden = YES;
+        self.destHeadingView.hidden = YES;
     }
     
     if (meDistanceInfo) {
         self.meDistanceLabel.text = meDistanceInfo;
         height += CGRectGetHeight(self.meDistanceLabel.frame);
-        self.meDistanceLabel.center = (CGPoint){kDefaultWidth * 0.5f, height};
+        self.meDistanceLabel.center = (CGPoint){kDistanceWidth * 0.5f, height + offsetY};
         self.meDistanceLabel.hidden = NO;
+        
+        self.meHeadingView.center = (CGPoint){kDistanceWidth + 8.0f, height + offsetY};
+        self.meHeadingView.layer.transform = CATransform3DMakeRotation(meRadian, 0.0f, 0.0f, 1.0f);
+        self.meHeadingView.hidden = NO;
     } else {
         self.meDistanceLabel.hidden = YES;
+        self.meHeadingView.hidden = YES;
     }
     
     if (kEFMapPersonConnectStateOnline == self.person.connectState) {
         self.requestButton.hidden = YES;
+        self.lineView.hidden = YES;
     } else {
         height += CGRectGetHeight(self.requestButton.frame);
         self.requestButton.center = (CGPoint){kDefaultWidth * 0.5f, height - CGRectGetHeight(self.requestButton.frame) * 0.4f};
         self.requestButton.hidden = NO;
+        
+        self.lineView.center = (CGPoint){kDefaultWidth * 0.5f, height - CGRectGetHeight(self.requestButton.frame) * 0.8f};
+        self.lineView.hidden = NO;
     }
     
     CGRect frame = (CGRect){CGPointZero, {kDefaultWidth, height}};
@@ -209,7 +241,7 @@
     EFGradientView *backgroundView = [[EFGradientView alloc] initWithFrame:self.view.bounds];
     backgroundView.colors = @[[UIColor COLOR_RGB(0xFA, 0xFA, 0xFA)],
                               [UIColor COLOR_RGB(0xEA, 0xEA, 0xEA)]];
-    [self.view insertSubview:backgroundView aboveSubview:0];
+    [self.view addSubview:backgroundView];
     self.backgroundView = backgroundView;
     
     // line

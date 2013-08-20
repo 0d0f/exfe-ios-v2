@@ -643,6 +643,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 #pragma mark - EFMapPersonViewControllerDelegate
 
 - (void)mapPersonViewControllerRequestButtonPressed:(EFMapPersonViewController *)controller {
+    [controller dismissAnimated:YES];
+    
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     EFMapPerson *person = controller.person;
     
