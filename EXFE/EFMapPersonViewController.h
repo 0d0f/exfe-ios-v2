@@ -8,13 +8,23 @@
 
 #import <UIKit/UIKit.h>
 
-@class EFMapPerson;
+@class EFMapPersonViewController;
+@protocol EFMapPersonViewControllerDelegate <NSObject>
+
+@optional
+
+- (void)mapPersonViewControllerRequestButtonPressed:(EFMapPersonViewController *)controller;
+
+@end
+
+@class EFMapPerson, EFMarauderMapDataSource;
 @interface EFMapPersonViewController : UIViewController
 
-- (id)initWithMe:(EFMapPerson *)me person:(EFMapPerson *)person;
+- (id)initWithDataSource:(EFMarauderMapDataSource *)dataSource person:(EFMapPerson *)person;
 
+@property (nonatomic, weak) id<EFMapPersonViewControllerDelegate> delegate;
 @property (nonatomic, weak) EFMapPerson *person;
-@property (nonatomic, weak) EFMapPerson *me;
+@property (nonatomic, weak) EFMarauderMapDataSource *mapDataSource;
 
 @property (nonatomic, weak) UIViewController *fromController;
 @property (nonatomic, assign) CGPoint location;

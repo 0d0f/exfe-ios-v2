@@ -56,6 +56,7 @@
 @property (nonatomic, assign) EFMapZoomType         mapZoomType;
 
 @property (nonatomic, strong) EFGeomarkGroupViewController  *geomarkGroupViewController;
+@property (nonatomic, strong) EFMapPersonViewController     *personViewController;
 
 @end
 
@@ -68,6 +69,8 @@
 
 - (void)_zoomToPerson:(EFMapPerson *)person;
 - (void)_zoomToPersonLocation:(EFMapPerson *)person;
+
+- (void)_sendRequestWithURL:(NSString *)url hasRequestAPIComplete:(BOOL)hasComplete;
 
 @end
 
@@ -154,6 +157,17 @@
     BOOL isMe = (person == [self.mapDataSource me]);
     CLLocationCoordinate2D coordinate = isMe ? [EFLocationManager defaultManager].userLocation.coordinate : person.lastLocation.coordinate;
     [self.mapView setCenterCoordinate:coordinate zoomLevel:17 animated:YES];
+}
+
+- (void)_sendRequestWithURL:(NSString *)url hasRequestAPIComplete:(BOOL)hasComplete {
+    if (url && hasComplete) {
+        SendMessageToWXReq *message = [[SendMessageToWXReq alloc] init];
+        message.bText = YES;
+        message.text = [NSString stringWithFormat:NSLocalizedString(@"你在哪？\n%@", nil), url];
+        message.scene = WXSceneSession;
+        
+        [WXApi sendReq:message];
+    }
 }
 
 @end
@@ -616,6 +630,42 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 - (void)geomarkGroupViewController:(EFGeomarkGroupViewController *)controller didSelectPerson:(EFMapPerson *)person {
     [controller dismissAnimated:YES];
+    
+    EFMapPersonViewController *personViewController = [[EFMapPersonViewController alloc] initWithDataSource:self.mapDataSource
+                                                                                                     person:person];
+    personViewController.delegate = self;
+    [personViewController presentFromViewController:self
+                                           location:self.view.center
+                                           animated:YES];
+    self.personViewController = personViewController;
+}
+
+#pragma mark - EFMapPersonViewControllerDelegate
+
+- (void)mapPersonViewControllerRequestButtonPressed:(EFMapPersonViewController *)controller {
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    EFMapPerson *person = controller.person;
+    
+    __block NSString *url = nil;
+    __block BOOL hasComplete = NO;
+    
+    [delegate.model.apiServer getRouteXUrlInCross:self.cross
+                                          success:^(NSString *url){
+                                              url = url;
+                                              [self _sendRequestWithURL:url hasRequestAPIComplete:hasComplete];
+                                          }
+                                          failure:^(NSError *error){
+                                          }];
+    [delegate.model.apiServer postRouteXRequestIdentityId:person.identityString
+                                                  inCross:self.cross
+                                                  success:^{
+                                                      hasComplete = YES;
+                                                      [self _sendRequestWithURL:url hasRequestAPIComplete:hasComplete];
+                                                  }
+                                                  failure:^(NSError *error){
+                                                      hasComplete = YES;
+                                                      [self _sendRequestWithURL:url hasRequestAPIComplete:hasComplete];
+                                                  }];
 }
 
 #pragma mark - EFMapStrokeViewDataSource

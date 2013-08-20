@@ -23,7 +23,7 @@
 UIGestureRecognizerDelegate
 >
 
-@property (nonatomic, weak) id delegate;
+@property (nonatomic, weak) id<EFGeomarkGroupViewControllerDelegate> delegate;
 @property (nonatomic, readonly) UIViewController    *fromViewController;
 @property (nonatomic, readonly) CGPoint             tapLocation;
 

@@ -8,6 +8,8 @@
 
 #import "EFLocation.h"
 
+#import "EFRouteLocation.h"
+
 #define kDefaultAccuracy    (1.0f)
 
 @implementation EFLocation
@@ -66,6 +68,24 @@
     [dict setValue:gps forKey:@"gps"];
     
     return dict;
+}
+
+- (CLLocationDistance)distanceFromLocation:(EFLocation *)anotherLocatoin {
+    NSParameterAssert(anotherLocatoin);
+    
+    CLLocation *location1 = [[CLLocation alloc] initWithLatitude:self.coordinate.latitude longitude:self.coordinate.longitude];
+    CLLocation *location2 = [[CLLocation alloc] initWithLatitude:anotherLocatoin.coordinate.latitude longitude:anotherLocatoin.coordinate.longitude];
+    
+    return [location1 distanceFromLocation:location2];
+}
+
+- (CLLocationDistance)distanceFromRouteLocation:(EFRouteLocation *)routeLocatoin {
+    NSParameterAssert(routeLocatoin);
+    
+    CLLocation *location1 = [[CLLocation alloc] initWithLatitude:self.coordinate.latitude longitude:self.coordinate.longitude];
+    CLLocation *location2 = [[CLLocation alloc] initWithLatitude:routeLocatoin.coordinate.latitude longitude:routeLocatoin.coordinate.longitude];
+    
+    return [location1 distanceFromLocation:location2];
 }
 
 @end

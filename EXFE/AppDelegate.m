@@ -27,7 +27,7 @@
 @synthesize navigationController=_navigationController;
 
 - (void)registerWeixin {
-//    [WXApi registerApp:kWeixinAppID];
+    [WXApi registerApp:kWeixinAppID];
 }
 
 - (NSString *)defaultScheme {
@@ -241,42 +241,43 @@
 
 #pragma mark - WXApiDelegate
 
-///*! @brief 收到一个来自微信的请求，处理完后调用sendResp
-// *
-// * 收到一个来自微信的请求，异步处理完成后必须调用sendResp发送处理结果给微信。
-// * 可能收到的请求有GetMessageFromWXReq、ShowMessageFromWXReq等。
-// * @param req 具体请求内容，是自动释放的
-// */
-//- (void)onReq:(BaseReq*)req {
-//#warning TEST ONLY
-//#ifdef DEBUG
-//    NSString *strTitle = [NSString stringWithFormat:@"被微信调用成功"];
-//    
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-//    alert.delegate = self;
-//    [alert show];
-//#endif
-//}
-//
-///*! @brief 发送一个sendReq后，收到微信的回应
-// *
-// * 收到一个来自微信的处理结果。调用一次sendReq后会收到onResp。
-// * 可能收到的处理结果有SendMessageToWXResp、SendAuthResp等。
-// * @param resp具体的回应内容，是自动释放的
-// */
-//- (void)onResp:(BaseResp*)resp {
-//    
-//}
-//
-//#pragma mark - UIAlertView
-//
-//- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-//    GetMessageFromWXResp *message = [[GetMessageFromWXResp alloc] init];
-//    message.bText = YES;
-//    message.text = @"http://www.exfe.com";
-//    
-//    [WXApi sendResp:(BaseResp *)message];
-//}
+/*! @brief 收到一个来自微信的请求，处理完后调用sendResp
+ *
+ * 收到一个来自微信的请求，异步处理完成后必须调用sendResp发送处理结果给微信。
+ * 可能收到的请求有GetMessageFromWXReq、ShowMessageFromWXReq等。
+ * @param req 具体请求内容，是自动释放的
+ */
+- (void)onReq:(BaseReq*)req {
+#ifdef DEBUG
+    NSString *strTitle = [NSString stringWithFormat:@"TEST 被微信调用成功"];
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    alert.delegate = self;
+    [alert show];
+#endif
+}
+
+/*! @brief 发送一个sendReq后，收到微信的回应
+ *
+ * 收到一个来自微信的处理结果。调用一次sendReq后会收到onResp。
+ * 可能收到的处理结果有SendMessageToWXResp、SendAuthResp等。
+ * @param resp具体的回应内容，是自动释放的
+ */
+- (void)onResp:(BaseResp*)resp {
+    
+}
+
+#pragma mark - UIAlertView
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+#ifdef DEBUG
+    GetMessageFromWXResp *message = [[GetMessageFromWXResp alloc] init];
+    message.bText = YES;
+    message.text = @"http://www.exfe.com";
+    
+    [WXApi sendResp:(BaseResp *)message];
+#endif
+}
 
 #pragma mark - Push Notification
 // request for APN
@@ -401,12 +402,12 @@
         return YES;
     }
     
-//    // Weixin
-//    BOOL wx = [WXApi handleOpenURL:url delegate:self];
-//    
-//    if (wx) {
-//        return YES;
-//    }
+    // Weixin
+    BOOL wx = [WXApi handleOpenURL:url delegate:self];
+    
+    if (wx) {
+        return YES;
+    }
     
     [Flurry logEvent:@"HANDLE_OPEN_URL"];
     
