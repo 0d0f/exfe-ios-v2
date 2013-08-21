@@ -165,11 +165,11 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
         } else {
             person.locationState = kEFMapPersonLocationStateOnTheWay;
         }
+        
+        person.angle = HeadingInRadian(destination.coordinate, person.lastLocation.coordinate);
     } else {
         person.locationState = kEFMapPersonLocationStateUnknow;
     }
-    
-    person.angle = HeadingInRadian(destination.coordinate, person.lastLocation.coordinate);
 }
 
 @end
@@ -406,6 +406,10 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     [mapView removeAnnotation:annotation];
     [self.routeLocationAnnotationMap removeObjectForKey:routeLocation.locationId];
     [self.routeLocations removeObject:routeLocation];
+    
+    for (EFMapPerson *person in self.people) {
+        [self _updatePersonState:person];
+    }
     
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [delegate.model.apiServer deleteRouteXDeleteGeomark:routeLocation
