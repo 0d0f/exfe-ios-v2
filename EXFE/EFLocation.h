@@ -9,6 +9,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 
+@class EFRouteLocation;
 @interface EFLocation : NSObject
 
 @property (assign)  CLLocationCoordinate2D  coordinate;
@@ -20,5 +21,8 @@
 
 - (NSDictionary *)dictionaryValue;
 - (NSDictionary *)dictionaryValueWitoutAccuracy;
+
+- (CLLocationDistance)distanceFromLocation:(EFLocation *)locatoin;
+- (CLLocationDistance)distanceFromRouteLocation:(EFRouteLocation *)routeLocatoin;
 
 @end

@@ -12,10 +12,17 @@
 #import "EFMapPerson.h"
 #import "EFGradientView.h"
 #import "Util.h"
+#import "EFLocation.h"
+#import "NSDate+RouteXDateFormater.h"
+#import "EFMarauderMapDataSource.h"
+
+#define kDefaultWidth   (200.0f)
+#define kDistanceWidth  (150.0f)
 
 @interface EFMapPersonViewController ()
 
 @property (nonatomic, strong) UIControl         *baseView;
+@property (nonatomic, strong) CALayer           *shadowLayer;
 @property (nonatomic, strong) EFGradientView    *backgroundView;
 @property (nonatomic, strong) UIView            *lineView;
 
@@ -23,13 +30,15 @@
 @property (nonatomic, strong) UILabel           *personInfoLabel;
 @property (nonatomic, strong) UILabel           *destDistanceLabel;
 @property (nonatomic, strong) UILabel           *meDistanceLabel;
+@property (nonatomic, strong) UIButton          *requestButton;
+@property (nonatomic, strong) UIImageView       *destHeadingView;
+@property (nonatomic, strong) UIImageView       *meHeadingView;
 
 @end
 
 @interface EFMapPersonViewController (Private)
 
 - (void)_initLabels;
-- (void)_layoutSubviews;
 - (void)_personDidChange;
 
 @end
@@ -47,38 +56,177 @@
     [self.view addSubview:nameLabel];
     self.nameLabel = nameLabel;
     
+    UILabel *personInfoLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {200.0f, 12.0f}}];
+    personInfoLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:9];
+    personInfoLabel.textColor = [UIColor COLOR_CARBON];
+    personInfoLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
+    personInfoLabel.shadowOffset = (CGSize){0.0f, 0.5f};
+    personInfoLabel.backgroundColor = [UIColor clearColor];
+    personInfoLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:personInfoLabel];
+    self.personInfoLabel = personInfoLabel;
     
-}
-
-- (void)_layoutSubviews {
+    UILabel *destDistanceLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {kDistanceWidth, 18.0f}}];
+    destDistanceLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+    destDistanceLabel.textColor = [UIColor COLOR_BLACK_19];
+    destDistanceLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
+    destDistanceLabel.shadowOffset = (CGSize){0.0f, 0.5f};
+    destDistanceLabel.backgroundColor = [UIColor clearColor];
+    destDistanceLabel.textAlignment = NSTextAlignmentRight;
+    [self.view addSubview:destDistanceLabel];
+    self.destDistanceLabel = destDistanceLabel;
     
+    UIImageView *destHeadingView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_arrow_14g5.png"]];
+    [self.view addSubview:destHeadingView];
+    self.destHeadingView = destHeadingView;
+    
+    UILabel *meDistanceLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {kDistanceWidth, 18.0f}}];
+    meDistanceLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+    meDistanceLabel.textColor = [UIColor COLOR_BLACK_19];
+    meDistanceLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
+    meDistanceLabel.shadowOffset = (CGSize){0.0f, 0.5f};
+    meDistanceLabel.backgroundColor = [UIColor clearColor];
+    meDistanceLabel.textAlignment = NSTextAlignmentRight;
+    [self.view addSubview:meDistanceLabel];
+    self.meDistanceLabel = meDistanceLabel;
+    
+    UIImageView *meHeadingView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_arrow_14g5.png"]];
+    [self.view addSubview:meHeadingView];
+    self.meHeadingView = meHeadingView;
+    
+    UIButton *requestButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [requestButton setTitle:NSLocalizedString(@"请对方更新方位", nil) forState:UIControlStateNormal];
+    [requestButton setTitleColor:[UIColor COLOR_RGB(0x00, 0x7C, 0xFF)] forState:UIControlStateNormal];
+    requestButton.frame = (CGRect){CGPointZero, {200.0f, 50.0f}};
+    [requestButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.75f] forState:UIControlStateNormal];
+    [requestButton addTarget:self
+                      action:@selector(sendRequestButtonPressed:)
+            forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:requestButton];
+    self.requestButton = requestButton;
 }
 
 - (void)_personDidChange {
-    [self _layoutSubviews];
+    CGFloat height = 0.0f;
+    
     // update name
     self.nameLabel.text = self.person.name;
     
+    height += CGRectGetHeight(self.nameLabel.frame);
+    CGFloat offsetY = -4.0f;
+    
+    self.nameLabel.center = (CGPoint){kDefaultWidth * 0.5f, height + offsetY};
+    
+    NSString *personInfo = nil;
+    NSString *destDistanceInfo = nil;
+    NSString *meDistanceInfo = nil;
+    CGFloat destRadian = 0.0f;
+    CGFloat meRadian = 0.0f;
+    
+    EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+    
     if (self.person.lastLocation) {
-        NSString *personInfo = nil;
+        // update person info
         if (kEFMapPersonConnectStateOnline == self.person.connectState) {
-            
+            personInfo = NSLocalizedString(@"当前所处方位", nil);
         } else {
+            NSString *timeInterval = [self.person.lastLocation.timestamp formatedTimeIntervalFromNow];
+            personInfo = [NSString stringWithFormat:NSLocalizedString(@"%@所处方位", nil), timeInterval];
+        }
+        
+        // update destination distance info
+        if (destination) {
+            CLLocationDistance distanceFromDest = ceil([[self.mapDataSource me].lastLocation distanceFromRouteLocation:destination]);
+            NSString *unit = NSLocalizedString(@"米", nil);
             
+            if (distanceFromDest > 1000.0f) {
+                distanceFromDest = ceil(distanceFromDest / 1000.0f);
+                unit = NSLocalizedString(@"千米", nil);
+            }
+            destDistanceInfo = [NSString stringWithFormat:NSLocalizedString(@"距目的地 %ld%@", nil), (long)distanceFromDest, unit];
+            
+            destRadian = HeadingInRadian(destination.coordinate, self.person.lastLocation.coordinate);
+        }
+        
+        // update me distance info
+        if ([self.mapDataSource me].lastLocation) {
+            CLLocationDistance distanceFromMe = ceil([self.person.lastLocation distanceFromLocation:[self.mapDataSource me].lastLocation]);
+            NSString *unit = NSLocalizedString(@"米", nil);
+            
+            if (distanceFromMe > 1000.0f) {
+                distanceFromMe = ceil(distanceFromMe / 1000.0f);
+                unit = NSLocalizedString(@"千米", nil);
+            }
+            meDistanceInfo = [NSString stringWithFormat:NSLocalizedString(@"与您相距 %ld%@", nil), (long)distanceFromMe, unit];
+            
+            meRadian = HeadingInRadian([self.mapDataSource me].lastLocation.coordinate, self.person.lastLocation.coordinate);
         }
     } else {
-        
+        personInfo = NSLocalizedString(@"未知方位", nil);
     }
+    
+    self.personInfoLabel.text = personInfo;
+    height += CGRectGetHeight(self.personInfoLabel.frame);
+    self.personInfoLabel.center = (CGPoint){kDefaultWidth * 0.5f, height + 0.25f * CGRectGetHeight(self.personInfoLabel.frame) + offsetY};
+    
+    if (destDistanceInfo) {
+        self.destDistanceLabel.text = destDistanceInfo;
+        height += CGRectGetHeight(self.destDistanceLabel.frame);
+        self.destDistanceLabel.center = (CGPoint){kDistanceWidth * 0.5f, height + offsetY};
+        self.destDistanceLabel.hidden = NO;
+        
+        self.destHeadingView.center = (CGPoint){kDistanceWidth + 8.0f, height + offsetY};
+        self.destHeadingView.layer.transform = CATransform3DMakeRotation(destRadian, 0.0f, 0.0f, 1.0f);
+        self.destHeadingView.hidden = NO;
+    } else {
+        self.destDistanceLabel.hidden = YES;
+        self.destHeadingView.hidden = YES;
+    }
+    
+    if (meDistanceInfo) {
+        self.meDistanceLabel.text = meDistanceInfo;
+        height += CGRectGetHeight(self.meDistanceLabel.frame);
+        self.meDistanceLabel.center = (CGPoint){kDistanceWidth * 0.5f, height + offsetY};
+        self.meDistanceLabel.hidden = NO;
+        
+        self.meHeadingView.center = (CGPoint){kDistanceWidth + 8.0f, height + offsetY};
+        self.meHeadingView.layer.transform = CATransform3DMakeRotation(meRadian, 0.0f, 0.0f, 1.0f);
+        self.meHeadingView.hidden = NO;
+    } else {
+        self.meDistanceLabel.hidden = YES;
+        self.meHeadingView.hidden = YES;
+    }
+    
+    if (kEFMapPersonConnectStateOnline == self.person.connectState) {
+        self.requestButton.hidden = YES;
+        self.lineView.hidden = YES;
+    } else {
+        height += CGRectGetHeight(self.requestButton.frame);
+        self.requestButton.center = (CGPoint){kDefaultWidth * 0.5f, height - CGRectGetHeight(self.requestButton.frame) * 0.4f};
+        self.requestButton.hidden = NO;
+        
+        self.lineView.center = (CGPoint){kDefaultWidth * 0.5f, height - CGRectGetHeight(self.requestButton.frame) * 0.8f};
+        self.lineView.hidden = NO;
+    }
+    
+    CGRect frame = (CGRect){CGPointZero, {kDefaultWidth, height}};
+    self.view.frame = frame;
+    
+    self.backgroundView.frame = frame;
+    [self.backgroundView setNeedsDisplay];
 }
 
 @end
 
 @implementation EFMapPersonViewController
 
-- (id)initWithMe:(EFMapPerson *)me person:(EFMapPerson *)person {
+- (id)initWithDataSource:(EFMarauderMapDataSource *)dataSource person:(EFMapPerson *)person {
     self = [super init];
     if (self) {
-        self.me = me;
+        self.view.backgroundColor = [UIColor clearColor];
+        [self _initLabels];
+        
+        self.mapDataSource = dataSource;
         self.person = person;
     }
     
@@ -93,7 +241,6 @@
     EFGradientView *backgroundView = [[EFGradientView alloc] initWithFrame:self.view.bounds];
     backgroundView.colors = @[[UIColor COLOR_RGB(0xFA, 0xFA, 0xFA)],
                               [UIColor COLOR_RGB(0xEA, 0xEA, 0xEA)]];
-    backgroundView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:backgroundView];
     self.backgroundView = backgroundView;
     
@@ -108,20 +255,79 @@
     [self.view addSubview:lineView];
     self.lineView = lineView;
     
-    [self _initLabels];
+    self.view.layer.cornerRadius = 4.0f;
+    self.view.layer.masksToBounds = YES;
+    self.view.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.view.layer.borderWidth = 0.5f;
+    
+    CALayer *shadowLayer = [CALayer layer];
+    shadowLayer.backgroundColor = [UIColor grayColor].CGColor;
+    shadowLayer.cornerRadius = 4.0f;
+    shadowLayer.masksToBounds = NO;
+    shadowLayer.bounds = self.view.bounds;
+    shadowLayer.shadowColor = [UIColor blackColor].CGColor;
+    shadowLayer.shadowOffset = (CGSize){0.0f, 1.0f};
+    shadowLayer.shadowOpacity = 0.66f;
+    shadowLayer.shadowRadius = 2.0f;
+    self.shadowLayer = shadowLayer;
 }
 
-#pragma mark - Control
+#pragma mark - Property Accosser
+
+- (void)setPerson:(EFMapPerson *)person {
+    [self willChangeValueForKey:@"person"];
+    
+    _person = person;
+    [self _personDidChange];
+    
+    [self didChangeValueForKey:@"person"];
+}
+
+#pragma mark - Touch Event Handler
+
+- (void)handleTouchDownEvent:(id)sender {
+    [self dismissAnimated:YES];
+}
+
+- (void)sendRequestButtonPressed:(id)sender {
+    if ([self.delegate respondsToSelector:@selector(mapPersonViewControllerRequestButtonPressed:)]) {
+        [self.delegate mapPersonViewControllerRequestButtonPressed:self];
+    }
+}
 
 #pragma mark - Public
 
 - (void)presentFromViewController:(UIViewController *)controller location:(CGPoint)location animated:(BOOL)animated {
     self.fromController = controller;
     self.location = location;
+    
+    // base view
+    CGRect frame = [controller.view.window convertRect:controller.view.frame fromView:controller.view.superview];
+    UIControl *baseView = [[UIControl alloc] initWithFrame:frame];
+    baseView.backgroundColor = [UIColor clearColor];
+    [baseView addTarget:self
+                 action:@selector(handleTouchDownEvent:)
+       forControlEvents:UIControlEventTouchDown];
+    
+    [controller.view.window addSubview:baseView];
+    
+    self.baseView = baseView;
+    
+    self.shadowLayer.position = location;
+    self.shadowLayer.bounds = self.view.bounds;
+    [self.baseView.layer addSublayer:self.shadowLayer];
+    
+    self.view.center = location;
+    [self.baseView addSubview:self.view];
+
 }
 
 - (void)dismissAnimated:(BOOL)animated {
-    
+    [self.shadowLayer removeFromSuperlayer];
+    self.shadowLayer = nil;
+    [self.baseView removeFromSuperview];
+    self.baseView = nil;
+    [self.view removeFromSuperview];
 }
 
 @end

@@ -269,6 +269,41 @@
 }
 
 /**
+ * Get RouteX URL
+ */
+- (void)getRouteXUrlInCross:(Cross *)cross
+                    success:(void (^)(NSString *url))successHandler
+                    failure:(void (^)(NSError *error))failureHandler {
+    NSString *endpoint = [NSString stringWithFormat:@"/v2/crosses/%d/getroutexurl", [cross.cross_id integerValue]];
+    NSDictionary *param = @{@"token": self.model.userToken};
+    
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
+    
+    [manager.HTTPClient getPath:endpoint
+                     parameters:param
+                        success:^(AFHTTPRequestOperation *operation, id responseObject){
+                            if (200 == operation.response.statusCode) {
+                                NSDictionary *metaInfo = [responseObject valueForKey:@"meta"];
+                                
+                                if ([[metaInfo valueForKey:@"code"] integerValue] == 200) {
+                                    NSDictionary *response = [responseObject valueForKey:@"response"];
+                                    NSString *url = [response valueForKey:@"url"];
+                                    
+                                    if (successHandler) {
+                                        successHandler(url);
+                                    }
+                                }
+                            }
+                        }
+                        failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                            if (failureHandler) {
+                                failureHandler(error);
+                            }
+                        }];
+}
+
+/**
  * Request
  */
 - (void)postRouteXRequestIdentityId:(NSString *)identityId

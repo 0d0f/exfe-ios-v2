@@ -71,6 +71,13 @@
                             failure:(void (^)(NSError *error))failureHandler;
 
 /**
+ * Get RouteX URL
+ */
+- (void)getRouteXUrlInCross:(Cross *)cross
+                    success:(void (^)(NSString *url))successHandler
+                    failure:(void (^)(NSError *error))failureHandler;
+
+/**
  * Request
  */
 - (void)postRouteXRequestIdentityId:(NSString *)identityId

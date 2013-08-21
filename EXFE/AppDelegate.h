@@ -10,7 +10,7 @@
 
 #import <RestKit/RestKit.h>
 #import <objc/runtime.h>
-//#import "WXApi.h"
+#import "WXApi.h"
 #import "Flurry.h"
 #import "User.h"
 #import "ModelMapping.h"
@@ -29,8 +29,8 @@
 @interface AppDelegate : UIResponder
 <
 UIApplicationDelegate,
-UIAlertViewDelegate
-//WXApiDelegate
+UIAlertViewDelegate,
+WXApiDelegate
 >
 
 @property (strong, nonatomic) UIWindow *window;
