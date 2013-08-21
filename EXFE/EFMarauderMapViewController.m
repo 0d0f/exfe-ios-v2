@@ -63,6 +63,7 @@
 @interface EFMarauderMapViewController (Private)
 
 - (void)_hideCalloutView;
+- (void)_layoutAnnotationView;
 
 - (void)_fireBreadcrumbUpdateTimer;
 - (void)_invalidBreadcrumbUpdateTimer;
@@ -80,6 +81,24 @@
     if (self.currentCalloutAnnotation) {
         [self.mapView removeAnnotation:self.currentCalloutAnnotation];
         self.currentCalloutAnnotation = nil;
+    }
+}
+
+- (void)_layoutAnnotationView {
+    EFRouteLocation *destinationRouteLocation = self.mapDataSource.destinationLocation;
+    id<MKAnnotation> destinationAnnotation = nil;
+    
+    if (destinationRouteLocation) {
+        destinationAnnotation = [self.mapDataSource annotationForRouteLocation:destinationRouteLocation];
+    }
+    
+    for (id<MKAnnotation> annotation in self.mapView.annotations) {
+        MKAnnotationView *annotationView = [self.mapView viewForAnnotation:annotation];
+        if (destinationAnnotation && destinationAnnotation == annotation) {
+            [annotationView.superview bringSubviewToFront:annotationView];
+        } else {
+            [annotationView.superview sendSubviewToBack:annotationView];
+        }
     }
 }
 
@@ -1074,10 +1093,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         }
     }
     
-    EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
-    if (userLocationView) {
-        [userLocationView.superview bringSubviewToFront:userLocationView];
-    }
+    [self _layoutAnnotationView];
 }
 
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id<MKOverlay>)overlay {
