@@ -10,4 +10,6 @@
 
 @interface EFCrumPathView : MKOverlayView
 
+@property (nonatomic, weak) MKMapView   *mapView;
+
 @end

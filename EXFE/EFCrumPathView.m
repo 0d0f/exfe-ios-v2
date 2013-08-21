@@ -36,7 +36,16 @@
     EFCrumPath *crumPath = (EFCrumPath *)self.overlay;
     NSArray *mapPoints = crumPath.mapPoints;
     
-    CGFloat lineWidth = 8.0f / zoomScale;
+    CGPoint point1 = self.mapView.center;
+    CGPoint point2 = (CGPoint){self.mapView.center.x, self.mapView.center.y + 30.0f};
+    
+    CLLocationCoordinate2D coordinate1 = [self.mapView convertPoint:point1 toCoordinateFromView:self.mapView];
+    CLLocationCoordinate2D coordinate2 = [self.mapView convertPoint:point2 toCoordinateFromView:self.mapView];
+    
+    MKMapPoint mapPoint1 = MKMapPointForCoordinate(coordinate1);
+    MKMapPoint mapPoint2 = MKMapPointForCoordinate(coordinate2);
+    CGFloat lineWidth = MKMetersBetweenMapPoints(mapPoint1, mapPoint2);
+    
     MKMapRect clipRect = MKMapRectInset(mapRect, -lineWidth, -lineWidth);
     
     CGPathRef path = [self _pathForPoints:mapPoints

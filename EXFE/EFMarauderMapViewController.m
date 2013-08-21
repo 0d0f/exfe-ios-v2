@@ -1084,6 +1084,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     EFCrumPathView *crumPathView = nil;
     
     crumPathView = [[EFCrumPathView alloc] initWithOverlay:overlay];
+    crumPathView.mapView = self.mapView;
     
     return crumPathView;
 }
