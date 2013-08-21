@@ -27,6 +27,8 @@
 
 // Crosses API
 #import "EFLoadCrossOperation.h"
+#import "EFLoadCrossListOperation.h"
+#import "EFEditCrossOperation.h"
 
 // Place API
 #import "EFReverseGeocodingOperation.h"

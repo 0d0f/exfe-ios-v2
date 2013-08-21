@@ -215,7 +215,7 @@
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
     if (self.model.apiServer && self.model.userId > 0) {
-        [self.crossesViewController refreshCrosses:@"crossupdateview"];
+        [self.model loadCrossListAfter:self.model.latestModify];
     }
 }
 
@@ -344,13 +344,13 @@
                         NSString *type = (NSString *)msg_type;
                         if ([type isEqualToString:@"i"]) {
                             if ([crossViewController pushToCross:cross_id] == NO) {
-                                [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
+//                                [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
                             }
                         }
                         
                         if ([type isEqualToString:@"c"]) {
                             if ([crossViewController pushToConversation:cross_id] == NO) {
-                                [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+//                                [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
                             }
                         }
                     }
@@ -358,8 +358,7 @@
             }
         }
     } else {
-        CrossesViewController *crossViewController = self.crossesViewController;
-        [crossViewController refreshCrosses:@"crossupdateview"];
+        [self.model loadCrossList];
     }
 }
 
@@ -382,9 +381,7 @@
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
         
-        CrossesViewController *crossViewController = self.crossesViewController;
-        [crossViewController refreshCrosses:@"crossview_init"];
-        [crossViewController loadObjectsFromDataStore];
+        [self.model loadCrossList];
         
         [self.navigationController dismissModalViewControllerAnimated:YES];
     }
@@ -510,7 +507,7 @@
             if ( cross_id > 0) {
                 if ([self.model isLoggedIn]) {
                     if ([crossViewController pushToCross:cross_id] == NO) {
-                        [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
+//                        [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
                     }
                 }
                 return ;
@@ -525,7 +522,7 @@
             if (cross_id > 0){
                 if ([self.model isLoggedIn]) {
                     if ([crossViewController pushToConversation:cross_id] == NO) {
-                        [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+//                        [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
                     }
                 }
             }
@@ -538,17 +535,6 @@
             [crossViewController ShowProfileView];
         }
     }
-}
-
-- (void)gatherCrossDidFinish {
-    CrossesViewController *crossViewController = self.crossesViewController;
-    [crossViewController refreshCrosses:@"gatherview"];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)crossUpdateDidFinish:(int)cross_id {
-    CrossesViewController *crossViewController = self.crossesViewController;
-    [crossViewController refreshCrosses:@"crossupdateview" withCrossId:cross_id];
 }
 
 - (void)signoutDidFinish {
@@ -566,7 +552,7 @@
     [self switchContextByUserId:0 withAbandon:YES];
     
     CrossesViewController *rootViewController = self.crossesViewController;
-    [rootViewController emptyView];
+    [rootViewController refreshAll];
     
     [self.navigationController popToRootViewControllerAnimated:YES];
     

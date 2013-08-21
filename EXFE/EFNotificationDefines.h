@@ -25,6 +25,14 @@ extern NSString *kEFNotificationNameLoadConversationFailure;
 extern NSString *kEFNotificationNameLoadCrossSuccess;
 extern NSString *kEFNotificationNameLoadCrossFailure;
 
+// defined in EFLoadCrossListOperation.m
+extern NSString *kEFNotificationNameLoadCrossListSuccess;
+extern NSString *kEFNotificationNameLoadCrossListFailure;
+
+// defined in EFEditCrossOperation.m
+extern NSString *kEFNotificationNameEditCrossSuccess;
+extern NSString *kEFNotificationNameEditCrossFailure;
+
 // defined in EFReverseGeocodingOperation.m
 extern NSString *kEFNotificationNameReverseGeocodingSuccess;
 extern NSString *kEFNotificationNameReverseGeocodingFailure;

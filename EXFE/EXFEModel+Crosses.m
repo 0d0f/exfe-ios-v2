@@ -10,18 +10,92 @@
 
 #import "EFKit.h"
 #import "EFAPIOperations.h"
+#import "Cross.h"
 
 @implementation EXFEModel (Crosses)
 
-- (void)loadCrossWithCrossId:(int)crossId updatedTime:(NSDate *)updatedTime {
-    EFLoadCrossOperation *loadCrossOperation = [EFLoadCrossOperation operationWithModel:self];
-    loadCrossOperation.crossId = crossId;
-    loadCrossOperation.updatedTime = updatedTime;
+
+- (NSArray *)getCrossList
+{
+    __block NSArray *xlist = nil;
     
-    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:loadCrossOperation];
     
+    
+    RKObjectManager *objectManager = self.objectManager;
+    
+    // ignore duplicate objects
+    [objectManager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Cross"];
+        NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
+        [request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
+        NSArray *crosses = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+        
+        if (crosses.count > 0) {
+            Cross *x = [crosses objectAtIndex:0];
+            self.latestModify = [self.latestModify laterDate:x.updated_at];
+        }
+        
+        NSMutableArray *filteredCrosses = [[NSMutableArray alloc] initWithCapacity:[crosses count]];
+        @autoreleasepool {
+            NSMutableDictionary *crossAddDict = [NSMutableDictionary dictionaryWithCapacity:[crosses count]];
+            
+            for (Cross *cross in crosses) {
+                NSString *key = [NSString stringWithFormat:@"%d", [cross.cross_id intValue]];
+                if (![crossAddDict valueForKey:key]) {
+                    [filteredCrosses addObject:cross];
+                    [crossAddDict setValue:@"YES" forKey:key];
+                }
+            }
+        }
+        
+        xlist = filteredCrosses;
+    }];
+    return xlist;
+}
+
+- (void)loadCrossWithCrossId:(int)crossId updatedTime:(NSDate *)updatedTime
+{
+    EFLoadCrossOperation *operation = [EFLoadCrossOperation operationWithModel:self];
+    operation.crossId = crossId;
+    operation.updatedTime = updatedTime;
+    
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+}
+
+- (void)loadCrossList
+{
+    EFLoadCrossListOperation *operation = [EFLoadCrossListOperation operationWithModel:self];
     
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+}
+
+- (void)loadCrossListAfter:(NSDate *)updatedTime
+{
+    if (self.lastQuery) {
+        NSDate * now = [NSDate date];
+        if ([now timeIntervalSinceDate:self.lastQuery] < 60) {
+            return;
+        }
+    }
+             
+    self.lastQuery = [NSDate date];
+    
+    EFLoadCrossListOperation *operation = [EFLoadCrossListOperation operationWithModel:self];
+    operation.updatedTime = updatedTime;
+    
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+}
+
+- (void)editCross:(Cross *)cross
+{
+    EFEditCrossOperation *operation = [EFEditCrossOperation operationWithModel:self];
+    operation.cross = cross;
+    
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
 }
 
 @end

@@ -22,7 +22,6 @@
 #import "Place+Helper.h"
 #import "NSString+EXFE.h"
 #import "CrossGroupViewController.h"
-#import "EFAPIServer.h"
 #import "EFHeadView.h"
 #import "EFKit.h"
 #import "WidgetConvViewController.h"
@@ -41,6 +40,9 @@
 @property (nonatomic, strong) TTTAttributedLabel *unverified_description;
 @property (nonatomic, strong) EFHeadView *headView;
 
+@property (nonatomic, readonly) EXFEModel *model;
+
+
 @end
 
 @interface CrossesViewController (Private)
@@ -49,6 +51,24 @@
 
 @implementation CrossesViewController
 
+{}
+#pragma mark Getter/Setter
+- (EXFEModel *)model
+{
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    return app.model;
+}
+
+- (Cross*) crossWithId:(int)cross_id{
+    for(Cross *c in self.crossList)
+    {
+        if([c.cross_id intValue]==cross_id)
+            return c;
+    }
+    return nil;
+}
+
+#pragma mark UIViewController life cycle
 - (id)init
 {
     self = [super init];
@@ -145,8 +165,12 @@
             [self.headView showAnimated:NO];
         }
         
-        [self loadObjectsFromDataStore];
-        [self refreshCrosses:@"crossupdateview"];
+        [self refreshAll];
+    
+        //Load cross from remote
+        NSDate *updated_at = [[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
+        [app.model loadCrossListAfter:updated_at];
+
     } else {
         [self.headView showAnimated:NO];
         
@@ -263,37 +287,13 @@
     self.unverified_title = unverified_title;
     [self.view addSubview:unverified_title];
     
-    if (self.crossChangeObserver == nil) {
-        self.crossChangeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:EXCrossListDidChangeNotification
-                                                                                     object:nil
-                                                                                      queue:[NSOperationQueue mainQueue]
-                                                                                 usingBlock:^(NSNotification *note) {
-                                                                                     [self loadObjectsFromDataStore];
-                                                                                 }];
-    }
+    [self registerAsObserver];
+    
     [self refreshWelcome];
-    
-    
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(refreshWelcome)
-//                                                 name:UIApplicationWillChangeStatusBarFrameNotification
-//                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(refreshWelcome)
-                                                 name:UIApplicationDidChangeStatusBarFrameNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleLoadMeSuccess:)
-                                                 name:kEFNotificationNameLoadMeSuccess
-                                               object:nil];
 }
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    if (self.crossChangeObserver) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self.crossChangeObserver];
-    }
+    [self unregisterForChangeNotification];
     self.crossList = nil;
 }
 
@@ -309,41 +309,7 @@
     [self.tableView reloadData];
 }
 
-- (void)setCrossList:(NSArray *)crossList
-{
-    if (_crossList != crossList) {
-        NSArray *tempList = crossList;
-        // WALKAROUND: clean duplicate
-        //        if (tempList != nil) {
-        //            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        //            for (Cross *x in crossList) {
-        //                NSString *key = [x.cross_id stringValue];
-        //                Cross *previous = [dict objectForKey:key];
-        //                if (previous == nil) {
-        //                    [dict setObject:x forKey:key];
-        //                } else {
-        //                    if ([DateTimeUtil secondsBetween:previous.updated_at with:x.updated_at]) {
-        //                        [dict removeObjectForKey:key];
-        //                        [dict setObject:x forKey:key];
-        //                    }
-        //                }
-        //            }
-        //            if (tempList.count > dict.count) {
-        //                tempList = [dict allValues];
-        //            }
-        //        }
-        _crossList = tempList;
-    }
-}
 
-- (Cross*) crossWithId:(int)cross_id{
-    for(Cross *c in self.crossList)
-    {
-        if([c.cross_id intValue]==cross_id)
-            return c;
-    }
-    return nil;
-}
 
 - (void)handleLoadMeSuccess:(NSNotification *)notif {
     
@@ -354,178 +320,55 @@
     [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
 }
 
-- (void) refreshCrosses:(NSString*)source{
-    [self refreshCrosses:(NSString*)source withCrossId:0];
+#pragma mark KVO methods
+- (void)registerAsObserver
+{
+    if (self.crossChangeObserver == nil) {
+        self.crossChangeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:EXCrossListDidChangeNotification
+                                                                                     object:nil
+                                                                                      queue:[NSOperationQueue mainQueue]
+                                                                                 usingBlock:^(NSNotification *note) {
+                                                                                     [self refreshAll];
+                                                                                 }];
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshWelcome)
+                                                 name:UIApplicationDidChangeStatusBarFrameNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleLoadMeSuccess:)
+                                                 name:kEFNotificationNameLoadMeSuccess
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshAll)
+                                                 name:kEFNotificationNameLoadCrossListSuccess
+                                               object:nil];
 }
 
-- (void)refreshCrosses:(NSString*)source withCrossId:(int)cross_id {
-    
-    NSDate *updated_at = [[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-    
-    //  source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [app.model.apiServer loadCrossesAfter:updated_at
-                                           success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                               
-                                               int notification=0;
-                                               if([[mappingResult array] count]>0)
-                                               {
-                                                   NSDate *last_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-                                                   BOOL isError=NO;
-                                                   Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-                                                   if(meta!=nil){
-                                                       if([meta.code intValue]!=200){
-                                                           [Util showErrorWithMetaObject:meta delegate:self];
-                                                           isError=YES;
-                                                       }
-                                                   }
-                                                   if(isError==NO){
-                                                       NSArray *crosses=(NSArray*)[[mappingResult dictionary] objectForKey:@"response.crosses"];
-                                                       for (Cross *cross in crosses){
-                                                           id updated=cross.updated;
-                                                           
-                                                           if([updated isKindOfClass:[NSDictionary class]]){
-                                                               NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
-                                                               NSString *key=nil;
-                                                               NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                                                               [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                                                               [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-                                                               
-                                                               while (key = [enumerator nextObject]){
-                                                                   NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
-                                                                   NSString *updated_at_str=[obj objectForKey:@"updated_at"];
-                                                                   if([updated_at_str isKindOfClass:[NSString class]]) {
-                                                                       NSDate *updated_at =[NSDate date];
-                                                                       if([updated_at_str length]>19){
-                                                                           updated_at_str=[updated_at_str substringToIndex:19];
-                                                                           updated_at = [formatter dateFromString:updated_at_str];
-                                                                           
-                                                                           if(last_updated_at==nil)
-                                                                               last_updated_at=updated_at;
-                                                                           else{
-                                                                               last_updated_at=[updated_at laterDate:last_updated_at];
-                                                                           }
-                                                                           
-                                                                           
-                                                                       }
-                                                                       
-                                                                       if([updated_at compare: cross.updated_at] == NSOrderedDescending || [updated_at compare: cross.updated_at] == NSOrderedSame) {
-                                                                           if([[obj objectForKey:@"identity_id"] isKindOfClass:[NSNumber class]]) {
-                                                                               NSNumber *identity_id = [obj objectForKey:@"identity_id"];
-                                                                               if ([[User getDefaultUser] isMeByIdentityId:identity_id] == NO){
-                                                                                   notification++;
-                                                                               }
-                                                                           }
-                                                                       }
-                                                                   }
-                                                               }
-                                                           }
-                                                           if(cross.updated_at!=nil){
-                                                               //                  if([source isEqualToString:@"crossview"]){
-                                                               //                      if(exfee_updated_at==nil){
-                                                               //                          cross.read_at=[NSDate date];
-                                                               //                          needsave=YES;
-                                                               //                      }
-                                                               //                  }
-                                                               if(last_updated_at==nil)
-                                                                   last_updated_at = cross.updated_at;
-                                                               else{
-                                                                   last_updated_at = [cross.updated_at laterDate:last_updated_at];
-                                                               }
-                                                           }
-                                                       }
-                                                       
-                                                       [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
-                                                       [[NSUserDefaults standardUserDefaults] synchronize];
-                                                       if(![source isEqualToString:@"crossview"] && notification>0){
-                                                           // show update hints
-                                                       }
-                                                       if ([source isEqualToString:@"gatherview"]) {
-                                                           [app.navigationController dismissModalViewControllerAnimated:YES];
-                                                       }
-                                                       else if([source isEqualToString:@"pushtocross"]) {
-                                                           Cross *cross = [self crossWithId:cross_id];
-                                                           
-                                                           EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
-                                                           [self.navigationController pushViewController:tabBarViewController animated:NO];
-                                                       }
-                                                       else if([source isEqualToString:@"pushtoconversation"]) {
-                                                           Cross *cross = [self crossWithId:cross_id];
-                                                           
-                                                           Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
-                                                           EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
-                                                           __weak EFTabBarViewController * weakTab = tabBarViewController;
-                                                           tabBarViewController.viewWillAppearHandler = ^{
-                                                               EFTabBarViewController * strongTab = weakTab;
-                                                               if (!strongTab) {
-                                                                   return;
-                                                               }
-                                                               NSUInteger toJumpIndex = [strongTab indexOfViewControllerForClass:toJumpClass];
-                                                               NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
-                                                               
-                                                               [strongTab.tabBar setSelectedIndex:toJumpIndex];
-                                                           };
-                                                           
-                                                           [self.navigationController pushViewController:tabBarViewController animated:NO];
-                                                           
-                                                       }
-                                                       else if([source isEqualToString:@"crossupdateview"] || [source isEqualToString:@"crossview"] || [source isEqualToString:@"crossview_init"]) {
-                                                           [self loadObjectsFromDataStore];
-                                                       }
-                                                   }
-                                               }
-                                               [self loadObjectsFromDataStore];
-                                               
-                                               //
-                                               [self stopLoading];
-                                               if(hud)
-                                                   [MBProgressHUD hideHUDForView:self.view animated:YES];
-                                               
-                                           }
-                                           failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                               if(alertShowflag==NO){
-                                                   alertShowflag=YES;
-                                                   [Util showConnectError:error delegate:self];
-                                               }
-                                               [self stopLoading];
-                                               if(hud)
-                                                   [MBProgressHUD hideHUDForView:self.view animated:YES];
-                                           }];
-    
+- (void)unregisterForChangeNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (self.crossChangeObserver) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self.crossChangeObserver];
+    }
 }
 
-- (void)loadObjectsFromDataStore {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Cross"];
-	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
-	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
-    
-    AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    RKObjectManager *objectManager = app.model.objectManager;
-    
-    // ignore duplicate objects
-    [objectManager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
-        NSArray *crosses = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
-        NSMutableArray *filteredCrosses = [[NSMutableArray alloc] initWithCapacity:[crosses count]];
-        @autoreleasepool {
-            NSMutableDictionary *crossAddDict = [NSMutableDictionary dictionaryWithCapacity:[crosses count]];
-            
-            for (Cross *cross in crosses) {
-                NSString *key = [NSString stringWithFormat:@"%d", [cross.cross_id intValue]];
-                if (![crossAddDict valueForKey:key]) {
-                    [filteredCrosses addObject:cross];
-                    [crossAddDict setValue:@"YES" forKey:key];
-                }
-            }
-        }
-        
-        self.crossList = filteredCrosses;
-    }];
+#pragma mark Override
+- (void)refresh
+{
+    [super refresh];
+    [self.model loadCrossListAfter:self.model.latestModify];
+}
+
+#pragma mark Refresh
+- (void)refreshAll {
+    self.crossList = [self.model getCrossList];
     
     [self refreshWelcome];
     [self.tableView reloadData];
 }
 
-#pragma mark Refresh
 - (void)refreshTableViewWithCrossId:(int)cross_id {
     for (int i = 0; i < [self.crossList count]; i++) {
         Cross *c = [self.crossList objectAtIndex:i];
@@ -538,18 +381,9 @@
     }
 }
 
-- (void)refresh
-{
-    [self refreshCrosses:@"crossupdateview"];
-}
-
-- (NSInteger)getCrossCount{
-    return self.crossList.count;
-}
-
 - (void)refreshWelcome{
     
-    NSInteger count = [self getCrossCount];
+    NSInteger count = self.crossList.count;
     
     if (self.label_profile.hidden != (count > 0)) {
         self.label_profile.hidden = count > 0;
@@ -593,13 +427,7 @@
     }
 }
 
-- (void)emptyView{ 
-    self.crossList = nil;
-    [self refreshWelcome];
-    [self.tableView reloadData];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex __attribute__ ((deprecated))
 {
     if (alertView.tag == 500) {
         if (buttonIndex == alertView.firstOtherButtonIndex) {
@@ -621,7 +449,7 @@
     if (0 == section) {
         return 1;
     } else if (1 == section) {
-        return [self getCrossCount];
+        return self.crossList.count;
     } else {
         return 0;
     }
@@ -728,19 +556,17 @@
             cell.time = @"";
         }
         
-        
-        AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
         NSString *avatarimgurl = nil;
         for(Invitation *invitation in cross.exfee.invitations) {
             NSInteger connected_uid = [invitation.identity.connected_user_id integerValue];
-            if (connected_uid == app.model.userId) {
+            if (connected_uid == self.model.userId) {
                 if(invitation && invitation.invited_by &&
                    invitation.invited_by.avatar_filename ) {
                     avatarimgurl=invitation.invited_by.avatar_filename;
                     break;
                 }
-            }else if (connected_uid < 0){
-                // Unverified identity: connected_uid + identity_git id == 0
+            } else if (connected_uid < 0){
+                // Unverified identity: connected_uid + identity_id == 0
                 // Concern: performace issue?
 //                NSFetchRequest* request = [User fetchRequest];
 //                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", [EFAPIServer sharedInstance].user_id];
@@ -857,8 +683,7 @@
 //                [self.tableView endUpdates];
 //            }
 //        }
-        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
+        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:self.model];
         [self.navigationController pushViewController:tabBarViewController animated:YES];
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -879,8 +704,7 @@
     Cross *cross = [self crossWithId:cross_id];
     if (cross != nil) {
         [self.navigationController popToRootViewControllerAnimated:NO];
-        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
+        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:self.model];
         [self.navigationController pushViewController:tabBarViewController animated:NO];
         
         return YES;
@@ -894,9 +718,8 @@
     
     if (cross != nil) {
         [self.navigationController popToRootViewControllerAnimated:NO];
-        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
         Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
-        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
+        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:self.model];
         __weak EFTabBarViewController *weakTab = tabBarViewController;
         tabBarViewController.viewWillAppearHandler = ^{
             EFTabBarViewController * strongTab = weakTab;
@@ -919,8 +742,7 @@
 
 - (void)ShowProfileView{
     ProfileViewController *profileViewController = [[ProfileViewController alloc]initWithNibName:@"ProfileViewController" bundle:nil];
-    AppDelegate *app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    profileViewController.model = app.model;
+    profileViewController.model = self.model;
     profileViewController.user = [User getDefaultUser];
     [self.navigationController pushViewController:profileViewController animated:YES];
     
@@ -938,9 +760,8 @@
     
     Cross *cross = [self crossWithId:cross_id];
     if (cross != nil) {
-        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
         Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
-        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
+        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:self.model];
         __weak EFTabBarViewController *weakTab = tabBarViewController;
         tabBarViewController.viewWillAppearHandler = ^{
             EFTabBarViewController *strongTab = weakTab;

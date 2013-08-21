@@ -1440,45 +1440,28 @@
 }
 
 - (void)saveCrossUpdate {
-    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"Saving";
-    hud.mode=MBProgressHUDModeCustomView;
+    hud.mode = MBProgressHUDModeCustomView;
     EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
     [bigspin startAnimating];
-    hud.customView=bigspin;
+    hud.customView = bigspin;
     
-    __weak typeof(self) weakSelf = self;
-    
-    _cross.by_identity=[_cross.exfee getMyInvitation].identity;
-    [self.model.apiServer editCross:_cross
-                                    success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-                                        if (operation.HTTPRequestOperation.response.statusCode == 200) {
-                                            if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
-                                                Meta *meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-                                                
-                                                if ([meta.code intValue] == 200) {
-                                                    Cross *responsecross = [[mappingResult dictionary] objectForKey:@"response.cross"];
-                                                    if ([responsecross.cross_id intValue] == [weakSelf.cross.cross_id intValue]) {
-                                                        [app crossUpdateDidFinish:[responsecross.cross_id intValue]];
-                                                    }
-                                                } else {
-                                                    [Util showErrorWithMetaObject:meta delegate:weakSelf];
-                                                }
-                                            }
-                                        } else {
-                                            NSString *errormsg = @"Could not save this cross.";
-                                            if (![errormsg isEqualToString:@""]) {
-                                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
-                                                alert.tag = 201; // 201 = Save Cross
-                                                [alert show];
-                                            }
-                                        }
-                                        [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
-                                    }
-                                    failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                        
-                                    }];
+    _cross.by_identity = [_cross.exfee getMyInvitation].identity;
+    [self.model editCross:_cross];
+    // both: [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+    // sucess: refresh cross
+    // fail: roll back or retry
+//    if (buttonIndex == alertView.cancelButtonIndex) {
+//        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+//        [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+//        //            [[Cross currentContext] rollback];
+//        [self fillTime:_cross.time];
+//        [self fillPlace:_cross.place];
+//        [self relayoutUI];
+//    } else if (buttonIndex == alertView.firstOtherButtonIndex){
+//        [self saveCrossUpdate];
+//    }
 }
 
 #pragma mark - UIAlertView methods
@@ -1487,30 +1470,6 @@
     //tag 101: save cross
     //tag 102: save exfee
     switch (alertView.tag) {
-        case 201:{
-            if (buttonIndex == alertView.cancelButtonIndex) {
-                RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
-                //            [[Cross currentContext] rollback];
-                [self fillTime:_cross.time];
-                [self fillPlace:_cross.place];
-                [self relayoutUI];
-            } else if (buttonIndex == alertView.firstOtherButtonIndex){
-                [self saveCrossUpdate];
-            }
-        }
-            break;
-        case 202:{
-            if (buttonIndex == alertView.cancelButtonIndex) {
-                //            [self setTime:cross.time];
-                //            [self setPlace:cross.place];
-                //            crosstitle.text=cross.title;
-                //            crossdescription.text=cross.cross_description;
-            } else if (buttonIndex == alertView.firstOtherButtonIndex){
-                //            [self saveExfeeUpdate];
-            }
-        }
-            break;
         case 403:{
             if (buttonIndex == alertView.cancelButtonIndex) {
                 // remove self from local storage

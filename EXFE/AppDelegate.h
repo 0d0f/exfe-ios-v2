@@ -42,7 +42,5 @@ UIAlertViewDelegate
 - (void)switchContextByUserId:(NSInteger)user_id withAbandon:(BOOL)flag;
 -(void)signinDidFinish;
 -(void)signoutDidFinish;
--(void)gatherCrossDidFinish;
--(void)crossUpdateDidFinish:(int)cross_id;
 -(void)showLanding:(UIViewController*)parent;
 @end

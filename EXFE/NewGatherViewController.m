@@ -23,6 +23,7 @@
 #import "IdentityId.h"
 #import "Identity+EXFE.h"
 #import "EFKit.h"
+#import "CrossesViewController.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -560,7 +561,8 @@
                                       success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                           [MBProgressHUD hideHUDForView:self.view animated:YES];
                                           AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-                                          [app gatherCrossDidFinish];
+                                          [app.crossesViewController refreshAll];
+                                          [self.navigationController popViewControllerAnimated:YES];
                                       }
                                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
                                           [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -1239,24 +1241,6 @@
 //    }];
   
 }
-
-#pragma mark RKObjectLoaderDelegate methods
-
-//- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-//    [MBProgressHUD hideHUDForView:self.view animated:YES];
-//    if([objects count]>0)
-//    {
-//        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//        [app GatherCrossDidFinish];
-//    }else{
-////        NSLog(@"gather error");
-//    }
-//  
-//}
-//- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-//  [MBProgressHUD hideHUDForView:self.view animated:YES];
-////    NSLog(@"%@",error);
-//}
 
 #pragma mark UIPickerviewDatasource methods
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView {

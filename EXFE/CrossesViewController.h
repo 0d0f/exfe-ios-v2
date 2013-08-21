@@ -34,10 +34,7 @@ TTTAttributedLabelDelegate
 @property (nonatomic, strong) id crossChangeObserver;
 @property (nonatomic, assign) BOOL needHeaderAnimation;
 
-- (void)refreshCrosses:(NSString*)source;
-- (void)refreshCrosses:(NSString*)source withCrossId:(int)cross_id;
-- (void)loadObjectsFromDataStore;
-- (void)emptyView;
+- (void)refreshAll;
 - (void)ShowProfileView;
 - (void)ShowGatherView;
 - (Cross*)crossWithId:(int)cross_id;

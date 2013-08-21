@@ -672,21 +672,15 @@
     [self loadCrossesBy:self.model.userId
             updatedtime:updatedtime
                 success:^(RKObjectRequestOperation *operation, id responseObject){
-                    [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
                     
                     if (success) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            success(operation, responseObject);
-                        });
+                        success(operation, responseObject);
                     }
                 }
                 failure:^(RKObjectRequestOperation *operation, NSError *error){
-                    [self _handleFailureWithRequestOperation:operation andError:error];
                     
                     if (failure) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            failure(operation, error);
-                        });
+                        failure(operation, error);
                     }
                 }];
 }

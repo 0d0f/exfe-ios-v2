@@ -54,8 +54,11 @@
 @property (nonatomic, strong, readonly ) NSEntityDescription *      crossEntry;
 @property (nonatomic, strong, readonly ) NSEntityDescription *      exfeeEntry;
 
+#pragma mark For Cross
+@property (nonatomic, strong) NSDate *latestModify;
+@property (nonatomic, strong) NSDate *lastQuery;
 
-
+- (void) clearTimeStamp;
 
 
 @end

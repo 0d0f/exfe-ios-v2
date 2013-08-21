@@ -119,37 +119,37 @@
 - (void)editCross:(Cross *)cross
           success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
           failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
-    RKObjectManager* manager =[RKObjectManager sharedManager];
+    RKObjectManager* manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
     NSString *endpoint = [NSString stringWithFormat:@"crosses/%u/edit?token=%@", [cross.cross_id intValue], self.model.userToken];
     
-    [manager postObject:cross
-                   path:endpoint
-             parameters:nil
-                success:^(RKObjectRequestOperation *operation, id responseObject){
-                    [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
-                               withObject:operation
-                               withObject:responseObject];
-                    
-                    if (success) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            success(operation, responseObject);
-                        });
-                    }
-                }
-                failure:^(RKObjectRequestOperation *operation, NSError *error){
-                    [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
-                               withObject:operation
-                               withObject:error];
-                    
-                    if (failure) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            failure(operation, error);
-                        });
-                    }
-                }];
+    [manager postObject2:cross
+                    path:endpoint
+              parameters:nil
+                 success:^(RKObjectRequestOperation *operation, id responseObject){
+                     [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                                withObject:operation
+                                withObject:responseObject];
+                     
+                     if (success) {
+                         dispatch_async(dispatch_get_main_queue(), ^{
+                             success(operation, responseObject);
+                         });
+                     }
+                 }
+                 failure:^(RKObjectRequestOperation *operation, NSError *error){
+                     [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                withObject:operation
+                                withObject:error];
+                     
+                     if (failure) {
+                         dispatch_async(dispatch_get_main_queue(), ^{
+                             failure(operation, error);
+                         });
+                     }
+                 }];
 
 }
 

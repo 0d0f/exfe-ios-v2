@@ -1105,6 +1105,12 @@
 		4FA84B09170155DD0096FB5A /* ExfeeAddCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA84B08170155DD0096FB5A /* ExfeeAddCollectionViewCell.m */; };
 		4FAD642716968C7F001870FF /* CrossTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD642616968C7F001870FF /* CrossTime+Helper.m */; };
 		4FAE4E6416AF9F82001479F8 /* x_titlebg_default.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */; };
+		4FB14BD717C21EB000EFC3F9 /* EFLoadCrossListOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB14BD617C21EB000EFC3F9 /* EFLoadCrossListOperation.m */; };
+		4FB14BD817C21EB000EFC3F9 /* EFLoadCrossListOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB14BD617C21EB000EFC3F9 /* EFLoadCrossListOperation.m */; };
+		4FB14BD917C21EB000EFC3F9 /* EFLoadCrossListOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB14BD617C21EB000EFC3F9 /* EFLoadCrossListOperation.m */; };
+		4FB14BE317C228B400EFC3F9 /* EFEditCrossOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB14BE217C228B400EFC3F9 /* EFEditCrossOperation.m */; };
+		4FB14BE417C228B400EFC3F9 /* EFEditCrossOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB14BE217C228B400EFC3F9 /* EFEditCrossOperation.m */; };
+		4FB14BE517C228B400EFC3F9 /* EFEditCrossOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB14BE217C228B400EFC3F9 /* EFEditCrossOperation.m */; };
 		4FB1635716B25756005B1D3C /* profile_title_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB1635516B25756005B1D3C /* profile_title_mask.png */; };
 		4FB1635816B25756005B1D3C /* profile_title_mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB1635616B25756005B1D3C /* profile_title_mask@2x.png */; };
 		4FB30D241700A76B007BC66D /* widget_exfee_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB30D221700A76A007BC66D /* widget_exfee_30.png */; };
@@ -2558,6 +2564,10 @@
 		4FAD642516968C7F001870FF /* CrossTime+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CrossTime+Helper.h"; sourceTree = "<group>"; };
 		4FAD642616968C7F001870FF /* CrossTime+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CrossTime+Helper.m"; sourceTree = "<group>"; };
 		4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = x_titlebg_default.jpg; sourceTree = "<group>"; };
+		4FB14BD517C21EB000EFC3F9 /* EFLoadCrossListOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLoadCrossListOperation.h; sourceTree = "<group>"; };
+		4FB14BD617C21EB000EFC3F9 /* EFLoadCrossListOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLoadCrossListOperation.m; sourceTree = "<group>"; };
+		4FB14BE117C228B400EFC3F9 /* EFEditCrossOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFEditCrossOperation.h; sourceTree = "<group>"; };
+		4FB14BE217C228B400EFC3F9 /* EFEditCrossOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFEditCrossOperation.m; sourceTree = "<group>"; };
 		4FB1635516B25756005B1D3C /* profile_title_mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_title_mask.png; sourceTree = "<group>"; };
 		4FB1635616B25756005B1D3C /* profile_title_mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_title_mask@2x.png"; sourceTree = "<group>"; };
 		4FB30D221700A76A007BC66D /* widget_exfee_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_exfee_30.png; sourceTree = "<group>"; };
@@ -4345,6 +4355,10 @@
 			children = (
 				76E96BCA177AFA0D00C06ECD /* EFLoadCrossOperation.h */,
 				76E96BCB177AFA0D00C06ECD /* EFLoadCrossOperation.m */,
+				4FB14BE117C228B400EFC3F9 /* EFEditCrossOperation.h */,
+				4FB14BE217C228B400EFC3F9 /* EFEditCrossOperation.m */,
+				4FB14BD517C21EB000EFC3F9 /* EFLoadCrossListOperation.h */,
+				4FB14BD617C21EB000EFC3F9 /* EFLoadCrossListOperation.m */,
 			);
 			name = "Crosses API Operation";
 			sourceTree = "<group>";
@@ -7083,6 +7097,8 @@
 				76555B21179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 				4F39249D17A782E200EDB441 /* Cross.m in Sources */,
 				4F2CF06F17BF54FF00E3A4B2 /* XQueryComponents.m in Sources */,
+				4FB14BD817C21EB000EFC3F9 /* EFLoadCrossListOperation.m in Sources */,
+				4FB14BE417C228B400EFC3F9 /* EFEditCrossOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7344,6 +7360,8 @@
 				76555B22179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 				4F39249E17A782E200EDB441 /* Cross.m in Sources */,
 				4F2CF07017BF54FF00E3A4B2 /* XQueryComponents.m in Sources */,
+				4FB14BD917C21EB000EFC3F9 /* EFLoadCrossListOperation.m in Sources */,
+				4FB14BE517C228B400EFC3F9 /* EFEditCrossOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7605,6 +7623,8 @@
 				76555B20179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 				4F39249C17A782E200EDB441 /* Cross.m in Sources */,
 				4F2CF06E17BF54FF00E3A4B2 /* XQueryComponents.m in Sources */,
+				4FB14BD717C21EB000EFC3F9 /* EFLoadCrossListOperation.m in Sources */,
+				4FB14BE317C228B400EFC3F9 /* EFEditCrossOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
