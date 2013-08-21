@@ -248,13 +248,6 @@
  * @param req 具体请求内容，是自动释放的
  */
 - (void)onReq:(BaseReq*)req {
-#ifdef DEBUG
-    NSString *strTitle = [NSString stringWithFormat:@"TEST 被微信调用成功"];
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    alert.delegate = self;
-    [alert show];
-#endif
 }
 
 /*! @brief 发送一个sendReq后，收到微信的回应
@@ -265,18 +258,6 @@
  */
 - (void)onResp:(BaseResp*)resp {
     
-}
-
-#pragma mark - UIAlertView
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-#ifdef DEBUG
-    GetMessageFromWXResp *message = [[GetMessageFromWXResp alloc] init];
-    message.bText = YES;
-    message.text = @"http://www.exfe.com";
-    
-    [WXApi sendResp:(BaseResp *)message];
-#endif
 }
 
 #pragma mark - Push Notification
