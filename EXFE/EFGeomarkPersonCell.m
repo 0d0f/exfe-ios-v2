@@ -75,7 +75,7 @@
         
         if (kEFMapPersonConnectStateOnline == self.person.connectState) {
 #warning !!!
-            locationInfo = [NSString stringWithFormat:NSLocalizedString(@"距离目的地%d米 与您相距%d米", nil), (long)self.person.distance, 150];
+            locationInfo = [NSString stringWithFormat:NSLocalizedString(@"距目的地%d米 与您相距%d米", nil), (long)self.person.distance, 150];
         } else {
             NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:self.person.lastLocation.timestamp];
             NSInteger time = timeInterval / 60;
@@ -84,7 +84,7 @@
                 time = time / 60;
                 isMinutes = NO;
             }
-            locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%d%@前 距离目的地%d米", nil), time, isMinutes ? @"分钟" : @"小时", (long)self.person.distance];
+            locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%d%@前 距目的地%d米", nil), time, isMinutes ? @"分钟" : @"小时", (long)self.person.distance];
         }
         
         self.locationInfoLabel.text = locationInfo;
