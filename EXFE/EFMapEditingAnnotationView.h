@@ -18,10 +18,12 @@
 - (void)mapEditingAnnotationView:(EFMapEditingAnnotationView *)view didChangeToStyle:(EFAnnotationStyle)annotationStyle;
 @end
 
-
+@class EFRouteLocation;
 @interface EFMapEditingAnnotationView : UIView
 
 @property (nonatomic, weak) id<EFMapEditingAnnotationViewDelegate> delegate;
 @property (nonatomic, copy) NSString *markLetter;
+
+- (void)customWithRouteLocation:(EFRouteLocation *)routeLocation;
 
 @end

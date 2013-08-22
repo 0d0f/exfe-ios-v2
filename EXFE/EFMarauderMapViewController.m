@@ -63,6 +63,7 @@
 @interface EFMarauderMapViewController (Private)
 
 - (void)_hideCalloutView;
+- (void)_layoutAnnotationView;
 
 - (void)_fireBreadcrumbUpdateTimer;
 - (void)_invalidBreadcrumbUpdateTimer;
@@ -80,6 +81,24 @@
     if (self.currentCalloutAnnotation) {
         [self.mapView removeAnnotation:self.currentCalloutAnnotation];
         self.currentCalloutAnnotation = nil;
+    }
+}
+
+- (void)_layoutAnnotationView {
+    EFRouteLocation *destinationRouteLocation = self.mapDataSource.destinationLocation;
+    id<MKAnnotation> destinationAnnotation = nil;
+    
+    if (destinationRouteLocation) {
+        destinationAnnotation = [self.mapDataSource annotationForRouteLocation:destinationRouteLocation];
+    }
+    
+    for (id<MKAnnotation> annotation in self.mapView.annotations) {
+        MKAnnotationView *annotationView = [self.mapView viewForAnnotation:annotation];
+        if (destinationAnnotation && destinationAnnotation == annotation) {
+            [annotationView.superview bringSubviewToFront:annotationView];
+        } else {
+            [annotationView.superview sendSubviewToBack:annotationView];
+        }
     }
 }
 
@@ -880,7 +899,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     routeLocation.markTitle = title;
     [routeLocation updateIconURL];
     
-    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView shouldPostToServer:NO];
 }
 
 - (void)mapView:(EFMapView *)mapView didChangeSelectedAnnotationStyle:(EFAnnotationStyle)style {
@@ -901,7 +920,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     [routeLocation updateIconURL];
     
-    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView shouldPostToServer:NO];
 }
 
 - (void)mapViewCancelButtonPressed:(EFMapView *)mapView {
@@ -948,6 +967,9 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     if ([view isKindOfClass:[EFAnnotationView class]]) {
         [mapView setCenterCoordinate:view.annotation.coordinate animated:YES];
         
+        EFAnnotation *annotation = (EFAnnotation *)view.annotation;
+        EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
+        
         [self _hideCalloutView];
         
         EFCalloutAnnotation *calloutAnnotation = [[EFCalloutAnnotation alloc] initWithCoordinate:view.annotation.coordinate
@@ -957,12 +979,20 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         
         self.currentCalloutAnnotation = calloutAnnotation;
         self.mapView.editingState = kEFMapViewEditingStateEditingAnnotation;
+        [self.mapView customEditingViewWithRouteLocation:routeLocation];
     }
 }
 
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
     [self _hideCalloutView];
     self.mapView.editingState = kEFMapViewEditingStateNormal;
+    
+    if ([view isKindOfClass:[EFAnnotationView class]]) {
+        EFAnnotation *annotation = (EFAnnotation *)view.annotation;
+        EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
+        
+        [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+    }
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
@@ -1074,16 +1104,14 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         }
     }
     
-    EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
-    if (userLocationView) {
-        [userLocationView.superview bringSubviewToFront:userLocationView];
-    }
+    [self _layoutAnnotationView];
 }
 
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id<MKOverlay>)overlay {
     EFCrumPathView *crumPathView = nil;
     
     crumPathView = [[EFCrumPathView alloc] initWithOverlay:overlay];
+    crumPathView.mapView = self.mapView;
     
     return crumPathView;
 }

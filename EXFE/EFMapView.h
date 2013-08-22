@@ -58,4 +58,6 @@ UIGestureRecognizerDelegate
 - (void)removeSelectedPath;
 - (void)userLocationDidChange;
 
+- (void)customEditingViewWithRouteLocation:(EFRouteLocation *)routeLocation;
+
 @end

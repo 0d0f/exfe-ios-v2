@@ -68,10 +68,10 @@
 
 @interface EFCalloutAnnotationView (Private)
 
-- (CGRect)_calculateFrame;
+- (CGRect)_calculateFrameEditing:(BOOL)editing;
 
 - (void)_prepareLabels;
-- (void)_prepareFrame;
+- (void)_prepareFrameEditing:(BOOL)editing;
 - (void)_prepareOffset;
 
 - (void)_show;
@@ -80,14 +80,16 @@
 
 @implementation EFCalloutAnnotationView (Private)
 
-- (CGRect)_calculateFrame {
+- (CGRect)_calculateFrameEditing:(BOOL)editing {
     CGFloat height = kTopInset + kBottomInset;
     
     if (self.annotation.title) {
         height += CGRectGetHeight(self.titleTextField.frame);
     }
-    if (self.annotation.subtitle) {
+    if ((self.annotation.subtitle && self.annotation.subtitle.length) || editing) {
         height += CGRectGetHeight(self.subtitleTextView.frame) + kBlank;
+    } else {
+        height += 2 * kBlank;
     }
     
     CGRect frame = self.frame;
@@ -147,18 +149,18 @@
     subtitleTextView.frame = subtitleTextViewFrame;
 }
 
-- (void)_prepareFrame {
-    self.frame = [self _calculateFrame];
+- (void)_prepareFrameEditing:(BOOL)editing {
+    self.frame = [self _calculateFrameEditing:editing];
 }
 
 - (void)_prepareOffset {
-    CGFloat offsetY = -(CGRectGetHeight(self.parentAnnotationView.frame) + CGRectGetHeight(self.frame) * 0.25f) + self.parentAnnotationView.centerOffset.y;
+    CGFloat offsetY = -(CGRectGetHeight(self.parentAnnotationView.frame) + CGRectGetHeight(self.frame) * 0.5f) + 10.0f + self.parentAnnotationView.centerOffset.y;
     self.centerOffset = (CGPoint){0.0f, offsetY};
 }
 
 - (void)reset {
     [self _prepareLabels];
-    [self _prepareFrame];
+    [self _prepareFrameEditing:NO];
     [self _prepareOffset];
 }
 
@@ -344,7 +346,7 @@
         }
         self.subtitleTextView.frame = subtitleTextViewFrame;
         
-        CGRect newFrame = [self _calculateFrame];
+        CGRect newFrame = [self _calculateFrameEditing:editing];
         
         if (CGRectGetHeight(newFrame) != CGRectGetHeight(self.originalFrame)) {
             CGFloat offsetY = CGRectGetHeight(self.originalFrame) - CGRectGetHeight(newFrame);
@@ -425,7 +427,7 @@
         self.subtitleTextView.frame = textViewFrame;
         
         // resize frame
-        [self _prepareFrame];
+        [self _prepareFrameEditing:editing];
         [self _prepareOffset];
         
         CGRect frame = [self.editingBaseView convertRect:self.frame fromView:self.superview];
@@ -486,15 +488,6 @@
 - (void)textViewDidEndEditing:(UITextView *)textView {
     ((EFCalloutAnnotation *)self.annotation).subtitle = self.subtitleTextView.text;
 }
-
-//- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-//    if ([text hasSuffix:@"\n"]) {
-//        [self.subtitleTextView resignFirstResponder];
-//        [self setEditing:NO animated:YES];
-//    }
-//    
-//    return YES;
-//}
 
 #pragma mark - UITextFieldDelegate
 

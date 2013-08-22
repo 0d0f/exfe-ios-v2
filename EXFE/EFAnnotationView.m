@@ -28,7 +28,7 @@
     if (self) {
         UILabel *markTitleLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {24, 26}}];
         markTitleLabel.textAlignment = NSTextAlignmentCenter;
-        markTitleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
+        markTitleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:20];
         markTitleLabel.backgroundColor = [UIColor clearColor];
         markTitleLabel.textColor = [UIColor whiteColor];
         markTitleLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.25f];

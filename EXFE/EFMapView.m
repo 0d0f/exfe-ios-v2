@@ -397,7 +397,20 @@ static UIView * ReverseSubviews(UIView *view) {
     
     self.touchDownGestureRecognizer.touchesBeganCallback = ^(NSSet *touches, UIEvent *event){
         if (weakSelf.selectedAnnotations.count) {
-            [weakSelf deselectAnnotation:[weakSelf selectedAnnotations][0] animated:YES];
+            BOOL shouldDeselect = YES;
+            
+            for (id<MKAnnotation> annotation in weakSelf.annotations) {
+                MKAnnotationView *annotationView = [weakSelf viewForAnnotation:annotation];
+                CGPoint location = [[touches anyObject] locationInView:annotationView];
+                if (CGRectContainsPoint(annotationView.bounds, location)) {
+                    shouldDeselect = NO;
+                    break;
+                }
+            }
+            
+            if (shouldDeselect) {
+                [weakSelf deselectAnnotation:[weakSelf selectedAnnotations][0] animated:YES];
+            }
         }
     };
     
@@ -485,6 +498,10 @@ static UIView * ReverseSubviews(UIView *view) {
 - (void)userLocationDidChange {
     [self.headingButton setImage:[UIImage imageNamed:@"map_arrow_blue.png"] forState:UIControlStateNormal];
     [self _fireTimer];
+}
+
+- (void)customEditingViewWithRouteLocation:(EFRouteLocation *)routeLocation {
+    [self.editingAnnotatoinView customWithRouteLocation:routeLocation];
 }
 
 #pragma mark - EFMapEditingAnnotationViewDelegate

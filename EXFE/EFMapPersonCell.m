@@ -11,9 +11,11 @@
 #import <QuartzCore/QuartzCore.h>
 #import "EFMapKit.h"
 #import "EFCache.h"
+#import "NSDate+RouteXDateFormater.h"
 
-#define kStateLabelNormalFrame  (CGRect){{5, 48}, {40, 12}}
-#define kStateLabelMeterFrame   (CGRect){{17, 48}, {36, 12}}
+#define kStateLabelNormalFrame      (CGRect){{5, 48}, {40, 12}}
+#define kStateLabelMeterFrame       (CGRect){{17, 48}, {36, 12}}
+#define kStateLabelTimestampFrame   (CGRect){{5, 48}, {40, 12}}
 
 @interface EFMapPersonCell ()
 
@@ -36,12 +38,22 @@
     
     NSString *infoText = nil;
     if (self.person.connectState == kEFMapPersonConnectStateUnknow) {
-        infoText = NSLocalizedString(@"方位未知", nil);
-        self.stateImageView.hidden = YES;
-        self.stateView.hidden = YES;
-        self.meterLabel.hidden = YES;
-        self.stateLabel.textAlignment = NSTextAlignmentCenter;
-        self.stateLabel.frame = kStateLabelNormalFrame;
+        if (self.person.lastLocation) {
+            NSDate *timestamp = self.person.lastLocation.timestamp;
+            infoText = [timestamp formatedTimeIntervalFromNow];
+            self.stateImageView.hidden = YES;
+            self.stateView.hidden = YES;
+            self.meterLabel.hidden = YES;
+            self.stateLabel.textAlignment = NSTextAlignmentCenter;
+            self.stateLabel.frame = kStateLabelNormalFrame;
+        } else {
+            infoText = NSLocalizedString(@"方位未知", nil);
+            self.stateImageView.hidden = YES;
+            self.stateView.hidden = YES;
+            self.meterLabel.hidden = YES;
+            self.stateLabel.textAlignment = NSTextAlignmentCenter;
+            self.stateLabel.frame = kStateLabelNormalFrame;
+        }
     } else {
         if (self.person.locationState == kEFMapPersonLocationStateArrival) {
             infoText = NSLocalizedString(@"抵达", nil);
@@ -77,7 +89,7 @@
                 }
             }
             
-            infoText = [NSString stringWithFormat:NSLocalizedString(@"%d", nil), distance];
+            infoText = [NSString stringWithFormat:@"%d", distance];
             
             self.stateLabel.frame = kStateLabelMeterFrame;
             self.stateLabel.text = infoText;
@@ -95,12 +107,44 @@
             self.stateView.hidden = YES;
             self.stateLabel.textAlignment = NSTextAlignmentRight;
         } else {
-            infoText = NSLocalizedString(@"方位未知", nil);
-            self.stateImageView.hidden = YES;
-            self.stateView.hidden = YES;
-            self.meterLabel.hidden = YES;
-            self.stateLabel.textAlignment = NSTextAlignmentCenter;
-            self.stateLabel.frame = kStateLabelNormalFrame;
+            if (self.person.lastLocation) {
+                if (self.person.connectState == kEFMapPersonConnectStateOnline) {
+                    infoText = NSLocalizedString(@"在线", nil);
+                    self.stateImageView.hidden = YES;
+                    self.stateView.hidden = YES;
+                    self.meterLabel.hidden = YES;
+                    self.stateLabel.textAlignment = NSTextAlignmentCenter;
+                    self.stateLabel.frame = kStateLabelNormalFrame;
+                } else {
+                    NSDate *timestamp = self.person.lastLocation.timestamp;
+                    NSUInteger value = [timestamp formatedTimeIntervalValueFromNow];
+                    NSString *unit = [timestamp formatedTimeIntervalUnitFromNow];
+                    
+                    infoText = [NSString stringWithFormat:@"%d", value];
+                    
+                    self.stateLabel.frame = kStateLabelTimestampFrame;
+                    self.stateLabel.text = infoText;
+                    [self.stateLabel sizeToFit];
+                    
+                    self.meterLabel.text = unit;
+                    [self.meterLabel sizeToFit];
+                    CGRect meterLabelFrame = self.meterLabel.frame;
+                    meterLabelFrame.origin = (CGPoint){CGRectGetMaxX(self.stateLabel.frame), CGRectGetMinY(self.stateLabel.frame) + 2.0f};
+                    self.meterLabel.frame = meterLabelFrame;
+                    
+                    self.stateImageView.hidden = YES;
+                    self.meterLabel.hidden = NO;
+                    self.stateView.hidden = YES;
+                    self.stateLabel.textAlignment = NSTextAlignmentRight;
+                }
+            } else {
+                infoText = NSLocalizedString(@"方位未知", nil);
+                self.stateImageView.hidden = YES;
+                self.stateView.hidden = YES;
+                self.meterLabel.hidden = YES;
+                self.stateLabel.textAlignment = NSTextAlignmentCenter;
+                self.stateLabel.frame = kStateLabelNormalFrame;
+            }
         }
     }
     

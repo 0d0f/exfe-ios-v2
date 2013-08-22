@@ -26,6 +26,7 @@ typedef enum {
     kEFRouteLocationTypePark,
     kEFRouteLocationTypeDestination,
     kEFRouteLocationTypeBreadcrumb,
+    kEFRouteLocationTypeCrossPlace
 } EFRouteLocationType;
 
 typedef enum {
