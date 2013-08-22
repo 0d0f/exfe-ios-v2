@@ -99,6 +99,8 @@
                     self.locationTytpe = kEFRouteLocationTypeDestination;
                 } else if ([lastTag isEqualToString:@"breadcrumbs"]) {
                     self.locationTytpe = kEFRouteLocationTypeBreadcrumb;
+                } else if ([lastTag isEqualToString:@"xplace"]) {
+                    self.locationTytpe = kEFRouteLocationTypeCrossPlace;
                 }
             } else if ([key isEqualToString:@"icon"]) {
                 NSString *iconString = obj;
@@ -183,6 +185,8 @@
         tags = @[@"place", @"park"];
     } else if (kEFRouteLocationTypeDestination == self.locationTytpe) {
         tags = @[@"place", @"destination"];
+    } else if (kEFRouteLocationTypeCrossPlace == self.locationTytpe) {
+        tags = @[@"place", @"park"];
     }
     [dict setValue:tags forKey:@"tags"];
     [dict setValue:[self.iconUrl absoluteString] forKey:@"icon"];
