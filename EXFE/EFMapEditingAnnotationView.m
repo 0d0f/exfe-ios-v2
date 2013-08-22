@@ -105,6 +105,14 @@
         [self.charactorArray addObject:string];
     }
     
+    NSString *otherCharactors = @"$@#%&?";
+    
+    for (NSUInteger i = 0; i < otherCharactors.length; i++) {
+        unichar ch = [otherCharactors characterAtIndex:i];
+        NSString *string = [NSString stringWithFormat:@"%c", ch];
+        [self.charactorArray addObject:string];
+    }
+    
     self.selectedIndex = [self.charactorArray indexOfObject:kDefaultCharactor];
     
     CGRect viewBounds = self.bounds;
