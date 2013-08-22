@@ -899,7 +899,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     routeLocation.markTitle = title;
     [routeLocation updateIconURL];
     
-    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView shouldPostToServer:NO];
 }
 
 - (void)mapView:(EFMapView *)mapView didChangeSelectedAnnotationStyle:(EFAnnotationStyle)style {
@@ -920,7 +920,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     [routeLocation updateIconURL];
     
-    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView shouldPostToServer:NO];
 }
 
 - (void)mapViewCancelButtonPressed:(EFMapView *)mapView {
@@ -982,6 +982,13 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
     [self _hideCalloutView];
     self.mapView.editingState = kEFMapViewEditingStateNormal;
+    
+    if ([view isKindOfClass:[EFAnnotationView class]]) {
+        EFAnnotation *annotation = (EFAnnotation *)view.annotation;
+        EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
+        
+        [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+    }
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
