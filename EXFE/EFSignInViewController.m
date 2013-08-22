@@ -14,6 +14,7 @@
 #import <Twitter/Twitter.h>
 #import <Accounts/Accounts.h>
 #import <FacebookSDK/FacebookSDK.h>
+#import "UIApplication+EXFE.h"
 #import "EFAPIServer.h"
 #import "Util.h"
 #import "Identity+EXFE.h"
@@ -682,9 +683,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         NSDictionary *dict = [Util parseIdentityString:identityText byProvider:provider];
         NSString *username = [dict valueForKeyPath:@"external_username"];
         
-        AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        // eg:  exfe://oauthcallback/
-        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
+        // eg:  exfe://oauthcallback
+        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback", [UIApplication sharedApplication].defaultScheme];
         
         NSString *oAuthURL = nil;
         switch (provider) {

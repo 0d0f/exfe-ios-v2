@@ -8,6 +8,7 @@
 
 #import "CrossesViewController.h"
 #import <BlocksKit/BlocksKit.h>
+#import "UIApplication+EXFE.h"
 #import "ProfileViewController.h"
 #import "EFLandingViewController.h"
 #import "Cross.h"
@@ -59,11 +60,12 @@
     return app.model;
 }
 
-- (Cross*) crossWithId:(int)cross_id{
-    for(Cross *c in self.crossList)
-    {
-        if([c.cross_id intValue]==cross_id)
+- (Cross*) crossWithId:(NSInteger)cross_id
+{
+    for (Cross *c in self.crossList) {
+        if ([c.cross_id integerValue] == cross_id) {
             return c;
+        }
     }
     return nil;
 }
@@ -102,10 +104,14 @@
     // Head View
     EFHeadView *headView = [[EFHeadView alloc] initWithFrame:(CGRect){{0.0f, 9.0f}, {320.0f, 56.0f}}];
     headView.headPressedHandler = ^{
-        [self ShowProfileView];
+        NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, @"", @"/profile?animated=yes"];
+        NSURL *url = [NSURL URLWithString:urlstr];
+        [[UIApplication sharedApplication] openURL:url];
     };
     headView.titlePressedHandler = ^{
-        [self ShowGatherView];
+        NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, @"", @"/gather?animated=yes"];
+        NSURL *url = [NSURL URLWithString:urlstr];
+        [[UIApplication sharedApplication] openURL:url];
     };
     headView.willShowHandler = ^{
         [self.tableView beginUpdates];
@@ -265,10 +271,10 @@
     unverified_description.linkAttributes = mutableLinkAttributes;
     unverified_description.delegate = self;
     unverified_description.text = text;
-    
-    [unverified_description addLinkToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@://profile/", app.defaultScheme]] withRange:range];
+    NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, @"", @"/profile?animated=yes"];
+    NSURL *url = [NSURL URLWithString:urlstr];
+    [unverified_description addLinkToURL:url withRange:range];
     [unverified_description sizeToFit];
-    
     
     CGFloat h = CGRectGetHeight(unverified_description.bounds);
     unverified_description.frame = CGRectMake(15, CGRectGetHeight(self.view.bounds) - 15 - h, 290, h + 15);
@@ -651,43 +657,18 @@
     if (indexPath.section == 1) {
         Cross *cross = [self.crossList objectAtIndex:indexPath.row];
         
-        cross.updated = [NSDate date];
-//        if (cross.updated != nil) {
-//            id updated = cross.updated;
-//            if ([updated isKindOfClass:[NSDictionary class]]) {
-//                NSEnumerator *enumerator = [(NSDictionary*)updated keyEnumerator];
-//                NSString *key = nil;
-//                
-//                while (key = [enumerator nextObject]) {
-//                    NSDictionary *obj = [(NSDictionary*) updated objectForKey:key];
-//                    NSString *updated_at_str = [obj objectForKey:@"updated_at"];
-//                    
-//                    if (updated_at_str != nil && [updated_at_str length] > 19) {
-//                        updated_at_str = [updated_at_str substringToIndex:19];
-//                    }
-//                    
-//                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//                    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//                    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-//                    NSDate *updated_at = [formatter dateFromString:updated_at_str];
-//                    if (cross.read_at == nil) {
-//                        cross.read_at=updated_at;
-//                    } else {
-//                        cross.read_at=[cross.read_at laterDate:updated_at];
-//                    }
-//                }
-//                
-//                [self.tableView beginUpdates];
-//                [self.tableView reloadRowsAtIndexPaths:@[indexPath]
-//                                      withRowAnimation:UITableViewRowAnimationNone];
-//                [self.tableView endUpdates];
-//            }
-//        }
-        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:self.model];
-        [self.navigationController pushViewController:tabBarViewController animated:YES];
+        cross.read_at = [NSDate date];
+        if (cross.updated != nil) {
+            [self.tableView beginUpdates];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+            [self.tableView endUpdates];
+        }
+        NSString *urlstr = [NSString stringWithFormat:@"%@://%@/!%@%@", [UIApplication sharedApplication].defaultScheme, @"", cross.cross_id, @"?animated=yes"];
+        NSURL *url = [NSURL URLWithString:urlstr];
+        [[UIApplication sharedApplication] openURL:url];
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-//        current_cellrow = indexPath.row;
     }
 }
 
@@ -700,25 +681,20 @@
 
 #pragma mark - View Push methods
 
-- (BOOL)pushToCross:(int)cross_id {
-    Cross *cross = [self crossWithId:cross_id];
-    if (cross != nil) {
-        [self.navigationController popToRootViewControllerAnimated:NO];
-        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:self.model];
-        [self.navigationController pushViewController:tabBarViewController animated:NO];
-        
-        return YES;
-    }
-    
-    return NO;
+- (BOOL)pushToCross:(NSInteger)crossId {
+    return [self showCross:crossId withTabClass:NSClassFromString(@"CrossGroupViewController") animated:NO];
 }
 
-- (BOOL)pushToConversation:(int)cross_id {
-    Cross *cross = [self crossWithId:cross_id];
+- (BOOL)pushToConversation:(NSInteger)crossId {
+    return [self showCross:crossId withTabClass:NSClassFromString(@"WidgetConvViewController") animated:NO];
+}
+
+- (BOOL)showCross:(NSInteger)crossId withTabClass:(Class)class animated:(BOOL)animated
+{
+    Cross *cross = [self crossWithId:crossId];
     
     if (cross != nil) {
         [self.navigationController popToRootViewControllerAnimated:NO];
-        Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
         EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:self.model];
         __weak EFTabBarViewController *weakTab = tabBarViewController;
         tabBarViewController.viewWillAppearHandler = ^{
@@ -726,13 +702,13 @@
             if (!strongTab) {
                 return;
             }
-            NSUInteger toJumpIndex = [strongTab indexOfViewControllerForClass:toJumpClass];
+            NSUInteger toJumpIndex = [strongTab indexOfViewControllerForClass:class];
             NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
             
             [strongTab.tabBar setSelectedIndex:toJumpIndex];
         };
         
-        [self.navigationController pushViewController:tabBarViewController animated:NO];
+        [self.navigationController pushViewController:tabBarViewController animated:animated];
         
         return YES;
     }
@@ -740,42 +716,27 @@
     return NO;
 }
 
-- (void)ShowProfileView{
+- (void)showProfileViewWithAnimated:(BOOL)animated
+{
     ProfileViewController *profileViewController = [[ProfileViewController alloc]initWithNibName:@"ProfileViewController" bundle:nil];
     profileViewController.model = self.model;
     profileViewController.user = [User getDefaultUser];
-    [self.navigationController pushViewController:profileViewController animated:YES];
+    [self.navigationController pushViewController:profileViewController animated:animated];
     
 }
-- (void)ShowGatherView{
+- (void)showGatherViewWithAnimated:(BOOL)animated
+{
     NewGatherViewController *gatherViewController = [[NewGatherViewController alloc]initWithNibName:@"NewGatherViewController" bundle:nil];
-    [self.navigationController pushViewController:gatherViewController animated:YES];
+    [self.navigationController pushViewController:gatherViewController animated:animated];
 }
 
 #pragma mark - CrossCardDelegate
 - (void)onClickConversation:(UIView *)card {
     [Flurry logEvent:@"CLICK_CROSS_CARD_CONVERSATION"];
-    CrossCard* c = (CrossCard*)card;
-    int cross_id = [c.cross_id intValue];
-    
-    Cross *cross = [self crossWithId:cross_id];
-    if (cross != nil) {
-        Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
-        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:self.model];
-        __weak EFTabBarViewController *weakTab = tabBarViewController;
-        tabBarViewController.viewWillAppearHandler = ^{
-            EFTabBarViewController *strongTab = weakTab;
-            if (!strongTab) {
-                return;
-            }
-            NSUInteger toJumpIndex = [strongTab indexOfViewControllerForClass:toJumpClass];
-            NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
-            
-            [strongTab.tabBar setSelectedIndex:toJumpIndex];
-        };
-        
-        [self.navigationController pushViewController:tabBarViewController animated:YES];
-    }
+    CrossCard *c = (CrossCard *)card;
+    NSString *urlstr = [NSString stringWithFormat:@"%@://%@/!%@%@", [UIApplication sharedApplication].defaultScheme, @"", c.cross_id, @"/conversation?animated=yes"];
+    NSURL *url = [NSURL URLWithString:urlstr];
+    [[UIApplication sharedApplication] openURL:url];
 }
 
 #pragma mark - Private
@@ -911,6 +872,65 @@
 - (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
 {
     [[UIApplication sharedApplication] openURL:url];
+}
+
+
+@end
+
+@implementation CrossesViewController (URLNavigation)
+
+- (BOOL)pushTo:(NSArray *)pathComponents animated:(BOOL)animated
+{
+    if (pathComponents.count > 0) {
+        NSString *root = [pathComponents objectAtIndex:0];
+        if ([root hasPrefix:@"+"] || [root hasPrefix:@"%2b"]) {
+            // identity for phone number
+            return NO;
+        } else if ([root rangeOfString:@"@"].location != NSNotFound) {
+            // identity
+            return NO;
+        } else if ([root hasPrefix:@"!"]) {
+            // cross with id
+            NSString * crossIdString = [root substringFromIndex:1];
+            NSCharacterSet *alphaNums = [NSCharacterSet decimalDigitCharacterSet];
+            NSCharacterSet *inStringSet = [NSCharacterSet characterSetWithCharactersInString:crossIdString];
+            BOOL valid = [alphaNums isSupersetOfSet:inStringSet];
+            if (valid) {
+                if (self.navigationController.viewControllers.count > 1) {
+                    [self.navigationController popToRootViewControllerAnimated:NO];
+                }
+                NSInteger crossId = [crossIdString integerValue];
+                Class cls = NSClassFromString(@"CrossGroupViewController");
+                if (pathComponents.count > 2) {
+                    NSString *tab = [pathComponents objectAtIndex:2];
+                    if ([@"conversation" caseInsensitiveCompare:tab] == NSOrderedSame) {
+                        cls = NSClassFromString(@"WidgetConvViewController");
+                    } else if ([@"exfee" caseInsensitiveCompare:tab] == NSOrderedSame) {
+                        cls = NSClassFromString(@"WidgetExfeeViewController");
+                    }
+                }
+                [self showCross:crossId withTabClass:cls animated:animated];
+                return YES;
+            }
+        } else if ([@"profile" caseInsensitiveCompare:root] == NSOrderedSame) {
+            if (self.navigationController.viewControllers.count > 1) {
+                [self.navigationController popToRootViewControllerAnimated:NO];
+            }
+            if ([self.model isLoggedIn]) {
+                [self showProfileViewWithAnimated:animated];
+            }
+            return YES;
+        } else if ([@"gather" caseInsensitiveCompare:root] == NSOrderedSame) {
+            if (self.navigationController.viewControllers.count > 1) {
+                [self.navigationController popToRootViewControllerAnimated:NO];
+            }
+            if ([self.model isLoggedIn]) {
+                [self showGatherViewWithAnimated:animated];
+            }
+            return YES;
+        }
+    }
+    return NO;
 }
 
 @end

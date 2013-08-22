@@ -12,9 +12,12 @@
 
 @interface UIApplication (EXFE)
 
+@property (nonatomic, strong, readonly) NSString *defaultScheme;
+
 + (NSString *) appVersion;
 + (BOOL) isNewVersion:(NSString *)checkVersion;
 + (NSString *) build;
 + (NSString *) versionBuild;
+
 
 @end

@@ -9,6 +9,7 @@
 #import "EFAPIServer.h"
 
 #import "Util.h"
+#import "UIApplication+EXFE.h"
 #import "Exfee+EXFE.h"
 #import "EFKit.h"
 #import "EXFEModel.h"
@@ -319,7 +320,6 @@
                success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSString *endpoint = [NSString stringWithFormat:@"users/forgotpassword"];
     RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
@@ -327,7 +327,7 @@
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithDictionary:@{@"external_username": identity, @"provider": [Identity getProviderString:provider]}];
     
     if (provider == kProviderTwitter || provider == kProviderFacebook) {
-        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
+        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback", [UIApplication sharedApplication].defaultScheme];
         
         [params addEntriesFromDictionary: @{@"device_callback": callback, @"device": @"iOS"}];
     }
@@ -840,8 +840,7 @@
                    success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
+    NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback", [UIApplication sharedApplication].defaultScheme];
     
     NSString *endpoint = [NSString stringWithFormat:@"users/VerifyUserIdentity?token=%@", self.model.userToken];
     NSDictionary *param = @{@"identity_id":[NSNumber numberWithInt:identity_id],@"device_callback":callback,@"device":@"iOS"};
@@ -1086,7 +1085,6 @@
               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSString *endpoint = [NSString stringWithFormat:@"users/%u/addIdentity?token=%@", self.model.userId, self.model.userToken];
     
     RKObjectManager *objectManager = self.model.objectManager;
@@ -1096,7 +1094,7 @@
     [params addEntriesFromDictionary:@{@"external_username":external_username, @"provider": [Identity getProviderString:provider]}];
     
     if (provider == kProviderTwitter || provider == kProviderFacebook) {
-        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
+        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback", [UIApplication sharedApplication].defaultScheme];
         
         [params addEntriesFromDictionary: @{@"device_callback": callback, @"device": @"iOS"}];
     }

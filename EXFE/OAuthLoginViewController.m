@@ -8,6 +8,7 @@
 
 #import "OAuthLoginViewController.h"
 #import "URLParser.h"
+#import "UIApplication+EXFE.h"
 
 @interface OAuthLoginViewController ()
 @property (nonatomic, copy) NSString *matchedURL;
@@ -48,9 +49,8 @@
         self.javaScriptString = nil;
         self.provider = provider;
         
-        AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        // eg:  exfe://oauthcallback/
-        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
+        // eg:  exfe://oauthcallback
+        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback", [UIApplication sharedApplication].defaultScheme];
         self.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
     }
     return self;
