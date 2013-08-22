@@ -10,6 +10,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "EFMapColorButton.h"
+#import "EFRouteLocation.h"
 
 #define kDefaultCharactor   @"P"
 
@@ -139,14 +140,6 @@
     
     self.markLetter = kDefaultCharactor;
     
-//    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-//    button.backgroundColor = [UIColor clearColor];
-//    button.frame = panView.frame;
-//    [button addTarget:self action:@selector(touchDown:withEvent:) forControlEvents:UIControlEventTouchDown];
-//    [button addTarget:self action:@selector(touchDrag:withEvent:) forControlEvents:UIControlEventTouchDragInside | UIControlEventTouchDragOutside];
-//    [button addTarget:self action:@selector(touchUp:withEvent:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
-//    [self addSubview:button];
-    
     CGRect buttonFrame = (CGRect){CGPointZero, {CGRectGetMidX(viewBounds) - 20.0f, CGRectGetHeight(viewBounds)}};
     EFMapColorButton *blueButton = [EFMapColorButton buttonWithColor:[UIColor colorWithRed:0.0f green:(123.0f / 255.0f) blue:1.0f alpha:1.0f]];
     [blueButton addTarget:self action:@selector(colorButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -160,6 +153,16 @@
     redButton.frame = buttonFrame;
     [self addSubview:redButton];
     self.redButton = redButton;
+}
+
+- (void)_selectButton:(EFMapColorButton *)button {
+    if (button == self.redButton) {
+        self.redButton.selected = YES;
+        self.blueButton.selected = NO;
+    } else if (button == self.blueButton) {
+        self.redButton.selected = NO;
+        self.blueButton.selected = YES;
+    }
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -177,6 +180,29 @@
         [self _init];
     }
     return self;
+}
+
+#pragma mark - Public
+
+- (void)customWithRouteLocation:(EFRouteLocation *)routeLocation {
+    switch (routeLocation.locationTytpe) {
+        case kEFRouteLocationTypeDestination:
+        case kEFRouteLocationTypeCrossPlace:
+            self.redButton.selected = NO;
+            self.blueButton.selected = NO;
+            self.markLetter = @" ";
+            break;
+        case kEFRouteLocationTypePark:
+            self.markLetter = routeLocation.markTitle;
+            if (kEFRouteLocationColorBlue == routeLocation.markColor) {
+                [self _selectButton:self.blueButton];
+            } else {
+                [self _selectButton:self.redButton];
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - Gesture
@@ -251,6 +277,8 @@
 #pragma mark - Action Handler
 
 - (void)colorButtonPressed:(EFMapColorButton *)button {
+    [self _selectButton:button];
+    
     if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToStyle:)]) {
         if (button == self.blueButton) {
             [self.delegate mapEditingAnnotationView:self didChangeToStyle:kEFAnnotationStyleParkBlue];

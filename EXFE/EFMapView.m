@@ -487,6 +487,10 @@ static UIView * ReverseSubviews(UIView *view) {
     [self _fireTimer];
 }
 
+- (void)customEditingViewWithRouteLocation:(EFRouteLocation *)routeLocation {
+    [self.editingAnnotatoinView customWithRouteLocation:routeLocation];
+}
+
 #pragma mark - EFMapEditingAnnotationViewDelegate
 
 - (void)mapEditingAnnotationView:(EFMapEditingAnnotationView *)view isChangingToTitle:(NSString *)title {

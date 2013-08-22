@@ -967,6 +967,9 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     if ([view isKindOfClass:[EFAnnotationView class]]) {
         [mapView setCenterCoordinate:view.annotation.coordinate animated:YES];
         
+        EFAnnotation *annotation = (EFAnnotation *)view.annotation;
+        EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
+        
         [self _hideCalloutView];
         
         EFCalloutAnnotation *calloutAnnotation = [[EFCalloutAnnotation alloc] initWithCoordinate:view.annotation.coordinate
@@ -976,6 +979,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         
         self.currentCalloutAnnotation = calloutAnnotation;
         self.mapView.editingState = kEFMapViewEditingStateEditingAnnotation;
+        [self.mapView customEditingViewWithRouteLocation:routeLocation];
     }
 }
 
