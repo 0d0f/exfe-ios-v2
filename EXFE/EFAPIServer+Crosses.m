@@ -15,7 +15,7 @@
 
 @implementation EFAPIServer (Crosses)
 
-- (void)loadCrossWithCrossId:(int)corss_id
+- (void)loadCrossWithCrossId:(NSUInteger)corss_id
                  updatedtime:(NSDate*)updatedtime
                      success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                      failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {

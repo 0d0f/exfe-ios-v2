@@ -430,9 +430,17 @@
                                                                                            if ([body isKindOfClass:[NSDictionary class]]) {
                                                                                                id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
                                                                                                if (code && [code intValue] == 200) {
-                                                                                                   [self.model loadMe];
-                                                                                                   [self.model loadCrossList];
                                                                                                    [self processUrlHandler:url];
+                                                                                                   
+                                                                                                   if ([url.path hasPrefix:@"/!"]) {
+                                                                                                       [self performBlock:^(id sender) {
+                                                                                                           [self.model loadMe];
+                                                                                                       } afterDelay:3];
+                                                                                                   } else {
+                                                                                                       [self.model loadMe];
+                                                                                                   }
+                                                                                                   
+                                                                                                   
                                                                                                }
                                                                                            }
                                                                                        }

@@ -29,6 +29,8 @@
 #import "EFLoadCrossOperation.h"
 #import "EFLoadCrossListOperation.h"
 #import "EFEditCrossOperation.h"
+#import "EFRemoveInvitationOperation.h"
+#import "EFRemoveMyInvitationOperation.h"
 
 // Place API
 #import "EFReverseGeocodingOperation.h"

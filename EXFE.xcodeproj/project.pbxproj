@@ -81,6 +81,12 @@
 		4F05D458175DAFAC0050A726 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F05D457175DAFAC0050A726 /* Constants.m */; };
 		4F05D459175DAFAC0050A726 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F05D457175DAFAC0050A726 /* Constants.m */; };
 		4F05D45A175DAFAC0050A726 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F05D457175DAFAC0050A726 /* Constants.m */; };
+		4F0C543717C7389300649C4F /* EFRemoveInvitationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C543617C7389300649C4F /* EFRemoveInvitationOperation.m */; };
+		4F0C543817C7389300649C4F /* EFRemoveInvitationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C543617C7389300649C4F /* EFRemoveInvitationOperation.m */; };
+		4F0C543917C7389300649C4F /* EFRemoveInvitationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C543617C7389300649C4F /* EFRemoveInvitationOperation.m */; };
+		4F0C544317C74B7800649C4F /* EFRemoveMyInvitationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C544217C74B7800649C4F /* EFRemoveMyInvitationOperation.m */; };
+		4F0C544417C74B7800649C4F /* EFRemoveMyInvitationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C544217C74B7800649C4F /* EFRemoveMyInvitationOperation.m */; };
+		4F0C544517C74B7800649C4F /* EFRemoveMyInvitationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C544217C74B7800649C4F /* EFRemoveMyInvitationOperation.m */; };
 		4F0E159B16A95C390086AC4A /* edit_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159916A95C390086AC4A /* edit_30.png */; };
 		4F0E159C16A95C390086AC4A /* edit_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159A16A95C390086AC4A /* edit_30@2x.png */; };
 		4F0E3551179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0E3550179E8DF400FFA0E4 /* EFIdentityBar.m */; };
@@ -2362,6 +2368,10 @@
 		4F05D43E175C6CB00050A726 /* EFAddIdentityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFAddIdentityViewController.xib; sourceTree = "<group>"; };
 		4F05D456175DAFAC0050A726 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		4F05D457175DAFAC0050A726 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		4F0C543517C7389200649C4F /* EFRemoveInvitationOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRemoveInvitationOperation.h; sourceTree = "<group>"; };
+		4F0C543617C7389300649C4F /* EFRemoveInvitationOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRemoveInvitationOperation.m; sourceTree = "<group>"; };
+		4F0C544117C74B7700649C4F /* EFRemoveMyInvitationOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRemoveMyInvitationOperation.h; sourceTree = "<group>"; };
+		4F0C544217C74B7800649C4F /* EFRemoveMyInvitationOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRemoveMyInvitationOperation.m; sourceTree = "<group>"; };
 		4F0E159916A95C390086AC4A /* edit_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30.png; sourceTree = "<group>"; };
 		4F0E159A16A95C390086AC4A /* edit_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30@2x.png"; sourceTree = "<group>"; };
 		4F0E354F179E8DF400FFA0E4 /* EFIdentityBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFIdentityBar.h; sourceTree = "<group>"; };
@@ -4375,6 +4385,10 @@
 				4FB14BE217C228B400EFC3F9 /* EFEditCrossOperation.m */,
 				4FB14BD517C21EB000EFC3F9 /* EFLoadCrossListOperation.h */,
 				4FB14BD617C21EB000EFC3F9 /* EFLoadCrossListOperation.m */,
+				4F0C543517C7389200649C4F /* EFRemoveInvitationOperation.h */,
+				4F0C543617C7389300649C4F /* EFRemoveInvitationOperation.m */,
+				4F0C544117C74B7700649C4F /* EFRemoveMyInvitationOperation.h */,
+				4F0C544217C74B7800649C4F /* EFRemoveMyInvitationOperation.m */,
 			);
 			name = "Crosses API Operation";
 			sourceTree = "<group>";
@@ -7131,6 +7145,8 @@
 				4F2CF06F17BF54FF00E3A4B2 /* XQueryComponents.m in Sources */,
 				4FB14BD817C21EB000EFC3F9 /* EFLoadCrossListOperation.m in Sources */,
 				4FB14BE417C228B400EFC3F9 /* EFEditCrossOperation.m in Sources */,
+				4F0C543817C7389300649C4F /* EFRemoveInvitationOperation.m in Sources */,
+				4F0C544417C74B7800649C4F /* EFRemoveMyInvitationOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7394,6 +7410,8 @@
 				4F2CF07017BF54FF00E3A4B2 /* XQueryComponents.m in Sources */,
 				4FB14BD917C21EB000EFC3F9 /* EFLoadCrossListOperation.m in Sources */,
 				4FB14BE517C228B400EFC3F9 /* EFEditCrossOperation.m in Sources */,
+				4F0C543917C7389300649C4F /* EFRemoveInvitationOperation.m in Sources */,
+				4F0C544517C74B7800649C4F /* EFRemoveMyInvitationOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7657,6 +7675,8 @@
 				4F2CF06E17BF54FF00E3A4B2 /* XQueryComponents.m in Sources */,
 				4FB14BD717C21EB000EFC3F9 /* EFLoadCrossListOperation.m in Sources */,
 				4FB14BE317C228B400EFC3F9 /* EFEditCrossOperation.m in Sources */,
+				4F0C543717C7389300649C4F /* EFRemoveInvitationOperation.m in Sources */,
+				4F0C544317C74B7800649C4F /* EFRemoveMyInvitationOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

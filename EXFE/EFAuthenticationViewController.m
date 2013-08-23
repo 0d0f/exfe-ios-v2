@@ -622,7 +622,6 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
     [self.model saveUserData];
     
     [self.model loadMe];
-    [self.model loadCrossList];
     
     if (success) {
         success();

@@ -9,6 +9,7 @@
 #import <CoreText/CoreText.h>
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
+#import <BlocksKit/BlocksKit.h>
 #import "UILabel+EXFE.h"
 #import "Invitation+EXFE.h"
 #import "Identity+EXFE.h"
@@ -152,18 +153,29 @@ typedef enum {
     invTable.tag = kTableOrigin;
     [self.view addSubview:invTable];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleNotification:)
-                                                 name:kEFNotificationNameLoadCrossSuccess
-                                               object:nil];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
 }
+
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
+    
     [self reloadSelected];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameLoadCrossSuccess
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameRemoveInvitationSuccess
+                                               object:nil];
     
 }
 
@@ -173,29 +185,20 @@ typedef enum {
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
 }
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-//    [invName release];
-//    [invHostFlag release];
-//    [invHostText release];
-//    [invRsvpImage release];
-//    [invRsvpLabel release];
-//    [invRsvpAltLabel release];
-//    [bioTitle release];
-//    [bioContent release];
-//    [invContent release];
-    
-    
-    
     
 }
-
 
 - (void)willMoveToParentViewController:(UIViewController *)parent
 {
@@ -223,29 +226,20 @@ typedef enum {
             [exfeeContainer reloadData];
             [self reloadSelected];
         }
+    } else if ([kEFNotificationNameRemoveInvitationSuccess isEqualToString:name]) {
+        // refresh
+        NSDictionary *userInfo = notification.userInfo;
+        Exfee *exfee = [userInfo objectForKey:@"exfee"];
+        
+        self.selected_invitation = nil;
+        self.exfee = exfee;
+        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+        [exfeeContainer reloadData];
+        [self reloadSelected];
+        
     }
 }
 
-#pragma mark - UIActionSheetDelegate
--(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    if (buttonIndex == actionSheet.destructiveButtonIndex) {
-        [_selected_invitation setRsvp_status:@"REMOVED"];
-        
-        Identity *myidentity = [self.exfee getMyInvitation].identity;
-        [self.model.apiServer editExfee:self.exfee
-                                     byIdentity:myidentity
-                                        success:^(Exfee *exfee) {
-                                            self.selected_invitation = nil;
-                                            self.exfee = exfee;
-                                            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
-                                            [exfeeContainer reloadData];
-                                            [self reloadSelected];
-                                        }
-                                        failure:^(NSError *error) {
-                                        }];
-    }
-}
 
 #pragma mark Gesture Handler
 
@@ -261,19 +255,27 @@ typedef enum {
     
     NSString *title = NSLocalizedString(@"People will no longer have access to any information in this ·X·. Please confirm to remove.", nil);
     NSString *destTitle = NSLocalizedString(@"Remove from this ·X·", nil);
-    if ([[User getDefaultUser] isMe:_selected_invitation.identity]) {
+    
+    BOOL isMe = [[User getDefaultUser] isMe:_selected_invitation.identity];
+    if (isMe) {
         title = NSLocalizedString(@"You will no longer have access to any information in this ·X· once left. Please confirm to leave.", nil);
         destTitle = NSLocalizedString(@"Leave from this ·X·", nil);
     }
     
-    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:title
-                                                            delegate:self
-                                                   cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                              destructiveButtonTitle:destTitle
-                                                   otherButtonTitles:nil];
-	popupQuery.actionSheetStyle = UIActionSheetStyleDefault;
-    
-	[popupQuery showInView:self.view];
+    UIActionSheet *actionSheet = [UIActionSheet actionSheetWithTitle:title];
+    [actionSheet setDestructiveButtonWithTitle:destTitle handler:^{
+        
+        if (isMe) {
+            [self.model removeSelfInvitation:_selected_invitation fromExfee:self.exfee];
+            
+        } else {
+            Identity *myidentity = [self.exfee getMyInvitation].identity;
+            [self.model removeInvitation:_selected_invitation fromExfee:self.exfee byIdentity:myidentity];
+        }
+
+    }];
+    [actionSheet setCancelButtonWithTitle:NSLocalizedString(@"Cancel", nil) handler:nil];
+    [actionSheet showInView:self.view];
 }
 
 - (void)removeNotificationIdentity:(NSUInteger)index
@@ -297,7 +299,7 @@ typedef enum {
                                                  
                                                  CrossGroupViewController *crossGroupViewController = viewControllers[0];
                                                  
-                                                 [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id intValue] updatedTime:nil];
+                                                 [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id integerValue] updatedTime:nil];
                                              } failure:^(NSError *error) {
                                                  NSLog(@"error %@", error);
                                              }];
@@ -1259,7 +1261,7 @@ typedef enum {
                                                      
                                                      CrossGroupViewController *crossGroupViewController = viewControllers[0];
                                                      
-                                                     [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id intValue] updatedTime:nil];
+                                                     [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id integerValue] updatedTime:nil];
                                                      
                                                      self.exfee = crossGroupViewController.cross.exfee;
                                                      [exfeeContainer reloadData];

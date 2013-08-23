@@ -11,6 +11,7 @@
 #import "EFKit.h"
 #import "EFAPIOperations.h"
 #import "Cross.h"
+#import "Invitation+EXFE.h"
 
 @implementation EXFEModel (Crosses)
 
@@ -53,7 +54,7 @@
     return xlist;
 }
 
-- (void)loadCrossWithCrossId:(int)crossId updatedTime:(NSDate *)updatedTime
+- (void)loadCrossWithCrossId:(NSUInteger)crossId updatedTime:(NSDate *)updatedTime
 {
     EFLoadCrossOperation *operation = [EFLoadCrossOperation operationWithModel:self];
     operation.crossId = crossId;
@@ -100,4 +101,24 @@
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
 }
 
+- (void)removeInvitation:(Invitation *)invitation fromExfee:(Exfee *)exfee byIdentity:(Identity *)identity
+{
+    EFRemoveInvitationOperation *operation = [EFRemoveInvitationOperation operationWithModel:self];
+    operation.exfee = exfee;
+    operation.invitation = invitation;
+    operation.byIdentity = identity;
+    
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+}
+
+- (void)removeSelfInvitation:(Invitation *)invitation fromExfee:(Exfee *)exfee
+{
+    EFRemoveMyInvitationOperation *operation = [EFRemoveMyInvitationOperation operationWithModel:self];
+    operation.exfee = exfee;
+    operation.invitation = invitation;
+    
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+}
 @end

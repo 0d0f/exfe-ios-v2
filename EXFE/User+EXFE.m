@@ -13,7 +13,8 @@
 
 @implementation User (EXFE)
 
-- (BOOL) isMe:(Identity*)my_identity{
+- (BOOL) isMe:(Identity*)my_identity
+{
     return [self isMeByIdentityId:my_identity.identity_id];
 }
 
@@ -26,7 +27,8 @@
     return NO;
 }
 
-- (NSArray*) sortedIdentiesBy:(NSSortDescriptor*) descriptor{
+- (NSArray*) sortedIdentiesBy:(NSSortDescriptor*) descriptor
+{
     return [self.identities sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
 }
 
@@ -35,21 +37,38 @@
     return [self sortedIdentiesBy:descriptor];
 }
 
-+ (User*) getDefaultUser{
+- (NSArray *) getIdentitiesForCrossEntry
+{
+    NSArray *identities = [self sortedIdentiesById];
+    NSMutableArray *list = [NSMutableArray arrayWithCapacity:identities.count];
+    for (Identity *identity in identities) {
+        NSString *status = identity.status;
+        if ([@"CONNECTED" isEqualToString:status] || [@"REVOKED" isEqualToString:status]) {
+            [list addObject:identity];
+        }
+    }
+    return list;
+}
+
++ (User*) getDefaultUser
+{
     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
     return [User getUserById:app.model.userId];
 }
 
-+ (User*) getDefaultUserFrom:(EXFEModel*)model{
++ (User*) getDefaultUserFrom:(EXFEModel*)model
+{
     return [User getUserFrom:model byId:model.userId];
 }
 
-+ (User*) getUserById:(int)userId{
++ (User*) getUserById:(int)userId
+{
     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
     return [User getUserFrom:app.model byId:userId];
 }
 
-+ (User*) getUserFrom:(EXFEModel*)model byId:(int)userId{
++ (User*) getUserFrom:(EXFEModel*)model byId:(int)userId
+{
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", userId];
     [request setPredicate:predicate];
