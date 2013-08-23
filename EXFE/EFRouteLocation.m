@@ -94,7 +94,7 @@
                 NSAssert([obj isKindOfClass:[NSArray class]], @"tags should be a array");
                 NSString *lastTag = [obj lastObject];
                 if ([lastTag isEqualToString:@"park"]) {
-                    self.locationTytpe = kEFRouteLocationTypePark;
+                    self.locationTytpe = kEFRouteLocationTypeNormal;
                 } else if ([lastTag isEqualToString:@"destination"]) {
                     self.locationTytpe = kEFRouteLocationTypeDestination;
                 } else if ([lastTag isEqualToString:@"breadcrumbs"]) {
@@ -158,7 +158,7 @@
             [self _updateIconURL];
         }
             break;
-        case kEFRouteLocationTypePark:
+        case kEFRouteLocationTypeNormal:
         {
             self.markTitle = @"P";
             self.markColor = kEFRouteLocationColorBlue;
@@ -181,7 +181,7 @@
     [dict setValue:[NSNumber numberWithLongLong:(long long)[self.updateDate timeIntervalSince1970]] forKey:@"updated_at"];
     [dict setValue:self.updatedByUid forKey:@"updated_by"];
     NSArray *tags = nil;
-    if (kEFRouteLocationTypePark == self.locationTytpe) {
+    if (kEFRouteLocationTypeNormal == self.locationTytpe) {
         tags = @[@"place", @"park"];
     } else if (kEFRouteLocationTypeDestination == self.locationTytpe) {
         tags = @[@"place", @"destination"];

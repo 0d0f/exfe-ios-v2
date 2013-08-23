@@ -366,7 +366,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
         if (!hasDestination) {
             routeLocation.locationTytpe = kEFRouteLocationTypeDestination;
         } else {
-            routeLocation.locationTytpe = kEFRouteLocationTypePark;
+            routeLocation.locationTytpe = kEFRouteLocationTypeNormal;
         }
     }
     

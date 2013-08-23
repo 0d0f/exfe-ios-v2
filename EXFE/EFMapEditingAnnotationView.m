@@ -200,7 +200,7 @@
             self.blueButton.selected = NO;
             self.markLetter = @" ";
             break;
-        case kEFRouteLocationTypePark:
+        case kEFRouteLocationTypeNormal:
             self.markLetter = routeLocation.markTitle;
             if (kEFRouteLocationColorBlue == routeLocation.markColor) {
                 [self _selectButton:self.blueButton];
