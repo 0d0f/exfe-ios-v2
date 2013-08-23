@@ -42,7 +42,7 @@
     
     switch (style) {
         case kEFAnnotationStyleDestination:
-            self.markImage = [UIImage imageNamed:@"map_pin_blue.png"];
+            self.markImage = [UIImage imageNamed:@"map_mark_ring_blue.png"];
             break;
         case kEFAnnotationStyleParkRed:
             self.markImage = [UIImage imageNamed:@"map_mark_red.png"];

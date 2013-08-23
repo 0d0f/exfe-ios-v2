@@ -27,7 +27,7 @@
     switch (self.locationTytpe) {
         case kEFRouteLocationTypeDestination:
         {
-            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/map_pin_blue@2x.png", IMG_ROOT]];
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/map_mark_ring_blue@2x.png", IMG_ROOT]];
             self.iconUrl = url;
         }
             break;
