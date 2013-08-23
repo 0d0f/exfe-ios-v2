@@ -7957,7 +7957,11 @@
 					"\"$(SRCROOT)/EXFE/Flurry\"",
 					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-force_load",
+					"${BUILT_PRODUCTS_DIR}/libBlocksKit.a",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -7984,7 +7988,11 @@
 					"\"$(SRCROOT)/EXFE/Flurry\"",
 					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-force_load",
+					"${BUILT_PRODUCTS_DIR}/libBlocksKit.a",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
