@@ -1036,7 +1036,9 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         EFAnnotation *annotation = (EFAnnotation *)view.annotation;
         EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
         
-        [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+        if (routeLocation.isChanged) {
+            [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+        }
     }
 }
 
@@ -1094,11 +1096,14 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         callout.editingDidEndHandler = ^(EFCalloutAnnotationView *calloutView){
             EFAnnotation *annotation = (EFAnnotation *)calloutView.parentAnnotationView.annotation;
             EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
-            routeLocation.title = calloutView.annotation.title;
-            routeLocation.subtitle = calloutView.annotation.subtitle;
-            [routeLocation updateIconURL];
             
-            [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+            if (routeLocation.isChanged) {
+                routeLocation.title = calloutView.annotation.title;
+                routeLocation.subtitle = calloutView.annotation.subtitle;
+                [routeLocation updateIconURL];
+                
+                [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+            }
         };
         
         return callout;

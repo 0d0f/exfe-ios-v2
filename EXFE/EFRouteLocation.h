@@ -46,6 +46,8 @@
 @property (nonatomic, copy)     NSString                *markTitle;
 @property (nonatomic, assign)   EFRouteLocationColor    markColor;
 
+@property (nonatomic, assign)   BOOL                    isChanged;
+
 + (EFRouteLocation *)generateRouteLocationWithCoordinate:(CLLocationCoordinate2D)coordinate;
 - (id)initWithDictionary:(NSDictionary *)param;
 - (NSDictionary *)dictionaryValue;

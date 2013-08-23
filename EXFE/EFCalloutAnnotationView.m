@@ -12,6 +12,10 @@
 #import "EFCalloutAnnotation.h"
 #import "Util.h"
 #import "UITextView+NumberOfLines.h"
+#import "EFAnnotation.h"
+#import "EFAnnotationView.h"
+#import "EFMarauderMapDataSource.h"
+
 
 #define kTopInset       (2.0f)
 #define kBottomInset    (0.0f)
@@ -61,6 +65,9 @@
 @property (nonatomic, weak)   UIView    *originalSuperView;
 @property (nonatomic, strong) UIView    *editingBaseView;
 @property (nonatomic, strong) UIView    *editingMaskView;
+
+@property (nonatomic, strong) NSString  *cachedTitle;
+@property (nonatomic, strong) NSString  *cachedSubtitle;
 
 @end
 
@@ -252,6 +259,9 @@
     [super setAnnotation:annotation];
     [self reset];
     
+    self.cachedTitle = annotation.title;
+    self.cachedSubtitle = annotation.subtitle;
+    
     self.editing = NO;
 }
 
@@ -372,6 +382,16 @@
                              [self.editingBaseView removeFromSuperview];
                              self.editingBaseView = nil;
                              self.editingMaskView = nil;
+                             
+                             EFAnnotation *annotation = (EFAnnotation *)self.parentAnnotationView.annotation;
+                             EFRouteLocation *routeLocation = [((EFAnnotationView *)self.parentAnnotationView).mapDataSource routeLocationForAnnotation:annotation];
+                             
+                             if ([self.annotation.title isEqualToString:self.cachedTitle] &&
+                                 [self.annotation.subtitle isEqualToString:self.cachedSubtitle]) {
+                                 routeLocation.isChanged = NO;
+                             } else {
+                                 routeLocation.isChanged = YES;
+                             }
                              
                              if (_editingDidEndHandler) {
                                  __weak typeof(self) weakSelf = self;

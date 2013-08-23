@@ -139,6 +139,8 @@
         }];
         
         self.coordinate = CLLocationCoordinate2DMake(latitude, longitude);
+        
+        self.isChanged = NO;
     }
     
     return self;
