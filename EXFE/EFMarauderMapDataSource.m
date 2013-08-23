@@ -23,6 +23,8 @@
 #import "EFPersonAnnotationView.h"
 #import "EFCrumPath.h"
 #import "EFTimestampAnnotation.h"
+#import "EFAPIOperations.h"
+#import "EXFEModel+Crosses.h"
 
 #define kTimestampDuration  (5.0f * 60.0f)
 #define kTimestampBlank     (15.0f)
@@ -70,6 +72,8 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
 @property (nonatomic, strong) NSMutableArray        *routeLocations;
 @property (nonatomic, strong) NSMutableDictionary   *routeLocationAnnotationMap;
 
+@property (nonatomic, strong) NSMutableDictionary   *toAddPeopleUserIdMap;
+
 @property (nonatomic, strong) NSMutableDictionary   *breadcrumPathMap;
 
 @property (nonatomic, strong) NSMutableDictionary   *timestampMap;
@@ -86,11 +90,15 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
 - (void)_postLocationDidChangeNotification;
 
 - (void)_initPeople;
+- (void)_reloadPeople;
 
 - (NSString *)_generateRouteLocationId;
 - (NSString *)_userIdFromDirtyUserId:(NSString *)dirtyUserId;
 
 - (void)_updatePersonState:(EFMapPerson *)person;
+
+- (void)_registerNotification;
+- (void)_unregisterNotification;
 
 @end
 
@@ -122,6 +130,27 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     
     self.people = people;
     self.peopleMap = peopleMap;
+}
+
+- (void)_reloadPeople {
+    BOOL hasChanged = NO;
+    NSArray *invitations = [self.cross.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
+    
+    for (NSArray *invitationList in invitations) {
+        Invitation *invitation = invitationList[0];
+        NSString *userIdString = [NSString stringWithFormat:@"%d", [invitation.identity.connected_user_id integerValue]];
+        if (![self.peopleMap valueForKey:userIdString]) {
+            hasChanged = YES;
+            EFMapPerson *person = [[EFMapPerson alloc] initWithIdentity:invitation.identity];
+            
+            [self.people addObject:person];
+            [self.peopleMap setValue:person forKey:person.userIdString];
+        }
+    }
+    
+    if (hasChanged && [self.delegate respondsToSelector:@selector(mapDataSourcePeopleDidChange:)]) {
+        [self.delegate mapDataSourcePeopleDidChange:self];
+    }
 }
 
 - (NSString *)_generateRouteLocationId {
@@ -172,6 +201,21 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     }
 }
 
+- (void)_registerNotification {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleLoadCrossSuccessNotification:)
+                                                 name:kEFNotificationNameLoadCrossSuccess
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleLoadCrossFailureNotification:)
+                                                 name:kEFNotificationNameLoadCrossFailure
+                                               object:nil];
+}
+
+- (void)_unregisterNotification {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 @end
 
 @implementation EFMarauderMapDataSource
@@ -188,9 +232,16 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
         self.personAnnotationMap = [[NSMutableDictionary alloc] init];
         self.breadcrumPathMap = [[NSMutableDictionary alloc] init];
         self.timestampMap = [[NSMutableDictionary alloc] init];
+        self.toAddPeopleUserIdMap = [[NSMutableDictionary alloc] init];
+        
+        [self _registerNotification];
     }
     
     return self;
+}
+
+- (void)dealloc {
+    [self _unregisterNotification];
 }
 
 #pragma mark - Property Accessor
@@ -206,6 +257,31 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     }
     
     return destination;
+}
+
+#pragma mark - Notification Handler
+
+- (void)handleLoadCrossSuccessNotification:(NSNotification *)notif {
+    NSDictionary *userInfo = notif.userInfo;
+    
+    Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
+    if ([meta.code intValue] == 403) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Privacy Control", nil)
+                                                        message:NSLocalizedString(@"You have no access to this private ·X·.", nil)
+                                                       delegate:self
+                                              cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                              otherButtonTitles:nil];
+        [alert show];
+    } else if ([meta.code intValue] == 200) {
+        Cross *cross = [userInfo objectForKey:@"response.cross"];
+        self.cross = cross;
+        
+        [self _reloadPeople];
+    }
+}
+
+- (void)handleLoadCrossFailureNotification:(NSNotification *)notif {
+    
 }
 
 #pragma mark - Request
@@ -451,6 +527,8 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
         [self.httpStreaming close];
         self.httpStreaming = nil;
     }
+    
+    [self.toAddPeopleUserIdMap removeAllObjects];
 }
 
 #pragma mark - Register
@@ -494,6 +572,8 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
         [person.locations removeAllObjects];
         person.lastLocation = nil;
     }
+    
+    [self.toAddPeopleUserIdMap removeAllObjects];
 }
 
 - (void)applicationDidEnterForeground {
@@ -526,13 +606,23 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
                         NSString *userIdString = [self _userIdFromDirtyUserId:path.pathId];
                         EFMapPerson *person = [self.peopleMap valueForKey:userIdString];
                         
-                        // update person last location
-                        person.lastLocation = path.positions[0];
-                        
-                        // update person connect state && location state && distance
-                        [self _updatePersonState:person];
-                        
-                        [self.delegate mapDataSource:self didUpdateLocations:path.positions forUser:person];
+                        if (person) {
+                            // update person last location
+                            person.lastLocation = path.positions[0];
+                            
+                            // update person connect state && location state && distance
+                            [self _updatePersonState:person];
+                            
+                            [self.delegate mapDataSource:self didUpdateLocations:path.positions forUser:person];
+                        } else {
+                            NSDate *timestamp = [self.toAddPeopleUserIdMap valueForKey:userIdString];
+                            if (!timestamp) {
+                                [self.toAddPeopleUserIdMap setValue:[NSDate date] forKey:userIdString];
+                                
+                                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                                [appDelegate.model loadCrossWithCrossId:[self.cross.cross_id intValue] updatedTime:nil];
+                            }
+                        }
                     }
                 } else if ([tags[0] isEqualToString:@"geomarks"]) {
                     EFRoutePath *routePath = [[EFRoutePath alloc] initWithDictionary:jsonDictionary];
