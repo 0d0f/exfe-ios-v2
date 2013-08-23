@@ -433,7 +433,7 @@
                                                                                                id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
                                                                                                if (code && [code intValue] == 200) {
                                                                                                    [self.model loadMe];
-                                                                                                   
+                                                                                                   [self.model loadCrossList];
                                                                                                    [self processUrlHandler:url];
                                                                                                }
                                                                                            }
