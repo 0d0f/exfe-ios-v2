@@ -32,6 +32,8 @@ NSString *kEFNotificationNameLoadMeFailure = @"notification.loadMe.failure";
     [self.model.apiServer loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
         self.state = kEFNetworkOperationStateSuccess;
         
+        // 
+        
         [self finish];
     }
                                 failure:^(RKObjectRequestOperation *operation, NSError *error){

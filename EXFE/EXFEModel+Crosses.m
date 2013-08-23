@@ -65,6 +65,8 @@
 
 - (void)loadCrossList
 {
+    self.lastQuery = [NSDate date];
+    
     EFLoadCrossListOperation *operation = [EFLoadCrossListOperation operationWithModel:self];
     
     EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];

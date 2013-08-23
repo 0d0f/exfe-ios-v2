@@ -619,6 +619,10 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
     NSAssert(user_id == [self.user.user_id integerValue], @"Should be same user");
     
     self.model.userToken = token;
+    [self.model saveUserData];
+    
+    [self.model loadMe];
+    [self.model loadCrossList];
     
     if (success) {
         success();
