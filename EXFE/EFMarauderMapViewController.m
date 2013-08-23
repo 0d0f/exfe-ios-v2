@@ -341,6 +341,10 @@
         [self.geomarkGroupViewController dismissAnimated:NO];
     }
     
+    if (self.personViewController) {
+        [self.personViewController dismissAnimated:NO];
+    }
+    
     [super viewDidDisappear:animated];
 }
 
@@ -795,13 +799,29 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     }
     
     if (filterdRouteLocations.count || filterdPeople.count) {
-        EFGeomarkGroupViewController *geomarkGroupViewController = [[EFGeomarkGroupViewController alloc] initWithGeomarks:filterdRouteLocations
-                                                                                                                andPeople:filterdPeople];
-        geomarkGroupViewController.delegate = self;
-        [geomarkGroupViewController presentFromViewController:self
-                                                  tapLocation:tapLocation
-                                                     animated:YES];
-        self.geomarkGroupViewController = geomarkGroupViewController;
+        if (1 == filterdRouteLocations.count + filterdPeople.count) {
+            if (filterdRouteLocations.count) {
+                EFAnnotation *annotation = [self.mapDataSource annotationForRouteLocation:filterdRouteLocations[0]];
+                [self.mapView selectAnnotation:annotation animated:YES];
+            } else {
+                EFMapPerson *person = filterdPeople[0];
+                EFMapPersonViewController *personViewController = [[EFMapPersonViewController alloc] initWithDataSource:self.mapDataSource
+                                                                                                                 person:person];
+                personViewController.delegate = self;
+                [personViewController presentFromViewController:self
+                                                       location:self.view.center
+                                                       animated:YES];
+                self.personViewController = personViewController;
+            }
+        } else {
+            EFGeomarkGroupViewController *geomarkGroupViewController = [[EFGeomarkGroupViewController alloc] initWithGeomarks:filterdRouteLocations
+                                                                                                                    andPeople:filterdPeople];
+            geomarkGroupViewController.delegate = self;
+            [geomarkGroupViewController presentFromViewController:self
+                                                      tapLocation:tapLocation
+                                                         animated:YES];
+            self.geomarkGroupViewController = geomarkGroupViewController;
+        }
     }
 }
 
@@ -1132,8 +1152,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     return crumPathView;
 }
-
-#pragma mark - Private
 
 #pragma mark - Action
 

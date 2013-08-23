@@ -606,8 +606,6 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
                         NSString *userIdString = [self _userIdFromDirtyUserId:path.pathId];
                         EFMapPerson *person = [self.peopleMap valueForKey:userIdString];
                         
-                        NSLog(@"GET %@'s position update", userIdString);
-                        
                         if (person) {
                             // update person last location
                             person.lastLocation = path.positions[0];
