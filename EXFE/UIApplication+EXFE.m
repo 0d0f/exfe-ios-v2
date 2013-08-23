@@ -62,4 +62,11 @@
     return versionBuild;
 }
 
+- (NSString *)defaultScheme {
+    NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
+    NSAssert([schemes objectAtIndex:1] != nil, @"Missing url sheme in main bundle.");
+    
+    return [schemes objectAtIndex:1];
+}
+
 @end

@@ -37,12 +37,9 @@ WXApiDelegate
 @property (nonatomic, strong, readwrite) EXFEModel *model;
 @property (nonatomic, strong, readwrite) UINavigationController *navigationController;
 @property (nonatomic, strong, readwrite) CrossesViewController *crossesViewController;
-@property (nonatomic, strong, readonly) NSString *defaultScheme;
 
 - (void)switchContextByUserId:(NSInteger)user_id withAbandon:(BOOL)flag;
 -(void)signinDidFinish;
 -(void)signoutDidFinish;
--(void)gatherCrossDidFinish;
--(void)crossUpdateDidFinish:(int)cross_id;
 -(void)showLanding:(UIViewController*)parent;
 @end

@@ -13,6 +13,7 @@
 #import <Twitter/Twitter.h>
 #import <Accounts/Accounts.h>
 #import <FacebookSDK/FacebookSDK.h>
+#import "UIApplication+EXFE.h"
 #import "TWAPIManager.h"
 #import "WCAlertView.h"
 #import "EFModel.h"
@@ -1356,9 +1357,8 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                         success(userid, token);
                     }
                 };
-                AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
-                // eg:  exfe://oauthcallback/
-                NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
+                // eg:  exfe://oauthcallback
+                NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback", [UIApplication sharedApplication].defaultScheme];
                 oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
                 
                 [self presentModalViewController:oauth animated:YES];
@@ -1435,9 +1435,8 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                             success(userid, token);
                         }
                     };
-                    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
-                    // eg:  exfe://oauthcallback/
-                    NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
+                    // eg:  exfe://oauthcallback
+                    NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback", [UIApplication sharedApplication].defaultScheme];
                     oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
                     
                     [self presentModalViewController:oauth animated:YES];

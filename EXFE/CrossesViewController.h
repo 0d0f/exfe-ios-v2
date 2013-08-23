@@ -34,16 +34,27 @@ TTTAttributedLabelDelegate
 @property (nonatomic, strong) id crossChangeObserver;
 @property (nonatomic, assign) BOOL needHeaderAnimation;
 
-- (void)refreshCrosses:(NSString*)source;
-- (void)refreshCrosses:(NSString*)source withCrossId:(int)cross_id;
-- (void)loadObjectsFromDataStore;
-- (void)emptyView;
-- (void)ShowProfileView;
-- (void)ShowGatherView;
+- (void)refreshAll;
+
 - (Cross*)crossWithId:(int)cross_id;
 - (void)refreshTableViewWithCrossId:(int)cross_id;
+
+
+
+#pragma mark navigation
+- (void)showProfileViewWithAnimated:(BOOL)animated;
+- (void)showGatherViewWithAnimated:(BOOL)animated;
 - (BOOL)pushToCross:(int)cross_id;
 - (BOOL)pushToConversation:(int)cross_id;
+- (BOOL)showCross:(NSInteger)crossId withTabClass:(Class)class animated:(BOOL)animated;
+
 - (void)onClickConversation:(UIView*)card;
+
+@end
+
+@interface CrossesViewController (URLNavigation)
+
+//- (BOOL)needAbc;
+- (BOOL)pushTo:(NSArray *)pathComponents animated:(BOOL)animated;
 
 @end

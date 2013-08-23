@@ -648,4 +648,12 @@ static NSString * kExtension           = @"exfe";
 //    [[QLog log] logWithFormat:@"gallery %zu stopped", (size_t) self.sequenceNumber];
 }
 
+
+
+- (void) clearTimeStamp
+{
+    self.lastQuery = nil;
+    self.latestModify = nil;
+}
+
 @end

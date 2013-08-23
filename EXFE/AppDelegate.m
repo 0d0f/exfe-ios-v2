@@ -17,6 +17,7 @@
 #import "Util.h"
 #import "EFKit.h"
 #import "EFModel.h"
+#import "XQueryComponents.h"
 
 @interface AppDelegate ()
 @property (nonatomic, copy) NSURL *url;
@@ -28,13 +29,6 @@
 
 - (void)registerWeixin {
     [WXApi registerApp:kWeixinAppID];
-}
-
-- (NSString *)defaultScheme {
-    NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
-    NSAssert([schemes objectAtIndex:1] != nil, @"Missing url sheme in main bundle.");
-    
-    return [schemes objectAtIndex:1];
 }
 
 #pragma mark UIApplicationDelegate
@@ -213,7 +207,7 @@
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
     if (self.model.apiServer && self.model.userId > 0) {
-        [self.crossesViewController refreshCrosses:@"crossupdateview"];
+        [self.model loadCrossListAfter:self.model.latestModify];
     }
 }
 
@@ -314,7 +308,7 @@
         
         if (userInfo != nil) {
             id arg = [userInfo objectForKey:@"args"];
-            if([arg isKindOfClass:[NSDictionary class]]) {
+            if(arg && [arg isKindOfClass:[NSDictionary class]]) {
                 id cid = [arg objectForKey:@"cid"];
                 id msg_type = [arg objectForKey:@"t"];
                 
@@ -324,22 +318,33 @@
                         NSString *type = (NSString *)msg_type;
                         if ([type isEqualToString:@"i"]) {
                             if ([crossViewController pushToCross:cross_id] == NO) {
-                                [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
+//                                [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
                             }
                         }
                         
                         if ([type isEqualToString:@"c"]) {
                             if ([crossViewController pushToConversation:cross_id] == NO) {
-                                [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+//                                [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
                             }
                         }
                     }
                 }
+            } else {
+                NSString * path = [userInfo objectForKey:@"path"];
+                if (path && [arg isKindOfClass:[NSString class]]) {
+                    NSURL *url = nil;
+                    if (path.length > 0) {
+                        url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:@"" path:path];
+                    } else {
+                        url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:@"" path:@"/"];
+                    }
+                    NSLog(@"Got url path: %@", url);
+                    [self jumpTo:url];
+                }
             }
         }
     } else {
-        CrossesViewController *crossViewController = self.crossesViewController;
-        [crossViewController refreshCrosses:@"crossupdateview"];
+        [self.model loadCrossList];
     }
 }
 
@@ -348,26 +353,6 @@
 - (void)showLanding:(UIViewController*)parent {
     EFLandingViewController *viewController = [[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil];
     [parent presentModalViewController:viewController animated:NO];
-}
-
-- (void)signinDidFinish {
-    if ([self.model isLoggedIn]) {
-        [self requestForPush];
-        
-        NSString *token = [[NSUserDefaults standardUserDefaults] valueForKey:@"udid"];
-        if (token.length > 0) {
-            [self.model.apiServer regDevice:token success:nil failure:nil];
-        }
-        
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
-        self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
-        
-        CrossesViewController *crossViewController = self.crossesViewController;
-        [crossViewController refreshCrosses:@"crossview_init"];
-        [crossViewController loadObjectsFromDataStore];
-        
-        [self.navigationController dismissModalViewControllerAnimated:YES];
-    }
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -473,9 +458,44 @@
     return YES;
 }
 
+- (void)jumpTo:(NSURL *)url
+{
+//    NSString *host = [url host];
+    NSArray *pathComps = [url pathComponents];
+    NSDictionary * params = [url queryComponents];
+    NSArray *anim = [params objectForKey:@"animated"];
+    BOOL animated = NO;
+    if (anim) {
+        animated = [[anim objectAtIndex:0] boolValue];
+    }
+
+    if (pathComps.count > 0 ) {
+        NSString *root = [pathComps objectAtIndex:0];
+        if ([@"/" isEqualToString:root]) {
+            NSMutableArray *array = [NSMutableArray arrayWithArray:pathComps];
+            [array removeObjectAtIndex:0];
+            if ([self.crossesViewController pushTo:array animated:animated]){
+                return;
+            } else {
+                if (self.navigationController.viewControllers.count > 1 && self.model.isLoggedIn) {
+                    [self.navigationController popToRootViewControllerAnimated:animated];
+                }
+                return;
+            }
+        }
+    }
+    // default keep current
+    return;
+}
+
 - (void)processUrlHandler:(NSURL*)url {
     
     NSString *host = [url host];
+    if (host.length == 0) {
+        [self jumpTo:url];
+        return;
+    } 
+    
     NSArray *pathComps = [url pathComponents];
     CrossesViewController *crossViewController = self.crossesViewController;
     
@@ -490,7 +510,6 @@
             if ( cross_id > 0) {
                 if ([self.model isLoggedIn]) {
                     if ([crossViewController pushToCross:cross_id] == NO) {
-                        [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
                     }
                 }
                 return ;
@@ -505,7 +524,6 @@
             if (cross_id > 0){
                 if ([self.model isLoggedIn]) {
                     if ([crossViewController pushToConversation:cross_id] == NO) {
-                        [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
                     }
                 }
             }
@@ -515,20 +533,27 @@
             [self.navigationController popToRootViewControllerAnimated:NO];
         }
         if ([self.model isLoggedIn]) {
-            [crossViewController ShowProfileView];
+            [crossViewController showProfileViewWithAnimated:NO];
         }
     }
 }
 
-- (void)gatherCrossDidFinish {
-    CrossesViewController *crossViewController = self.crossesViewController;
-    [crossViewController refreshCrosses:@"gatherview"];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)crossUpdateDidFinish:(int)cross_id {
-    CrossesViewController *crossViewController = self.crossesViewController;
-    [crossViewController refreshCrosses:@"crossupdateview" withCrossId:cross_id];
+- (void)signinDidFinish {
+    if ([self.model isLoggedIn]) {
+        [self requestForPush];
+        
+        NSString *token = [[NSUserDefaults standardUserDefaults] valueForKey:@"udid"];
+        if (token.length > 0) {
+            [self.model.apiServer regDevice:token success:nil failure:nil];
+        }
+        
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+        self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
+        
+        [self.model loadCrossList];
+        
+        [self.navigationController dismissModalViewControllerAnimated:YES];
+    }
 }
 
 - (void)signoutDidFinish {
@@ -546,7 +571,7 @@
     [self switchContextByUserId:0 withAbandon:YES];
     
     CrossesViewController *rootViewController = self.crossesViewController;
-    [rootViewController emptyView];
+    [rootViewController refreshAll];
     
     [self.navigationController popToRootViewControllerAnimated:YES];
     

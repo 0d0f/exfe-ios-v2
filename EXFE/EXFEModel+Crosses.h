@@ -8,8 +8,15 @@
 
 #import "EXFEModel.h"
 
+@class Cross;
 @interface EXFEModel (Crosses)
 
-- (void)loadCrossWithCrossId:(int)crossId updatedTime:(NSDate *)updatedTime;
+#pragma mark From local storage
+- (NSArray *)getCrossList;
 
+#pragma mark From remote api
+- (void)loadCrossWithCrossId:(int)crossId updatedTime:(NSDate *)updatedTime;
+- (void)loadCrossList;
+- (void)loadCrossListAfter:(NSDate *)time;
+- (void)editCross:(Cross *)cross;
 @end
