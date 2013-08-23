@@ -289,6 +289,11 @@
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameLoadCrossSuccess
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameRemoveMyInvitationSuccess
+                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -333,7 +338,7 @@
 {
     [super viewDidAppear:animated];
     
-    [self.model loadCrossWithCrossId:[_cross.cross_id intValue] updatedTime:_cross.updated_at];
+    [self.model loadCrossWithCrossId:[_cross.cross_id integerValue] updatedTime:_cross.updated_at];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -349,11 +354,11 @@
 
 #pragma mark - Notification Handler
 
-- (void)handleNotification:(NSNotification *)notificaiton {
-    NSString *name = notificaiton.name;
+- (void)handleNotification:(NSNotification *)notification {
+    NSString *name = notification.name;
     
     if ([name isEqualToString:kEFNotificationNameLoadCrossSuccess]) {
-        NSDictionary *userInfo = notificaiton.userInfo;
+        NSDictionary *userInfo = notification.userInfo;
         
         Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
         if ([meta.code intValue] == 403) {
@@ -367,7 +372,32 @@
         } else if ([meta.code intValue] == 200) {
             [self refreshUI];
         }
+    } else if ([kEFNotificationNameRemoveMyInvitationSuccess isEqualToString:name]) {
+   
+        NSDictionary *userInfo = notification.userInfo;
+        Exfee *exfee = [userInfo objectForKey:@"exfee"];
+        if (self.cross && exfee) {
+            if ([self.cross.exfee.exfee_id integerValue] == [exfee.exfee_id integerValue]) {
+                NSArray * list = [exfee getMyInvitations];
+                if (list.count == 0) {
+                    [self removeCrossAndExit];
+                }
+            }
+        }
     }
+}
+
+- (void)removeCrossAndExit
+{
+    // remove self from local storage
+    if (self.cross) {
+        [[self.cross managedObjectContext] deleteObject:self.cross];
+    }
+    
+    // exit current page
+    [self.tabBarViewController.navigationController popToRootViewControllerAnimated:YES];
+    // notify the list to reload from local
+    [NSNotificationCenter.defaultCenter postNotificationName:EXCrossListDidChangeNotification object:self];
 }
 
 #pragma mark - Setter && Getter
@@ -1385,7 +1415,7 @@
                                                      alert.tag = 403;
                                                      [alert show];
                                                  } else if ([[meta objectForKey:@"code"] intValue] == 200) {
-                                                     [self.model loadCrossWithCrossId:[_cross.cross_id intValue] updatedTime:nil];
+                                                     [self.model loadCrossWithCrossId:[_cross.cross_id integerValue] updatedTime:nil];
                                                      
                                                      [self refreshUI];
                                                  }
@@ -1472,14 +1502,7 @@
     switch (alertView.tag) {
         case 403:{
             if (buttonIndex == alertView.cancelButtonIndex) {
-                // remove self from local storage
-                if (self.cross) {
-                    [[self.cross managedObjectContext] deleteObject:self.cross];
-                }
-                // exit current page
-                [self.navigationController popToRootViewControllerAnimated:YES];
-                // notify the list to reload from local
-                [NSNotificationCenter.defaultCenter postNotificationName:EXCrossListDidChangeNotification object:self];
+                [self removeCrossAndExit];
             }
         }
             break;

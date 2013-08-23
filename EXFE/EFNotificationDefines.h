@@ -33,6 +33,14 @@ extern NSString *kEFNotificationNameLoadCrossListFailure;
 extern NSString *kEFNotificationNameEditCrossSuccess;
 extern NSString *kEFNotificationNameEditCrossFailure;
 
+// defined in EFRemoveInvitationOperation.m
+extern NSString *kEFNotificationNameRemoveInvitationSuccess;
+extern NSString *kEFNotificationNameRemoveInvitationFailure;
+
+// defined in EFRemoveMyInvitationOperation.m
+extern NSString *kEFNotificationNameRemoveMyInvitationSuccess;
+extern NSString *kEFNotificationNameRemoveMyInvitationFailure;
+
 // defined in EFReverseGeocodingOperation.m
 extern NSString *kEFNotificationNameReverseGeocodingSuccess;
 extern NSString *kEFNotificationNameReverseGeocodingFailure;

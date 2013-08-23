@@ -10,7 +10,7 @@
 
 @interface EFLoadCrossOperation : EFNetworkOperation
 
-@property (nonatomic, assign)   int         crossId;
-@property (nonatomic, strong)   NSDate    *updatedTime;
+@property (nonatomic, assign)   NSUInteger    crossId;
+@property (nonatomic, strong)   NSDate        *updatedTime;
 
 @end
