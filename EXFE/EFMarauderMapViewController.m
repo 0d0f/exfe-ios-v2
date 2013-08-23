@@ -291,11 +291,11 @@
     
     if ([[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
 #warning !!! 文本替换
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"第一次使用活点地图"
-                                                            message:@"是否启用"
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"开启活点地图"
+                                                            message:@"请确认将您未来1小时内的方位展现给能看到这张活点地图的人。"
                                                            delegate:self
-                                                  cancelButtonTitle:@"残忍的拒绝"
-                                                  otherButtonTitles:@"欣然的接受", nil];
+                                                  cancelButtonTitle:@"取消"
+                                                  otherButtonTitles:@"确定", nil];
         [alertView show];
     } else {
         // register to update location
@@ -350,11 +350,11 @@
     [self.mapDataSource openStreaming];
     if ([[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
 #warning !!! 文本替换
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"第一次使用活点地图"
-                                                            message:@"是否启用"
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"开启活点地图"
+                                                            message:@"请确认将您未来1小时内的方位展现给能看到这张活点地图的人。"
                                                            delegate:self
-                                                  cancelButtonTitle:@"残忍的拒绝"
-                                                  otherButtonTitles:@"欣然的接受", nil];
+                                                  cancelButtonTitle:@"取消"
+                                                  otherButtonTitles:@"确定", nil];
         [alertView show];
     } else {
         // register to update location
