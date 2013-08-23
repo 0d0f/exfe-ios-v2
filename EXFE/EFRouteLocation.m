@@ -31,7 +31,7 @@
             self.iconUrl = url;
         }
             break;
-        case kEFRouteLocationTypePark:
+        case kEFRouteLocationTypeNormal:
         {
             NSString *endPoint = nil;
             if (kEFRouteLocationColorBlue == self.markColor) {

@@ -23,10 +23,10 @@ typedef enum {
 
 typedef enum {
     kEFRouteLocationTypeUnknow = 0,
-    kEFRouteLocationTypePark,
-    kEFRouteLocationTypeDestination,
-    kEFRouteLocationTypeBreadcrumb,
-    kEFRouteLocationTypeCrossPlace
+    kEFRouteLocationTypeNormal      = 0 << 1,
+    kEFRouteLocationTypeDestination = 0 << 2,
+    kEFRouteLocationTypeCrossPlace  = 0 << 3,
+    kEFRouteLocationTypeBreadcrumb  = 0 << 4,
 } EFRouteLocationType;
 
 typedef enum {
