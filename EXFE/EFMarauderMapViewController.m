@@ -73,6 +73,8 @@
 
 - (void)_sendRequestWithURL:(NSString *)url hasRequestAPIComplete:(BOOL)hasComplete;
 
+- (void)_refreshTableViewFrame;
+
 @end
 
 @implementation EFMarauderMapViewController (Private)
@@ -189,6 +191,20 @@
     }
 }
 
+- (void)_refreshTableViewFrame {
+    CGFloat height = [self.mapDataSource numberOfPeople] * [EFMapPersonCell defaultCellHeight];
+    if (height + 100 > CGRectGetHeight(self.view.frame)) {
+        height = CGRectGetHeight(self.view.frame) - 100.0f;
+        self.tableView.scrollEnabled = YES;
+    } else {
+        self.tableView.scrollEnabled = NO;
+    }
+    
+    self.leftBaseView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, height}};
+    CAShapeLayer *shapeLayer = (CAShapeLayer *)self.leftBaseView.layer.mask;
+    shapeLayer.path = [[UIBezierPath bezierPathWithRoundedRect:self.leftBaseView.bounds byRoundingCorners:UIRectCornerBottomRight cornerRadii:(CGSize){4.0f, 4.0f}] CGPath];;
+}
+
 @end
 
 @implementation EFMarauderMapViewController
@@ -273,17 +289,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    CGFloat height = [self.mapDataSource numberOfPeople] * [EFMapPersonCell defaultCellHeight];
-    if (height + 100 > CGRectGetHeight(self.view.frame)) {
-        height = CGRectGetHeight(self.view.frame) - 100.0f;
-        self.tableView.scrollEnabled = YES;
-    } else {
-        self.tableView.scrollEnabled = NO;
-    }
-    
-    self.leftBaseView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, height}};
-    CAShapeLayer *shapeLayer = (CAShapeLayer *)self.leftBaseView.layer.mask;
-    shapeLayer.path = [[UIBezierPath bezierPathWithRoundedRect:self.leftBaseView.bounds byRoundingCorners:UIRectCornerBottomRight cornerRadii:(CGSize){4.0f, 4.0f}] CGPath];;
+    [self _refreshTableViewFrame];
     
     [self.mapStrokeView reloadData];
     
@@ -551,13 +557,14 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSInteger numberOfRows = 0;
     if (tableView == self.tableView) {
-        return [self.mapDataSource numberOfPeople] - 1;
+        numberOfRows = [self.mapDataSource numberOfPeople] - 1;
     } else if (tableView == self.selfTableView) {
-        return 1;
+        numberOfRows = 1;
     }
     
-    return 0;
+    return numberOfRows;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -752,6 +759,16 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 #pragma mark - EFMarauderMapDataSourceDelegate
+
+- (void)mapDataSourcePeopleDidChange:(EFMarauderMapDataSource *)dataSource {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self _refreshTableViewFrame];
+        
+        [self.selfTableView reloadData];
+        [self.tableView reloadData];
+        [self.mapStrokeView reloadData];
+    });
+}
 
 - (void)mapView:(EFMapView *)mapView tappedAtCoordinate:(CLLocationCoordinate2D)coordinate {
     CGPoint tapLocation = [mapView convertCoordinate:coordinate toPointToView:self.mapView];
