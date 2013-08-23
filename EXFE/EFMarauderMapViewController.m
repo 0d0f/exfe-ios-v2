@@ -620,13 +620,15 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     self.mapDataSource.selectedPerson = person;
     
     if (!locations || !locations.count) {
-        EFMapPersonViewController *personViewController = [[EFMapPersonViewController alloc] initWithDataSource:self.mapDataSource
-                                                                                                         person:person];
-        personViewController.delegate = self;
-        [personViewController presentFromViewController:self
-                                               location:self.view.center
-                                               animated:YES];
-        self.personViewController = personViewController;
+        if (!person.lastLocation) {
+            EFMapPersonViewController *personViewController = [[EFMapPersonViewController alloc] initWithDataSource:self.mapDataSource
+                                                                                                             person:person];
+            personViewController.delegate = self;
+            [personViewController presentFromViewController:self
+                                                   location:self.view.center
+                                                   animated:YES];
+            self.personViewController = personViewController;
+        }
         
         return;
     }
