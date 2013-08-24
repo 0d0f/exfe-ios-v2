@@ -33,8 +33,9 @@
         label.textColor = [UIColor whiteColor];
         label.textAlignment = NSTextAlignmentCenter;
         label.center = (CGPoint){CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds)};
-        label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
+        label.font = [UIFont fontWithName:@"Raleway" size:20];
         label.backgroundColor = [UIColor clearColor];
+        label.adjustsFontSizeToFitWidth = YES;
         [self addSubview:label];
         self.label = label;
     }
@@ -44,7 +45,7 @@
 
 - (void)drawRect:(CGRect)rect {
     CGRect viewBounds = self.bounds;
-    UIFont *font = [UIFont fontWithName:@"HelveticaNeue" size:12];
+    UIFont *font = [UIFont fontWithName:@"Raleway" size:12];
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
@@ -105,7 +106,7 @@
         [self.charactorArray addObject:string];
     }
     
-    NSString *otherCharactors = @"$@#%&?";
+    NSString *otherCharactors = @"$@#%&?!~/\\<>";
     
     for (NSUInteger i = 0; i < otherCharactors.length; i++) {
         unichar ch = [otherCharactors characterAtIndex:i];
@@ -129,7 +130,8 @@
     label.backgroundColor = [UIColor clearColor];
     label.textAlignment = NSTextAlignmentCenter;
     label.text = kDefaultCharactor;
-    label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
+    label.font = [UIFont fontWithName:@"Raleway" size:20];
+    label.adjustsFontSizeToFitWidth = YES;
     label.textColor = [UIColor whiteColor];
     label.userInteractionEnabled = YES;
     [panView addSubview:label];

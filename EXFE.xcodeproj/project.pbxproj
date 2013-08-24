@@ -1631,6 +1631,9 @@
 		7660330A17C21E0500B21A12 /* EFGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7660330917C21E0500B21A12 /* EFGradientView.m */; };
 		7660330B17C21E0500B21A12 /* EFGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7660330917C21E0500B21A12 /* EFGradientView.m */; };
 		7660330C17C21E0500B21A12 /* EFGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7660330917C21E0500B21A12 /* EFGradientView.m */; };
+		766176C717C9227300E98E74 /* Raleway-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 766176C617C9227300E98E74 /* Raleway-Regular.ttf */; };
+		766176C817C9227300E98E74 /* Raleway-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 766176C617C9227300E98E74 /* Raleway-Regular.ttf */; };
+		766176C917C9227300E98E74 /* Raleway-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 766176C617C9227300E98E74 /* Raleway-Regular.ttf */; };
 		7661C7EC1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7ED1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7EE1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
@@ -2844,6 +2847,7 @@
 		766032FC17C21C1B00B21A12 /* EFMapPersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapPersonViewController.m; sourceTree = "<group>"; };
 		7660330817C21E0500B21A12 /* EFGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFGradientView.h; sourceTree = "<group>"; };
 		7660330917C21E0500B21A12 /* EFGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFGradientView.m; sourceTree = "<group>"; };
+		766176C617C9227300E98E74 /* Raleway-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-Regular.ttf"; sourceTree = "<group>"; };
 		7661C7EA1738B15400133F10 /* EFErrorHandlerCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorHandlerCenter.h; sourceTree = "<group>"; };
 		7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorHandlerCenter.m; sourceTree = "<group>"; };
 		766C9827179933D00064B5BC /* EFPersonAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPersonAnnotationView.h; sourceTree = "<group>"; };
@@ -4486,6 +4490,7 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				766176C617C9227300E98E74 /* Raleway-Regular.ttf */,
 				76D024C417C7817000F69FD2 /* map_mark_ring_red.png */,
 				76D024C517C7817000F69FD2 /* map_mark_ring_red@2x.png */,
 				76D024C617C7817000F69FD2 /* map_mark_diamond_blue.png */,
@@ -5599,6 +5604,7 @@
 				4F63DB8317172AA600136B7E /* spin_80_2.png in Resources */,
 				4F63DB8417172AA600136B7E /* spin_80_3.png in Resources */,
 				4F63DB8B17172AA600136B7E /* Default-568h@2x.png in Resources */,
+				766176C817C9227300E98E74 /* Raleway-Regular.ttf in Resources */,
 				4F63DB8C17172AA600136B7E /* Default.png in Resources */,
 				4F63DB8D17172AA600136B7E /* Default@2x.png in Resources */,
 				4F63DB9017172AA600136B7E /* identity_facebook_40.png in Resources */,
@@ -6267,6 +6273,7 @@
 				4F00548817296F6400D4B429 /* table.png in Resources */,
 				4F00548B17296F6400D4B429 /* table@2x.png in Resources */,
 				4F005490172977E200D4B429 /* identity_facebook_50btn.png in Resources */,
+				766176C917C9227300E98E74 /* Raleway-Regular.ttf in Resources */,
 				4F005493172977E200D4B429 /* identity_twitter_50btn.png in Resources */,
 				4FDFA3C7172A794900929BC9 /* start_tri-00.png in Resources */,
 				4FDFA3CA172A794900929BC9 /* start_tri-00@2x.png in Resources */,
@@ -6516,6 +6523,7 @@
 				76C9318217BDDA3600536383 /* cautionbar_cancel_pressed@2x.png in Resources */,
 				7817DAAB1603419E00AE859D /* Default-568h@2x.png in Resources */,
 				7817DAAC1603419E00AE859D /* Default.png in Resources */,
+				766176C717C9227300E98E74 /* Raleway-Regular.ttf in Resources */,
 				7817DAAD1603419E00AE859D /* Default@2x.png in Resources */,
 				78F9F887165383D60079BA6B /* identity_facebook_40.png in Resources */,
 				78F9F888165383D60079BA6B /* identity_facebook_40@2x.png in Resources */,

@@ -28,13 +28,14 @@
     if (self) {
         self.userInteractionEnabled = NO;
         
-        UILabel *markTitleLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {24, 26}}];
+        UILabel *markTitleLabel = [[UILabel alloc] initWithFrame:(CGRect){{3.0f, 0.0f}, {18, 26}}];
         markTitleLabel.textAlignment = NSTextAlignmentCenter;
-        markTitleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:20];
+        markTitleLabel.font = [UIFont fontWithName:@"Raleway" size:20];
         markTitleLabel.backgroundColor = [UIColor clearColor];
         markTitleLabel.textColor = [UIColor whiteColor];
         markTitleLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.25f];
         markTitleLabel.shadowOffset = (CGSize){0.0f, 0.5f};
+        markTitleLabel.adjustsFontSizeToFitWidth = YES;
         self.markTitleLabel = markTitleLabel;
         [self addSubview:markTitleLabel];
         

@@ -30,7 +30,7 @@
 
 #define kAnnotationOffsetY  (-50.0f)
 #define kShadowOffset       (3.0f)
-#define kTapRectHalfWidth   (50.0f)
+#define kTapRectHalfWidth   (24.0f)
 
 @interface EFMarauderMapViewController ()
 
