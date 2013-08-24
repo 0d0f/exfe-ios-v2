@@ -902,9 +902,9 @@
     annView.canShowCallout = YES;
     
     if ([((PlaceAnnotation*)annotation).external_id isEqualToString:self.selecetedPlace.external_id]) {
-        annView.image = [UIImage imageNamed:@"map_mark_ring_blue.png"];
+        annView.image = [UIImage imageNamed:@"map_mark_diamond_blue.png"];
     } else {
-        annView.image = [UIImage imageNamed:@"map_mark_ring_red.png"];
+        annView.image = [UIImage imageNamed:@"map_mark_red.png"];
     }
     [annView setCenterOffset:CGPointMake(0, -18)];
     UIButton* butt = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
@@ -927,13 +927,13 @@
             for(int i = 0;i < [annotations count];i++){
                 id annotation = [annotations objectAtIndex:i];
                 MKAnnotationView* annoview = [mapView viewForAnnotation: annotation];
-                if([annoview.image isEqual:[UIImage imageNamed:@"map_mark_ring_blue.png"]]){
-                    annoview.image = [UIImage imageNamed:@"map_mark_ring_red.png"];
+                if([annoview.image isEqual:[UIImage imageNamed:@"map_mark_diamond_blue.png"]]){
+                    annoview.image = [UIImage imageNamed:@"map_mark_red.png"];
                 }
             }
         }
         
-        view.image = [UIImage imageNamed:@"map_mark_ring_blue.png"];
+        view.image = [UIImage imageNamed:@"map_mark_diamond_blue.png"];
 //
         PlaceAnnotation *annot = view.annotation;
 //        if (annot.index == -2){
@@ -1004,11 +1004,11 @@
         if([annotation isKindOfClass:[PlaceAnnotation class]]){
             MKAnnotationView* annoview = [map viewForAnnotation: annotation];
             if([annotation.external_id isEqualToString:self.selecetedPlace.external_id]){
-                annoview.image=[UIImage imageNamed:@"map_mark_ring_blue.png"];
+                annoview.image=[UIImage imageNamed:@"map_mark_diamond_blue.png"];
                 [annoview.superview bringSubviewToFront:annoview];
 //                [annoview bringSubviewToFront:map];
             } else {
-                annoview.image = [UIImage imageNamed:@"map_mark_ring_red.png"];
+                annoview.image = [UIImage imageNamed:@"map_mark_red.png"];
             }
         }
     }
@@ -1057,7 +1057,7 @@
             location.longitude = annotation.coordinate.longitude;
 
             MKAnnotationView* annoview = [map viewForAnnotation: annotation];
-            annoview.image=[UIImage imageNamed:@"map_mark_ring_blue.png"];
+            annoview.image=[UIImage imageNamed:@"map_mark_diamond_blue.png"];
         }
     }else if(index==-1){
         self.selecetedPlace.title=inputplace.text;
@@ -1081,11 +1081,11 @@
             if([annotation isKindOfClass:[PlaceAnnotation class]]){
                 MKAnnotationView* annoview = [map viewForAnnotation: annotation];
                 if([annotation.external_id isEqualToString:self.selecetedPlace.external_id]){
-                    annoview.image=[UIImage imageNamed:@"map_mark_ring_blue.png"];
+                    annoview.image=[UIImage imageNamed:@"map_mark_diamond_blue.png"];
                     [annoview.superview bringSubviewToFront:annoview];
                     [annoview bringSubviewToFront:map];
                 } else {
-                    annoview.image=[UIImage imageNamed:@"map_mark_ring_red.png"];
+                    annoview.image=[UIImage imageNamed:@"map_mark_red.png"];
                 }
             }
         }

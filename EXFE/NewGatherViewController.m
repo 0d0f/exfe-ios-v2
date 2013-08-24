@@ -1106,7 +1106,7 @@
         if ( pinView == nil ){
             pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultPinID];
             pinView.canShowCallout = YES;
-            pinView.image = [UIImage imageNamed:@"map_mark_ring_blue.png"];
+            pinView.image = [UIImage imageNamed:@"map_mark_diamond_blue.png"];
             pinView.centerOffset = CGPointMake(0, -18);
             
             UIButton *btnNav = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
