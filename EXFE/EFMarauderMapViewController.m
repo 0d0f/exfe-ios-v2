@@ -848,7 +848,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                 if (userLocationView) {
                     if (destination) {
                         userLocationView.showNavigation = YES;
-                        CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
+                        CGFloat radian = HeadingInRadian([EFLocationManager defaultManager].userLocation.coordinate, destination.coordinate);
                         userLocationView.radianBetweenDestination = radian;
                     } else {
                         userLocationView.showNavigation = NO;
@@ -886,7 +886,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         if (userLocationView) {
             if (destination) {
                 userLocationView.showNavigation = YES;
-                CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
+                CGFloat radian = HeadingInRadian([EFLocationManager defaultManager].userLocation.coordinate, destination.coordinate);
                 userLocationView.radianBetweenDestination = radian;
             } else {
                 userLocationView.showNavigation = NO;
@@ -911,7 +911,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         if (userLocationView) {
             if (destination) {
                 userLocationView.showNavigation = YES;
-                CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
+                CGFloat radian = HeadingInRadian([EFLocationManager defaultManager].userLocation.coordinate, destination.coordinate);
                 userLocationView.radianBetweenDestination = radian;
             } else {
                 userLocationView.showNavigation = NO;
@@ -1058,7 +1058,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         EFRouteLocation *destination = self.mapDataSource.destinationLocation;
         if (destination) {
             userLocationView.showNavigation = YES;
-            CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
+            CGFloat radian = HeadingInRadian([EFLocationManager defaultManager].userLocation.coordinate, destination.coordinate);
             userLocationView.radianBetweenDestination = radian;
         } else {
             userLocationView.showNavigation = NO;

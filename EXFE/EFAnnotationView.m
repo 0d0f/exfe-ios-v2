@@ -26,6 +26,8 @@
 {
     self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.userInteractionEnabled = NO;
+        
         UILabel *markTitleLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {24, 26}}];
         markTitleLabel.textAlignment = NSTextAlignmentCenter;
         markTitleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:20];

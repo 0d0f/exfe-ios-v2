@@ -198,6 +198,7 @@
     }
     
     if (kEFMapPersonConnectStateOnline == self.person.connectState) {
+        height += CGRectGetHeight(self.meDistanceLabel.frame) * 0.8f;
         self.requestButton.hidden = YES;
         self.lineView.hidden = YES;
     } else {

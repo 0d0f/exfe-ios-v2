@@ -43,7 +43,7 @@ CGFloat RadianAWithLine(CGFloat a, CGFloat b, CGFloat c) {
     return A;
 }
 
-CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocationCoordinate2D locationCoordinate) {
+CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoordinate2D destinationCoordinate) {
     CGFloat offset = fabs(destinationCoordinate.longitude - locationCoordinate.longitude);
     CLLocationCoordinate2D another = CLLocationCoordinate2DMake(locationCoordinate.latitude + offset, locationCoordinate.longitude);
     
