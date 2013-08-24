@@ -171,18 +171,18 @@
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        UIImageView *avatarBaseImageView = [[UIImageView alloc] initWithFrame:(CGRect){{3.0f, 3.0f}, {44.0f, 44.0f}}];
-        avatarBaseImageView.image = [UIImage imageNamed:@"portrait_frame_40.png"];
-        avatarBaseImageView.userInteractionEnabled = YES;
-        [self.contentView addSubview:avatarBaseImageView];
-        self.avatarBaseImageView = avatarBaseImageView;
-        
         UIImageView *avatarImageView = [[UIImageView alloc] initWithFrame:(CGRect){{5, 5}, {40, 40}}];
         avatarImageView.layer.masksToBounds = YES;
         avatarImageView.layer.cornerRadius = 2.0f;
         avatarImageView.userInteractionEnabled = YES;
         [self.contentView addSubview:avatarImageView];
         self.avatarImageView = avatarImageView;
+        
+        UIImageView *avatarBaseImageView = [[UIImageView alloc] initWithFrame:(CGRect){{3.0f, 3.0f}, {44.0f, 44.0f}}];
+        avatarBaseImageView.image = [UIImage imageNamed:@"portrait_frame_40.png"];
+        avatarBaseImageView.userInteractionEnabled = YES;
+        [self.contentView addSubview:avatarBaseImageView];
+        self.avatarBaseImageView = avatarBaseImageView;
         
         UIImageView *stateImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_arrow_12red.png"]];
         stateImageView.frame = (CGRect){{3, 47}, {14, 14}};

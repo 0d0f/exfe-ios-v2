@@ -27,6 +27,7 @@
 #import "EFUserLocationAnnotationView.h"
 #import "EFTimestampAnnotation.h"
 #import "EFTimestampAnnotationView.h"
+#import "WXApi.h"
 
 #define kAnnotationOffsetY  (-50.0f)
 #define kShadowOffset       (3.0f)
