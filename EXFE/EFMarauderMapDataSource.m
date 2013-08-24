@@ -830,40 +830,42 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
     
     [self removeAllTimestampToMapView:mapView];
     
-    if (kEFMapPersonConnectStateOffline == person.connectState) {
-        EFLocation *lastLocation = person.lastLocation;
-        NSArray *locations = person.locations;
-        NSMutableArray *annotations = [[NSMutableArray alloc] init];
-        
+    EFLocation *lastLocation = person.lastLocation;
+    NSArray *locations = person.locations;
+    NSMutableArray *annotations = [[NSMutableArray alloc] init];
+    
+    EFLocation *preLocation = nil;
+    
+    if (kEFMapPersonConnectStateOnline != person.connectState) {
         EFTimestampAnnotation *firstTimestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:lastLocation.coordinate
                                                                                         timestamp:lastLocation.timestamp];
         [annotations addObject:firstTimestamp];
-        
-        EFLocation *preLocation = lastLocation;
-        
-        for (EFLocation *location in locations) {
-            NSTimeInterval timeInterval = [preLocation.timestamp timeIntervalSinceDate:location.timestamp];
-            if (timeInterval >= kTimestampDuration) {
-                CGPoint viewPoint = [mapView convertCoordinate:location.coordinate toPointToView:mapView];
-                
-                CGFloat length = HUGE_VALF;
-                for (EFTimestampAnnotation *preTimestamp in annotations) {
-                    CGPoint preViewPoint = [mapView convertCoordinate:preTimestamp.coordinate toPointToView:mapView];
-                    length = MIN(length, LengthBetweenPoints(viewPoint, preViewPoint));
-                }
-                
-                if (length > kTimestampBlank) {
-                    EFTimestampAnnotation *timestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:location.coordinate
-                                                                                               timestamp:location.timestamp];
-                    [annotations addObject:timestamp];
-                    preLocation = location;
-                }
+    }
+    
+    preLocation = lastLocation;
+    
+    for (EFLocation *location in locations) {
+        NSTimeInterval timeInterval = [preLocation.timestamp timeIntervalSinceDate:location.timestamp];
+        if (timeInterval >= kTimestampDuration) {
+            CGPoint viewPoint = [mapView convertCoordinate:location.coordinate toPointToView:mapView];
+            
+            CGFloat length = HUGE_VALF;
+            for (EFTimestampAnnotation *preTimestamp in annotations) {
+                CGPoint preViewPoint = [mapView convertCoordinate:preTimestamp.coordinate toPointToView:mapView];
+                length = MIN(length, LengthBetweenPoints(viewPoint, preViewPoint));
+            }
+            
+            if (length > kTimestampBlank) {
+                EFTimestampAnnotation *timestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:location.coordinate
+                                                                                           timestamp:location.timestamp];
+                [annotations addObject:timestamp];
+                preLocation = location;
             }
         }
-        
-        [self.timestampMap setObject:annotations forKey:[NSValue valueWithNonretainedObject:person]];
-        [mapView addAnnotations:annotations];
     }
+    
+    [self.timestampMap setObject:annotations forKey:[NSValue valueWithNonretainedObject:person]];
+    [mapView addAnnotations:annotations];
 }
 
 #pragma mark - RoutePath

@@ -12,10 +12,13 @@
 #import "EFMapKit.h"
 #import "EFCache.h"
 #import "NSDate+RouteXDateFormater.h"
+#import "EFGradientView.h"
+#import "Util.h"
 
 #define kStateLabelNormalFrame      (CGRect){{5, 48}, {40, 12}}
 #define kStateLabelMeterFrame       (CGRect){{17, 48}, {36, 12}}
 #define kStateLabelTimestampFrame   (CGRect){{5, 48}, {40, 12}}
+#define kGradientViewTag            (233)
 
 @interface EFMapPersonCell ()
 
@@ -63,7 +66,9 @@
             self.stateLabel.text = infoText;
             [self.stateLabel sizeToFit];
             
-            self.stateView.layer.backgroundColor = [UIColor colorWithRed:(229.0f / 255.0f) green:(49.0f / 255.0f) blue:(83.0f / 255.0f) alpha:1.0f].CGColor;
+            EFGradientView *gradientView = (EFGradientView *)[self.stateView viewWithTag:kGradientViewTag];
+            gradientView.colors = @[[UIColor COLOR_RGB(0xCC, 0xCC, 0xCC)],
+                                    [UIColor COLOR_RGB(0x7F, 0x7F, 0x7F)]];
             self.stateView.hidden = NO;
             self.meterLabel.hidden = YES;
             self.stateLabel.textAlignment = NSTextAlignmentCenter;
@@ -110,8 +115,13 @@
             if (self.person.lastLocation) {
                 if (self.person.connectState == kEFMapPersonConnectStateOnline) {
                     infoText = NSLocalizedString(@"在线", nil);
+                    
+                    EFGradientView *gradientView = (EFGradientView *)[self.stateView viewWithTag:kGradientViewTag];
+                    gradientView.colors = @[[UIColor COLOR_RGB(0xFF, 0x7E, 0x98)],
+                                            [UIColor COLOR_RGB(0xE5, 0x2E, 0x53)]];
+                    
+                    self.stateView.hidden = NO;
                     self.stateImageView.hidden = YES;
-                    self.stateView.hidden = YES;
                     self.meterLabel.hidden = YES;
                     self.stateLabel.textAlignment = NSTextAlignmentCenter;
                     self.stateLabel.frame = kStateLabelNormalFrame;
@@ -177,6 +187,12 @@
         
         UIView *stateView = [[UIView alloc] initWithFrame:(CGRect){{7, 50}, {7, 7}}];
         stateView.layer.cornerRadius = 3.5;
+        stateView.layer.masksToBounds = YES;
+        
+        EFGradientView *gradientView = [[EFGradientView alloc] initWithFrame:stateView.bounds];
+        gradientView.tag = kGradientViewTag;
+        [stateView addSubview:gradientView];
+        
         [self.contentView addSubview:stateView];
         self.stateView = stateView;
         self.stateView.hidden = YES;
