@@ -146,6 +146,10 @@
                                                                           action:@selector(handlePan:)];
     [self.label addGestureRecognizer:pan];
     
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                            action:@selector(handleLongPressed:)];
+    [self.label addGestureRecognizer:longPress];
+    
     self.markLetter = kDefaultCharactor;
     
     CGRect buttonFrame = (CGRect){CGPointZero, {CGRectGetMidX(viewBounds) - 20.0f, CGRectGetHeight(viewBounds)}};
@@ -171,6 +175,24 @@
         self.redButton.selected = NO;
         self.blueButton.selected = YES;
     }
+}
+
+- (void)_showLetterPickerView {
+    if (!self.letterPickerView) {
+        CGRect viewBounds = self.bounds;
+        viewBounds.origin.y -= (CGRectGetHeight(viewBounds) + 12.0f);
+        self.letterPickerView = [[EFLetterPickerView alloc] initWithFrame:viewBounds];
+        self.letterPickerView.hidden = YES;
+        [self addSubview:self.letterPickerView];
+    }
+    self.letterPickerView.hidden = NO;
+}
+
+- (void)_hideLetterPickerView {
+    if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
+        [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
+    }
+    self.letterPickerView.hidden = YES;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -246,14 +268,7 @@
     UIGestureRecognizerState state = pan.state;
     switch (state) {
         case UIGestureRecognizerStateBegan:
-            if (!self.letterPickerView) {
-                CGRect viewBounds = self.bounds;
-                viewBounds.origin.y -= (CGRectGetHeight(viewBounds) + 12.0f);
-                self.letterPickerView = [[EFLetterPickerView alloc] initWithFrame:viewBounds];
-                self.letterPickerView.hidden = YES;
-                [self addSubview:self.letterPickerView];
-            }
-            self.letterPickerView.hidden = NO;
+            [self _showLetterPickerView];
             break;
         case UIGestureRecognizerStateChanged:
             if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:isChangingToTitle:)]) {
@@ -261,14 +276,14 @@
             }
             break;
         case UIGestureRecognizerStateEnded:
-            if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
-                [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
-            }
-            self.letterPickerView.hidden = YES;
+            [self _hideLetterPickerView];
             break;
         default:
             break;
     }
+}
+
+- (void)handleLongPressed:(UILongPressGestureRecognizer *)gesture {
 }
 
 #pragma mark - Property Accessor

@@ -947,6 +947,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     [routeLocation updateIconURL];
     
     [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView shouldPostToServer:NO];
+    
+    routeLocation.isChanged = YES;
 }
 
 - (void)mapView:(EFMapView *)mapView didChangeSelectedAnnotationStyle:(EFAnnotationStyle)style {
@@ -968,6 +970,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     [routeLocation updateIconURL];
     
     [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView shouldPostToServer:NO];
+    
+    routeLocation.isChanged = YES;
 }
 
 - (void)mapViewCancelButtonPressed:(EFMapView *)mapView {
