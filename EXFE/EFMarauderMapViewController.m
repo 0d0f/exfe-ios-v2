@@ -840,7 +840,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         double delayInSeconds = self.annotationAnimationDelay;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [dataSource addRouteLocation:routeLocation toMapView:self.mapView];
+            [dataSource addRouteLocation:routeLocation toMapView:self.mapView canChangeType:NO];
             
             if ([EFLocationManager defaultManager].userLocation) {
                 EFRouteLocation *destination = self.mapDataSource.destinationLocation;
@@ -877,7 +877,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations {
     for (EFRouteLocation *routeLocation in locations) {
-        [dataSource addRouteLocation:routeLocation toMapView:self.mapView];
+        [dataSource addRouteLocation:routeLocation toMapView:self.mapView canChangeType:NO];
     }
     
     if ([EFLocationManager defaultManager].userLocation) {
@@ -943,10 +943,17 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     EFCalloutAnnotationView *calloutView = (EFCalloutAnnotationView *)[self.mapView viewForAnnotation:self.currentCalloutAnnotation];
     EFAnnotation *annotation = calloutView.parentAnnotationView.annotation;
     EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
+    
+    if (routeLocation.locatinMask & kEFRouteLocationMaskXPlace) {
+        [self.mapDataSource changeXPlaceRouteLocationToNormalRouteLocaiton:routeLocation];
+        routeLocation.markColor = kEFRouteLocationColorBlue;
+    }
+    
     routeLocation.markTitle = title;
     [routeLocation updateIconURL];
     
     [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView shouldPostToServer:NO];
+    [self.mapView customEditingViewWithRouteLocation:routeLocation];
     
     routeLocation.isChanged = YES;
 }
@@ -956,20 +963,20 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     EFAnnotation *annotation = calloutView.parentAnnotationView.annotation;
     EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
     
-    if (kEFAnnotationStyleDestination) {
-        routeLocation.locationTytpe = kEFRouteLocationTypeDestination;
+    if (routeLocation.locatinMask & kEFRouteLocationMaskXPlace) {
+        [self.mapDataSource changeXPlaceRouteLocationToNormalRouteLocaiton:routeLocation];
+    }
+    
+    if (kEFAnnotationStyleMarkRed == style) {
+        routeLocation.markColor = kEFRouteLocationColorRed;
     } else {
-        routeLocation.locationTytpe = kEFRouteLocationTypeNormal;
-        if (kEFAnnotationStyleParkRed == style) {
-            routeLocation.markColor = kEFRouteLocationColorRed;
-        } else {
-            routeLocation.markColor = kEFRouteLocationColorBlue;
-        }
+        routeLocation.markColor = kEFRouteLocationColorBlue;
     }
     
     [routeLocation updateIconURL];
     
     [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView shouldPostToServer:NO];
+    [self.mapView customEditingViewWithRouteLocation:routeLocation];
     
     routeLocation.isChanged = YES;
 }
@@ -1031,6 +1038,9 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         self.currentCalloutAnnotation = calloutAnnotation;
         self.mapView.editingState = kEFMapViewEditingStateEditingAnnotation;
         [self.mapView customEditingViewWithRouteLocation:routeLocation];
+        
+        // bring the selected view to front.
+        [view.superview bringSubviewToFront:view];
     }
 }
 

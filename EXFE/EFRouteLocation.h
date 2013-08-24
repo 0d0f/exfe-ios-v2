@@ -36,12 +36,13 @@
 @property (nonatomic, copy)     NSString                *createdByUid;
 @property (nonatomic, strong)   NSDate                  *updateDate;
 @property (nonatomic, copy)     NSString                *updatedByUid;
-@property (nonatomic, assign)   EFRouteLocationType     locationTytpe;
 @property (nonatomic, copy)     NSURL                   *iconUrl;
 @property (nonatomic, copy)     NSString                *title;
 @property (nonatomic, copy)     NSString                *subtitle;
 @property (nonatomic, assign)   CGFloat                 accuracy;
 @property (nonatomic, assign)   CLLocationCoordinate2D  coordinate;
+@property (nonatomic, assign)   EFRouteLocationMask     locatinMask;    // for tags
+@property (nonatomic, strong)   NSArray                 *tags;
 
 @property (nonatomic, copy)     NSString                *markTitle;
 @property (nonatomic, assign)   EFRouteLocationColor    markColor;
@@ -49,6 +50,7 @@
 @property (nonatomic, assign)   BOOL                    isChanged;
 
 + (EFRouteLocation *)generateRouteLocationWithCoordinate:(CLLocationCoordinate2D)coordinate;
++ (EFRouteLocation *)generateRouteLocationFromRouteLocation:(EFRouteLocation *)routeLocation;
 - (id)initWithDictionary:(NSDictionary *)param;
 - (NSDictionary *)dictionaryValue;
 

@@ -30,6 +30,13 @@ typedef enum {
 } EFRouteLocationType;
 
 typedef enum {
+    kEFRouteLocationMaskUnknow = 0,
+    kEFRouteLocationMaskNormal =        1 << 0,
+    kEFRouteLocationMaskDestination =   1 << 1,
+    kEFRouteLocationMaskXPlace =        1 << 2,
+} EFRouteLocationMask;
+
+typedef enum {
     kEFRouteLocationColorBlue = 0,
     kEFRouteLocationColorRed
 } EFRouteLocationColor;

@@ -41,13 +41,16 @@
     _style = style;
     
     switch (style) {
+        case kEFAnnotationStyleXPlace:
+            self.markImage = [UIImage imageNamed:@"map_mark_diamond_blue.png"];
+            break;
         case kEFAnnotationStyleDestination:
             self.markImage = [UIImage imageNamed:@"map_mark_ring_blue.png"];
             break;
-        case kEFAnnotationStyleParkRed:
+        case kEFAnnotationStyleMarkRed:
             self.markImage = [UIImage imageNamed:@"map_mark_red.png"];
             break;
-        case kEFAnnotationStyleParkBlue:
+        case kEFAnnotationStyleMarkBlue:
         default:
             self.markImage = [UIImage imageNamed:@"map_mark_blue.png"];
             break;

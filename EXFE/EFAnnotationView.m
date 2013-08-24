@@ -111,7 +111,8 @@
     
     self.image = annotatoin.markImage;
     
-    if (kEFAnnotationStyleDestination == annotatoin.style) {
+    if (kEFAnnotationStyleDestination == annotatoin.style ||
+        kEFAnnotationStyleXPlace == annotatoin.style) {
         self.markTitleLabel.hidden = YES;
     } else {
         self.markTitleLabel.hidden = NO;

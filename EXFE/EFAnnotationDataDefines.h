@@ -11,8 +11,9 @@
 
 typedef enum {
     kEFAnnotationStyleDestination = 0,
-    kEFAnnotationStyleParkBlue,
-    kEFAnnotationStyleParkRed
+    kEFAnnotationStyleMarkBlue,
+    kEFAnnotationStyleMarkRed,
+    kEFAnnotationStyleXPlace
 } EFAnnotationStyle;
 
 typedef void (^TouchEventBlock)(void);

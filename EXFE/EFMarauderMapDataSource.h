@@ -60,9 +60,10 @@ EFHTTPStreamingDelegate
  * Route Location
  * @note: All input must be on mars.
  */
-- (void)addRouteLocation:(EFRouteLocation *)routeLocation toMapView:(MKMapView *)mapView;
+- (void)addRouteLocation:(EFRouteLocation *)routeLocation toMapView:(MKMapView *)mapView canChangeType:(BOOL)canChangeType;
+- (void)addRouteLocation:(EFRouteLocation *)routeLocation toMapView:(MKMapView *)mapView;   // canChangeType == YES
 - (void)updateRouteLocation:(EFRouteLocation *)routeLocation inMapView:(MKMapView *)mapView shouldPostToServer:(BOOL)shouldPost;
-- (void)updateRouteLocation:(EFRouteLocation *)routeLocation inMapView:(MKMapView *)mapView;
+- (void)updateRouteLocation:(EFRouteLocation *)routeLocation inMapView:(MKMapView *)mapView;    // shouldPost == YES
 
 - (EFRouteLocation *)routeLocationForAnnotation:(EFAnnotation *)annotation;
 - (EFRouteLocation *)routeLocationForRouteLocationId:(NSString *)routeLocationId;
@@ -121,6 +122,7 @@ EFHTTPStreamingDelegate
  * Factory
  */
 - (EFRouteLocation *)createRouteLocationWithCoordinate:(CLLocationCoordinate2D)coordinate;
+- (void)changeXPlaceRouteLocationToNormalRouteLocaiton:(EFRouteLocation *)xplace;
 
 - (CLLocationCoordinate2D)earthCoordinateToMarsCoordinate:(CLLocationCoordinate2D)mars;
 - (CLLocationCoordinate2D)marsCoordinateToEarthCoordinate:(CLLocationCoordinate2D)earth;

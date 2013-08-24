@@ -69,11 +69,13 @@
         self.people = people;
         
         NSUInteger count = self.geomarks.count + self.people.count;
+        CGFloat height = kDefaultCellHeight * count;
         if (count > kDefaultCellCount) {
             count = kDefaultCellCount;
+            height = kDefaultCellHeight * (count + 0.6f);
         }
         
-        self.view.frame = (CGRect){CGPointZero, {200.0f, kDefaultCellHeight * count}};
+        self.view.frame = (CGRect){CGPointZero, {200.0f, height}};
     }
     
     return self;

@@ -14,38 +14,37 @@
 
 @interface EFRouteLocation (Private)
 
+- (void)_locationMaskDidChange;
 - (void)_updateIconURL;
 
 @end
 
 @implementation EFRouteLocation (Private)
 
+- (void)_locationMaskDidChange {
+    
+}
+
 - (void)_updateIconURL {
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     NSURL *baseURl = objectManager.HTTPClient.baseURL;
     
-    switch (self.locationTytpe) {
-        case kEFRouteLocationTypeDestination:
-        {
-            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/map_mark_ring_blue@2x.png", IMG_ROOT]];
-            self.iconUrl = url;
+    if (self.locatinMask & kEFRouteLocationMaskXPlace) {
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/map_mark_diamond_blue@2x.png", IMG_ROOT]];
+        self.iconUrl = url;
+    } else if (self.locatinMask & kEFRouteLocationMaskDestination) {
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/map_mark_ring_blue@2x.png", IMG_ROOT]];
+        self.iconUrl = url;
+    } else {
+        NSString *endPoint = nil;
+        if (kEFRouteLocationColorBlue == self.markColor) {
+            endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=blue", self.markTitle];
+        } else {
+            endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=red", self.markTitle];
         }
-            break;
-        case kEFRouteLocationTypeNormal:
-        {
-            NSString *endPoint = nil;
-            if (kEFRouteLocationColorBlue == self.markColor) {
-                endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=blue", self.markTitle];
-            } else {
-                endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=red", self.markTitle];
-            }
-            NSURL *url = [NSURL URLWithString:endPoint
-                                relativeToURL:baseURl];
-            self.iconUrl = url;
-        }
-            break;
-        default:
-            break;
+        NSURL *url = [NSURL URLWithString:endPoint
+                            relativeToURL:baseURl];
+        self.iconUrl = url;
     }
 }
 
@@ -58,7 +57,10 @@
     IdentityId *identityId = [identity identityIdValue];
     
     EFRouteLocation *instance = [[self alloc] init];
-    instance.locationTytpe = kEFRouteLocationTypeUnknow;
+    instance.locatinMask = kEFRouteLocationMaskNormal;
+    instance.markColor = kEFRouteLocationColorBlue;
+    instance.markTitle = @"P";
+    instance.tags = @[];
     instance.locationId = [NSString stringWithFormat:@"%d", rand() % 255];
     instance.coordinate = coordinate;
     instance.createdDate = [NSDate date];
@@ -67,6 +69,22 @@
     instance.updatedByUid = identityId.identity_id;
     
     return instance;
+}
+
++ (EFRouteLocation *)generateRouteLocationFromRouteLocation:(EFRouteLocation *)routeLocation {
+    EFRouteLocation *another = [[EFRouteLocation alloc] initWithDictionary:[routeLocation dictionaryValue]];
+    another.locationId = [NSString stringWithFormat:@"%d", rand() % 255];
+    another.locatinMask &= ~kEFRouteLocationMaskXPlace;
+    
+    if (!another.markTitle || !another.markTitle.length) {
+        another.markTitle = @"P";
+    }
+    
+    NSMutableArray *tags = [[NSMutableArray alloc] initWithArray:another.tags];
+    [tags removeObject:@"xplace"];
+    another.tags = tags;
+    
+    return another;
 }
 
 - (id)initWithDictionary:(NSDictionary *)param {
@@ -92,15 +110,22 @@
                 self.updatedByUid = obj;
             } else if ([key isEqualToString:@"tags"]) {
                 NSAssert([obj isKindOfClass:[NSArray class]], @"tags should be a array");
-                NSString *lastTag = [obj lastObject];
-                if ([lastTag isEqualToString:@"park"]) {
-                    self.locationTytpe = kEFRouteLocationTypeNormal;
-                } else if ([lastTag isEqualToString:@"destination"]) {
-                    self.locationTytpe = kEFRouteLocationTypeDestination;
-                } else if ([lastTag isEqualToString:@"breadcrumbs"]) {
-                    self.locationTytpe = kEFRouteLocationTypeBreadcrumb;
-                } else if ([lastTag isEqualToString:@"xplace"]) {
-                    self.locationTytpe = kEFRouteLocationTypeCrossPlace;
+                self.locatinMask = kEFRouteLocationMaskUnknow;
+                self.tags = obj;
+                
+                BOOL isDestinationOrXPlace = NO;
+                for (NSString *tag in obj) {
+                    if ([tag isEqualToString:@"destination"]) {
+                        self.locatinMask |= kEFRouteLocationMaskDestination;
+                        isDestinationOrXPlace = YES;
+                    } else if ([tag isEqualToString:@"xplace"]) {
+                        self.locatinMask |= kEFRouteLocationMaskXPlace;
+                        isDestinationOrXPlace = YES;
+                    }
+                }
+                
+                if (!isDestinationOrXPlace) {
+                    self.locatinMask = kEFRouteLocationMaskNormal;
                 }
             } else if ([key isEqualToString:@"icon"]) {
                 NSString *iconString = obj;
@@ -146,35 +171,16 @@
     return self;
 }
 
-- (void)setLocationTytpe:(EFRouteLocationType)locationTytpe {
-    if (_locationTytpe == locationTytpe)
-        return;
+- (void)setLocatinMask:(EFRouteLocationMask)locatinMask {
+    [self willChangeValueForKey:@"locationMask"];
     
-    _locationTytpe = locationTytpe;
+    _locatinMask = locatinMask;
+    [self _locationMaskDidChange];
     
-    switch (locationTytpe) {
-        case kEFRouteLocationTypeDestination:
-        {
-            self.markTitle = @"终";
-            self.markColor = kEFRouteLocationColorBlue;
-            [self _updateIconURL];
-        }
-            break;
-        case kEFRouteLocationTypeNormal:
-        {
-            self.markTitle = @"P";
-            self.markColor = kEFRouteLocationColorBlue;
-            [self _updateIconURL];
-        }
-            break;
-        default:
-            break;
-    }
+    [self didChangeValueForKey:@"locationMask"];
 }
 
 - (NSDictionary *)dictionaryValue {
-    NSAssert(kEFRouteLocationTypeUnknow != self.locationTytpe, @"MUST not be unknow!");
-    
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:12];
     [dict setValue:self.locationId forKey:@"id"];
     [dict setValue:@"location" forKey:@"type"];
@@ -182,15 +188,7 @@
     [dict setValue:self.createdByUid forKey:@"created_by"];
     [dict setValue:[NSNumber numberWithLongLong:(long long)[self.updateDate timeIntervalSince1970]] forKey:@"updated_at"];
     [dict setValue:self.updatedByUid forKey:@"updated_by"];
-    NSArray *tags = nil;
-    if (kEFRouteLocationTypeNormal == self.locationTytpe) {
-        tags = @[@"place", @"park"];
-    } else if (kEFRouteLocationTypeDestination == self.locationTytpe) {
-        tags = @[@"place", @"destination"];
-    } else if (kEFRouteLocationTypeCrossPlace == self.locationTytpe) {
-        tags = @[@"place", @"park"];
-    }
-    [dict setValue:tags forKey:@"tags"];
+    [dict setValue:self.tags forKey:@"tags"];
     [dict setValue:[self.iconUrl absoluteString] forKey:@"icon"];
     [dict setValue:self.title ? self.title : @"" forKey:@"title"];
     [dict setValue:self.subtitle ? self.subtitle : @"" forKey:@"description"];

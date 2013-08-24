@@ -11,6 +11,7 @@
 #import "EFAPI.h"
 
 #define kDefaultTimerTimeInterval   (5.0f)
+#define kDefaultPostBackgroundTimeInterval  (5.0f)
 #define kHasPostUserLocationKey     @"key.hasPostUserLocation"
 #define kDefaultBackgroundDuration  (1200.0f)
 
@@ -41,6 +42,8 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 @property (nonatomic, assign) UIBackgroundTaskIdentifier    bgTask;
 
 @property (nonatomic, strong) NSDate            *enterBackgroundTimestamp;
+@property (nonatomic, strong) NSDate            *lastestPostTimestamp;
+@property (nonatomic, assign) BOOL              isInBackground;
 
 @end
 
@@ -88,6 +91,12 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
     if (UIBackgroundTaskInvalid != self.bgTask) {
         [self _endBackgroundTask];
     }
+    
+    NSDate *now = [NSDate date];
+    if (self.lastestPostTimestamp && [now timeIntervalSinceDate:self.lastestPostTimestamp] < kDefaultPostBackgroundTimeInterval) {
+        return;
+    }
+    self.lastestPostTimestamp = now;
     
     self.bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         [self _endBackgroundTask];
@@ -157,9 +166,10 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 - (id)init {
     self = [super init];
     if (self) {
+        self.isInBackground = NO;
+        
         CLLocationManager *locationManager = [[CLLocationManager alloc] init];
         locationManager.delegate = self;
-        locationManager.distanceFilter = 5.0f;
         self.locationManager = locationManager;
         
         self.userLocation = [[EFUserLocation alloc] init];
@@ -172,7 +182,7 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
                                                    object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(handleNotification:)
-                                                     name:UIApplicationDidBecomeActiveNotification
+                                                     name:UIApplicationWillEnterForegroundNotification
                                                    object:nil];
     }
     
@@ -185,9 +195,13 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
     NSString *name = notif.name;
     
     if ([name isEqualToString:UIApplicationDidEnterBackgroundNotification]) {
+        self.isInBackground = YES;
+        
         self.enterBackgroundTimestamp = [NSDate date];
         [self _invalideTimer];
-    } else if ([name isEqualToString:UIApplicationDidBecomeActiveNotification]) {
+    } else if ([name isEqualToString:UIApplicationWillEnterForegroundNotification]) {
+        self.isInBackground = NO;
+        
         if ([CLLocationManager locationServicesEnabled] && ![self isFirstTimeToPostUserLocation]) {
             [self startUpdatingLocation];
         }
@@ -206,13 +220,7 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
                                                             object:nil];
     });
     
-    BOOL isInBackground = NO;
-    
-    if (UIApplicationStateBackground == [UIApplication sharedApplication].applicationState) {
-        isInBackground = YES;
-    }
-    
-    if (isInBackground) {
+    if (self.isInBackground) {
         NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:self.enterBackgroundTimestamp];
         if (timeInterval > kDefaultBackgroundDuration) {
             // timeout

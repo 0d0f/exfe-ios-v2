@@ -215,23 +215,17 @@
 #pragma mark - Public
 
 - (void)customWithRouteLocation:(EFRouteLocation *)routeLocation {
-    switch (routeLocation.locationTytpe) {
-        case kEFRouteLocationTypeDestination:
-        case kEFRouteLocationTypeCrossPlace:
-            self.redButton.selected = NO;
-            self.blueButton.selected = NO;
-            self.markLetter = @" ";
-            break;
-        case kEFRouteLocationTypeNormal:
-            self.markLetter = routeLocation.markTitle;
-            if (kEFRouteLocationColorBlue == routeLocation.markColor) {
-                [self _selectButton:self.blueButton];
-            } else {
-                [self _selectButton:self.redButton];
-            }
-            break;
-        default:
-            break;
+    if (routeLocation.locatinMask & kEFRouteLocationMaskXPlace || routeLocation.locatinMask & kEFRouteLocationMaskDestination) {
+        self.redButton.selected = NO;
+        self.blueButton.selected = NO;
+        self.markLetter = @" ";
+    } else {
+        self.markLetter = routeLocation.markTitle;
+        if (kEFRouteLocationColorRed == routeLocation.markColor) {
+            [self _selectButton:self.redButton];
+        } else {
+            [self _selectButton:self.blueButton];
+        }
     }
 }
 
@@ -304,9 +298,9 @@
     
     if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToStyle:)]) {
         if (button == self.blueButton) {
-            [self.delegate mapEditingAnnotationView:self didChangeToStyle:kEFAnnotationStyleParkBlue];
+            [self.delegate mapEditingAnnotationView:self didChangeToStyle:kEFAnnotationStyleMarkBlue];
         } else if (button == self.redButton) {
-            [self.delegate mapEditingAnnotationView:self didChangeToStyle:kEFAnnotationStyleParkRed];
+            [self.delegate mapEditingAnnotationView:self didChangeToStyle:kEFAnnotationStyleMarkRed];
         }
     }
 }

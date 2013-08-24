@@ -81,6 +81,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
 @property (nonatomic, strong) NSMutableDictionary   *personAnnotationMap;
 
 @property (nonatomic, strong) EFHTTPStreaming       *httpStreaming;
+@property (nonatomic, strong) NSMutableArray        *locationIdCharactors;
 
 @end
 
@@ -89,6 +90,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
 - (void)_postPathDidChangeNotification;
 - (void)_postLocationDidChangeNotification;
 
+- (void)_initLocationIdCharactors;
 - (void)_initPeople;
 - (void)_reloadPeople;
 
@@ -114,6 +116,19 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:EFNotificationRouteLocationDidChange object:nil];
     });
+}
+
+- (void)_initLocationIdCharactors {
+    self.locationIdCharactors = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 10; i++) {
+        [self.locationIdCharactors addObject:[NSString stringWithFormat:@"%d", i]];
+    }
+    for (int i = 0; i < 26; i++) {
+        [self.locationIdCharactors addObject:[NSString stringWithFormat:@"%c", i + 'a']];
+    }
+    for (int i = 0; i < 26; i++) {
+        [self.locationIdCharactors addObject:[NSString stringWithFormat:@"%c", i + 'A']];
+    }
 }
 
 - (void)_initPeople {
@@ -156,8 +171,14 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
 - (NSString *)_generateRouteLocationId {
     NSString *locationId = nil;
     
+    NSInteger count = self.locationIdCharactors.count;
+    
     while (YES) {
-        locationId = [NSString stringWithFormat:@"%ld%ld%ld%ld%ld@location", (random() % 99) + 1, random() % 100, random() % 100, random() % 100, random() % 100];
+        locationId = [NSString stringWithFormat:@"%@%@%@%@.location",
+                      self.locationIdCharactors[rand() % count],
+                      self.locationIdCharactors[rand() % count],
+                      self.locationIdCharactors[rand() % count],
+                      self.locationIdCharactors[rand() % count]];
         BOOL crashed = NO;
         for (EFRouteLocation *routeLocation in self.routeLocations) {
             if ([routeLocation.locationId isEqualToString:locationId]) {
@@ -225,6 +246,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
     if (self) {
         self.cross = cross;
         
+        [self _initLocationIdCharactors];
         [self _initPeople];
         
         self.routeLocations = [[NSMutableArray alloc] init];
@@ -250,9 +272,15 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
     EFRouteLocation *destination = nil;
     
     for (EFRouteLocation *location in self.routeLocations) {
-        if (location.locationTytpe == kEFRouteLocationTypeDestination) {
-            destination = location;
-            break;
+        BOOL isDestination = !!(location.locatinMask & kEFRouteLocationMaskDestination);
+        if (isDestination) {
+            if (destination) {
+                if ([location.updateDate timeIntervalSinceDate:destination.updateDate] > 0) {
+                    destination = location;
+                }
+            } else {
+                destination = location;
+            }
         }
     }
     
@@ -345,7 +373,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
 
 #pragma mark - RouteLocation
 
-- (void)addRouteLocation:(EFRouteLocation *)routeLocation toMapView:(MKMapView *)mapView {
+- (void)addRouteLocation:(EFRouteLocation *)routeLocation toMapView:(MKMapView *)mapView canChangeType:(BOOL)canChangeType {
     NSParameterAssert(routeLocation);
     NSParameterAssert(mapView);
     
@@ -354,24 +382,26 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
         return;
     }
     
-    if (kEFRouteLocationTypeUnknow == routeLocation.locationTytpe) {
-        BOOL hasDestination = NO;
-        for (EFRouteLocation *location in self.routeLocations) {
-            if (kEFRouteLocationTypeDestination == location.locationTytpe) {
-                hasDestination = YES;
-                break;
-            }
-        }
-        
-        if (!hasDestination) {
-            routeLocation.locationTytpe = kEFRouteLocationTypeDestination;
+    if (canChangeType) {
+        EFRouteLocation *destination = self.destinationLocation;
+        if (!destination) {
+            routeLocation.locatinMask |= kEFRouteLocationMaskDestination;
         } else {
-            routeLocation.locationTytpe = kEFRouteLocationTypeNormal;
+            routeLocation.locatinMask = kEFRouteLocationMaskNormal;
         }
     }
     
+    EFAnnotationStyle annoationStyle = kEFAnnotationStyleMarkBlue;
+    if (routeLocation.locatinMask & kEFRouteLocationMaskXPlace) {
+        annoationStyle = kEFAnnotationStyleXPlace;
+    } else if (routeLocation.locatinMask & kEFRouteLocationMaskDestination) {
+        annoationStyle = kEFAnnotationStyleDestination;
+    } else if (routeLocation.markColor == kEFRouteLocationColorRed) {
+        annoationStyle = kEFAnnotationStyleMarkRed;
+    }
+    
     [self.routeLocations addObject:routeLocation];
-    EFAnnotation *annotation = [[EFAnnotation alloc] initWithStyle:(routeLocation.locationTytpe == kEFRouteLocationTypeDestination) ? kEFAnnotationStyleDestination : ((routeLocation.markColor == kEFRouteLocationColorRed) ? kEFAnnotationStyleParkRed : kEFAnnotationStyleParkBlue)
+    EFAnnotation *annotation = [[EFAnnotation alloc] initWithStyle:annoationStyle
                                                         coordinate:routeLocation.coordinate
                                                              title:routeLocation.title
                                                        description:routeLocation.subtitle];
@@ -386,6 +416,10 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
     }
 }
 
+- (void)addRouteLocation:(EFRouteLocation *)routeLocation toMapView:(MKMapView *)mapView {
+    [self addRouteLocation:routeLocation toMapView:mapView canChangeType:YES];
+}
+
 - (void)updateRouteLocation:(EFRouteLocation *)routeLocation inMapView:(MKMapView *)mapView shouldPostToServer:(BOOL)shouldPost {
     NSParameterAssert(routeLocation);
     NSParameterAssert(mapView);
@@ -395,15 +429,15 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
     annotation.title = routeLocation.title;
     annotation.subtitle = routeLocation.subtitle;
     
-    if (kEFRouteLocationTypeDestination == routeLocation.locationTytpe) {
-        annotation.style = kEFAnnotationStyleDestination;
-    } else {
-        if (routeLocation.markColor == kEFRouteLocationColorRed) {
-            annotation.style = kEFAnnotationStyleParkRed;
-        } else {
-            annotation.style = kEFAnnotationStyleParkBlue;
-        }
+    EFAnnotationStyle annoationStyle = kEFAnnotationStyleMarkBlue;
+    if (routeLocation.locatinMask & kEFRouteLocationMaskXPlace) {
+        annoationStyle = kEFAnnotationStyleXPlace;
+    } else if (routeLocation.locatinMask & kEFRouteLocationMaskDestination) {
+        annoationStyle = kEFAnnotationStyleDestination;
+    } else if (routeLocation.markColor == kEFRouteLocationColorRed) {
+        annoationStyle = kEFAnnotationStyleMarkRed;
     }
+    annotation.style = annoationStyle;
     
     EFRouteLocation *cachedRouteLocation = [self routeLocationForRouteLocationId:routeLocation.locationId];
     NSInteger cachedIndex = [self.routeLocations indexOfObject:cachedRouteLocation];
@@ -559,10 +593,31 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
     EFRouteLocation *routelocation = [EFRouteLocation generateRouteLocationWithCoordinate:coordinate];
     routelocation.locationId = [self _generateRouteLocationId];
     
-    routelocation.title = NSLocalizedString(@"街道信息", nil);
-    routelocation.subtitle = @"获取中...";
-        
+    routelocation.title = NSLocalizedString(@"这里", nil);
+    routelocation.subtitle = @"";
+    
     return routelocation;
+}
+
+- (void)changeXPlaceRouteLocationToNormalRouteLocaiton:(EFRouteLocation *)xplace {
+    NSString *oldLocationId = xplace.locationId;
+    NSString *newLocationId = [self _generateRouteLocationId];
+    
+    EFAnnotation *xplaceAnnotation = [self.routeLocationAnnotationMap valueForKey:oldLocationId];
+    [self.routeLocationAnnotationMap setValue:xplaceAnnotation forKey:newLocationId];
+    [self.routeLocationAnnotationMap removeObjectForKey:oldLocationId];
+    
+    xplace.locationId = newLocationId;
+    xplace.locatinMask &= ~(kEFRouteLocationMaskXPlace | kEFRouteLocationMaskDestination);
+    
+    if (!xplace.markTitle || !xplace.markTitle.length) {
+        xplace.markTitle = @"P";
+    }
+    
+    NSMutableArray *tags = [[NSMutableArray alloc] initWithArray:xplace.tags];
+    [tags removeObject:@"xplace"];
+    [tags removeObject:@"destination"];
+    xplace.tags = tags;
 }
 
 #pragma mark - Application Event
