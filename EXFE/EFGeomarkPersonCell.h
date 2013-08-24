@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class EFMapPerson;
+@class EFMapPerson, EFMarauderMapDataSource;
 @interface EFGeomarkPersonCell : UITableViewCell
 
 @property (nonatomic, weak) EFMapPerson *person;
+@property (nonatomic, weak) EFMarauderMapDataSource *mapDataSource;
 
 @end

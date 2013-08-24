@@ -46,7 +46,7 @@
 @implementation EFMapPersonViewController (Private)
 
 - (void)_initLabels {
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {200.0f, 24.0f}}];
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {200.0f, 25.0f}}];
     nameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
     nameLabel.textColor = [UIColor COLOR_BLACK_19];
     nameLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
@@ -56,7 +56,7 @@
     [self.view addSubview:nameLabel];
     self.nameLabel = nameLabel;
     
-    UILabel *personInfoLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {200.0f, 12.0f}}];
+    UILabel *personInfoLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {200.0f, 10.0f}}];
     personInfoLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:9];
     personInfoLabel.textColor = [UIColor COLOR_CARBON];
     personInfoLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
@@ -66,7 +66,7 @@
     [self.view addSubview:personInfoLabel];
     self.personInfoLabel = personInfoLabel;
     
-    UILabel *destDistanceLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {kDistanceWidth, 18.0f}}];
+    UILabel *destDistanceLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {kDistanceWidth, 17.0f}}];
     destDistanceLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
     destDistanceLabel.textColor = [UIColor COLOR_BLACK_19];
     destDistanceLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
@@ -80,7 +80,7 @@
     [self.view addSubview:destHeadingView];
     self.destHeadingView = destHeadingView;
     
-    UILabel *meDistanceLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {kDistanceWidth, 18.0f}}];
+    UILabel *meDistanceLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {kDistanceWidth, 17.0f}}];
     meDistanceLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
     meDistanceLabel.textColor = [UIColor COLOR_BLACK_19];
     meDistanceLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
@@ -113,7 +113,7 @@
     self.nameLabel.text = self.person.name;
     
     height += CGRectGetHeight(self.nameLabel.frame);
-    CGFloat offsetY = -4.0f;
+    CGFloat offsetY = -6.0f;
     
     self.nameLabel.center = (CGPoint){kDefaultWidth * 0.5f, height + offsetY};
     
@@ -141,7 +141,7 @@
             
             if (distanceFromDest > 1000.0f) {
                 distanceFromDest = ceil(distanceFromDest / 1000.0f);
-                unit = NSLocalizedString(@"千米", nil);
+                unit = NSLocalizedString(@"公里", nil);
             }
             destDistanceInfo = [NSString stringWithFormat:NSLocalizedString(@"距目的地 %ld%@", nil), (long)distanceFromDest, unit];
             
@@ -155,19 +155,21 @@
             
             if (distanceFromMe > 1000.0f) {
                 distanceFromMe = ceil(distanceFromMe / 1000.0f);
-                unit = NSLocalizedString(@"千米", nil);
+                unit = NSLocalizedString(@"公里", nil);
             }
             meDistanceInfo = [NSString stringWithFormat:NSLocalizedString(@"与您相距 %ld%@", nil), (long)distanceFromMe, unit];
             
             meRadian = HeadingInRadian([self.mapDataSource me].lastLocation.coordinate, self.person.lastLocation.coordinate);
         }
     } else {
-        personInfo = NSLocalizedString(@"未知方位", nil);
+        personInfo = NSLocalizedString(@"方位未知", nil);
     }
     
     self.personInfoLabel.text = personInfo;
     height += CGRectGetHeight(self.personInfoLabel.frame);
-    self.personInfoLabel.center = (CGPoint){kDefaultWidth * 0.5f, height + 0.25f * CGRectGetHeight(self.personInfoLabel.frame) + offsetY};
+    self.personInfoLabel.center = (CGPoint){kDefaultWidth * 0.5f, height + 0.74f * CGRectGetHeight(self.personInfoLabel.frame) + offsetY};
+    
+    height += 7.0f;
     
     if (destDistanceInfo) {
         self.destDistanceLabel.text = destDistanceInfo;
@@ -198,15 +200,15 @@
     }
     
     if (kEFMapPersonConnectStateOnline == self.person.connectState) {
-        height += CGRectGetHeight(self.meDistanceLabel.frame) * 0.8f;
+        height += CGRectGetHeight(self.meDistanceLabel.frame) * 0.5f;
         self.requestButton.hidden = YES;
         self.lineView.hidden = YES;
     } else {
         height += CGRectGetHeight(self.requestButton.frame);
-        self.requestButton.center = (CGPoint){kDefaultWidth * 0.5f, height - CGRectGetHeight(self.requestButton.frame) * 0.4f};
+        self.requestButton.center = (CGPoint){kDefaultWidth * 0.5f, height - CGRectGetHeight(self.requestButton.frame) * 0.45f};
         self.requestButton.hidden = NO;
         
-        self.lineView.center = (CGPoint){kDefaultWidth * 0.5f, height - CGRectGetHeight(self.requestButton.frame) * 0.8f};
+        self.lineView.center = (CGPoint){kDefaultWidth * 0.5f, height - CGRectGetHeight(self.requestButton.frame) * 0.9f};
         self.lineView.hidden = NO;
     }
     

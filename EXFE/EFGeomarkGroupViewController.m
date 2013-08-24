@@ -13,6 +13,7 @@
 #import "EFGeomarkPersonCell.h"
 #import "EFGradientView.h"
 #import "Util.h"
+#import "EFMarauderMapDataSource.h"
 
 #define kDefaultCellHeight  (44.0f)
 #define kDefaultCellCount   (3)
@@ -219,6 +220,7 @@
         EFGeomarkPersonCell *cell = [tableView dequeueReusableCellWithIdentifier:Identiter];
         if (nil == cell) {
             cell = [[EFGeomarkPersonCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identiter];
+            cell.mapDataSource = self.mapDataSource;
         }
         
         EFMapPerson *person = self.people[indexPath.row];

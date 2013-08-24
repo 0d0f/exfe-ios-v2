@@ -171,11 +171,15 @@
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
+        UIImageView *avatarBaseImageView = [[UIImageView alloc] initWithFrame:(CGRect){{3.0f, 3.0f}, {44.0f, 44.0f}}];
+        avatarBaseImageView.image = [UIImage imageNamed:@"portrait_frame_40.png"];
+        avatarBaseImageView.userInteractionEnabled = YES;
+        [self.contentView addSubview:avatarBaseImageView];
+        self.avatarBaseImageView = avatarBaseImageView;
+        
         UIImageView *avatarImageView = [[UIImageView alloc] initWithFrame:(CGRect){{5, 5}, {40, 40}}];
         avatarImageView.layer.masksToBounds = YES;
-        avatarImageView.layer.borderColor = [UIColor blackColor].CGColor;
-        avatarImageView.layer.borderWidth = 0.5f;
-        avatarImageView.layer.cornerRadius = 1.0f;
+        avatarImageView.layer.cornerRadius = 2.0f;
         avatarImageView.userInteractionEnabled = YES;
         [self.contentView addSubview:avatarImageView];
         self.avatarImageView = avatarImageView;

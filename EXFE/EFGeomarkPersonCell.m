@@ -13,6 +13,7 @@
 #import "EFMapPerson.h"
 #import "EFLocation.h"
 #import "Util.h"
+#import "EFMarauderMapDataSource.h"
 
 @interface EFGeomarkPersonCell ()
 
@@ -74,8 +75,15 @@
         NSString *locationInfo = nil;
         
         if (kEFMapPersonConnectStateOnline == self.person.connectState) {
-#warning !!!
-            locationInfo = [NSString stringWithFormat:NSLocalizedString(@"距目的地%d米 与您相距%d米", nil), (long)self.person.distance, 150];
+            CLLocationDistance distanceFromMe = ceil([self.person.lastLocation distanceFromLocation:[self.mapDataSource me].lastLocation]);
+            NSString *unit = NSLocalizedString(@"米", nil);
+            
+            if (distanceFromMe > 1000.0f) {
+                distanceFromMe = ceil(distanceFromMe / 1000.0f);
+                unit = NSLocalizedString(@"公里", nil);
+            }
+            NSString *distanceString = [NSString stringWithFormat:@"%ld%@", (long)distanceFromMe, unit];
+            locationInfo = [NSString stringWithFormat:NSLocalizedString(@"距目的地%d米 与您相距%@", nil), (long)self.person.distance, distanceString];
         } else {
             NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:self.person.lastLocation.timestamp];
             NSInteger time = timeInterval / 60;

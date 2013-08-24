@@ -826,6 +826,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         } else {
             EFGeomarkGroupViewController *geomarkGroupViewController = [[EFGeomarkGroupViewController alloc] initWithGeomarks:filterdRouteLocations
                                                                                                                     andPeople:filterdPeople];
+            geomarkGroupViewController.mapDataSource = self.mapDataSource;
             geomarkGroupViewController.delegate = self;
             [geomarkGroupViewController presentFromViewController:self
                                                       tapLocation:tapLocation

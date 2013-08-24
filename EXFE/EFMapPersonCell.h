@@ -11,6 +11,7 @@
 @class EFMapPerson;
 @interface EFMapPersonCell : UITableViewCell
 
+@property (strong)  UIImageView      *avatarBaseImageView;
 @property (strong)  UIImageView      *avatarImageView;
 @property (strong)  UIImageView      *stateImageView;
 @property (strong)  UILabel          *stateLabel;

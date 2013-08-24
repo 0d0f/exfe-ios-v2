@@ -18,6 +18,7 @@
 
 @end
 
+@class EFMarauderMapDataSource;
 @interface EFGeomarkGroupViewController : UITableViewController
 <
 UIGestureRecognizerDelegate
@@ -29,6 +30,8 @@ UIGestureRecognizerDelegate
 
 @property (nonatomic, strong) NSArray   *geomarks;
 @property (nonatomic, strong) NSArray   *people;
+
+@property (nonatomic, weak) EFMarauderMapDataSource *mapDataSource;
 
 - (id)initWithGeomarks:(NSArray *)geomarks andPeople:(NSArray *)people;
 
