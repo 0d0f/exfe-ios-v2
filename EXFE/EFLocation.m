@@ -88,4 +88,8 @@
     return [location1 distanceFromLocation:location2];
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"{%f, %f}", self.coordinate.latitude, self.coordinate.longitude];
+}
+
 @end
