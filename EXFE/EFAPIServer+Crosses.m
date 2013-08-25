@@ -125,7 +125,7 @@
     
     NSString *endpoint = [NSString stringWithFormat:@"crosses/%u/edit?token=%@", [cross.cross_id intValue], self.model.userToken];
     
-    [manager postObject2:cross
+    [manager postObject:cross
                     path:endpoint
               parameters:nil
                  success:^(RKObjectRequestOperation *operation, id responseObject){
