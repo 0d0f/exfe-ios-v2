@@ -294,6 +294,16 @@
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameRemoveMyInvitationSuccess
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameEditCrossSuccess
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameEditCrossFailure
+                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -384,6 +394,12 @@
                 }
             }
         }
+    } else if ([kEFNotificationNameEditCrossSuccess isEqualToString:name]) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+         // sucess: refresh cross
+    } else if ([kEFNotificationNameEditCrossFailure isEqualToString:name]) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+         // fail: roll back or retry
     }
 }
 
