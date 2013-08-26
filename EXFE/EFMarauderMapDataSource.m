@@ -82,6 +82,8 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
 
 @property (nonatomic, strong) EFHTTPStreaming       *httpStreaming;
 @property (nonatomic, strong) NSMutableArray        *locationIdCharactors;
+@property (nonatomic, assign) BOOL                  hasStreamInited;
+@property (nonatomic, strong) NSMutableArray        *tempGeomarks;
 
 @end
 
@@ -196,8 +198,8 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
 }
 
 - (NSString *)_userIdFromDirtyUserId:(NSString *)dirtyUserId {
-    NSRange exfeRange = [dirtyUserId rangeOfString:@"@exfe"];
-    NSAssert(exfeRange.location != NSNotFound, @"there MUST be a @exfe");
+    NSRange exfeRange = [dirtyUserId rangeOfString:@".breadcrumbs"];
+    NSAssert(exfeRange.location != NSNotFound, @"there MUST be a .breadcrumbs");
     NSString *userIdString = [dirtyUserId substringToIndex:exfeRange.location];
     
     return userIdString;
@@ -255,6 +257,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
         self.breadcrumPathMap = [[NSMutableDictionary alloc] init];
         self.timestampMap = [[NSMutableDictionary alloc] init];
         self.toAddPeopleUserIdMap = [[NSMutableDictionary alloc] init];
+        self.tempGeomarks = [[NSMutableArray alloc] init];
         
         [self _registerNotification];
     }
@@ -285,6 +288,40 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
     }
     
     return destination;
+}
+
+- (void)setHasStreamInited:(BOOL)hasStreamInited {
+    [self willChangeValueForKey:@"hasStreamInited"];
+    
+    _hasStreamInited = hasStreamInited;
+    
+    if (!hasStreamInited) {
+        [self.tempGeomarks removeAllObjects];
+    } else {
+        NSMutableArray *toRemoveGeomarks = [[NSMutableArray alloc] init];
+        
+        for (EFRouteLocation *geomark in self.routeLocations) {
+            BOOL needToRemove = YES;
+            for (EFRouteLocation *temp in self.tempGeomarks) {
+                if ([geomark.locationId isEqualToString:temp.locationId]) {
+                    needToRemove = NO;
+                    break;
+                }
+            }
+            
+            if (needToRemove) {
+                [toRemoveGeomarks addObject:geomark];
+            }
+        }
+        
+        [self.delegate mapDataSource:self didGetRouteLocations:self.tempGeomarks];
+        
+        for (EFRouteLocation *toRemoveGeomark in toRemoveGeomarks) {
+            [self.delegate mapDataSource:self needDeleteRouteLocation:toRemoveGeomark.locationId];
+        }
+    }
+    
+    [self didChangeValueForKey:@"hasStreamInited"];
 }
 
 #pragma mark - Notification Handler
@@ -386,6 +423,17 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
         EFRouteLocation *destination = self.destinationLocation;
         if (!destination) {
             routeLocation.locatinMask |= kEFRouteLocationMaskDestination;
+            NSArray *tags = routeLocation.tags;
+            if (tags) {
+                NSMutableArray *newTags = [[NSMutableArray alloc] initWithArray:tags];
+                if (NSNotFound == [tags indexOfObject:@"destination"]) {
+                    [newTags addObject:@"destination"];
+                }
+                routeLocation.tags = newTags;
+            } else {
+                tags = @[@"destination"];
+                routeLocation.tags = tags;
+            }
         } else {
             routeLocation.locatinMask = kEFRouteLocationMaskNormal;
         }
@@ -538,6 +586,8 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
 - (void)openStreaming {
     [self closeStreaming];
     
+    self.hasStreamInited = NO;
+    
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     NSURL *baseURL = objectManager.HTTPClient.baseURL;
     
@@ -563,6 +613,8 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
     }
     
     [self.toAddPeopleUserIdMap removeAllObjects];
+    
+    self.hasStreamInited = NO;
 }
 
 #pragma mark - Register
@@ -647,6 +699,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
     NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:data
                                                                 options:NSJSONReadingMutableContainers
                                                                   error:&error];
+    
     if (jsonDictionary && !error) {
         NSString *type = [jsonDictionary valueForKey:@"type"];
         BOOL isAction = !![jsonDictionary valueForKey:@"action"];
@@ -688,8 +741,12 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
             } else if ([type isEqualToString:@"location"]) {
                 EFRouteLocation *routeLocation = [[EFRouteLocation alloc] initWithDictionary:jsonDictionary];
                 
-                if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateRouteLocations:)]) {
-                    [self.delegate mapDataSource:self didGetRouteLocations:@[routeLocation]];
+                if (self.hasStreamInited) {
+                    if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateRouteLocations:)]) {
+                        [self.delegate mapDataSource:self didGetRouteLocations:@[routeLocation]];
+                    }
+                } else {
+                    [self.tempGeomarks addObject:routeLocation];
                 }
             }
         } else {
@@ -709,9 +766,45 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D locationCoordinate, CLLocationCoo
                         [self.delegate mapDataSource:self didUpdateRouteLocations:@[routeLocation]];
                     }
                 }
+            } else if ([action isEqualToString:@"init_end"]) {
+                if ([type isEqualToString:@"command"]) {
+                    self.hasStreamInited = YES;
+                }
+            } else if ([action isEqualToString:@"save"]) {
+                if ([type isEqualToString:@"route"]) {
+                    if ([tags[0] isEqualToString:@"breadcrumbs"]) {
+                        EFRoutePath *path = [[EFRoutePath alloc] initWithDictionary:jsonDictionary];
+                        if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
+                            NSString *userIdString = [self _userIdFromDirtyUserId:path.pathId];
+                            EFMapPerson *person = [self.peopleMap valueForKey:userIdString];
+                            
+                            if (person) {
+                                // update person last location
+                                person.lastLocation = path.positions[0];
+                                
+                                // update person connect state && location state && distance
+                                [self _updatePersonState:person];
+                                
+                                [self.delegate mapDataSource:self didUpdateLocations:path.positions forUser:person];
+                            } else {
+                                NSDate *timestamp = [self.toAddPeopleUserIdMap valueForKey:userIdString];
+                                if (!timestamp) {
+                                    [self.toAddPeopleUserIdMap setValue:[NSDate date] forKey:userIdString];
+                                    
+                                    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                                    [appDelegate.model loadCrossWithCrossId:[self.cross.cross_id intValue] updatedTime:nil];
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
+}
+
+- (void)streamingDidStartReconnecting {
+    self.hasStreamInited = NO;
 }
 
 #pragma mark - Person

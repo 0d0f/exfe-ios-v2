@@ -63,8 +63,8 @@
     
     [self willChangeValueForKey:@"lastLocation"];
     
-    if (_lastLocation) {
-        [self.locations addObject:_lastLocation];
+    if (_lastLocation && _lastLocation.needToSave) {
+        [self.locations insertObject:_lastLocation atIndex:0];
     }
     
     _lastLocation = lastLocation;

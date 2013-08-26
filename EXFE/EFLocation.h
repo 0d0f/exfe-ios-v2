@@ -16,6 +16,8 @@
 @property (assign)  CGFloat                 accuracy;       // might be 0.0f
 @property (strong)  NSDate                  *timestamp;
 
+@property (assign)  BOOL                    needToSave;     // for streaming location's action tag. Default as YES
+
 - (id)initWithDictionary:(NSDictionary *)param;
 - (MKMapPoint)mapPointValue;
 

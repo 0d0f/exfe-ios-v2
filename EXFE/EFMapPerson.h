@@ -23,8 +23,10 @@
 @property (nonatomic, assign) EFMapPersonLocationState  locationState;
 
 @property (nonatomic, strong) NSMutableArray            *locations;     // from get
-@property (nonatomic, strong) EFLocation                *lastLocation;  // from streaming
+@property (nonatomic, strong) EFLocation                *lastLocation;  // from streaming, needToSave default as YES
 
 - (id)initWithIdentity:(Identity *)identity;
+
+- (void)setLastLocation:(EFLocation *)lastLocation needToSave:(BOOL)needToSave;
 
 @end

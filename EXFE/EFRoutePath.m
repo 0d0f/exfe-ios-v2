@@ -53,9 +53,20 @@
                 self.strokeColor = [self colorFromRGBA:obj];
             } else if ([key isEqualToString:@"positions"]) {
                 NSMutableArray *positions = [[NSMutableArray alloc] initWithCapacity:[obj count]];
+                NSString *action = [param valueForKey:@"action"];
+                BOOL needToSave = NO;
+                if (action && [action isEqualToString:@"save"]) {
+                    needToSave = YES;
+                }
                 
                 for (NSDictionary *locationParam in obj) {
                     EFLocation *location = [[EFLocation alloc] initWithDictionary:locationParam];
+                    if (needToSave) {
+                        location.needToSave = YES;
+                    } else {
+                        location.needToSave = NO;
+                    }
+                    
                     [positions addObject:location];
                 }
                 

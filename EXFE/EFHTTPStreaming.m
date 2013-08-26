@@ -161,6 +161,9 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
 }
 
 - (void)reconnect {
+    if ([self.delegate respondsToSelector:@selector(streamingDidStartReconnecting:)]) {
+        [self.delegate streamingDidStartReconnecting];
+    }
     [self close];
     [self open];
 }

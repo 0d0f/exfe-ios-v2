@@ -39,6 +39,8 @@
         }];
         
         self.coordinate = CLLocationCoordinate2DMake(latitude, longitude);
+        
+        self.needToSave = YES;
     }
     
     return self;
@@ -86,6 +88,10 @@
     CLLocation *location2 = [[CLLocation alloc] initWithLatitude:routeLocatoin.coordinate.latitude longitude:routeLocatoin.coordinate.longitude];
     
     return [location1 distanceFromLocation:location2];
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"{%f, %f}", self.coordinate.latitude, self.coordinate.longitude];
 }
 
 @end
