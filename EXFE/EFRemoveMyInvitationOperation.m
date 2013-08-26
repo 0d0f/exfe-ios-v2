@@ -9,6 +9,7 @@
 #import "EFRemoveMyInvitationOperation.h"
 
 #import "Invitation+EXFE.h"
+#import "Exfee+EXFE.h"
 
 NSString *kEFNotificationNameRemoveMyInvitationSuccess = @"notification.removeMyInvitation.success";
 NSString *kEFNotificationNameRemoveMyInvitationFailure = @"notification.removeMyInvitation.failure";
@@ -40,6 +41,8 @@ NSString *kEFNotificationNameRemoveMyInvitationFailure = @"notification.removeMy
                             success:^(Exfee *editedExfee) {
                                 self.state = kEFNetworkOperationStateSuccess;
                                 NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:@{@"exfee": editedExfee}];
+                                [userInfo setValue:@"exfee" forKey:@"type"];
+                                [userInfo setValue:self.exfee.exfee_id forKey:@"id"];
                                 self.successUserInfo = userInfo;
                                 
                                 [self finish];

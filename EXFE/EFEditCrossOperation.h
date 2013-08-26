@@ -8,6 +8,7 @@
 
 #import "EFNetworkOperation.h"
 
+@class Cross;
 @interface EFEditCrossOperation : EFNetworkOperation
 
 @property (nonatomic, strong) Cross *cross;
