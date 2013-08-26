@@ -835,6 +835,37 @@
                                                  }];
 }
 
+- (void)mergeAllByToken:(NSString *)token
+                success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+
+    NSDictionary *param = @{@"browsing_identity_token":token, @"force":@"true"};
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/mergeIdentities?token=%@", self.model.userId, self.model.userToken];
+    
+    self.model.objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    [self.model.objectManager.HTTPClient postPath:endpoint
+                                       parameters:param
+                                          success:^(AFHTTPRequestOperation *operation, id responseObject){
+                                              [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                                              
+                                              if (success) {
+                                                  dispatch_async(dispatch_get_main_queue(), ^{
+                                                      success(operation, responseObject);
+                                                  });
+                                              }
+                                          }
+                                          failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                                              [self _handleFailureWithRequestOperation:operation andError:error];
+                                              
+                                              if (failure) {
+                                                  dispatch_async(dispatch_get_main_queue(), ^{
+                                                      failure(operation, error);
+                                                  });
+                                              }
+                                          }];
+}
+
 // endpoint: VerifyUserIdentity
 - (void)verifyUserIdentity:(NSInteger)identity_id
                    success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success

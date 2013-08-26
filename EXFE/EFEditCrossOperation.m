@@ -8,6 +8,8 @@
 
 #import "EFEditCrossOperation.h"
 
+#import "Cross.h"
+
 NSString *kEFNotificationNameEditCrossSuccess = @"notification.editCross.success";
 NSString *kEFNotificationNameEditCrossFailure = @"notification.editCross.failure";
 
@@ -45,6 +47,8 @@ NSString *kEFNotificationNameEditCrossFailure = @"notification.editCross.failure
                             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                 self.state = kEFNetworkOperationStateSuccess;
                                 NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];
+                                [userInfo setValue:@"cross" forKey:@"type"];
+                                [userInfo setValue:self.cross.cross_id forKey:@"id"];
                                 self.successUserInfo = userInfo;
                                 
                                 [self finish];

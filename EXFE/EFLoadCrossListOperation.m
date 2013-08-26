@@ -36,6 +36,7 @@ NSString *kEFNotificationNameLoadCrossListFailure = @"notification.loadCrossList
                                    success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                        self.state = kEFNetworkOperationStateSuccess;
                                        NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];
+                                       [userInfo setValue:@"cross" forKey:@"type"];
                                        self.successUserInfo = userInfo;
                                        
                                        [self finish];

@@ -371,16 +371,32 @@
         NSDictionary *userInfo = notification.userInfo;
         
         Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
-        if ([meta.code intValue] == 403) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Privacy Control", nil)
-                                                            message:NSLocalizedString(@"You have no access to this private ·X·.", nil)
-                                                           delegate:self
-                                                  cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                                  otherButtonTitles:nil];
-            alert.tag = 403;
-            [alert show];
-        } else if ([meta.code intValue] == 200) {
-            [self refreshUI];
+        NSInteger c = [meta.code integerValue];
+        NSInteger t = c / 100;
+        
+        switch (t) {
+            case 2:{
+                Cross *c = [userInfo objectForKey:@"response.cross"];
+                if ([self.cross.cross_id integerValue] == [c.cross_id integerValue]) {
+                    self.cross = c;
+                    [self refreshUI];
+                }
+            } break;
+            case 4:{
+                if (c == 403) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Privacy Control", nil)
+                                                                    message:NSLocalizedString(@"You have no access to this private ·X·.", nil)
+                                                                   delegate:self
+                                                          cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                                          otherButtonTitles:nil];
+                    alert.tag = 403;
+                    [alert show];
+                }
+            } break;
+                
+            default:{
+                
+            } break;
         }
     } else if ([kEFNotificationNameRemoveMyInvitationSuccess isEqualToString:name]) {
    
@@ -397,9 +413,26 @@
     } else if ([kEFNotificationNameEditCrossSuccess isEqualToString:name]) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
          // sucess: refresh cross
+        NSDictionary *userInfo = notification.userInfo;
+        Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
+        NSInteger c = [meta.code integerValue];
+        NSInteger t = c / 100;
+        
+        switch (t) {
+            case 2:{
+                Cross *responsecross = [userInfo objectForKey:@"response.cross"];
+                if ([responsecross.cross_id integerValue] == [self.cross.cross_id integerValue]) {
+                    [self refreshUI];
+                }
+            } break;
+                
+            default:{
+                [self.model loadCrossWithCrossId:[self.cross.cross_id integerValue] updatedTime:self.cross.updated_at];
+            } break;
+        }
     } else if ([kEFNotificationNameEditCrossFailure isEqualToString:name]) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-         // fail: roll back or retry
+        [self.model loadCrossWithCrossId:[self.cross.cross_id integerValue] updatedTime:self.cross.updated_at];
     }
 }
 
