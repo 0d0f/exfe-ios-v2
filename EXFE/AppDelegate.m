@@ -379,11 +379,15 @@
     NSDictionary *params = [Util splitQuery:query];
     NSString *token = [params objectForKey:@"token"];
     NSString *user_id = [params objectForKey:@"user_id"];
-    //NSString *identity_id = [params objectForKey:@"identity_id"];
+    NSString *username = [params objectForKey:@"username"];
+    if (!username) {
+        username = @"";
+    }
+    NSString *identity_id = [params objectForKey:@"identity_id"];
     
     self.url = url;
     
-    if (token.length > 0 && [user_id intValue] > 0){
+    if (token.length > 0 && [user_id integerValue] > 0){
         EFAPIServer *server = self.model.apiServer;
         if (![server isLoggedIn]) {
             // sign in
@@ -405,56 +409,92 @@
             } else {
                 // merge identities
                 
+                [UIAlertView showAlertViewWithTitle:@"Merge accounts"
+                                            message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?", username]
+                                  cancelButtonTitle:@"Cancel"
+                                  otherButtonTitles:@[@"Merge"]
+                                            handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                                if (buttonIndex == alertView.firstOtherButtonIndex ) {
+                                                    
+                                                    [server mergeAllByToken:token
+                                                                    success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                                        if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                                                                            NSDictionary *body = responseObject;
+                                                                            NSNumber *code = [body valueForKey:@"meta.code"];
+                                                                            NSInteger c = [code integerValue];
+                                                                            NSInteger t = c / 100;
+                                                                            switch (t) {
+                                                                                case 2:
+                                                                                    [self processUrlHandler:url];
+                                                                                    
+                                                                                    if ([url.path hasPrefix:@"/!"]) {
+                                                                                        [self performBlock:^(id sender) {
+                                                                                            [self.model loadMe];
+                                                                                        } afterDelay:3];
+                                                                                    } else {
+                                                                                        [self.model loadMe];
+                                                                                    }
+                                                                                    break;
+                                                                                    
+                                                                                default:
+                                                                                    break;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    failure:nil];
+                                                }
+                                            }];
+                
                 // Load identities to merge from another user
-                [server loadUserBy:[user_id integerValue]
-                             withToken:token
-                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                   NSDictionary *body = responseObject;
-                                   if([body isKindOfClass:[NSDictionary class]]) {
-                                       NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
-                                       if(code){
-                                           if([code integerValue] == 200) {
-                                               NSString *name = [responseObject valueForKeyPath:@"response.user.name"];
-                                               NSArray *ids = [responseObject valueForKeyPath:@"response.user.identities.@distinctUnionOfObjects.id"];
-                                               
-                                               [UIAlertView showAlertViewWithTitle:@"Merge accounts"
-                                                                           message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?", name]
-                                                                 cancelButtonTitle:@"Cancel"
-                                                                 otherButtonTitles:@[@"Merge"]
-                                                                           handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                                                               if (buttonIndex == alertView.firstOtherButtonIndex ) {
-                                                                                   
-                                                                                   [server mergeIdentities:ids byToken:token success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                                                       if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                                                                                           NSDictionary *body=responseObject;
-                                                                                           if ([body isKindOfClass:[NSDictionary class]]) {
-                                                                                               id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
-                                                                                               if (code && [code intValue] == 200) {
-                                                                                                   [self processUrlHandler:url];
-                                                                                                   
-                                                                                                   if ([url.path hasPrefix:@"/!"]) {
-                                                                                                       [self performBlock:^(id sender) {
-                                                                                                           [self.model loadMe];
-                                                                                                       } afterDelay:3];
-                                                                                                   } else {
-                                                                                                       [self.model loadMe];
-                                                                                                   }
-                                                                                                   
-                                                                                                   
-                                                                                               }
-                                                                                           }
-                                                                                       }
-                                                                                   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                                                       
-                                                                                   }];
-                                                                               }
-                                                                           }];
-                                           }
-                                       }
-                                   }
-                                   
-                               }
-                               failure:nil];
+//                [server loadUserBy:[user_id integerValue]
+//                             withToken:token
+//                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//                                   NSDictionary *body = responseObject;
+//                                   if([body isKindOfClass:[NSDictionary class]]) {
+//                                       NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+//                                       if(code){
+//                                           if([code integerValue] == 200) {
+//                                               NSString *name = [responseObject valueForKeyPath:@"response.user.name"];
+//                                               NSArray *ids = [responseObject valueForKeyPath:@"response.user.identities.@distinctUnionOfObjects.id"];
+//                                               
+//                                               [UIAlertView showAlertViewWithTitle:@"Merge accounts"
+//                                                                           message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?", name]
+//                                                                 cancelButtonTitle:@"Cancel"
+//                                                                 otherButtonTitles:@[@"Merge"]
+//                                                                           handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+//                                                                               if (buttonIndex == alertView.firstOtherButtonIndex ) {
+//                                                                                   
+//                                                                                   [server mergeIdentities:ids byToken:token success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//                                                                                       if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+//                                                                                           NSDictionary *body=responseObject;
+//                                                                                           if ([body isKindOfClass:[NSDictionary class]]) {
+//                                                                                               id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
+//                                                                                               if (code && [code intValue] == 200) {
+//                                                                                                   [self processUrlHandler:url];
+//                                                                                                   
+//                                                                                                   if ([url.path hasPrefix:@"/!"]) {
+//                                                                                                       [self performBlock:^(id sender) {
+//                                                                                                           [self.model loadMe];
+//                                                                                                       } afterDelay:3];
+//                                                                                                   } else {
+//                                                                                                       [self.model loadMe];
+//                                                                                                   }
+//                                                                                                   
+//                                                                                                   
+//                                                                                               }
+//                                                                                           }
+//                                                                                       }
+//                                                                                   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//                                                                                       
+//                                                                                   }];
+//                                                                               }
+//                                                                           }];
+//                                           }
+//                                       }
+//                                   }
+//                                   
+//                               }
+//                               failure:nil];
             }
         }
         
