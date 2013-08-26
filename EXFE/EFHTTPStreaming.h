@@ -17,6 +17,9 @@
 @required
 - (void)completedRead:(NSString*) str;
 
+@optional
+- (void)streamingDidStartReconnecting;
+
 @end
 
 

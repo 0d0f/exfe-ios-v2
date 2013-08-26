@@ -39,6 +39,8 @@
         }];
         
         self.coordinate = CLLocationCoordinate2DMake(latitude, longitude);
+        
+        self.needToSave = YES;
     }
     
     return self;
