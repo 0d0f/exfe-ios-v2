@@ -973,6 +973,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     if (routeLocation.locatinMask & kEFRouteLocationMaskXPlace) {
         [self.mapDataSource changeXPlaceRouteLocationToNormalRouteLocaiton:routeLocation];
+    } else if (routeLocation.locatinMask & kEFRouteLocationMaskDestination) {
+        [self.mapDataSource changeDestinationToNormalRouteLocation:routeLocation];
     }
     
     if (kEFAnnotationStyleMarkRed == style) {

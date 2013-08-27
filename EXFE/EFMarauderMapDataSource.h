@@ -123,6 +123,7 @@ EFHTTPStreamingDelegate
  */
 - (EFRouteLocation *)createRouteLocationWithCoordinate:(CLLocationCoordinate2D)coordinate;
 - (void)changeXPlaceRouteLocationToNormalRouteLocaiton:(EFRouteLocation *)xplace;
+- (void)changeDestinationToNormalRouteLocation:(EFRouteLocation *)destination;
 
 - (CLLocationCoordinate2D)earthCoordinateToMarsCoordinate:(CLLocationCoordinate2D)mars;
 - (CLLocationCoordinate2D)marsCoordinateToEarthCoordinate:(CLLocationCoordinate2D)earth;
