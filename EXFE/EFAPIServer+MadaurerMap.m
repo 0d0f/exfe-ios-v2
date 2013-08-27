@@ -71,9 +71,9 @@
                       parameters:(id)param
                          success:^(AFHTTPRequestOperation *operation, id responseObject){
                             if (200 == operation.response.statusCode) {
-                                NSAssert([responseObject isKindOfClass:[NSDictionary class]], @"responseObject SHOULD be a dictionary.");
-                                
                                 if (responseObject) {
+                                    NSAssert([responseObject isKindOfClass:[NSDictionary class]], @"responseObject SHOULD be a dictionary.");
+                                    
                                     NSDictionary *result = (NSDictionary *)responseObject;
                                     CGFloat earthToMarsLatitudeOffset = [[result valueForKey:@"earth_to_mars_latitude"] doubleValue];
                                     CGFloat earthToMarsLongitudeOffset = [[result valueForKey:@"earth_to_mars_longitude"] doubleValue];

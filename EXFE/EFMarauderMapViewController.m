@@ -554,63 +554,12 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     return MKMapRectMake(MIN(a.x, b.x), MIN(a.y, b.y), ABS(a.x - b.x), ABS(a.y - b.y));
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger numberOfRows = 0;
-    if (tableView == self.tableView) {
-        numberOfRows = [self.mapDataSource numberOfPeople] - 1;
-    } else if (tableView == self.selfTableView) {
-        numberOfRows = 1;
-    }
-    
-    return numberOfRows;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *Identitier = @"MapPersonCell";
-    EFMapPersonCell *cell = (EFMapPersonCell *)[tableView dequeueReusableCellWithIdentifier:Identitier];
-    if (!cell) {
-        cell = [[EFMapPersonCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identitier];
-    }
-    
-    EFMapPerson *person = nil;
-    if (tableView == self.tableView) {
-        person  = [self.mapDataSource personAtIndex:indexPath.row + 1];
-    } else  if (tableView == self.selfTableView) {
-        person = [self.mapDataSource me];
-    }
-    
-    cell.person = person;
-    return cell;
-}
-
-#pragma mark - UITableViewDelegate
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView == self.tableView) {
-        CGRect originShadowFrame = self.tableViewShadowView.frame;
-        originShadowFrame.origin.y = scrollView.contentOffset.y;
-        self.tableViewShadowView.frame = originShadowFrame;
-        
-        CGFloat alpha = fabs(scrollView.contentOffset.y / 10.0f);
-        self.tableViewShadowView.alpha = alpha > 1.0f ? 1.0f : alpha;
-        
-        [self.mapStrokeView reloadData];
-    }
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+#pragma mark - EFMapPersonCellDelegate
+- (void)mapPersonCellSingleTapHappened:(EFMapPersonCell *)cell {
     [self.mapDataSource removeAllBreadcrumPathsToMapView:self.mapView];
     
     NSArray *locations = nil;
-    EFMapPerson *person = nil;
-    
-    if (tableView == self.tableView) {
-        person = [self.mapDataSource personAtIndex:indexPath.row + 1];
-    } else if (tableView == self.selfTableView) {
-        person = [self.mapDataSource me];
-    }
+    EFMapPerson *person = [self.mapDataSource personAtIndex:cell.index];
     
     locations = person.locations;
     self.mapDataSource.selectedPerson = person;
@@ -635,18 +584,78 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     // timestamp
     [self.mapDataSource updateTimestampForPerson:person toMapView:self.mapView];
     
-    if (self.recentZoomedPerson == person) {
-        if (kEFMapZoomTypePersonAndDestination == self.mapZoomType) {
-            [self _zoomToPersonLocation:person];
-        } else {
-            [self _zoomToPerson:person];
-        }
-    } else {
-        [self _zoomToPerson:person];
-        self.recentZoomedPerson = person;
-    }
+    [self _zoomToPerson:person];
     
     [self _fireBreadcrumbUpdateTimer];
+
+}
+
+- (void)mapPersonCellDoubleTapHappened:(EFMapPersonCell *)cell {
+    EFMapPerson *person = [self.mapDataSource personAtIndex:cell.index];
+    BOOL isMe = (person == [self.mapDataSource me]);
+    if (isMe) {
+        if (![EFLocationManager defaultManager].userLocation) {
+            return;
+        }
+    } else {
+        if (!person.lastLocation) {
+            return;
+        }
+    }
+    
+    [self _zoomToPersonLocation:person];
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSInteger numberOfRows = 0;
+    if (tableView == self.tableView) {
+        numberOfRows = [self.mapDataSource numberOfPeople] - 1;
+    } else if (tableView == self.selfTableView) {
+        numberOfRows = 1;
+    }
+    
+    return numberOfRows;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *Identitier = @"MapPersonCell";
+    EFMapPersonCell *cell = (EFMapPersonCell *)[tableView dequeueReusableCellWithIdentifier:Identitier];
+    if (!cell) {
+        cell = [[EFMapPersonCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identitier];
+        cell.delegate = self;
+    }
+    
+    EFMapPerson *person = nil;
+    if (tableView == self.tableView) {
+        person  = [self.mapDataSource personAtIndex:indexPath.row + 1];
+        cell.index = indexPath.row + 1;
+    } else  if (tableView == self.selfTableView) {
+        person = [self.mapDataSource me];
+        cell.index = 0;
+    }
+    
+    cell.person = person;
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView == self.tableView) {
+        CGRect originShadowFrame = self.tableViewShadowView.frame;
+        originShadowFrame.origin.y = scrollView.contentOffset.y;
+        self.tableViewShadowView.frame = originShadowFrame;
+        
+        CGFloat alpha = fabs(scrollView.contentOffset.y / 10.0f);
+        self.tableViewShadowView.alpha = alpha > 1.0f ? 1.0f : alpha;
+        
+        [self.mapStrokeView reloadData];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
