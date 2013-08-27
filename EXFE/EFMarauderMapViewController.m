@@ -381,24 +381,19 @@
 - (void)userLocationDidChange {
     EFUserLocationAnnotationView *locationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
     CLLocationCoordinate2D latestCoordinate = [EFLocationManager defaultManager].userLocation.coordinate;
-    CGPoint latestPoint = [self.mapView convertCoordinate:latestCoordinate toPointToView:self.mapView];
     
     if (locationView) {
-        if (CLLocationCoordinate2DIsValid(self.firstUserLocationCoordinate)) {
-            CGPoint firstPoint = [self.mapView convertCoordinate:self.firstUserLocationCoordinate toPointToView:self.mapView];
-            
-            CATransform3D newTransform = CATransform3DMakeTranslation(latestPoint.x - firstPoint.x, latestPoint.y - firstPoint.y, 0.0f);
-            
-            CABasicAnimation *translationAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
-            translationAnimation.fromValue = [locationView.layer valueForKey:@"transform"];
-            translationAnimation.toValue = [NSValue valueWithCATransform3D:newTransform];
-            translationAnimation.duration = 0.233f;
-            translationAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-            translationAnimation.fillMode = kCAFillModeForwards;
-            
-            [locationView.layer addAnimation:translationAnimation forKey:@"translation"];
-            locationView.layer.transform = newTransform;
-        }
+        CGFloat zoomFactor =  self.mapView.visibleMapRect.size.width / self.mapView.bounds.size.width;
+        MKMapPoint mapPoint = MKMapPointForCoordinate(latestCoordinate);
+        CGPoint point;
+        
+        point.x = mapPoint.x / zoomFactor;
+        point.y = mapPoint.y / zoomFactor;
+        
+        [UIView animateWithDuration:0.133f
+                         animations:^{
+                             locationView.center = point;
+                         }];
     } else {
         [self.mapView addAnnotation:[EFLocationManager defaultManager].userLocation];
     }

@@ -25,6 +25,7 @@
 #import "EFTimestampAnnotation.h"
 #import "EFAPIOperations.h"
 #import "EXFEModel+Crosses.h"
+#import "EFMapDataDefines.h"
 
 #define kTimestampDuration  (5.0f * 60.0f)
 #define kTimestampBlank     (15.0f)
@@ -73,11 +74,8 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
 @property (nonatomic, strong) NSMutableDictionary   *routeLocationAnnotationMap;
 
 @property (nonatomic, strong) NSMutableDictionary   *toAddPeopleUserIdMap;
-
 @property (nonatomic, strong) NSMutableDictionary   *breadcrumPathMap;
-
 @property (nonatomic, strong) NSMutableDictionary   *timestampMap;
-
 @property (nonatomic, strong) NSMutableDictionary   *personAnnotationMap;
 
 @property (nonatomic, strong) EFHTTPStreaming       *httpStreaming;
@@ -233,6 +231,10 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
                                              selector:@selector(handleLoadCrossFailureNotification:)
                                                  name:kEFNotificationNameLoadCrossFailure
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleUserLocationChangeNotification:)
+                                                 name:EFNotificationUserLocationDidChange
+                                               object:nil];
 }
 
 - (void)_unregisterNotification {
@@ -347,6 +349,11 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
 
 - (void)handleLoadCrossFailureNotification:(NSNotification *)notif {
     
+}
+
+- (void)handleUserLocationChangeNotification:(NSNotification *)notif {
+    EFMapPerson *me = [self me];
+    me.connectState = kEFMapPersonConnectStateOnline;
 }
 
 #pragma mark - Request

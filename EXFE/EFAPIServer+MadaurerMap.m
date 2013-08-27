@@ -73,12 +73,14 @@
                             if (200 == operation.response.statusCode) {
                                 NSAssert([responseObject isKindOfClass:[NSDictionary class]], @"responseObject SHOULD be a dictionary.");
                                 
-                                NSDictionary *result = (NSDictionary *)responseObject;
-                                CGFloat earthToMarsLatitudeOffset = [[result valueForKey:@"earth_to_mars_latitude"] doubleValue];
-                                CGFloat earthToMarsLongitudeOffset = [[result valueForKey:@"earth_to_mars_longitude"] doubleValue];
-                                
-                                if (successHandler) {
-                                    successHandler(earthToMarsLatitudeOffset, earthToMarsLongitudeOffset);
+                                if (responseObject) {
+                                    NSDictionary *result = (NSDictionary *)responseObject;
+                                    CGFloat earthToMarsLatitudeOffset = [[result valueForKey:@"earth_to_mars_latitude"] doubleValue];
+                                    CGFloat earthToMarsLongitudeOffset = [[result valueForKey:@"earth_to_mars_longitude"] doubleValue];
+                                    
+                                    if (successHandler) {
+                                        successHandler(earthToMarsLatitudeOffset, earthToMarsLongitudeOffset);
+                                    }
                                 }
                             }
                         }
@@ -105,16 +107,18 @@
                              if (200 == operation.response.statusCode) {
                                  NSAssert([responseObject isKindOfClass:[NSArray class]], @"responseObject SHOULD be a array.");
                                  
-                                 NSArray *result = (NSArray *)responseObject;
-                                 
-                                 NSMutableArray *routeObjects = [[NSMutableArray alloc] initWithCapacity:result.count];
-                                 for (NSDictionary *routeDictionary in result) {
-                                     EFRoutePath *routePath = [[EFRoutePath alloc] initWithDictionary:routeDictionary];
-                                     [routeObjects addObject:routePath];
-                                 }
-                                 
-                                 if (successHandler) {
-                                     successHandler(routeObjects);
+                                 if (responseObject) {
+                                     NSArray *result = (NSArray *)responseObject;
+                                     
+                                     NSMutableArray *routeObjects = [[NSMutableArray alloc] initWithCapacity:result.count];
+                                     for (NSDictionary *routeDictionary in result) {
+                                         EFRoutePath *routePath = [[EFRoutePath alloc] initWithDictionary:routeDictionary];
+                                         [routeObjects addObject:routePath];
+                                     }
+                                     
+                                     if (successHandler) {
+                                         successHandler(routeObjects);
+                                     }
                                  }
                              }
                          }
@@ -143,12 +147,14 @@
                              if (200 == operation.response.statusCode) {
                                  NSAssert([responseObject isKindOfClass:[NSDictionary class]], @"responseObject SHOULD be a dictionary.");
                                  
-                                 NSDictionary *result = (NSDictionary *)responseObject;
-                                 
-                                 EFRoutePath *routePath = [[EFRoutePath alloc] initWithDictionary:result];
-                                 
-                                 if (successHandler) {
-                                     successHandler(routePath);
+                                 if (responseObject) {
+                                     NSDictionary *result = (NSDictionary *)responseObject;
+                                     
+                                     EFRoutePath *routePath = [[EFRoutePath alloc] initWithDictionary:result];
+                                     
+                                     if (successHandler) {
+                                         successHandler(routePath);
+                                     }
                                  }
                              }
                          }
