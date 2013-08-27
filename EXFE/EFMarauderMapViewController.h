@@ -39,7 +39,8 @@ EFMarauderMapDataSourceDelegate,
 EFMapStrokeViewDataSource,
 UIAlertViewDelegate,
 EFGeomarkGroupViewControllerDelegate,
-EFMapPersonViewControllerDelegate
+EFMapPersonViewControllerDelegate,
+EFMapPersonCellDelegate
 >
 
 @property (nonatomic, weak)     EXFEModel               *model;

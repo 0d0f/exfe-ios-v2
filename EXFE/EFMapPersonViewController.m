@@ -16,8 +16,9 @@
 #import "NSDate+RouteXDateFormater.h"
 #import "EFMarauderMapDataSource.h"
 
-#define kDefaultWidth   (200.0f)
-#define kDistanceWidth  (150.0f)
+#define kDefaultWidth       (200.0f)
+#define kDistanceWidth      (150.0f)
+#define kDistanceInfoWidth  (50.0f)
 
 @interface EFMapPersonViewController ()
 
@@ -29,7 +30,9 @@
 @property (nonatomic, strong) UILabel           *nameLabel;
 @property (nonatomic, strong) UILabel           *personInfoLabel;
 @property (nonatomic, strong) UILabel           *destDistanceLabel;
+@property (nonatomic, strong) UILabel           *destDistanceInfoLabel;
 @property (nonatomic, strong) UILabel           *meDistanceLabel;
+@property (nonatomic, strong) UILabel           *meDistanceInfoLabel;
 @property (nonatomic, strong) UIButton          *requestButton;
 @property (nonatomic, strong) UIImageView       *destHeadingView;
 @property (nonatomic, strong) UIImageView       *meHeadingView;
@@ -73,8 +76,19 @@
     destDistanceLabel.shadowOffset = (CGSize){0.0f, 0.5f};
     destDistanceLabel.backgroundColor = [UIColor clearColor];
     destDistanceLabel.textAlignment = NSTextAlignmentRight;
+    destDistanceLabel.text = NSLocalizedString(@"至目的地", nil);
     [self.view addSubview:destDistanceLabel];
     self.destDistanceLabel = destDistanceLabel;
+    
+    UILabel *destDistanceInfoLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {kDistanceInfoWidth, 17.0f}}];;
+    destDistanceInfoLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+    destDistanceInfoLabel.textColor = [UIColor COLOR_BLACK_19];
+    destDistanceInfoLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
+    destDistanceInfoLabel.shadowOffset = (CGSize){0.0f, 0.5f};
+    destDistanceInfoLabel.backgroundColor = [UIColor clearColor];
+    destDistanceInfoLabel.textAlignment = NSTextAlignmentLeft;
+    [self.view addSubview:destDistanceInfoLabel];
+    self.destDistanceInfoLabel = destDistanceInfoLabel;
     
     UIImageView *destHeadingView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_arrow_14g5.png"]];
     [self.view addSubview:destHeadingView];
@@ -87,8 +101,19 @@
     meDistanceLabel.shadowOffset = (CGSize){0.0f, 0.5f};
     meDistanceLabel.backgroundColor = [UIColor clearColor];
     meDistanceLabel.textAlignment = NSTextAlignmentRight;
+    meDistanceLabel.text = NSLocalizedString(@"距您的位置", nil);
     [self.view addSubview:meDistanceLabel];
     self.meDistanceLabel = meDistanceLabel;
+    
+    UILabel *meDistanceInfoLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {kDistanceInfoWidth, 17.0f}}];
+    meDistanceInfoLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+    meDistanceInfoLabel.textColor = [UIColor COLOR_BLACK_19];
+    meDistanceInfoLabel.shadowColor = [UIColor colorWithWhite:1.0f alpha:0.75f];
+    meDistanceInfoLabel.shadowOffset = (CGSize){0.0f, 0.5f};
+    meDistanceInfoLabel.backgroundColor = [UIColor clearColor];
+    meDistanceInfoLabel.textAlignment = NSTextAlignmentLeft;
+    [self.view addSubview:meDistanceInfoLabel];
+    self.meDistanceInfoLabel = meDistanceInfoLabel;
     
     UIImageView *meHeadingView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_arrow_14g5.png"]];
     [self.view addSubview:meHeadingView];
@@ -143,7 +168,7 @@
                 distanceFromDest = ceil(distanceFromDest / 1000.0f);
                 unit = NSLocalizedString(@"公里", nil);
             }
-            destDistanceInfo = [NSString stringWithFormat:NSLocalizedString(@"距目的地 %ld%@", nil), (long)distanceFromDest, unit];
+            destDistanceInfo = [NSString stringWithFormat:@"%ld%@", (long)distanceFromDest, unit];
             
             destRadian = HeadingInRadian(destination.coordinate, self.person.lastLocation.coordinate);
         }
@@ -157,7 +182,7 @@
                 distanceFromMe = ceil(distanceFromMe / 1000.0f);
                 unit = NSLocalizedString(@"公里", nil);
             }
-            meDistanceInfo = [NSString stringWithFormat:NSLocalizedString(@"与您相距 %ld%@", nil), (long)distanceFromMe, unit];
+            meDistanceInfo = [NSString stringWithFormat:@"%ld%@", (long)distanceFromMe, unit];
             
             meRadian = HeadingInRadian([self.mapDataSource me].lastLocation.coordinate, self.person.lastLocation.coordinate);
         }
@@ -172,30 +197,40 @@
     height += 7.0f;
     
     if (destDistanceInfo) {
-        self.destDistanceLabel.text = destDistanceInfo;
         height += CGRectGetHeight(self.destDistanceLabel.frame);
-        self.destDistanceLabel.center = (CGPoint){kDistanceWidth * 0.5f, height + offsetY};
+        self.destDistanceLabel.center = (CGPoint){kDistanceWidth * 0.2f, height + offsetY};
         self.destDistanceLabel.hidden = NO;
         
-        self.destHeadingView.center = (CGPoint){kDistanceWidth + 8.0f, height + offsetY};
+        self.destDistanceInfoLabel.text = destDistanceInfo;
+        [self.destDistanceInfoLabel sizeToFit];
+        self.destDistanceInfoLabel.center = (CGPoint){CGRectGetMaxX(self.destDistanceLabel.frame) + CGRectGetWidth(self.destDistanceInfoLabel.frame) * 0.5f + 4.0f, height + offsetY};
+        self.destDistanceInfoLabel.hidden = NO;
+        
+        self.destHeadingView.center = (CGPoint){CGRectGetMaxX(self.destDistanceInfoLabel.frame) + 6.0f, height + offsetY};
         self.destHeadingView.layer.transform = CATransform3DMakeRotation(destRadian, 0.0f, 0.0f, 1.0f);
         self.destHeadingView.hidden = NO;
     } else {
         self.destDistanceLabel.hidden = YES;
+        self.destDistanceInfoLabel.hidden = YES;
         self.destHeadingView.hidden = YES;
     }
     
     if (meDistanceInfo) {
-        self.meDistanceLabel.text = meDistanceInfo;
         height += CGRectGetHeight(self.meDistanceLabel.frame);
-        self.meDistanceLabel.center = (CGPoint){kDistanceWidth * 0.5f, height + offsetY};
+        self.meDistanceLabel.center = (CGPoint){kDistanceWidth * 0.2f, height + offsetY};
         self.meDistanceLabel.hidden = NO;
         
-        self.meHeadingView.center = (CGPoint){kDistanceWidth + 8.0f, height + offsetY};
+        self.meDistanceInfoLabel.text = meDistanceInfo;
+        [self.meDistanceInfoLabel sizeToFit];
+        self.meDistanceInfoLabel.center = (CGPoint){CGRectGetMaxX(self.meDistanceLabel.frame) + CGRectGetWidth(self.meDistanceInfoLabel.frame) * 0.5f + 4.0f, height + offsetY};
+        self.meDistanceInfoLabel.hidden = NO;
+        
+        self.meHeadingView.center = (CGPoint){CGRectGetMaxX(self.meDistanceInfoLabel.frame) + 6.0f, height + offsetY};
         self.meHeadingView.layer.transform = CATransform3DMakeRotation(meRadian, 0.0f, 0.0f, 1.0f);
         self.meHeadingView.hidden = NO;
     } else {
         self.meDistanceLabel.hidden = YES;
+        self.meDistanceInfoLabel.hidden = YES;
         self.meHeadingView.hidden = YES;
     }
     

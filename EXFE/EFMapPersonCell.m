@@ -215,9 +215,45 @@
         meterLabel.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:meterLabel];
         self.meterLabel = meterLabel;
+        
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                    action:@selector(handleSingleTap:)];
+        singleTap.numberOfTapsRequired = 1;
+        [self addGestureRecognizer:singleTap];
+        
+        UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                    action:@selector(handleDoubleTap:)];
+        doubleTap.numberOfTapsRequired = 2;
+        [self addGestureRecognizer:doubleTap];
+        
+        [singleTap requireGestureRecognizerToFail:doubleTap];
     }
     return self;
 }
+
+#pragma mark - Gesture
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)gesture {
+    UIGestureRecognizerState state = gesture.state;
+    
+    if (UIGestureRecognizerStateEnded == state) {
+        if ([self.delegate respondsToSelector:@selector(mapPersonCellSingleTapHappened:)]) {
+            [self.delegate mapPersonCellSingleTapHappened:self];
+        }
+    }
+}
+
+- (void)handleDoubleTap:(UITapGestureRecognizer *)gesture {
+    UIGestureRecognizerState state = gesture.state;
+    
+    if (UIGestureRecognizerStateEnded == state) {
+        if ([self.delegate respondsToSelector:@selector(mapPersonCellDoubleTapHappened:)]) {
+            [self.delegate mapPersonCellDoubleTapHappened:self];
+        }
+    }
+}
+
+#pragma mark -
 
 + (CGFloat)defaultCellHeight {
     return ceilf(5 + 40 + 15);
