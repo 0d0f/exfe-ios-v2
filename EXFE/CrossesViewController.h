@@ -10,7 +10,7 @@
 #import "PullRefreshTableViewController.h"
 #import "EXInnerButton.h"
 #import "EXSpinView.h"
-#import "MBProgressHUD.h"
+
 #import "CrossCard.h"
 #import "NewGatherViewController.h"
 #import "TTTAttributedLabel.h"
@@ -26,7 +26,6 @@ TTTAttributedLabelDelegate
 > {
     BOOL alertShowflag;
     NSMutableAttributedString *gatherax;
-    MBProgressHUD *hud;
     UIImage *default_background;
 }
 

@@ -11,24 +11,23 @@
 #import <QuartzCore/QuartzCore.h>
 #import <BlocksKit/BlocksKit.h>
 #import "Util.h"
-#import "EXLabel.h"
-#import "EXRSVPStatusView.h"
-#import "MapPin.h"
-#import "Cross.h"
-#import "Exfee+EXFE.h"
-#import "User+EXFE.h"
-#import "Place+Helper.h"
-#import "CrossTime+Helper.h"
-#import "EFTime+Helper.h"
+#import "EFEntity.h"
+#import "EFKit.h"
+#import "EFModel.h"
+
+#import "NSString+EXFE.h"
+
 #import "TitleDescEditViewController.h"
 #import "TimeViewController.h"
 #import "PlaceViewController.h"
 #import "WidgetConvViewController.h"
 #import "WidgetExfeeViewController.h"
-#import "NSString+EXFE.h"
-#import "EFAPI.h"
-#import "EFKit.h"
-#import "EFModel.h"
+
+#import "EXLabel.h"
+#import "EXRSVPStatusView.h"
+#import "MapPin.h"
+#import "MBProgressHUD.h"
+
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
@@ -93,6 +92,10 @@
 #define kViewTagPlaceDescription         (0120302)
 
 @interface CrossGroupViewController ()
+
+@property (nonatomic, weak) Cross * cross;
+@property (nonatomic, strong) NSArray *sortedInvitations;
+
 @end
 
 @interface CrossGroupViewController (Private)
@@ -101,18 +104,25 @@
 @end
 
 @implementation CrossGroupViewController
-@synthesize cross = _cross;
-@synthesize currentViewController = _currentViewController;
-@synthesize headerStyle = _headerStyle;
-@synthesize widgetId = _widgetId;
+{}
 
+#pragma mark - Setter && Getter
+- (Cross *)cross
+{
+    return self.tabBarViewController.cross;
+}
+
+- (void)setCross:(Cross *)cross
+{
+    
+}
+
+#pragma mark lifecycle
 - (id)initWithModel:(EXFEModel*) exfeModel
 {
     self = [super initWithModel:exfeModel];
     if (self) {
         // Custom initialization
-        _headerStyle = kHeaderStyleFull;
-        _widgetId = kWidgetCross;
         popupCtrolId = 0;
         savedFrame = CGRectNull;
         savedScrollEnable = NO;
@@ -312,43 +322,13 @@
     // fill data & relayout
     
     [self refreshUI];
-    
-    switch (_widgetId) {
-        case kWidgetConversation:
-        {
-            NSArray *controllers = [self.tabBarViewController viewControllersForClass:[WidgetConvViewController class]];
-            
-            NSAssert(controllers.count, @"Should contain a WidgetExfeeViewController");
-            
-            WidgetConvViewController *exfeeViewController = controllers[0];
-            NSUInteger index = [self.tabBarViewController.viewControllers indexOfObject:exfeeViewController];
-            [self.tabBarViewController.tabBar setSelectedIndex:index];
-            [self performSelector:@selector(hidePopupIfShown) withObject:nil afterDelay:1.0f];
-        }
-            break;
-        case kWidgetExfee:
-        {
-            NSArray *controllers = [self.tabBarViewController viewControllersForClass:[WidgetExfeeViewController class]];
-            
-            NSAssert(controllers.count, @"Should contain a WidgetExfeeViewController");
-            
-            WidgetExfeeViewController *exfeeViewController = controllers[0];
-            NSUInteger index = [self.tabBarViewController.viewControllers indexOfObject:exfeeViewController];
-            [self.tabBarViewController.tabBar setSelectedIndex:index];
-            [self performSelector:@selector(hidePopupIfShown) withObject:nil afterDelay:1.0f];
-        }
-            break;
-        case kWidgetCross:
-        default:
-            break;
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    [self.model loadCrossWithCrossId:[_cross.cross_id integerValue] updatedTime:_cross.updated_at];
+    [self.model loadCrossWithCrossId:[self.cross.cross_id integerValue] updatedTime:self.cross.updated_at];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -359,7 +339,6 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    self.cross = nil;
 }
 
 #pragma mark - Notification Handler
@@ -369,34 +348,37 @@
     
     if ([name isEqualToString:kEFNotificationNameLoadCrossSuccess]) {
         NSDictionary *userInfo = notification.userInfo;
-        
-        Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
-        NSInteger c = [meta.code integerValue];
-        NSInteger t = c / 100;
-        
-        switch (t) {
-            case 2:{
-                Cross *c = [userInfo objectForKey:@"response.cross"];
-                if ([self.cross.cross_id integerValue] == [c.cross_id integerValue]) {
-                    self.cross = c;
-                    [self refreshUI];
-                }
-            } break;
-            case 4:{
-                if (c == 403) {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Privacy Control", nil)
-                                                                    message:NSLocalizedString(@"You have no access to this private ·X·.", nil)
-                                                                   delegate:self
-                                                          cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                                          otherButtonTitles:nil];
-                    alert.tag = 403;
-                    [alert show];
-                }
-            } break;
-                
-            default:{
-                
-            } break;
+        NSString *cat = userInfo[@"type"];
+        NSNumber *num = userInfo[@"id"];
+        if ([@"cross" isEqualToString:cat] && [self.cross.cross_id isEqualToNumber:num]) {
+            Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
+            NSInteger c = [meta.code integerValue];
+            NSInteger t = c / 100;
+            
+            switch (t) {
+                case 2:{
+                    Cross *c = [userInfo objectForKey:@"response.cross"];
+                    if ([self.cross.cross_id integerValue] == [c.cross_id integerValue]) {
+                        self.cross = c;
+                        [self refreshUI];
+                    }
+                } break;
+                case 4:{
+                    if (c == 403) {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Privacy Control", nil)
+                                                                        message:NSLocalizedString(@"You have no access to this private ·X·.", nil)
+                                                                       delegate:self
+                                                              cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                                              otherButtonTitles:nil];
+                        alert.tag = 403;
+                        [alert show];
+                    }
+                } break;
+                    
+                default:{
+                    
+                } break;
+            }
         }
     } else if ([kEFNotificationNameRemoveMyInvitationSuccess isEqualToString:name]) {
    
@@ -449,28 +431,6 @@
     [NSNotificationCenter.defaultCenter postNotificationName:EXCrossListDidChangeNotification object:self];
 }
 
-#pragma mark - Setter && Getter
-
-- (void)setCross:(Cross *)cross {
-    if (cross == _cross)
-        return;
-    
-    if (_cross) {
-        [_cross removeObserver:self
-                    forKeyPath:@"conversation_count"];
-        _cross = nil;
-    }
-    
-    if (cross) {
-        _cross = cross;
-        
-        // kvo
-        [cross addObserver:self
-                forKeyPath:@"conversation_count"
-                   options:NSKeyValueObservingOptionNew
-                   context:NULL];
-    }
-}
 
 #pragma mark - KVO
 
@@ -849,7 +809,7 @@
 }
 
 - (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index {
-    Invitation *invitation = [self.sortedInvitations objectAtIndex:index];
+    Invitation *invitation = self.sortedInvitations[index];
     EXInvitationItem *item = [[EXInvitationItem alloc] initWithInvitation:invitation];
     item.isMe = [[User getDefaultUser] isMe:invitation.identity];
     
@@ -1397,7 +1357,7 @@
     TitleDescEditViewController *titleViewController = [[TitleDescEditViewController alloc] initWithNibName:@"TitleDescEditViewController" bundle:nil];
     titleViewController.delegate = self;
     NSString *imgurl = nil;
-    for (NSDictionary *widget in (NSArray*)_cross.widget) {
+    for (NSDictionary *widget in (NSArray*)self.cross.widget) {
         if ([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
             imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
             break;
@@ -1408,13 +1368,13 @@
     [self.tabBarViewController presentViewController:titleViewController
                                             animated:YES
                                           completion:nil];
-    [titleViewController setCrossTitle:_cross.title desc:_cross.cross_description];
+    [titleViewController setCrossTitle:self.cross.title desc:self.cross.cross_description];
 }
 
 - (void)showTimeView {
     TimeViewController *timeViewController = [[TimeViewController alloc] initWithNibName:@"TimeViewController" bundle:nil];
     timeViewController.delegate = self;
-    [timeViewController setDateTime:_cross.time];
+    [timeViewController setDateTime:self.cross.time];
     [self.tabBarViewController presentViewController:timeViewController
                                             animated:YES
                                           completion:nil];
@@ -1424,9 +1384,9 @@
     PlaceViewController *placeViewController = [[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
     placeViewController.delegate = self;
     
-    if (_cross.place != nil) {
-        if(![_cross.place isEmpty]){
-            placeViewController.selecetedPlace = _cross.place;
+    if (self.cross.place != nil) {
+        if(![self.cross.place isEmpty]){
+            placeViewController.selecetedPlace = self.cross.place;
         } else {
             placeViewController.isaddnew = YES;
             placeViewController.showtableview = YES;
@@ -1449,62 +1409,64 @@
 
 #pragma mark - API request for modification.
 - (void)sendrsvp:(NSString*)status invitation:(Invitation*)_invitation {
-    Identity *myidentity = [_cross.exfee getMyInvitation].identity;
+    Identity *myidentity = [self.cross.exfee getMyInvitation].identity;
     
-    [self.model.apiServer submitRsvp:status
-                                          on:_invitation
-                                  myIdentity:[myidentity.identity_id intValue]
-                                     onExfee:[_cross.exfee.exfee_id intValue]
-                                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
-                                             if([responseObject isKindOfClass:[NSDictionary class]]) {
-                                                 NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
-                                                 if ([[meta objectForKey:@"code"] intValue] == 403) {
-                                                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Privacy Control", nil) message:NSLocalizedString(@"You have no access to this private ·X·.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-                                                     alert.tag = 403;
-                                                     [alert show];
-                                                 } else if ([[meta objectForKey:@"code"] intValue] == 200) {
-                                                     [self.model loadCrossWithCrossId:[_cross.cross_id integerValue] updatedTime:nil];
-                                                     
-                                                     [self refreshUI];
-                                                 }
-                                                 
-                                             }
-                                         }
-                                     }
-                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                         [Util showConnectError:error delegate:self]; 
-                                     }];
+    [self.model changeRsvp:status on:_invitation from:self.cross.exfee byIdentity:myidentity];
+    
+//    [self.model.apiServer submitRsvp:status
+//                                          on:_invitation
+//                                  myIdentity:[myidentity.identity_id intValue]
+//                                     onExfee:[self.cross.exfee.exfee_id integerValue]
+//                                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//                                         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+//                                             if([responseObject isKindOfClass:[NSDictionary class]]) {
+//                                                 NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
+//                                                 if ([[meta objectForKey:@"code"] intValue] == 403) {
+//                                                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Privacy Control", nil) message:NSLocalizedString(@"You have no access to this private ·X·.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+//                                                     alert.tag = 403;
+//                                                     [alert show];
+//                                                 } else if ([[meta objectForKey:@"code"] intValue] == 200) {
+//                                                     [self.model loadCrossWithCrossId:[self.cross.cross_id integerValue] updatedTime:nil];
+//                                                     
+//                                                     [self refreshUI];
+//                                                 }
+//                                                 
+//                                             }
+//                                         }
+//                                     }
+//                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//                                         [Util showConnectError:error delegate:self]; 
+//                                     }];
 }
 
 #pragma mark - EditCrossDelegate
 
 - (void)addExfee:(NSArray *)invitations {
-    [_cross.exfee addInvitations:[NSSet setWithArray:invitations]];
+    [self.cross.exfee addInvitations:[NSSet setWithArray:invitations]];
     //[self saveCrossUpdate];
-    [self fillExfee:_cross.exfee];
+    [self fillExfee:self.cross.exfee];
 }
 
 - (void)setTime:(CrossTime *)time {
-    _cross.time = time;
+    self.cross.time = time;
     [self saveCrossUpdate];
     [self fillTime:time];
     [self relayoutUI];
 }
 
 - (void)setPlace:(Place*)place {
-    _cross.place = place;
+    self.cross.place = place;
     [self saveCrossUpdate];
     [self fillPlace:place];
     [self relayoutUI];
 }
 
 - (void)setTitle:(NSString*)title Description:(NSString*)desc {
-    if (_cross.title != title) {
+    if (self.cross.title != title) {
         //title_be_edit=YES;
     }
-    _cross.title = title;
-    _cross.cross_description = desc;
+    self.cross.title = title;
+    self.cross.cross_description = desc;
     
     // walkaround.
     // we should use notification to update title.
@@ -1514,7 +1476,7 @@
     }
 
     [self saveCrossUpdate];
-    [self fillDescription:_cross];
+    [self fillDescription:self.cross];
     [self relayoutUI];
 }
 
@@ -1526,8 +1488,8 @@
     [bigspin startAnimating];
     hud.customView = bigspin;
     
-    _cross.by_identity = [_cross.exfee getMyInvitation].identity;
-    [self.model editCross:_cross];
+    self.cross.by_identity = [self.cross.exfee getMyInvitation].identity;
+    [self.model editCross:self.cross];
     // both: [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
     // sucess: refresh cross
     // fail: roll back or retry

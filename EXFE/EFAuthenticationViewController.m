@@ -13,22 +13,28 @@
 #import <Twitter/Twitter.h>
 #import <Accounts/Accounts.h>
 #import <FacebookSDK/FacebookSDK.h>
-#import "UIApplication+EXFE.h"
-#import "TWAPIManager.h"
-#import "WCAlertView.h"
-#import "EFModel.h"
-#import "CSLinearLayoutView.h"
 #import "Util.h"
-#import "TTTAttributedLabel.h"
-#import "EFAPI.h"
-#import "User+EXFE.h"
-#import "Identity+EXFE.h"
+#import "EFEntity.h"
 #import "EFKit.h"
-#import "EXGradientToolbarView.h"
-#import "UILabel+EXFE.h"
-#import "EFIdentityBar.h"
-#import "EFPasswordField.h"
+#import "EFModel.h"
+
+#import "EFAPIServer.h"
+
 #import "OAuthLoginViewController.h"
+
+#import "UIApplication+EXFE.h"
+#import "UILabel+EXFE.h"
+
+#import "CSLinearLayoutView.h"
+#import "EFIdentityTextField.h"
+#import "TWAPIManager.h"
+#import "MBProgressHUD.h"
+#import "EXSpinView.h"
+#import "EFIdentityBar.h"
+#import "TTTAttributedLabel.h"
+#import "EXGradientToolbarView.h"
+#import "EFPasswordField.h"
+#import "WCAlertView.h"
 
 #define kTagPassword        233
 #define kTagBtnAuthPwd      234
@@ -987,12 +993,12 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                             hud.mode = MBProgressHUDModeIndeterminate;
                             
-                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                                UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-                                    [hud hide:YES];
-                                }];
-                                [hud addGestureRecognizer:tap];
-                            });
+//                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+//                                UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+//                                    [hud hide:YES];
+//                                }];
+//                                [hud addGestureRecognizer:tap];
+//                            });
                             
                             [self.model.apiServer changePassword:nil
                                                             with:password

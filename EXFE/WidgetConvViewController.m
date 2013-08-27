@@ -8,13 +8,15 @@
 
 #import "WidgetConvViewController.h"
 
-#import "Post.h"
-#import "PostCell.h"
 #import "Util.h"
-#import "EFAPI.h"
+#import "EFEntity.h"
 #import "EFKit.h"
 #import "EFModel.h"
-#import "CrossGroupViewController.h"
+#import "EFCrossTabBarViewController.h"
+
+#import "Post.h"
+#import "PostCell.h"
+
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
@@ -30,16 +32,28 @@
 
 @interface WidgetConvViewController ()
 
-@property (nonatomic, strong) NSMutableArray* posts;
+@property (nonatomic, strong) NSMutableArray     *posts;
+@property (nonatomic, weak, readonly) Exfee      *exfee;
+@property (nonatomic, weak, readonly) Invitation *myInvitation;
 
 @end
 
 @implementation WidgetConvViewController
-@synthesize exfee_id;
-@synthesize myIdentity;
+{}
+#pragma mark Getter/Setter
 @synthesize inputToolbar;
 
+- (Exfee *)exfee
+{
+    return self.tabBarViewController.cross.exfee;
+}
 
+- (Invitation *)myInvitation
+{
+    return [self.tabBarViewController.cross.exfee getMyInvitation];
+}
+
+#pragma mark lifecycle
 - (id)initWithModel:(EXFEModel *)exfeModel
 {
     self = [super initWithModel:exfeModel];
@@ -57,8 +71,7 @@
     NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"CrossGroupViewController")];
     NSAssert(viewControllers != nil && viewControllers.count, @"viewControllers 不应该为空");
     
-    CrossGroupViewController *crossGroupViewController = viewControllers[0];
-    crossGroupViewController.cross.conversation_count = 0;
+    self.tabBarViewController.cross.conversation_count = 0;
     
     [self refreshConversation];
 }
@@ -268,7 +281,7 @@
         }
     }
     
-    [self.model loadConversationWithExfeeId:exfee_id updatedTime:updated_at];
+    [self.model loadConversationWithExfee:self.exfee updatedTime:updated_at];
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
@@ -279,7 +292,7 @@
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Post"];
     NSPredicate *predicate = [NSPredicate
                               predicateWithFormat:@"(postable_type = %@) AND (postable_id = %u)",
-                              @"exfee", exfee_id];
+                              @"exfee", [self.exfee.exfee_id integerValue]];
     
     [request setPredicate:predicate];
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:YES];
@@ -621,22 +634,7 @@
     [Flurry logEvent:@"SEND_CONVERSATION"];
     
     [inputToolbar setInputEnabled:NO];
-    [self.model.apiServer postConversation:content
-                                                by:myIdentity
-                                                on:exfee_id
-                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                               [inputToolbar setInputEnabled:YES];
-                                               if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                                                   [inputToolbar.textView clearText];
-                                                   [self refreshConversation];
-                                               } else {
-                                               }
-                                           }
-                                           failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                               [inputToolbar setInputEnabled:YES];
-                                               [Util showConnectError:error delegate:self];
-                                           }];
-    
+    [self.model postConversation:content by:self.myInvitation.identity on:self.exfee];
 }
 
 - (void)showOrHideHint{

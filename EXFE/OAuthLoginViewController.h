@@ -7,10 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Util.h"
-#import "MBProgressHUD.h"
-#import "EXSpinView.h"
-#import "Identity+EXFE.h"
+#import "EFEntity.h"
 
 
 typedef void (^OAuthAuthenticateSuccess)(NSDictionary *param);

@@ -10,13 +10,9 @@
 
 #import <CoreData/CoreData.h>
 #import <RestKit/RestKit.h>
-#import "Identity+EXFE.h"
-#import "User+EXFE.h"
+#import "EFEntity.h"
 #import "EFContactObject.h"
-#import "MBProgressHUD.h"
-#import "EXSpinView.h"
 #import "EXAddressBookService.h"
-#import "LocalContact+EXFE.h"
 
 @interface EFContactDataSource ()
 @property (nonatomic, strong) NSMutableArray *sections;

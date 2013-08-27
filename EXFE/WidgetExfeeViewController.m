@@ -10,28 +10,24 @@
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 #import <BlocksKit/BlocksKit.h>
+
+#import "Util.h"
+#import "EFEntity.h"
+#import "EFKit.h"
+#import "EFModel.h"
+
 #import "UILabel+EXFE.h"
-#import "Invitation+EXFE.h"
-#import "Identity+EXFE.h"
-#import "Exfee+EXFE.h"
-#import "Invitation+EXFE.h"
-#import "User+EXFE.h"
+#import "DateTimeUtil.h"
+#import "NSString+EXFE.h"
+
 #import "WidgetExfeeViewController.h"
 #import "CrossGroupViewController.h"
 #import "ExfeeCollectionViewCell.h"
 #import "ExfeeAddCollectionViewCell.h"
-#import "Util.h"
-#import "DateTimeUtil.h"
-#import "NSString+EXFE.h"
 #import "EFContactViewController.h"
-#import "EFAPIServer.h"
+
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
-#import "Cross.h"
-#import "IdentityId+EXFE.h"
-#import "EFAPI.h"
-#import "EFKit.h"
-#import "EFModel.h"
 #import "RoughIdentity.h"
 #import "EFContactObject.h"
 
@@ -72,11 +68,20 @@ typedef enum {
 
 @interface WidgetExfeeViewController ()
 
+@property (nonatomic, weak) Exfee *exfee;
+
 @end
 
 @implementation WidgetExfeeViewController
 
+{}
+#pragma mark Getter/Setter
+- (Exfee *)exfee
+{
+    return self.tabBarViewController.cross.exfee;
+}
 
+#pragma mark lifecycle
 - (id)initWithModel:(EXFEModel *)exfeModel
 {
     self = [super initWithModel:exfeModel];
@@ -217,11 +222,6 @@ typedef enum {
         
         Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
         if ([meta.code intValue] == 200) {
-            NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"CrossGroupViewController")];
-            NSAssert(viewControllers != nil && viewControllers.count, @"viewController 不应为空");
-            
-            CrossGroupViewController *crossGroupViewController = viewControllers[0];
-            self.exfee = crossGroupViewController.cross.exfee;
             self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
             [exfeeContainer reloadData];
             [self reloadSelected];
@@ -232,7 +232,6 @@ typedef enum {
         Exfee *exfee = [userInfo objectForKey:@"exfee"];
         
         self.selected_invitation = nil;
-        self.exfee = exfee;
         self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
         [exfeeContainer reloadData];
         [self reloadSelected];
@@ -284,25 +283,27 @@ typedef enum {
     IdentityId *identity_id = [set objectAtIndex:index];
     [set removeObjectAtIndex:index];
     
-    [self.model.apiServer removeNotificationIdentity:identity_id
-                                                from:_selected_invitation
-                                             onExfee:self.exfee
-                                             success:^(Exfee *editExfee) {
-                                                 self.selected_invitation = nil;
-                                                 self.exfee = editExfee;
-                                                 self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
-                                                 [exfeeContainer reloadData];
-                                                 [self reloadSelected];
-                                                 
-                                                 NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"CrossGroupViewController")];
-                                                 NSAssert(viewControllers != nil && viewControllers.count, @"viewController 不应为空");
-                                                 
-                                                 CrossGroupViewController *crossGroupViewController = viewControllers[0];
-                                                 
-                                                 [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id integerValue] updatedTime:nil];
-                                             } failure:^(NSError *error) {
-                                                 NSLog(@"error %@", error);
-                                             }];
+    [self.model removeNotificationIdentity:identity_id from:_selected_invitation onExfee:self.exfee];
+    
+//    [self.model.apiServer removeNotificationIdentity:identity_id
+//                                                from:_selected_invitation
+//                                             onExfee:self.exfee
+//                                             success:^(Exfee *editExfee) {
+//                                                 self.selected_invitation = nil;
+//                                                 self.exfee = editExfee;
+//                                                 self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+//                                                 [exfeeContainer reloadData];
+//                                                 [self reloadSelected];
+//                                                 
+//                                                 NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"CrossGroupViewController")];
+//                                                 NSAssert(viewControllers != nil && viewControllers.count, @"viewController 不应为空");
+//                                                 
+//                                                 CrossGroupViewController *crossGroupViewController = viewControllers[0];
+//                                                 
+//                                                 [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id integerValue] updatedTime:nil];
+//                                             } failure:^(NSError *error) {
+//                                                 NSLog(@"error %@", error);
+//                                             }];
 }
 
 #pragma mark UITableViewDataSource
@@ -1052,20 +1053,23 @@ typedef enum {
                 
                 Identity *myidentity = [self.exfee getMyInvitation].identity;
                 
-                [self.model.apiServer editExfee:exfee
-                                             byIdentity:myidentity
-                                                success:^(Exfee *editedExfee){
-                                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-                                                    
-                                                    self.exfee = editedExfee;
-                                                    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
-                                                    [exfeeContainer reloadData];
-                                                    
-                                                    [self dismissViewControllerAnimated:YES completion:nil];
-                                                }
-                                                failure:^(NSError *error){
-                                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-                                                }];
+                [self.model editExfee:exfee byIdentity:myidentity];
+                
+//                [self.model.apiServer editExfee:exfee
+//                                             byIdentity:myidentity
+//                                                success:^(Exfee *editedExfee){
+//                                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+//                                                    
+//                                                    self.exfee = editedExfee;
+//                                                    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+//                                                    [exfeeContainer reloadData];
+//                                                    
+//                                                    [self dismissViewControllerAnimated:YES completion:nil];
+//                                                }
+//                                                failure:^(NSError *error){
+//                                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+//                                                }];
+                 [self dismissViewControllerAnimated:YES completion:nil];
             };
             
             EFContactViewController *viewController = [[EFContactViewController alloc] initWithNibName:@"EFContactViewController" bundle:nil];
@@ -1240,39 +1244,40 @@ typedef enum {
 - (void)sendrsvp:(NSString*)status invitation:(Invitation*)_invitation {
     
     Identity *myidentity = [self.exfee getMyInvitation].identity;
-    [self.model.apiServer submitRsvp:status
-                                          on:_invitation
-                                  myIdentity:[myidentity.identity_id intValue]
-                                     onExfee:[self.exfee.exfee_id intValue]
-                                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                         
-                                         if ([operation.response statusCode] == 200){
-                                             if([responseObject isKindOfClass:[NSDictionary class]])
-                                             {
-                                                 NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
-                                                 if([[meta objectForKey:@"code"] intValue]==403){
-                                                     //                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                                     //                                 alert.tag=403;
-                                                     //                                 [alert show];
-                                                     //                                 [alert release];
-                                                 } else if ([[meta objectForKey:@"code"] intValue] == 200) {
-                                                     NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"CrossGroupViewController")];
-                                                     NSAssert(viewControllers != nil && viewControllers.count, @"viewController 不应为空");
-                                                     
-                                                     CrossGroupViewController *crossGroupViewController = viewControllers[0];
-                                                     
-                                                     [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id integerValue] updatedTime:nil];
-                                                     
-                                                     self.exfee = crossGroupViewController.cross.exfee;
-                                                     [exfeeContainer reloadData];
-                                                 }
-                                                 
-                                             }
-                                         }
-                                     }
-                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                         [Util showConnectError:error delegate:self];
-                                     }];
+    
+    [self.model changeRsvp:status on:_invitation from:self.exfee byIdentity:myidentity];
+//    [self.model.apiServer submitRsvp:status
+//                                          on:_invitation
+//                                  myIdentity:[myidentity.identity_id intValue]
+//                                     onExfee:[self.exfee.exfee_id intValue]
+//                                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//                                         
+//                                         if ([operation.response statusCode] == 200){
+//                                             if([responseObject isKindOfClass:[NSDictionary class]])
+//                                             {
+//                                                 NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
+//                                                 if([[meta objectForKey:@"code"] intValue]==403){
+//                                                     //                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                                                     //                                 alert.tag=403;
+//                                                     //                                 [alert show];
+//                                                     //                                 [alert release];
+//                                                 } else if ([[meta objectForKey:@"code"] intValue] == 200) {
+//                                                     NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"CrossGroupViewController")];
+//                                                     NSAssert(viewControllers != nil && viewControllers.count, @"viewController 不应为空");
+//                                                     
+//                                                     CrossGroupViewController *crossGroupViewController = viewControllers[0];
+//                                                     
+//                                                     [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id integerValue] updatedTime:nil];
+//                                                     
+//                                                     [exfeeContainer reloadData];
+//                                                 }
+//                                                 
+//                                             }
+//                                         }
+//                                     }
+//                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//                                         [Util showConnectError:error delegate:self];
+//                                     }];
 }
 
 #pragma mark UIAlertViewDelegate

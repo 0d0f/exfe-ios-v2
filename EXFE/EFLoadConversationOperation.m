@@ -31,7 +31,7 @@ NSString *kEFNotificationNameLoadConversationFailure = @"notificaiton.loadConver
     NSAssert(self.model, @"model shouldn't be nill.");
     NSAssert(self.model.apiServer, @"api shouldn't be nill.");
     
-    [self.model.apiServer loadConversationWithExfeeId:self.exfeeId
+    [self.model.apiServer loadConversationWithExfee:self.exfee
                                           updatedtime:self.updatedTime
                                               success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
                                                   self.state = kEFNetworkOperationStateSuccess;

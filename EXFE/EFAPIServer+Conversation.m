@@ -10,14 +10,15 @@
 
 #import "Util.h"
 #import "DateTimeUtil.h"
+#import "Exfee+EXFE.h"
 
 @implementation EFAPIServer (Conversation)
 
-- (void)loadConversationWithExfeeId:(int)exfee_id
+- (void)loadConversationWithExfee:(Exfee*)exfee
                         updatedtime:(NSDate*)updatedtime
                             success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                             failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
-    NSString *endpoint = [NSString stringWithFormat:@"conversation/%u", exfee_id];
+    NSString *endpoint = [NSString stringWithFormat:@"conversation/%u", [exfee.exfee_id integerValue]];
     
     NSDictionary *param = nil;
     if (updatedtime != nil) {
@@ -55,7 +56,7 @@
 
 - (void)postConversation:(NSString*)content
                       by:(Identity*)myIdentity
-                      on:(int)exfee_id
+                      on:(Exfee*)exfee
                  success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                  failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
@@ -65,7 +66,7 @@
                                @"type": @"post",
                                @"via": @"iOS"};
     
-    NSString *endpoint = [NSString stringWithFormat:@"conversation/%u/add?token=%@", exfee_id, self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"conversation/%u/add?token=%@", [exfee.exfee_id integerValue], self.model.userToken];
     RKObjectManager *manager=[RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     

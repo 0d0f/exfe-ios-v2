@@ -13,8 +13,8 @@
 
 - (void)submitRsvp:(NSString *)status
                 on:(Invitation *)invitation
-        myIdentity:(int)my_identity_id
-           onExfee:(int)exfee_id
+        myIdentity:(Identity *)my_identity
+           onExfee:(Exfee *)exfee
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 

@@ -20,6 +20,7 @@
 #import "CTUtil.h"
 #import "CrossesViewController.h"
 #import "EFKit.h"
+#import "EFCrossTabBarViewController.h"
 
 #define kNavBarHeight 44
 #define kStatusBarHeight 20
@@ -55,15 +56,13 @@ EFTabBarDataSource
     
 }
 
-@property (nonatomic, assign) int exfee_id;
-@property (nonatomic, strong) Identity* myIdentity;
 @property (nonatomic, strong) UIInputToolbar* inputToolbar;
 @property (nonatomic, copy) id onExitBlock;
 
 // EFTabBarDataSource
 @property (nonatomic, strong) EFTabBarItem *customTabBarItem;
 @property (nonatomic, assign) EFTabBarStyle tabBarStyle;
-@property (nonatomic, weak) EFTabBarViewController *tabBarViewController;
+@property (nonatomic, weak) EFCrossTabBarViewController *tabBarViewController;
 @property (nonatomic, copy) UIImage *shadowImage;
 @property (nonatomic, assign) CGRect initFrame;
 

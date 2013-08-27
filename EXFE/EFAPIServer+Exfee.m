@@ -18,14 +18,14 @@
 
 - (void)submitRsvp:(NSString *)status
                 on:(Invitation *)invitation
-        myIdentity:(int)my_identity_id
-           onExfee:(int)exfee_id
+        myIdentity:(Identity *)my_identity
+           onExfee:(Exfee *)exfee
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
-    NSDictionary *rsvpdict = @{@"identity_id": invitation.identity.identity_id, @"by_identity_id": @(my_identity_id), @"rsvp_status": status, @"type": @"rsvp"};
+    NSDictionary *rsvpdict = @{@"identity_id": invitation.identity.identity_id, @"by_identity_id": my_identity, @"rsvp_status": status, @"type": @"rsvp"};
     NSDictionary *param = @{@"rsvps": @[rsvpdict]};
     
-    NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/rsvp?token=%@",exfee_id, self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/rsvp?token=%@", [exfee.exfee_id integerValue], self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;

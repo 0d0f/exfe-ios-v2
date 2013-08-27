@@ -13,15 +13,27 @@
 
 @implementation EXFEModel (ConversationAPI)
 
-- (void)loadConversationWithExfeeId:(int)exfeeId updatedTime:(NSDate *)updatedTime {
-    EFLoadConversationOperation *loadConversationOperation = [EFLoadConversationOperation operationWithModel:self];
-    loadConversationOperation.exfeeId = exfeeId;
-    loadConversationOperation.updatedTime = updatedTime;
+- (void)loadConversationWithExfee:(Exfee *)exfee updatedTime:(NSDate *)updatedTime {
+    EFLoadConversationOperation *operation = [EFLoadConversationOperation operationWithModel:self];
+    operation.exfee = exfee;
+    operation.updatedTime = updatedTime;
     
-    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:loadConversationOperation];
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
     
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
     
+}
+
+- (void)postConversation:(NSString *)content by:(Identity *)myIdentity on:(Exfee *)exfee
+{
+    EFPostConversationOperation *operation = [EFPostConversationOperation operationWithModel:self];
+    operation.exfee = exfee;
+    operation.content = content;
+    operation.byIdentity = myIdentity;
+    
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
+    
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
 }
 
 @end

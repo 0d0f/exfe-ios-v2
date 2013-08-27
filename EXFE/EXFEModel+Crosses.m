@@ -19,9 +19,6 @@
 - (NSArray *)getCrossList
 {
     __block NSArray *xlist = nil;
-    
-    
-    
     RKObjectManager *objectManager = self.objectManager;
     
     // ignore duplicate objects
@@ -52,6 +49,26 @@
         xlist = filteredCrosses;
     }];
     return xlist;
+}
+
+- (Cross *)getCrossById:(NSUInteger)crossId
+{
+    __block Cross *x = nil;
+    RKObjectManager *objectManager = self.objectManager;
+    
+    [objectManager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Cross"];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"cross_id = %u", crossId];
+        NSSortDescriptor* descUpdateAt = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
+        NSSortDescriptor* descReadAt = [NSSortDescriptor sortDescriptorWithKey:@"read_at" ascending:NO];
+        [request setSortDescriptors:@[descUpdateAt, descReadAt]];
+        [request setPredicate:predicate];
+        NSArray *crosses = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+        if (crosses.count > 0) {
+            x = [crosses objectAtIndex:0];
+        }
+    }];
+    return x;
 }
 
 - (void)loadCrossWithCrossId:(NSUInteger)crossId updatedTime:(NSDate *)updatedTime
@@ -101,6 +118,29 @@
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
 }
 
+
+- (void)editExfee:(Exfee *)exfee byIdentity:(Identity *)identity
+{
+    EFEditExfeeOperation *operation = [EFEditExfeeOperation operationWithModel:self];
+    operation.exfee = exfee;
+    operation.byIdentity = identity;
+    
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+}
+
+- (void)changeRsvp:(NSString *)rsvp on:(Invitation *)invitation from:(Exfee *)exfee byIdentity:(Identity *)identity
+{
+    EFRsvpOperation *operation = [EFRsvpOperation operationWithModel:self];
+    operation.rsvp = rsvp;
+    operation.invitation = invitation;
+    operation.exfee = exfee;
+    operation.byIdentity = identity;
+    
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+}
+
 - (void)removeInvitation:(Invitation *)invitation fromExfee:(Exfee *)exfee byIdentity:(Identity *)identity
 {
     EFRemoveInvitationOperation *operation = [EFRemoveInvitationOperation operationWithModel:self];
@@ -121,4 +161,16 @@
     EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
 }
+
+- (void)removeNotificationIdentity:(IdentityId *)identityId from:(Invitation *)invitation onExfee:(Exfee *)exfee
+{
+    EFRemoveNotificationIdentityOperation *operation = [EFRemoveNotificationIdentityOperation operationWithModel:self];
+    operation.exfee = exfee;
+    operation.invitation = invitation;
+    operation.identityid = identityId;
+    
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+}
+
 @end

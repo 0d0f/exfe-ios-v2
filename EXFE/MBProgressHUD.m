@@ -6,6 +6,7 @@
 
 #import "MBProgressHUD.h"
 
+#import <BlocksKit/BlocksKit.h>
 
 #if __has_feature(objc_arc)
 	#define MB_AUTORELEASE(exp) exp
@@ -98,6 +99,12 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 	MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:view];
 	[view addSubview:hud];
 	[hud show:animated];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+            [hud hide:YES];
+        }];
+        [hud addGestureRecognizer:tap];
+    });
 	return MB_AUTORELEASE(hud);
 }
 

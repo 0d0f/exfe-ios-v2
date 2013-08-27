@@ -7,8 +7,11 @@
 //
 
 #import "OAuthLoginViewController.h"
+#import "Util.h"
 #import "URLParser.h"
 #import "UIApplication+EXFE.h"
+#import "MBProgressHUD.h"
+#import "EXSpinView.h"
 
 @interface OAuthLoginViewController ()
 @property (nonatomic, copy) NSString *matchedURL;

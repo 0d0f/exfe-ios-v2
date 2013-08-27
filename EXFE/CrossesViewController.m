@@ -8,28 +8,25 @@
 
 #import "CrossesViewController.h"
 #import <BlocksKit/BlocksKit.h>
-#import "UIApplication+EXFE.h"
-#import "ProfileViewController.h"
-#import "EFLandingViewController.h"
-#import "Cross.h"
-#import "Exfee+EXFE.h"
-#import "User+EXFE.h"
-#import "Identity+EXFE.h"
-#import "Rsvp.h"
-#import "CrossCard.h"
+
 #import "Util.h"
-#import "CrossTime+Helper.h"
-#import "EFTime+Helper.h"
-#import "Place+Helper.h"
-#import "NSString+EXFE.h"
-#import "CrossGroupViewController.h"
-#import "EFHeadView.h"
 #import "EFKit.h"
-#import "WidgetConvViewController.h"
-#import "WidgetExfeeViewController.h"
+#import "EFEntity.h"
 #import "EFModel.h"
 #import "EFMapKit.h"
 
+#import "NSString+EXFE.h"
+#import "UIApplication+EXFE.h"
+
+
+#import "ProfileViewController.h"
+#import "EFLandingViewController.h"
+#import "CrossGroupViewController.h"
+#import "WidgetConvViewController.h"
+#import "WidgetExfeeViewController.h"
+
+#import "EFHeadView.h"
+#import "CrossCard.h"
 
 @interface CrossesViewController ()
 
@@ -744,7 +741,6 @@
 - (EFTabBarViewController *)_detailViewControllerWithCross:(Cross *)cross withModel:(EXFEModel *)model {
     // CrossGroupViewController
     CrossGroupViewController *crossGroupViewController = [[CrossGroupViewController alloc] initWithModel:model];
-    crossGroupViewController.cross = cross;
     
     EFTabBarItem *tabBarItem1 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_x_30.png"]];
     tabBarItem1.highlightImage = [UIImage imageNamed:@"widget_x_30shine.png"];
@@ -755,12 +751,12 @@
     
     // ConvViewController
     WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithModel:model] ;
-    // prepare data for conversation
-    conversationViewController.exfee_id = [cross.exfee.exfee_id intValue];
-    Invitation* myInvitation = [cross.exfee getMyInvitation];
-    if (myInvitation != nil) {
-        conversationViewController.myIdentity = myInvitation.identity;
-    }
+//    // prepare data for conversation
+//    conversationViewController.exfee_id = [cross.exfee.exfee_id intValue];
+//    Invitation* myInvitation = [cross.exfee getMyInvitation];
+//    if (myInvitation != nil) {
+//        conversationViewController.myIdentity = myInvitation.identity;
+//    }
     
     NSUInteger conversationCount = [cross.conversation_count unsignedIntegerValue];
     
@@ -775,12 +771,12 @@
     
     // ExfeeViewController
     WidgetExfeeViewController *exfeeViewController = [[WidgetExfeeViewController alloc] initWithModel:model];
-    exfeeViewController.exfee = cross.exfee;
-    __weak Exfee * weakExfee = exfeeViewController.exfee;
-    exfeeViewController.onExitBlock = ^{
-        [crossGroupViewController performSelector:@selector(fillExfee:)
-                                       withObject:weakExfee];
-    };
+//    exfeeViewController.exfee = cross.exfee;
+//    __weak Exfee * weakExfee = exfeeViewController.exfee;
+//    exfeeViewController.onExitBlock = ^{
+//        [crossGroupViewController performSelector:@selector(fillExfee:)
+//                                       withObject:weakExfee];
+//    };
     
     EFTabBarItem *tabBarItem3 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_exfee_30.png"]];
     tabBarItem3.highlightImage = [UIImage imageNamed:@"widget_exfee_30shine.png"];
@@ -802,7 +798,8 @@
     mapViewController.model = model;
     
     // Init TabBarViewController
-    EFTabBarViewController *tabBarViewController = [[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController, mapViewController]];
+    EFCrossTabBarViewController *tabBarViewController = [[EFCrossTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController, mapViewController]];
+    tabBarViewController.cross = cross;
     
     __weak EFTabBarViewController *weakTab = tabBarViewController;
     tabBarViewController.titlePressedHandler = ^{
@@ -821,37 +818,6 @@
         [objectManager.operationQueue cancelAllOperations];
         [self.navigationController popToRootViewControllerAnimated:YES];
     };
-    
-    tabBarViewController.title = cross.title;
-    
-    // Fetch background image
-    BOOL flag = NO;
-    for(NSDictionary *widget in cross.widget) {
-        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-            NSString* url = [widget objectForKey:@"image"];
-            
-            if (url && url.length > 0) {
-                NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
-                
-                if (!imgurl) {
-                    tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
-                } else { 
-                    [[EFDataManager imageManager] loadImageForView:tabBarViewController.tabBar
-                                                  setImageSelector:@selector(setBackgroundImage:)
-                                                       placeHolder:[UIImage imageNamed:@"x_titlebg_default.jpg"]
-                                                               key:imgurl
-                                                   completeHandler:nil];
-                }
-                
-                flag = YES;
-                break;
-            }
-        }
-    }
-    if (flag == NO) {
-        // Missing Background widget
-        tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
-    }
     
     return tabBarViewController;
 }

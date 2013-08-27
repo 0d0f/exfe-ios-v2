@@ -10,7 +10,7 @@
 
 @interface EFLoadConversationOperation : EFNetworkOperation
 
-@property (nonatomic, assign) int exfeeId;
+@property (nonatomic, assign) Exfee  *exfee;
 @property (nonatomic, strong) NSDate *updatedTime;
 
 @end
