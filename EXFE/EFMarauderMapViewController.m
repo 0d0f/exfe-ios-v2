@@ -88,19 +88,13 @@
 }
 
 - (void)_layoutAnnotationView {
-    EFRouteLocation *destinationRouteLocation = self.mapDataSource.destinationLocation;
-    id<MKAnnotation> destinationAnnotation = nil;
-    
-    if (destinationRouteLocation) {
-        destinationAnnotation = [self.mapDataSource annotationForRouteLocation:destinationRouteLocation];
-    }
-    
     for (id<MKAnnotation> annotation in self.mapView.annotations) {
-        MKAnnotationView *annotationView = [self.mapView viewForAnnotation:annotation];
-        if (destinationAnnotation && destinationAnnotation == annotation) {
-            [annotationView.superview bringSubviewToFront:annotationView];
-        } else {
-            [annotationView.superview sendSubviewToBack:annotationView];
+        MKAnnotationView *view = [self.mapView viewForAnnotation:annotation];
+        
+        if ([view isKindOfClass:[EFCalloutAnnotationView class]]) {
+            UIView *superView = view.superview;
+            [superView bringSubviewToFront:view];
+            break;
         }
     }
 }
@@ -226,13 +220,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    EFMapStrokeView *mapStrokeView = [[EFMapStrokeView alloc] initWithFrame:self.view.bounds];
-    mapStrokeView.dataSource = self;
-    mapStrokeView.mapView = self.mapView;
-    mapStrokeView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    [self.view insertSubview:mapStrokeView belowSubview:self.leftBaseView];
-    self.mapStrokeView = mapStrokeView;
-    
+//    EFMapStrokeView *mapStrokeView = [[EFMapStrokeView alloc] initWithFrame:self.view.bounds];
+//    mapStrokeView.dataSource = self;
+//    mapStrokeView.mapView = self.mapView;
+//    mapStrokeView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+//    [self.view insertSubview:mapStrokeView belowSubview:self.leftBaseView];
+//    self.mapStrokeView = mapStrokeView;
+//    
     self.mapView.delegate = self;
     
     // tableView baseView
@@ -748,6 +742,14 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         }
         
         CGPoint avatarCenter = cell.center;
+        
+        CGRect tableViewVisibleRect = self.tableView.bounds;
+        tableViewVisibleRect.origin = self.tableView.contentOffset;
+        
+        if (!CGRectContainsPoint(tableViewVisibleRect, avatarCenter)) {
+            return nil;
+        }
+        
         CLLocationCoordinate2D avatarCoordinate = [self.mapView convertPoint:avatarCenter toCoordinateFromView:self.tableView];
         EFLocation *avatarCenterLocation = [[EFLocation alloc] init];
         avatarCenterLocation.coordinate = avatarCoordinate;
@@ -1025,6 +1027,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     [self.mapStrokeView reloadData];
     self.mapStrokeView.hidden = NO;
+    
+    [self _layoutAnnotationView];
 }
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
@@ -1158,6 +1162,20 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)annotationViews {
+    UIView *anyView = annotationViews[0];
+    UIView *superView = anyView.superview;
+    
+    if (annotationViews.count > 0) {
+        if (!self.mapStrokeView) {
+            EFMapStrokeView *mapStrokeView = [[EFMapStrokeView alloc] initWithFrame:self.view.bounds];
+            mapStrokeView.dataSource = self;
+            mapStrokeView.mapView = self.mapView;
+            mapStrokeView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+            [superView insertSubview:mapStrokeView atIndex:0];
+            self.mapStrokeView = mapStrokeView;
+        }
+    }
+    
     for (MKAnnotationView *view in annotationViews) {
         if ([view isKindOfClass:[EFAnnotationView class]]) {
             CATransform3D newTransform = CATransform3DMakeTranslation(0.0f, -CGRectGetHeight(self.view.frame), 0.0f);
@@ -1174,6 +1192,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                 ((EFUserLocationAnnotationView *)view).userHeading = userHeading;
             }
         }
+        
+        [superView bringSubviewToFront:view];
     }
     
     [self _layoutAnnotationView];
