@@ -63,6 +63,7 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
                 }
                 
                 NSString *to_add = [[NSString alloc] initWithBytes:buffer length:length encoding:NSUTF8StringEncoding];
+                
                 if (to_add != nil) {
                     if (_strFromStream && _strFromStream.length) {
                         _strFromStream = [_strFromStream stringByAppendingString:to_add];
@@ -71,10 +72,8 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
                     }
                     
                     if (newLineIdx > 0) {
-                        NSData *data = [_strFromStream dataUsingEncoding:NSUTF8StringEncoding];
-                        length = [_strFromStream lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
                         char *stringBuffer = (char *)malloc(sizeof(char) * length);
-                        memcpy(stringBuffer, [data bytes], length);
+                        memcpy(stringBuffer, buffer, length);
                         
                         length = strlen(stringBuffer);
                         
