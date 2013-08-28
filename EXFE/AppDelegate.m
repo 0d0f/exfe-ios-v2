@@ -186,6 +186,7 @@
     
     if (![[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
         [[EFLocationManager defaultManager] startUpdatingLocation];
+        [[EFLocationManager defaultManager] startUpdatingHeading];
     }
     
     return YES;

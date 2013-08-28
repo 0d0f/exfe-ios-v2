@@ -33,9 +33,9 @@
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setValue:[NSNumber numberWithBool:self.shouldSaveBreadcrumbs] forKey:@"save_breadcrumbs"];
     
-    if (self.shouldSaveBreadcrumbs) {
-        [dict setValue:[NSNumber numberWithLong:(long)self.duration] forKey:@"after_in_seconds"];
-    }
+//    if (self.shouldSaveBreadcrumbs) {
+//        [dict setValue:[NSNumber numberWithLong:(long)self.duration] forKey:@"after_in_seconds"];
+//    }
     
     return dict;
 }

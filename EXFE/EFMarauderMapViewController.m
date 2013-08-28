@@ -220,13 +220,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    EFMapStrokeView *mapStrokeView = [[EFMapStrokeView alloc] initWithFrame:self.view.bounds];
-//    mapStrokeView.dataSource = self;
-//    mapStrokeView.mapView = self.mapView;
-//    mapStrokeView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-//    [self.view insertSubview:mapStrokeView belowSubview:self.leftBaseView];
-//    self.mapStrokeView = mapStrokeView;
-//    
     self.mapView.delegate = self;
     
     // tableView baseView
@@ -291,12 +284,11 @@
     [self.mapDataSource openStreaming];
     
     if ([[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
-#warning !!! 文本替换
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"开启活点地图"
-                                                            message:@"请确认将您未来1小时内的方位展现给能看到这张活点地图的人。"
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"开启活点地图", nil)
+                                                            message:NSLocalizedString(@"这张“活点地图”将会展现您未来1小时内的方位。", nil)
                                                            delegate:self
-                                                  cancelButtonTitle:@"取消"
-                                                  otherButtonTitles:@"确定", nil];
+                                                  cancelButtonTitle:NSLocalizedString(@"取消", nil)
+                                                  otherButtonTitles:NSLocalizedString(@"确定", nil), nil];
         [alertView show];
     } else {
         // register to update location
@@ -304,14 +296,12 @@
         [self.mapDataSource getPeopleBreadcrumbs];
     }
     
-    [[EFLocationManager defaultManager] startUpdatingHeading];
-    
     [[EFLocationManager defaultManager] addObserver:self
                                          forKeyPath:@"userHeading"
                                             options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                                             context:NULL];
     
-    if ([EFLocationManager defaultManager].userLocation) {
+    if ([EFLocationManager defaultManager].userLocation.location) {
         [self userLocationDidChange];
     }
     [self _fireBreadcrumbUpdateTimer];
@@ -354,25 +344,26 @@
 - (void)enterForeground {
     [self.mapDataSource openStreaming];
     if ([[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
-#warning !!! 文本替换
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"开启活点地图"
-                                                            message:@"请确认将您未来1小时内的方位展现给能看到这张活点地图的人。"
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"开启活点地图", nil)
+                                                            message:NSLocalizedString(@"这张“活点地图”将会展现您未来1小时内的方位。", nil)
                                                            delegate:self
-                                                  cancelButtonTitle:@"取消"
-                                                  otherButtonTitles:@"确定", nil];
+                                                  cancelButtonTitle:NSLocalizedString(@"取消", nil)
+                                                  otherButtonTitles:NSLocalizedString(@"确定", nil), nil];
         [alertView show];
     } else {
         // register to update location
         [self.mapDataSource applicationDidEnterForeground];
     }
     
-    if ([EFLocationManager defaultManager].userLocation) {
+    if ([EFLocationManager defaultManager].userLocation.location) {
         [self userLocationDidChange];
     }
     [self _fireBreadcrumbUpdateTimer];
 }
 
 - (void)userLocationDidChange {
+    [self.mapView userLocationDidChange];
+    
     EFUserLocationAnnotationView *locationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
     CLLocationCoordinate2D latestCoordinate = [EFLocationManager defaultManager].userLocation.coordinate;
     
@@ -441,6 +432,7 @@
         
         // start updating location
         [[EFLocationManager defaultManager] startUpdatingLocation];
+        [[EFLocationManager defaultManager] startUpdatingHeading];
     } else {
         [self.tabBarViewController.tabBar setSelectedIndex:self.tabBarViewController.defaultIndex];
     }

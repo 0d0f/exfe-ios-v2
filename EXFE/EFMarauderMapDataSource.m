@@ -738,8 +738,17 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
                             // update person last location
                             person.lastLocation = path.positions[0];
                             
+                            
                             // update person connect state && location state && distance
                             [self _updatePersonState:person];
+                            
+                            if (person == [self me]) {
+                                if ([EFLocationManager defaultManager].userLocation.location) {
+                                    person.connectState = kEFMapPersonConnectStateOnline;
+                                } else {
+                                    person.connectState = kEFMapPersonConnectStateOffline;
+                                }
+                            }
                             
                             [self.delegate mapDataSource:self didUpdateLocations:path.positions forUser:person];
                         } else {

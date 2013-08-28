@@ -31,6 +31,8 @@ CLLocationManagerDelegate
 @property (nonatomic, readonly) CLHeading   *userHeading;       // KVO
 
 + (instancetype)defaultManager;
++ (BOOL)locationServicesEnabled;
++ (BOOL)headingServicesEnabled;
 
 /**
  * Check
