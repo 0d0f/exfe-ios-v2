@@ -63,6 +63,10 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 @implementation EFLocationManager (Private)
 
 - (void)_postUserLocation {
+    if (!self.userLocation.location) {
+        return;
+    }
+    
     EFLocation *breadcrum = [[EFLocation alloc] init];
     breadcrum.coordinate = self.userLocation.coordinateWithoutOffset;
     breadcrum.accuracy = MAX(self.userLocation.location.verticalAccuracy, self.userLocation.location.horizontalAccuracy);
@@ -74,7 +78,6 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
                                              success:^(CGFloat latOffset, CGFloat lngOffset){
                                                  self.userLocation.offset = (CGPoint){latOffset, lngOffset};
                                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                                     [[NSNotificationCenter defaultCenter] postNotificationName:EFNotificationUserLocationDidChange object:nil];
                                                      [[NSNotificationCenter defaultCenter] postNotificationName:EFNotificationUserLocationOffsetDidGet object:nil];
                                                  });
                                              }
@@ -90,6 +93,10 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 - (void)_postUserLocationInBackground {
     if (UIBackgroundTaskInvalid != self.bgTask) {
         [self _endBackgroundTask];
+    }
+    
+    if (!self.userLocation.location) {
+        return;
     }
     
     NSDate *now = [NSDate date];
@@ -152,6 +159,14 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 @end
 
 @implementation EFLocationManager
+
++ (BOOL)locationServicesEnabled {
+    return [CLLocationManager locationServicesEnabled];
+}
+
++ (BOOL)headingServicesEnabled {
+    return [CLLocationManager headingAvailable];
+}
 
 + (instancetype)defaultManager {
     static EFLocationManager *Manager = nil;
@@ -225,6 +240,7 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
         if (timeInterval > kDefaultBackgroundDuration) {
             // timeout
             [self stopUpdatingLocation];
+            [self stopUpdatingHeading];
             return;
         } else {
             // post

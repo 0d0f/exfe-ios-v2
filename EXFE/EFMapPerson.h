@@ -27,6 +27,4 @@
 
 - (id)initWithIdentity:(Identity *)identity;
 
-- (void)setLastLocation:(EFLocation *)lastLocation needToSave:(BOOL)needToSave;
-
 @end
