@@ -141,10 +141,17 @@
     
     [self regObserver];
     
-    self.tabBarViewController.cross.conversation_count = 0;
-    
     [self refreshConversation];
     [self loadConversation];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (self.tabBarViewController.cross.conversation_count > 0) {
+        [self.tabBarViewController setValue:@(0) forKeyPath:@"cross.conversation_count"];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -179,11 +186,49 @@
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNamePostConversationFailure
                                                object:nil];
+    [self.tabBarViewController addObserver:self
+                                forKeyPath:@"cross.conversation_count"
+                                   options:NSKeyValueObservingOptionNew
+                                   context:NULL];
 }
 
 - (void)unregObserver
 {
+    [self.tabBarViewController removeObserver:self
+                                   forKeyPath:@"cross.conversation_count"
+                                      context:NULL];
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    
+    if ([keyPath isEqualToString:@"cross.conversation_count"]) {
+        
+        NSNumber *num= [change objectForKey:NSKeyValueChangeNewKey];
+        if (num && ![[NSNull null] isEqual:num]) {
+            NSUInteger count = [num unsignedIntegerValue];
+            if (count) {
+                self.customTabBarItem.shouldPop = YES;
+                if (count > 55) {
+                    self.customTabBarItem.image = [UIImage imageNamed:@"widget_conv_many_30shine.png"];
+                    self.customTabBarItem.highlightImage = [UIImage imageNamed:@"widget_conv_many_30shine.png"];
+                    self.customTabBarItem.title = nil;
+                } else {
+                    self.customTabBarItem.image = [UIImage imageNamed:@"widget_conv_30.png"];
+                    self.customTabBarItem.highlightImage = [UIImage imageNamed:@"widget_conv_30shine.png"];
+                    self.customTabBarItem.title = [NSString stringWithFormat:@"%u", count];
+                }
+            } else {
+                self.customTabBarItem.shouldPop = NO;
+                self.customTabBarItem.image = [UIImage imageNamed:@"widget_conv_30.png"];
+                self.customTabBarItem.highlightImage = [UIImage imageNamed:@"widget_conv_30shine.png"];
+                self.customTabBarItem.title = nil;
+            }
+        }
+    }
 }
 
 - (void)handleNotification:(NSNotification *)notification {
@@ -550,9 +595,11 @@
     }
 }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    NSLog(@"scrollViewDidEndScrollingAnimation");
+    if (decelerate) {
+        [self loadConversation];
+    }
 }
 
 #pragma mark UITableViewDataSource methods

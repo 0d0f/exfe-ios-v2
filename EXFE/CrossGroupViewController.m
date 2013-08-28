@@ -338,37 +338,6 @@
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (object == self.cross) {
-        if ([keyPath isEqualToString:@"conversation_count"]) {
-            NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"WidgetConvViewController")];
-//            NSAssert(viewControllers != nil && viewControllers.count, @"viewControllers 不应该为 nil 或 空");
-            if (viewControllers.count == 0) {
-                return;
-            }
-            
-            WidgetConvViewController *conversationViewController = viewControllers[0];
-            
-            NSUInteger count = [self.cross.conversation_count unsignedIntegerValue];
-            if (count) {
-                conversationViewController.customTabBarItem.shouldPop = YES;
-                if (count > 55) {
-                    conversationViewController.customTabBarItem.image = [UIImage imageNamed:@"widget_conv_many_30shine.png"];
-                    conversationViewController.customTabBarItem.highlightImage = [UIImage imageNamed:@"widget_conv_many_30shine.png"];
-                    conversationViewController.customTabBarItem.title = nil;
-                } else {
-                    conversationViewController.customTabBarItem.image = [UIImage imageNamed:@"widget_conv_30.png"];
-                    conversationViewController.customTabBarItem.highlightImage = [UIImage imageNamed:@"widget_conv_30shine.png"];
-                    conversationViewController.customTabBarItem.title = [NSString stringWithFormat:@"%u", count];
-                }
-            } else {
-                conversationViewController.customTabBarItem.shouldPop = NO;
-                conversationViewController.customTabBarItem.image = [UIImage imageNamed:@"widget_conv_30.png"];
-                conversationViewController.customTabBarItem.highlightImage = [UIImage imageNamed:@"widget_conv_30shine.png"];
-                conversationViewController.customTabBarItem.title = nil;
-            }
-        }
-    }
-    
     if ([@"cross" isEqualToString:keyPath]) {
         [self refreshUI];
     }
