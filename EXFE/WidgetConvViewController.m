@@ -186,6 +186,8 @@
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNamePostConversationFailure
                                                object:nil];
+    
+    // we may need to reg before appear ...
     [self.tabBarViewController addObserver:self
                                 forKeyPath:@"cross.conversation_count"
                                    options:NSKeyValueObservingOptionNew
