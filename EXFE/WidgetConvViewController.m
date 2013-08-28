@@ -64,18 +64,6 @@
     return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    // Clear Data
-    NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"CrossGroupViewController")];
-    NSAssert(viewControllers != nil && viewControllers.count, @"viewControllers 不应该为空");
-    
-    self.tabBarViewController.cross.conversation_count = 0;
-    
-    [self refreshConversation];
-}
-
 - (void)viewDidLoad
 {
     CGRect b = self.view.bounds;
@@ -142,10 +130,35 @@
     inputaccessoryview=[[ConversationInputAccessoryView alloc] initWithFrame:CGRectMake(10.0, 0.0, 310.0, 40.0)];
     [inputaccessoryview setBackgroundColor:[UIColor lightGrayColor]];
     [inputaccessoryview setAlpha: 0.8];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self regObserver];
+    
+    self.tabBarViewController.cross.conversation_count = 0;
     
     [self loadObjectsFromDataStore];
+    [self loadConversation];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
     
+    [self unregObserver];
+    
+}
+
+#pragma mark - Notification Handler
+
+- (void)regObserver
+{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameLoadConversationSuccess
@@ -154,55 +167,36 @@
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameLoadConversationFailure
                                                object:nil];
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-#ifdef __IPHONE_5_0
-    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
-    if (version >= 5.0) {
-        
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
-    }
-#endif
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    RKObjectManager* manager =[RKObjectManager sharedManager];
-    [manager.operationQueue cancelAllOperations];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-    self.posts = nil;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNamePostConversationSuccess
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNamePostConversationFailure
+                                               object:nil];
 }
 
-//- (void)dealloc {
-//    
-////    [_shadowImage release];
-//	
-////    [cellbackground release];
-////    [cellsepator release];
-////    [avatarframe release];
-////    [_tableView release];
-////    [inputToolbar release];
-//
-//    [super dealloc];
-//}
-
-#pragma mark - Notification Handler
+- (void)unregObserver
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)handleNotification:(NSNotification *)notification {
     NSString *name = notification.name;
     
     if ([name isEqualToString:kEFNotificationNameLoadConversationSuccess]) {
-        NSDictionary *userInfo = notification.userInfo;
-        Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
-        if (meta != nil && 200 == [meta.code intValue]) {
-            [self loadObjectsFromDataStore];
-        }
+        [self loadObjectsFromDataStore];
     } else if ([name isEqualToString:kEFNotificationNameLoadConversationFailure]) {
         [self showOrHideHint];
+    } else if ([name isEqualToString:kEFNotificationNamePostConversationSuccess]) {
+        [inputToolbar setInputEnabled:YES];
+        [inputToolbar.textView clearText];
+        [self loadObjectsFromDataStore];
+//            [self loadConversation];
+    } else if ([name isEqualToString:kEFNotificationNamePostConversationFailure]) {
+        [inputToolbar setInputEnabled:YES];
     }
 }
 
@@ -272,7 +266,7 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (void)refreshConversation {
+- (void)loadConversation {
     NSDate *updated_at = nil;
     if ([_posts count] > 0) {
         Post *post = [_posts objectAtIndex:0];
@@ -287,6 +281,7 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [inputToolbar hidekeyboard];
 }
+
 - (void)loadObjectsFromDataStore {
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Post"];
@@ -331,6 +326,7 @@
 - (void) setShowTime:(BOOL)show{
     
 }
+
 - (void) hiddenTime{
     CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
     fadeoutAnimation.fillMode = kCAFillModeForwards;
@@ -630,9 +626,13 @@
 {
     [inputToolbar hidekeyboard];
 }
+
 - (void) addPost:(NSString*)content{
     [Flurry logEvent:@"SEND_CONVERSATION"];
     
+    if (content.length == 0) {
+        return;
+    }
     [inputToolbar setInputEnabled:NO];
     [self.model postConversation:content by:self.myInvitation.identity on:self.exfee];
 }

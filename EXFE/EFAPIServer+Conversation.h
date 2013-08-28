@@ -21,7 +21,7 @@
 - (void)postConversation:(NSString*)content
                       by:(Identity*)myIdentity
                       on:(Exfee*)exfee
-                 success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-                 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+                 success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+                 failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
 @end

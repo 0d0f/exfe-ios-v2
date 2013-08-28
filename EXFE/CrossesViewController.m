@@ -864,8 +864,8 @@
                 }
                 NSInteger crossId = [crossIdString integerValue];
                 Class cls = NSClassFromString(@"CrossGroupViewController");
-                if (pathComponents.count > 2) {
-                    NSString *tab = [pathComponents objectAtIndex:2];
+                if (pathComponents.count > 1) {
+                    NSString *tab = [pathComponents objectAtIndex:1];
                     if ([@"conversation" caseInsensitiveCompare:tab] == NSOrderedSame) {
                         cls = NSClassFromString(@"WidgetConvViewController");
                     } else if ([@"exfee" caseInsensitiveCompare:tab] == NSOrderedSame) {
