@@ -12,6 +12,7 @@
 #import "EFEntity.h"
 #import "EFKit.h"
 #import "EFModel.h"
+
 #import "EFCrossTabBarViewController.h"
 
 #import "Post.h"
@@ -35,6 +36,8 @@
 @property (nonatomic, strong) NSMutableArray     *posts;
 @property (nonatomic, weak, readonly) Exfee      *exfee;
 @property (nonatomic, weak, readonly) Invitation *myInvitation;
+
+@property (nonatomic, strong) ConversationTableView  * tableView;
 
 @end
 
@@ -76,13 +79,13 @@
     [super viewDidLoad];
     [Flurry logEvent:@"WIDGET_CONVERSATION"];
     
-    _tableView=[[ConversationTableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame) - kDefaultToolbarHeight + 2)];
-    _tableView.dataSource=self;
-    _tableView.delegate=self;
-    [self.view addSubview:_tableView];
+    self.tableView=[[ConversationTableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame) - kDefaultToolbarHeight + 2)];
+    self.tableView.dataSource=self;
+    self.tableView.delegate=self;
+    [self.view addSubview:self.tableView];
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
-    [_tableView addGestureRecognizer:gestureRecognizer];
+    [self.tableView addGestureRecognizer:gestureRecognizer];
     
     hintGroup = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(b), 100, CGRectGetWidth(b), CGRectGetHeight(b) - 100 - 42)];
     {
@@ -120,8 +123,8 @@
     cellsepator=[UIImage imageNamed:@"conv_line_h.png"];
     avatarframe=[UIImage imageNamed:@"conv_portrait_frame.png"];
     
-    _tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
-    _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
+    self.tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
+    self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     
     istimehidden=YES;
     showTimeMode=0;
@@ -140,7 +143,7 @@
     
     self.tabBarViewController.cross.conversation_count = 0;
     
-    [self loadObjectsFromDataStore];
+    [self refreshConversation];
     [self loadConversation];
 }
 
@@ -187,16 +190,17 @@
     NSString *name = notification.name;
     
     if ([name isEqualToString:kEFNotificationNameLoadConversationSuccess]) {
-        [self loadObjectsFromDataStore];
+        [self refreshConversation];
     } else if ([name isEqualToString:kEFNotificationNameLoadConversationFailure]) {
         [self showOrHideHint];
     } else if ([name isEqualToString:kEFNotificationNamePostConversationSuccess]) {
         [inputToolbar setInputEnabled:YES];
         [inputToolbar.textView clearText];
-        [self loadObjectsFromDataStore];
+        [self refreshConversation];
 //            [self loadConversation];
     } else if ([name isEqualToString:kEFNotificationNamePostConversationFailure]) {
         [inputToolbar setInputEnabled:YES];
+        [self showOrHideHint];
     }
 }
 
@@ -216,14 +220,14 @@
     
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
         frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height;
-        if(_tableView.contentSize.height>_tableView.frame.size.height - keyboardEndFrame.size.height)
+        if(self.tableView.contentSize.height>self.tableView.frame.size.height - keyboardEndFrame.size.height)
         {
-            CGRect f = _tableView.frame;
-            f.size.height = CGRectGetHeight(_tableView.superview.frame) - kDefaultToolbarHeight + 2 - keyboardEndFrame.size.height;
-            CGPoint offset = _tableView.contentOffset;
-            offset.y = _tableView.contentSize.height - CGRectGetHeight(f);
-            _tableView.contentOffset = offset;
-            _tableView.frame = f;
+            CGRect f = self.tableView.frame;
+            f.size.height = CGRectGetHeight(self.tableView.superview.frame) - kDefaultToolbarHeight + 2 - keyboardEndFrame.size.height;
+            CGPoint offset = self.tableView.contentOffset;
+            offset.y = self.tableView.contentSize.height - CGRectGetHeight(f);
+            self.tableView.contentOffset = offset;
+            self.tableView.frame = f;
         }
     }
     else {
@@ -242,12 +246,12 @@
 	CGRect frame = self.inputToolbar.frame;
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
         frame.origin.y = self.view.frame.size.height - frame.size.height;
-        if(_tableView.contentSize.height>_tableView.frame.size.height){
-            CGRect _tableviewrect=_tableView.frame;
+        if(self.tableView.contentSize.height>self.tableView.frame.size.height){
+            CGRect _tableviewrect=self.tableView.frame;
             //_tableviewrect.origin.y=DECTOR_HEIGHT;
             _tableviewrect.origin.y = 0;
-            _tableviewrect.size.height = CGRectGetHeight(_tableView.superview.frame) - kDefaultToolbarHeight + 2;
-            [_tableView setFrame:_tableviewrect];
+            _tableviewrect.size.height = CGRectGetHeight(self.tableView.superview.frame) - kDefaultToolbarHeight + 2;
+            [self.tableView setFrame:_tableviewrect];
         }
 
     }
@@ -268,8 +272,8 @@
 
 - (void)loadConversation {
     NSDate *updated_at = nil;
-    if ([_posts count] > 0) {
-        Post *post = [_posts objectAtIndex:0];
+    if ([self.posts count] > 0) {
+        Post *post = [self.posts objectAtIndex:0];
         if (post && post.updated_at != nil) {
             updated_at = post.updated_at;
         }
@@ -282,28 +286,17 @@
     [inputToolbar hidekeyboard];
 }
 
-- (void)loadObjectsFromDataStore {
+- (void)refreshConversation {
     
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Post"];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"(postable_type = %@) AND (postable_id = %u)",
-                              @"exfee", [self.exfee.exfee_id unsignedIntegerValue]];
-    
-    [request setPredicate:predicate];
-	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:YES];
-	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
-    
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    NSArray *list = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
-    
+    NSArray *list = [self.model getConversationOf:self.exfee];
     if (list) {
-        [_posts removeAllObjects];
-        [_posts addObjectsFromArray: list];
-        [_tableView reloadData];
-        if(_tableView.contentSize.height>_tableView.frame.size.height) {
-            CGPoint bottomOffset = CGPointMake(0, _tableView.contentSize.height - _tableView.frame.size.height);
+        [self.posts removeAllObjects];
+        [self.posts addObjectsFromArray: list];
+        [self.tableView reloadData];
+        if(self.tableView.contentSize.height>self.tableView.frame.size.height) {
+            CGPoint bottomOffset = CGPointMake(0, self.tableView.contentSize.height - self.tableView.frame.size.height);
             showfloattime=NO;
-            [_tableView setContentOffset:bottomOffset animated:NO];
+            [self.tableView setContentOffset:bottomOffset animated:NO];
         }
     }
     [self showOrHideHint];
@@ -366,18 +359,18 @@
 }
 
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
-    //CGPoint location = [sender locationInView:_tableView];
+    //CGPoint location = [sender locationInView:self.tableView];
     CGPoint location = [sender locationInView:self.view];
-    location.y = location.y - CGRectGetMinY(_tableView.frame);
+    location.y = location.y - CGRectGetMinY(self.tableView.frame);
     CGRect showTimeRect=[self.view frame];
     
 // TODO: right 60px for touch area
     if(CGRectContainsPoint(showTimeRect, location))
     {
-        CGPoint point=_tableView.contentOffset;
-        NSArray *paths = [_tableView indexPathsForVisibleRows];
+        CGPoint point=self.tableView.contentOffset;
+        NSArray *paths = [self.tableView indexPathsForVisibleRows];
         for(NSIndexPath *path in paths){
-            CGRect rect=[_tableView rectForRowAtIndexPath:path];
+            CGRect rect=[self.tableView rectForRowAtIndexPath:path];
             rect.origin.y-=point.y;
             if(CGRectContainsPoint(rect, location))
             {
@@ -397,7 +390,7 @@
                 }
                     
                 istimehidden=NO;
-                Post *post=[_posts objectAtIndex:path.row];
+                Post *post=[self.posts objectAtIndex:path.row];
               
                 if(post && !timetextlayer){
                     timetextlayer=[CATextLayer layer];
@@ -405,7 +398,7 @@
                     timetextlayer.cornerRadius = 2.0;
                     timetextlayer.backgroundColor=FONT_COLOR_232737.CGColor;
                     [timetextlayer setAlignmentMode:kCAAlignmentCenter];
-                    [_tableView.layer addSublayer:timetextlayer];
+                    [self.tableView.layer addSublayer:timetextlayer];
                 }
                 int textheight=14;
                 NSMutableAttributedString *timeattribstring=nil;
@@ -475,11 +468,12 @@
     [inputToolbar expandingTextView:expandingTextView willChangeHeight:height];
 }
 
-#pragma mark UIScrollView methods
+#pragma mark UIScrollViewDelegate methods
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     showfloattime=YES;
     [inputToolbar hidekeyboard];
 }
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     if(showfloattime==YES)
@@ -503,8 +497,8 @@
         [self hiddenTimeNow];
     }
     
-    CGPoint point=_tableView.contentOffset;
-    NSArray *paths = [_tableView indexPathsForVisibleRows];
+    CGPoint point=self.tableView.contentOffset;
+    NSArray *paths = [self.tableView indexPathsForVisibleRows];
     if(paths!=nil && [paths count]>0)
     {
         NSIndexPath *path=(NSIndexPath*)[paths objectAtIndex:0];
@@ -522,7 +516,7 @@
             
             [floattimetextlayer removeAnimationForKey:@"fadeout"];
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
-            Post *post = [_posts objectAtIndex:path.row];
+            Post *post = [self.posts objectAtIndex:path.row];
             NSDate *post_created_at = post.created_at;
 
             NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
@@ -556,14 +550,19 @@
     }
 }
 
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    NSLog(@"scrollViewDidEndScrollingAnimation");
+}
+
 #pragma mark UITableViewDataSource methods
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-	return [_posts count];
+	return [self.posts count];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Post *post=[_posts objectAtIndex:indexPath.row];
+    Post *post=[self.posts objectAtIndex:indexPath.row];
     NSString *name=post.by_identity.nickname;
     if(name==nil || [name isEqualToString:@""])
         name=post.by_identity.name;
@@ -593,7 +592,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
 
-    Post *post=[_posts objectAtIndex:indexPath.row];
+    Post *post=[self.posts objectAtIndex:indexPath.row];
     cell.content=[post.content stringByTrimmingCharactersInSet:
     [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     cell.time=@"";
@@ -638,6 +637,6 @@
 }
 
 - (void)showOrHideHint{
-    hintGroup.hidden = (_posts.count > 0);
+    hintGroup.hidden = (self.posts.count > 0);
 }
 @end

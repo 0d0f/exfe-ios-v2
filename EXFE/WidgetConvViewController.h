@@ -36,7 +36,6 @@ UITableViewDataSource,
 UITableViewDelegate,
 EFTabBarDataSource
 > {
-    ConversationTableView* _tableView;
     UIInputToolbar *inputToolbar;
     UIImage *cellbackground;
     UIImage *cellsepator;
@@ -66,9 +65,6 @@ EFTabBarDataSource
 @property (nonatomic, copy) UIImage *shadowImage;
 @property (nonatomic, assign) CGRect initFrame;
 
-
-- (void) refreshConversation;
-- (void) loadObjectsFromDataStore;
 - (void) addPost:(NSString*)content;
 - (void) touchesBegan:(UITapGestureRecognizer*)sender;
 - (CGSize) textWidthForHeight:(CGFloat)inHeight withAttributedString:(NSAttributedString *)attributedString;

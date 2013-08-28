@@ -12,6 +12,7 @@
 @class Identity;
 @interface EXFEModel (ConversationAPI)
 
+- (NSArray *)getConversationOf:(Exfee *)exfee;
 - (void)loadConversationWithExfee:(Exfee *)exfee updatedTime:(NSDate *)updatedTime;
 - (void)postConversation:(NSString *)content by:(Identity *)myIdentity on:(Exfee *)exfee;
 
