@@ -21,9 +21,8 @@
 - (void)removeNotificationIdentity:(IdentityId *)identityId
                               from:(Invitation *)invitation
                            onExfee:(Exfee *)exfee
-                           success:(void (^)(Exfee *editExfee))successHandler
-                        apiFailure:(void (^)(Meta *meta))apiFailureHandler
-                           failure:(void (^)(NSError *error))failureHandler;
+                           success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))successHandler
+                           failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failureHandler;
 
 - (void)editExfee:(Exfee *)exfee
        byIdentity:(Identity *)identity

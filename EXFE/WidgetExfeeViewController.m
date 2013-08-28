@@ -241,7 +241,7 @@ typedef enum {
     NSString *title = NSLocalizedString(@"People will no longer have access to any information in this ·X·. Please confirm to remove.", nil);
     NSString *destTitle = NSLocalizedString(@"Remove from this ·X·", nil);
     
-    BOOL isMe = [[User getDefaultUser] isMe:_selected_invitation.identity];
+    BOOL isMe = [[User getDefaultUser] isMe:self.selected_invitation.identity];
     if (isMe) {
         title = NSLocalizedString(@"You will no longer have access to any information in this ·X· once left. Please confirm to leave.", nil);
         destTitle = NSLocalizedString(@"Leave from this ·X·", nil);
@@ -254,7 +254,7 @@ typedef enum {
             
             Exfee *e = [Exfee object:moc];
             e.exfee_id = [self.exfee.exfee_id copy];
-            _selected_invitation.rsvp_status = @"REMOVED";
+            self.selected_invitation.rsvp_status = @"REMOVED";
             e.invitations = [NSSet setWithObjects:_selected_invitation, nil];
             [self.model removeSelfInvitation:_selected_invitation fromExfee:e];
             
@@ -265,9 +265,9 @@ typedef enum {
             
             Exfee *e = [Exfee object:moc];
             e.exfee_id = [self.exfee.exfee_id copy];
-            _selected_invitation.rsvp_status = @"REMOVED";
-            e.invitations = [NSSet setWithObjects:_selected_invitation, [self.exfee getMyInvitation], nil];
-            [self.model removeInvitation:_selected_invitation fromExfee:e];
+            self.selected_invitation.rsvp_status = @"REMOVED";
+            e.invitations = [NSSet setWithObjects:self.selected_invitation, [self.exfee getMyInvitation], nil];
+            [self.model removeInvitation:self.selected_invitation fromExfee:e];
             
             self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
             [exfeeContainer reloadData];
@@ -285,7 +285,9 @@ typedef enum {
     IdentityId *identity_id = [set objectAtIndex:index];
     [set removeObjectAtIndex:index];
     
-    [self.model removeNotificationIdentity:identity_id from:_selected_invitation onExfee:self.exfee];
+    [self.model removeNotificationIdentity:identity_id from:self.selected_invitation onExfee:self.exfee];
+    
+    
 }
 
 #pragma mark UITableViewDataSource
@@ -647,6 +649,8 @@ typedef enum {
                 // remove notification identity;
                 NSUInteger r = indexPath.row - 1;
                 [self removeNotificationIdentity:r];
+                
+                [invTable deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
             }
             break;
         default:
@@ -1304,7 +1308,7 @@ typedef enum {
 - (void)reloadSelected
 {
     BOOL flag = NO;
-    NSNumber *inv_id = _selected_invitation.invitation_id;
+    NSNumber *inv_id = self.selected_invitation.invitation_id;
     for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {
         Invitation* inv = [self.sortedInvitations objectAtIndex:i];
         if ([inv.invitation_id unsignedIntegerValue] == [inv_id unsignedIntegerValue]) {
@@ -1313,11 +1317,11 @@ typedef enum {
             PSTCollectionViewCell* cell = [exfeeContainer cellForItemAtIndexPath:indexPath];
             if (cell != nil) {
                 [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionNone];
-                [self fillInvitationContent:_selected_invitation];
+                [self fillInvitationContent:self.selected_invitation];
                 [self clickCell:cell];
             } else {
                 [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionBottom];
-                [self fillInvitationContent:_selected_invitation];
+                [self fillInvitationContent:self.selected_invitation];
                 
                 double delayInSeconds = 0.01;
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
@@ -1337,7 +1341,7 @@ typedef enum {
         self.selected_invitation = [self.sortedInvitations objectAtIndex:0];
         NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
         [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionNone];
-        [self fillInvitationContent:_selected_invitation];
+        [self fillInvitationContent:self.selected_invitation];
     }
 }
 @end

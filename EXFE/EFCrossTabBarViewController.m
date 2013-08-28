@@ -87,6 +87,7 @@
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameRemoveMyInvitationFailure
                                                object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameRemoveInvitationSuccess
@@ -95,6 +96,7 @@
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameRemoveInvitationFailure
                                                object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameEditExfeeSuccess
@@ -102,6 +104,15 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameEditExfeeFailure
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameRemoveNotificationIdentitySuccess
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameRemoveNotificationIdentityFailure
                                                object:nil];
     
     // Rsvp (=>exfee)
@@ -144,9 +155,10 @@
             }
         } else if ([@"exfee" isEqualToString:cat]) {
             if (num && [self.cross.exfee.exfee_id isEqualToNumber:num] ) {
-                // kEFNotificationNameRsvpSuccess
-                // kEFNotificationNameRemoveMyInvitationSuccess 
-                
+                // kEFNotificationNameRemoveInvitationSuccess
+                // kEFNotificationNameRemoveMyInvitationSuccess
+                // kEFNotificationNameEditExfeeSuccess
+                //kEFNotificationNameRemoveNotificationIdentitySuccess
                 
                 Exfee *exfee = [userInfo objectForKey:@"response.exfee"];
                 NSArray * list = [exfee getMyInvitations];

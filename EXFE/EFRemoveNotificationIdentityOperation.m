@@ -8,8 +8,7 @@
 
 #import "EFRemoveNotificationIdentityOperation.h"
 
-#import "Invitation+EXFE.h"
-#import "Exfee+EXFE.h"
+#import "EFEntity.h"
 
 NSString *kEFNotificationNameRemoveNotificationIdentitySuccess = @"notification.removeNotificationIdentity.success";
 NSString *kEFNotificationNameRemoveNotificationIdentityFailure = @"notification.removeNotificationIdentity.failure";
@@ -37,25 +36,42 @@ NSString *kEFNotificationNameRemoveNotificationIdentityFailure = @"notification.
     [self.model.apiServer removeNotificationIdentity:self.identityid
                                                 from:self.invitation
                                              onExfee:self.exfee
-                                             success:^(Exfee *editExfee) {
-                                                 self.state = kEFNetworkOperationStateSuccess;
-                                                 NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:@{@"exfee": editExfee}];
-                                                 [userInfo setValue:@"exfee" forKey:@"type"];
-                                                 [userInfo setValue:self.exfee.exfee_id forKey:@"id"];
-                                                 self.successUserInfo = userInfo;
-                                                 
-                                                 [self finish];
+                                             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                                 if ([operation.HTTPRequestOperation.response statusCode] == 200){
+                                                     NSDictionary *result = [mappingResult dictionary];
+                                                     if(result)
+                                                     {
+                                                         Meta *meta = (Meta *)[result objectForKey:@"meta"];
+                                                         int code = [meta.code intValue];
+                                                         int type = code / 100;
+                                                         switch (type) {
+                                                             case 2: // HTTP OK
+                                                             {
+                                                                 self.state = kEFNetworkOperationStateSuccess;
+                                                                 NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];
+                                                                 [userInfo setValue:@"exfee" forKey:@"type"];
+                                                                 [userInfo setValue:self.exfee.exfee_id forKey:@"id"];
+                                                                 self.successUserInfo = userInfo;
+                                                                 
+                                                                 [self finish];
+                                                                 
+                                                             }  break;
+                                                             default:{
+                                                                 // RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                                                 // [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                                                                 self.state = kEFNetworkOperationStateFailure;
+                                                                 NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];
+                                                                 [userInfo setValue:@"exfee" forKey:@"type"];
+                                                                 [userInfo setValue:self.exfee.exfee_id forKey:@"id"];
+                                                                 self.failureUserInfo = userInfo;
+                                                                 
+                                                                 [self finish];
+                                                             }  break;
+                                                         }
+                                                     }
+                                                 }
                                              }
-                                          apiFailure:^(Meta *meta) {
-                                              self.state = kEFNetworkOperationStateFailure;
-                                              NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:@{@"meta": meta}];
-                                              [userInfo setValue:@"exfee" forKey:@"type"];
-                                              [userInfo setValue:self.exfee.exfee_id forKey:@"id"];
-                                              self.failureUserInfo = userInfo;
-                                              
-                                              [self finish];
-                                          }
-                                             failure:^(NSError *error) {
+                                             failure:^(RKObjectRequestOperation *operation, NSError *error) {
                                                  self.state = kEFNetworkOperationStateFailure;
                                                  NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
                                                  [userInfo setValue:@"exfee" forKey:@"type"];
@@ -65,7 +81,6 @@ NSString *kEFNotificationNameRemoveNotificationIdentityFailure = @"notification.
                                                  
                                                  [self finish];
                                              }];
-    
 }
 
 @end
