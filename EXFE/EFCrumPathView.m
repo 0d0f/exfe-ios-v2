@@ -35,16 +35,8 @@
           inContext:(CGContextRef)context {
     EFCrumPath *crumPath = (EFCrumPath *)self.overlay;
     NSArray *mapPoints = crumPath.mapPoints;
-    
-    CGPoint point1 = self.mapView.center;
-    CGPoint point2 = (CGPoint){self.mapView.center.x, self.mapView.center.y + 30.0f};
-    
-    CLLocationCoordinate2D coordinate1 = [self.mapView convertPoint:point1 toCoordinateFromView:self.mapView];
-    CLLocationCoordinate2D coordinate2 = [self.mapView convertPoint:point2 toCoordinateFromView:self.mapView];
-    
-    MKMapPoint mapPoint1 = MKMapPointForCoordinate(coordinate1);
-    MKMapPoint mapPoint2 = MKMapPointForCoordinate(coordinate2);
-    CGFloat lineWidth = MKMetersBetweenMapPoints(mapPoint1, mapPoint2);
+
+    CGFloat lineWidth = (4.0f * [UIScreen mainScreen].scale) / zoomScale;
     
     MKMapRect clipRect = MKMapRectInset(mapRect, -lineWidth, -lineWidth);
     
@@ -59,8 +51,10 @@
         CGContextSetLineJoin(context, kCGLineJoinRound);
         CGContextSetLineCap(context, kCGLineCapRound);
         
+        CGContextSetShadowWithColor(context, CGSizeZero, 1.0f, [UIColor whiteColor].CGColor);
+        
         if (kEFMapLineStyleDashedLine == crumPath.lineStyle) {
-            CGFloat dashes[] = {0.0f, lineWidth * 4};
+            CGFloat dashes[] = {0, 4 * lineWidth};
             CGContextSetLineDash(context, 0, dashes, 2);
         } else if (kEFMapLineStyleLine == crumPath.lineStyle) {
         }
@@ -86,7 +80,7 @@ static BOOL lineIntersectsRect(MKMapPoint p0, MKMapPoint p1, MKMapRect r)
     return MKMapRectIntersectsRect(r, r2);
 }
 
-#define MIN_POINT_DELTA 5.0
+#define MIN_POINT_DELTA (8.0 * [UIScreen mainScreen].scale)
 
 - (CGPathRef)_pathForPoints:(NSArray *)mapPoints
                    clipRect:(MKMapRect)mapRect
