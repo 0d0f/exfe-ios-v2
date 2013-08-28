@@ -696,7 +696,7 @@
         [self.navigationController popToRootViewControllerAnimated:NO];
         EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:self.model];
         __weak EFTabBarViewController *weakTab = tabBarViewController;
-        tabBarViewController.viewWillAppearHandler = ^{
+        tabBarViewController.viewInitHandler = ^{
             EFTabBarViewController * strongTab = weakTab;
             if (!strongTab) {
                 return;

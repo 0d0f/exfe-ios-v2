@@ -1318,6 +1318,8 @@
 - (void)sendrsvp:(NSString*)status invitation:(Invitation*)_invitation {
     
     [self.model changeRsvp:status on:_invitation from:self.cross.exfee];
+    _invitation.rsvp_status = status;
+    [self fillExfee:self.cross.exfee];
     
 //    [self.model.apiServer submitRsvp:status
 //                                          on:_invitation

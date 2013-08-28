@@ -59,31 +59,60 @@
 
 - (void)regObserver
 {
+    //Cross
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameLoadCrossSuccess
                                                object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleNotification:)
-                                                 name:kEFNotificationNameRemoveMyInvitationSuccess
+                                                 name:kEFNotificationNameLoadCrossFailure
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameEditCrossSuccess
                                                object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameEditCrossFailure
                                                object:nil];
     
+    // Exfee
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameRemoveMyInvitationSuccess
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameRemoveMyInvitationFailure
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameRemoveInvitationSuccess
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameRemoveInvitationFailure
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameEditExfeeSuccess
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameEditExfeeFailure
+                                               object:nil];
+    
+    // Rsvp (=>exfee)
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameRsvpSuccess
                                                object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameRsvpFailure
+                                               object:nil];
 }
 
 - (void)unregObserver
@@ -121,8 +150,9 @@
                 
                 Exfee *exfee = [userInfo objectForKey:@"response.exfee"];
                 NSArray * list = [exfee getMyInvitations];
-                if (list.count == 0) {
-                    // exit cross and remove from local
+                if (list.count == 0 && [kEFNotificationNameRemoveMyInvitationSuccess isEqualToString:name]) {
+                        // exit cross and remove from local
+                        [self removeCrossAndExit];
                 } else {
                     Cross *c = [self.model getCrossById:[self.cross.cross_id unsignedIntegerValue]];
                     [self setValue:c forKeyPath:@"cross"];
@@ -149,13 +179,19 @@
         
         if ([@"cross" isEqualToString:cat]) {
             if (num && [self.cross.cross_id isEqualToNumber:num] ) {
-                if ([kEFNotificationNameLoadCrossSuccess isEqualToString:name]) {
+                if ([kEFNotificationNameLoadCrossFailure isEqualToString:name]) {
                     Meta *meta = userInfo[@"meta"];
                     if (meta) {
                         NSInteger c = [meta.code integerValue];
                         NSInteger t = c / 100;
                         
                         switch (t) {
+                            case 3:{
+                                if (c == 304) {
+                                    // "errorType":"Cross Not Modified."
+                                    // do nothing
+                                }
+                            } break;
                             case 4:{
                                 if (c == 403) {
                                     UIAlertView *alert = [UIAlertView alertViewWithTitle:NSLocalizedString(@"Privacy Control", nil) message:NSLocalizedString(@"You have no access to this private ·X·.", nil)];
@@ -183,8 +219,42 @@
             }
         } else if ([@"exfee" isEqualToString:cat]) {
             if (num && [self.cross.exfee.exfee_id isEqualToNumber:num] ) {
-                
-            } else {
+                Meta *meta = userInfo[@"meta"];
+                if (meta) {
+                    NSInteger c = [meta.code integerValue];
+                    NSInteger t = c / 100;
+                    // RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                    // [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                    switch (t) {
+                        case 3:{
+                            if (c == 304) {
+                                // "errorType":"Cross Not Modified."
+                                // do nothing
+                            }
+                        } break;
+                        case 4:{
+                            if (c == 400) {
+                                // 400 Over people max limited
+                            }
+                        } break;
+                            
+                        default:{
+                            
+                        } break;
+                    }
+                } else {
+                    NSError *error = userInfo[@"error"];
+                    // RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                    // [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                }
+            } else if ([@"rsvp" isEqualToString:cat]) {
+                if (num && [self.cross.exfee.exfee_id isEqualToNumber:num] ) {
+                    // kEFNotificationNameRsvpFailure
+                    [self.model loadCrossWithCrossId:[self.cross.cross_id unsignedIntegerValue] updatedTime:nil];
+                } else {
+                    
+                }
+            }else {
                 // for exfee list
             }
         } else {

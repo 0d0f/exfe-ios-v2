@@ -129,9 +129,6 @@ typedef enum {
     CGRect b = self.initFrame;
     self.view.tag = kTagViewExfeeRoot;
     
-    if (self.exfee) {
-        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
-    }
     
     flowLayout = [[PSTCollectionViewFlowLayout alloc] init];
     exfeeContainer = [[PSTCollectionView alloc] initWithFrame:CGRectMake(0, kYOffset, CGRectGetWidth(b), CGRectGetHeight(b) - kYOffset) collectionViewLayout:flowLayout];
@@ -164,24 +161,19 @@ typedef enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self regObserver];
+    
+    if (self.exfee) {
+        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+    }
+    [exfeeContainer reloadData];
+    [self reloadSelected];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    
-    [self reloadSelected];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleNotification:)
-                                                 name:kEFNotificationNameLoadCrossSuccess
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleNotification:)
-                                                 name:kEFNotificationNameRemoveInvitationSuccess
-                                               object:nil];
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -192,8 +184,8 @@ typedef enum {
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [self unregObserver];
     [super viewDidDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewDidUnload
@@ -212,35 +204,29 @@ typedef enum {
         [self.onExitBlock invoke];
     }
 }
-#pragma mark - Notification handler
 
-- (void)handleNotification:(NSNotification *)notification {
-    NSString *name = notification.name;
-    
-    if ([name isEqualToString:kEFNotificationNameLoadCrossSuccess]) {
-        NSDictionary *userInfo = notification.userInfo;
-        
-        Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
-        if ([meta.code intValue] == 200) {
-            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
-            [exfeeContainer reloadData];
-            [self reloadSelected];
-        }
-    } else if ([kEFNotificationNameRemoveInvitationSuccess isEqualToString:name]) {
-        // refresh
-        NSDictionary *userInfo = notification.userInfo;
-        Exfee *exfee = [userInfo objectForKey:@"exfee"];
-        
-        self.selected_invitation = nil;
+#pragma mark - Notification Handler
+
+- (void)regObserver
+{
+    [self.tabBarViewController addObserver:self forKeyPath:@"cross" options:NSKeyValueObservingOptionNew context:NULL];
+}
+
+- (void)unregObserver
+{
+    [self.tabBarViewController removeObserver:self forKeyPath:@"cross" context:NULL];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {    
+    if ([@"cross" isEqualToString:keyPath]) {
         self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
         [exfeeContainer reloadData];
         [self reloadSelected];
-        
     }
 }
-
-
-#pragma mark Gesture Handler
 
 #pragma mark Fill content and Layout
 - (void)fillInvitationContent:(Invitation*)inv
@@ -263,13 +249,29 @@ typedef enum {
     
     UIActionSheet *actionSheet = [UIActionSheet actionSheetWithTitle:title];
     [actionSheet setDestructiveButtonWithTitle:destTitle handler:^{
-        
+        NSManagedObjectContext *moc = self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext;
         if (isMe) {
-            [self.model removeSelfInvitation:_selected_invitation fromExfee:self.exfee];
             
+            Exfee *e = [Exfee object:moc];
+            e.exfee_id = [self.exfee.exfee_id copy];
+            _selected_invitation.rsvp_status = @"REMOVED";
+            e.invitations = [NSSet setWithObjects:_selected_invitation, nil];
+            [self.model removeSelfInvitation:_selected_invitation fromExfee:e];
+            
+            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+            [exfeeContainer reloadData];
+            [self reloadSelected];
         } else {
             
-            [self.model removeInvitation:_selected_invitation fromExfee:self.exfee];
+            Exfee *e = [Exfee object:moc];
+            e.exfee_id = [self.exfee.exfee_id copy];
+            _selected_invitation.rsvp_status = @"REMOVED";
+            e.invitations = [NSSet setWithObjects:_selected_invitation, [self.exfee getMyInvitation], nil];
+            [self.model removeInvitation:_selected_invitation fromExfee:e];
+            
+            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+            [exfeeContainer reloadData];
+            [self reloadSelected];
         }
 
     }];
@@ -284,26 +286,6 @@ typedef enum {
     [set removeObjectAtIndex:index];
     
     [self.model removeNotificationIdentity:identity_id from:_selected_invitation onExfee:self.exfee];
-    
-//    [self.model.apiServer removeNotificationIdentity:identity_id
-//                                                from:_selected_invitation
-//                                             onExfee:self.exfee
-//                                             success:^(Exfee *editExfee) {
-//                                                 self.selected_invitation = nil;
-//                                                 self.exfee = editExfee;
-//                                                 self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
-//                                                 [exfeeContainer reloadData];
-//                                                 [self reloadSelected];
-//                                                 
-//                                                 NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"CrossGroupViewController")];
-//                                                 NSAssert(viewControllers != nil && viewControllers.count, @"viewController 不应为空");
-//                                                 
-//                                                 CrossGroupViewController *crossGroupViewController = viewControllers[0];
-//                                                 
-//                                                 [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id unsignedIntegerValue] updatedTime:nil];
-//                                             } failure:^(NSError *error) {
-//                                                 NSLog(@"error %@", error);
-//                                             }];
 }
 
 #pragma mark UITableViewDataSource
@@ -996,12 +978,12 @@ typedef enum {
             void (^addActionHandler)(NSArray *contactObjects) = ^(NSArray *contactObjects){
                 NSAssert(dispatch_get_main_queue() == dispatch_get_current_queue(), @"WTF! MUST on main queue! boy!");
                 
-                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.labelText = @"Adding...";
-                hud.mode = MBProgressHUDModeCustomView;
-                EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-                [bigspin startAnimating];
-                hud.customView = bigspin;
+//                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//                hud.labelText = @"Adding...";
+//                hud.mode = MBProgressHUDModeCustomView;
+//                EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+//                [bigspin startAnimating];
+//                hud.customView = bigspin;
                 
                 
                 Exfee *exfee = [Exfee disconnectedEntity];
@@ -1049,25 +1031,19 @@ typedef enum {
                     [invitations addObject:invitation];
                 }
                 
+                NSMutableArray *tempSorted = [NSMutableArray arrayWithArray:self.sortedInvitations];
+                [tempSorted addObjectsFromArray:[invitations allObjects]];
+                
+                [invitations addObject:[self.exfee getMyInvitation]];
                 [exfee addInvitations:invitations];
                 
                 [self.model editExfee:exfee];
                 
-//                [self.model.apiServer editExfee:exfee
-//                                             byIdentity:myidentity
-//                                                success:^(Exfee *editedExfee){
-//                                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                                                    
-//                                                    self.exfee = editedExfee;
-//                                                    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
-//                                                    [exfeeContainer reloadData];
-//                                                    
-//                                                    [self dismissViewControllerAnimated:YES completion:nil];
-//                                                }
-//                                                failure:^(NSError *error){
-//                                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                                                }];
-                 [self dismissViewControllerAnimated:YES completion:nil];
+                self.sortedInvitations = tempSorted;
+                [exfeeContainer reloadData];
+                [self reloadSelected];
+                
+                [self dismissViewControllerAnimated:YES completion:nil];
             };
             
             EFContactViewController *viewController = [[EFContactViewController alloc] initWithNibName:@"EFContactViewController" bundle:nil];
@@ -1242,6 +1218,10 @@ typedef enum {
 - (void)sendrsvp:(NSString*)status invitation:(Invitation*)_invitation {
     
     [self.model changeRsvp:status on:_invitation from:self.exfee];
+    
+    _invitation.rsvp_status = status;
+    [self fillInvitationContent:_invitation];
+    
 //    [self.model.apiServer submitRsvp:status
 //                                          on:_invitation
 //                                  myIdentity:[myidentity.identity_id intValue]

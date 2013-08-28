@@ -145,13 +145,12 @@
 
 - (void)editExfee:(Exfee *)exfee
        byIdentity:(Identity *)identity
-          success:(void (^)(Exfee *))successHandler
-       apiFailure:(void (^)(Meta *meta))apiFailureHandler
-          failure:(void (^)(NSError *error))failureHandler {
+          success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))successHandler
+          failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failureHandler {
     RKObjectManager *manager = [RKObjectManager sharedManager];
     NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/edit?token=%@&by_identity_id=%u", [exfee.exfee_id intValue], self.model.userToken, [identity.identity_id intValue]];
     
-    manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
+//    manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
     RKObjectRequestOperation *operation = [manager appropriateObjectRequestOperationWithObject:exfee
@@ -159,7 +158,7 @@
                                                                                           path:endpoint
                                                                                     parameters:nil];
     
-    // warnming handler
+    // warning handler
     [operation setWillMapDeserializedResponseBlock:^id(id object){
         if ([object isKindOfClass:[NSDictionary class]]) {
             NSDictionary *dictObject = (NSDictionary *)object;
@@ -186,52 +185,10 @@
                    withObject:operation
                    withObject:mappingResult];
         
-        if ([operation.HTTPRequestOperation.response statusCode] == 200){
-            if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
-            {
-                Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
-                int code = [meta.code intValue];
-                int type = code / 100;
-                switch (type) {
-                    case 2: // HTTP OK
-                    {
-                        if (206 == code || 200 == code) {
-                            Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
-                            if (successHandler) {
-                                dispatch_async(dispatch_get_main_queue(), ^{
-                                    successHandler(respExfee);
-                                });
-                            }
-                        }
-                    }
-                        break;
-                    case 4: // Client Error
-                    {
-                        // 400 Over people max limited
-                        RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                        [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
-                        if (failureHandler) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                apiFailureHandler(meta);
-                            });
-                        }
-                    }
-                        break;
-                    case 5: // Server Error
-                    {
-                        RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                        [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
-                        if (failureHandler) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                apiFailureHandler(meta);
-                            });
-                        }
-                    }
-                        break;
-                    default:
-                        break;
-                }
-            }
+        if (successHandler) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                successHandler(operation, mappingResult);
+            });
         }
     }
                                      failure:^(RKObjectRequestOperation *operation, NSError *error){
@@ -239,11 +196,9 @@
                                                     withObject:operation
                                                     withObject:error];
                                          
-                                         RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                                         [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
                                          if (failureHandler) {
                                              dispatch_async(dispatch_get_main_queue(), ^{
-                                                 failureHandler(error);
+                                                 failureHandler(operation, error);
                                              });
                                          }
                                      }];

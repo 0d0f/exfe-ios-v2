@@ -27,8 +27,7 @@
 
 - (void)editExfee:(Exfee *)exfee
        byIdentity:(Identity *)identity
-          success:(void (^)(Exfee *editedExfee))successHandler
-       apiFailure:(void (^)(Meta *meta))apiFailureHandler
-          failure:(void (^)(NSError *error))failureHandler;
+          success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))successHandler
+          failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failureHandler;
 
 @end
