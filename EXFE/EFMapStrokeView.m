@@ -140,6 +140,10 @@
 - (void)reloadData {
     NSAssert(dispatch_get_current_queue() == dispatch_get_main_queue(), @"MUST be on main thread.");
     
+    CLLocationCoordinate2D cooridnate = self.mapView.centerCoordinate;
+    CGPoint center = [self.mapView convertCoordinate:cooridnate toPointToView:self.superview];
+    self.center = center;
+    
     [self _reloadFlag];
     [self _reloadStrokesToDraw];
     

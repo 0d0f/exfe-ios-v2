@@ -105,9 +105,9 @@
                      parameters:nil
                         success:^(AFHTTPRequestOperation *operation, id responseObject){
                              if (200 == operation.response.statusCode) {
-                                 NSAssert([responseObject isKindOfClass:[NSArray class]], @"responseObject SHOULD be a array.");
-                                 
                                  if (responseObject) {
+                                     NSAssert([responseObject isKindOfClass:[NSArray class]], @"responseObject SHOULD be a array.");
+                                     
                                      NSArray *result = (NSArray *)responseObject;
                                      
                                      NSMutableArray *routeObjects = [[NSMutableArray alloc] initWithCapacity:result.count];

@@ -679,6 +679,19 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     xplace.tags = tags;
 }
 
+- (void)changeDestinationToNormalRouteLocation:(EFRouteLocation *)destination {
+    destination.locatinMask &= ~(kEFRouteLocationMaskXPlace | kEFRouteLocationMaskDestination);
+    
+    if (!destination.markTitle || !destination.markTitle.length) {
+        destination.markTitle = @"P";
+    }
+    
+    NSMutableArray *tags = [[NSMutableArray alloc] initWithArray:destination.tags];
+    [tags removeObject:@"xplace"];
+    [tags removeObject:@"destination"];
+    destination.tags = tags;
+}
+
 #pragma mark - Application Event
 
 - (void)applicationDidEnterBackground {
