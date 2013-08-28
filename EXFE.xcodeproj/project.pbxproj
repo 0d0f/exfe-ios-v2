@@ -102,6 +102,9 @@
 		4F0C546717CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546617CC9CD500649C4F /* EFPostConversationOperation.m */; };
 		4F0C546817CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546617CC9CD500649C4F /* EFPostConversationOperation.m */; };
 		4F0C546917CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546617CC9CD500649C4F /* EFPostConversationOperation.m */; };
+		4F0C546D17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546C17CCF6CD00649C4F /* NSManagedObject+EXFE.m */; };
+		4F0C546E17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546C17CCF6CD00649C4F /* NSManagedObject+EXFE.m */; };
+		4F0C546F17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546C17CCF6CD00649C4F /* NSManagedObject+EXFE.m */; };
 		4F0E159B16A95C390086AC4A /* edit_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159916A95C390086AC4A /* edit_30.png */; };
 		4F0E159C16A95C390086AC4A /* edit_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159A16A95C390086AC4A /* edit_30@2x.png */; };
 		4F0E3551179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0E3550179E8DF400FFA0E4 /* EFIdentityBar.m */; };
@@ -2401,6 +2404,8 @@
 		4F0C546517CC9CD100649C4F /* EFPostConversationOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPostConversationOperation.h; sourceTree = "<group>"; };
 		4F0C546617CC9CD500649C4F /* EFPostConversationOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPostConversationOperation.m; sourceTree = "<group>"; };
 		4F0C546A17CCA62A00649C4F /* EFEntity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EFEntity.h; sourceTree = "<group>"; };
+		4F0C546B17CCF6CC00649C4F /* NSManagedObject+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+EXFE.h"; sourceTree = "<group>"; };
+		4F0C546C17CCF6CD00649C4F /* NSManagedObject+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+EXFE.m"; sourceTree = "<group>"; };
 		4F0E159916A95C390086AC4A /* edit_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30.png; sourceTree = "<group>"; };
 		4F0E159A16A95C390086AC4A /* edit_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30@2x.png"; sourceTree = "<group>"; };
 		4F0E354F179E8DF400FFA0E4 /* EFIdentityBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFIdentityBar.h; sourceTree = "<group>"; };
@@ -3757,6 +3762,8 @@
 				763A01C11721222C0082CC9E /* LocalContact+EXFE.m */,
 				4FFD701917638546009836F5 /* IdentityId+EXFE.h */,
 				4FFD701A17638546009836F5 /* IdentityId+EXFE.m */,
+				4F0C546B17CCF6CC00649C4F /* NSManagedObject+EXFE.h */,
+				4F0C546C17CCF6CD00649C4F /* NSManagedObject+EXFE.m */,
 			);
 			name = "Entity Extention";
 			sourceTree = "<group>";
@@ -7197,6 +7204,7 @@
 				4F0C545E17CC876400649C4F /* EFRsvpOperation.m in Sources */,
 				4F0C546317CC879B00649C4F /* EFRemoveNotificationIdentityOperation.m in Sources */,
 				4F0C546817CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */,
+				4F0C546E17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7466,6 +7474,7 @@
 				4F0C545F17CC876400649C4F /* EFRsvpOperation.m in Sources */,
 				4F0C546417CC879B00649C4F /* EFRemoveNotificationIdentityOperation.m in Sources */,
 				4F0C546917CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */,
+				4F0C546F17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7735,6 +7744,7 @@
 				4F0C545D17CC876400649C4F /* EFRsvpOperation.m in Sources */,
 				4F0C546217CC879B00649C4F /* EFRemoveNotificationIdentityOperation.m in Sources */,
 				4F0C546717CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */,
+				4F0C546D17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

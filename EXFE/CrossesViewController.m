@@ -60,7 +60,7 @@
 - (Cross*) crossWithId:(NSInteger)cross_id
 {
     for (Cross *c in self.crossList) {
-        if ([c.cross_id integerValue] == cross_id) {
+        if ([c.cross_id unsignedIntegerValue] == cross_id) {
             return c;
         }
     }
@@ -309,6 +309,8 @@
     [super viewWillAppear:animated];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    
+    [self refreshAll];
     [self.tableView reloadData];
 }
 
@@ -561,7 +563,7 @@
         
         NSString *avatarimgurl = nil;
         for(Invitation *invitation in cross.exfee.invitations) {
-            NSInteger connected_uid = [invitation.identity.connected_user_id integerValue];
+            NSInteger connected_uid = [invitation.identity.connected_user_id unsignedIntegerValue];
             if (connected_uid == self.model.userId) {
                 if(invitation && invitation.invited_by &&
                    invitation.invited_by.avatar_filename ) {
@@ -799,6 +801,7 @@
     
     // Init TabBarViewController
     EFCrossTabBarViewController *tabBarViewController = [[EFCrossTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController, mapViewController]];
+    tabBarViewController.model = self.model;
     tabBarViewController.cross = cross;
     
     __weak EFTabBarViewController *weakTab = tabBarViewController;

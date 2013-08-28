@@ -806,7 +806,7 @@
         } else {
             [idlist appendString:@","];
         }
-        [idlist appendFormat:@"%u", [identity_id integerValue]];
+        [idlist appendFormat:@"%u", [identity_id unsignedIntegerValue]];
     }
     [idlist appendString:@"]"];
     NSDictionary *param = @{@"browsing_identity_token":token, @"identity_ids":idlist};

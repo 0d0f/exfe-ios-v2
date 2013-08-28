@@ -20,51 +20,53 @@
                 on:(Invitation *)invitation
         myIdentity:(Identity *)my_identity
            onExfee:(Exfee *)exfee
-           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
-    NSDictionary *rsvpdict = @{@"identity_id": invitation.identity.identity_id, @"by_identity_id": my_identity, @"rsvp_status": status, @"type": @"rsvp"};
+           success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))successHandler
+           failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failureHandler{
+    NSDictionary *rsvpdict = @{@"identity_id": invitation.identity.identity_id, @"by_identity_id": my_identity.identity_id, @"rsvp_status": status, @"type": @"rsvp"};
     NSDictionary *param = @{@"rsvps": @[rsvpdict]};
     
-    NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/rsvp?token=%@", [exfee.exfee_id integerValue], self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/rsvp?token=%@", [exfee.exfee_id unsignedIntegerValue], self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
-    manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
+    manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
-    [manager.HTTPClient postPath:endpoint
-                      parameters:param
-                         success:^(AFHTTPRequestOperation *operation, id responseObject){
-                             [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
-                                        withObject:operation
-                                        withObject:responseObject];
-                             
-                             if (success) {
-                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                     success(operation, responseObject);
-                                 });
-                             }
-                         }
-                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
-                             [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
-                                        withObject:operation
-                                        withObject:error];
-                             
-                             if (failure) {
-                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                     failure(operation, error);
-                                 });
-                             }
-                         }];
+    [manager postObject2:exfee
+                    path:endpoint
+              parameters:param
+                 success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                     [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                                withObject:operation
+                                withObject:mappingResult];
+                     
+                     if (successHandler) {
+                         dispatch_async(dispatch_get_main_queue(), ^{
+                             successHandler(operation, mappingResult);
+                         });
+                     }
+                 }
+                 failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                     [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                withObject:operation
+                                withObject:error];
+                     
+                     if (failureHandler) {
+                         dispatch_async(dispatch_get_main_queue(), ^{
+                             failureHandler(operation, error);
+                         });
+                     }
+                 }];
 }
 
 - (void)removeNotificationIdentity:(IdentityId *)identityId
                               from:(Invitation *)invitation
                            onExfee:(Exfee *)exfee
                            success:(void (^)(Exfee *editExfee))successHandler
+                        apiFailure:(void (^)(Meta *meta))apiFailureHandler
                            failure:(void (^)(NSError *error))failureHandler
 {
     NSDictionary *param = @{@"identity_id": identityId.identity_id};
     
-    NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/removenotificationidentity?token=%@", [exfee.exfee_id integerValue], self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/removenotificationidentity?token=%@", [exfee.exfee_id unsignedIntegerValue], self.model.userToken];
     
     RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
@@ -99,12 +101,12 @@
                                      break;
                                  case 4: // Client Error
                                  {
-                                     // 400 Over people mac limited
+                                     // 400 Over people max limited
                                      RKObjectManager *objectManager = [RKObjectManager sharedManager];
                                      [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
                                      if (failureHandler) {
                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                             failureHandler(nil);
+                                             apiFailureHandler(meta);
                                          });
                                      }
                                  }
@@ -115,7 +117,7 @@
                                      [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
                                      if (failureHandler) {
                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                             failureHandler(nil);
+                                             apiFailureHandler(meta);
                                          });
                                      }
                                  }
@@ -144,6 +146,7 @@
 - (void)editExfee:(Exfee *)exfee
        byIdentity:(Identity *)identity
           success:(void (^)(Exfee *))successHandler
+       apiFailure:(void (^)(Meta *meta))apiFailureHandler
           failure:(void (^)(NSError *error))failureHandler {
     RKObjectManager *manager = [RKObjectManager sharedManager];
     NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/edit?token=%@&by_identity_id=%u", [exfee.exfee_id intValue], self.model.userToken, [identity.identity_id intValue]];
@@ -204,12 +207,12 @@
                         break;
                     case 4: // Client Error
                     {
-                        // 400 Over people mac limited
+                        // 400 Over people max limited
                         RKObjectManager *objectManager = [RKObjectManager sharedManager];
                         [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
                         if (failureHandler) {
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                failureHandler(nil);
+                                apiFailureHandler(meta);
                             });
                         }
                     }
@@ -220,7 +223,7 @@
                         [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
                         if (failureHandler) {
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                failureHandler(nil);
+                                apiFailureHandler(meta);
                             });
                         }
                     }

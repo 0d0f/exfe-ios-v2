@@ -10,11 +10,9 @@
 
 #import "EFKit.h"
 #import "EFAPIOperations.h"
-#import "Cross.h"
-#import "Invitation+EXFE.h"
+#import "EFEntity.h"
 
 @implementation EXFEModel (Crosses)
-
 
 - (NSArray *)getCrossList
 {
@@ -112,6 +110,7 @@
 - (void)editCross:(Cross *)cross
 {
     EFEditCrossOperation *operation = [EFEditCrossOperation operationWithModel:self];
+//    cross.by_identity = [cross.exfee getMyInvitation].identity;
     operation.cross = cross;
     
     EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
@@ -119,34 +118,34 @@
 }
 
 
-- (void)editExfee:(Exfee *)exfee byIdentity:(Identity *)identity
+- (void)editExfee:(Exfee *)exfee
 {
     EFEditExfeeOperation *operation = [EFEditExfeeOperation operationWithModel:self];
     operation.exfee = exfee;
-    operation.byIdentity = identity;
+    operation.byIdentity = [exfee getMyInvitation].identity;
     
     EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
 }
 
-- (void)changeRsvp:(NSString *)rsvp on:(Invitation *)invitation from:(Exfee *)exfee byIdentity:(Identity *)identity
+- (void)changeRsvp:(NSString *)rsvp on:(Invitation *)invitation from:(Exfee *)exfee
 {
     EFRsvpOperation *operation = [EFRsvpOperation operationWithModel:self];
     operation.rsvp = rsvp;
     operation.invitation = invitation;
     operation.exfee = exfee;
-    operation.byIdentity = identity;
+    operation.byIdentity = [exfee getMyInvitation].identity;
     
     EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
 }
 
-- (void)removeInvitation:(Invitation *)invitation fromExfee:(Exfee *)exfee byIdentity:(Identity *)identity
+- (void)removeInvitation:(Invitation *)invitation fromExfee:(Exfee *)exfee
 {
     EFRemoveInvitationOperation *operation = [EFRemoveInvitationOperation operationWithModel:self];
     operation.exfee = exfee;
     operation.invitation = invitation;
-    operation.byIdentity = identity;
+    operation.byIdentity = [exfee getMyInvitation].identity;
     
     EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];

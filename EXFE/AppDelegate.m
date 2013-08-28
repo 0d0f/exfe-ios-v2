@@ -446,7 +446,7 @@
                                             }];
                 
                 // Load identities to merge from another user
-//                [server loadUserBy:[user_id integerValue]
+//                [server loadUserBy:[user_id unsignedIntegerValue]
 //                             withToken:token
 //                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
 //                                   NSDictionary *body = responseObject;
@@ -627,7 +627,7 @@
     [self.navigationController presentModalViewController:viewController animated:NO];
 }
 
-- (void)switchContextByUserId:(NSInteger)user_id withAbandon:(BOOL)flag
+- (void)switchContextByUserId:(NSUInteger)user_id withAbandon:(BOOL)flag
 {
     if (self.model == nil || self.model.userId != user_id) {
         [self.model stop];

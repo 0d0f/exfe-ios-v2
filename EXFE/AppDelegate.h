@@ -38,7 +38,7 @@ WXApiDelegate
 @property (nonatomic, strong, readwrite) UINavigationController *navigationController;
 @property (nonatomic, strong, readwrite) CrossesViewController *crossesViewController;
 
-- (void)switchContextByUserId:(NSInteger)user_id withAbandon:(BOOL)flag;
+- (void)switchContextByUserId:(NSUInteger)user_id withAbandon:(BOOL)flag;
 -(void)signinDidFinish;
 -(void)signoutDidFinish;
 -(void)showLanding:(UIViewController*)parent;

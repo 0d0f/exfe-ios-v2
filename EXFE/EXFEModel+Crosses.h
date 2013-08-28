@@ -12,6 +12,7 @@
 @class Invitation;
 @class Exfee;
 @class IdentityId;
+
 @interface EXFEModel (Crosses)
 {}
 #pragma mark - From local storage
@@ -26,9 +27,9 @@
 - (void)editCross:(Cross *)cross;
 
 #pragma mark Exfee
-- (void)editExfee:(Exfee *)exfee byIdentity:(Identity *)identity;
-- (void)changeRsvp:(NSString *)rsvp on:(Invitation *)invitation from:(Exfee *)exfee byIdentity:(Identity *)identity;
-- (void)removeInvitation:(Invitation *)invitation fromExfee:(Exfee *)exfee byIdentity:(Identity *)identity;
+- (void)editExfee:(Exfee *)exfee;
+- (void)changeRsvp:(NSString *)rsvp on:(Invitation *)invitation from:(Exfee *)exfee;
+- (void)removeInvitation:(Invitation *)invitation fromExfee:(Exfee *)exfee;
 - (void)removeSelfInvitation:(Invitation *)invitation fromExfee:(Exfee *)exfee;
 - (void)removeNotificationIdentity:(IdentityId *)identityId from:(Invitation *)invitation onExfee:(Exfee *)exfee;
 @end

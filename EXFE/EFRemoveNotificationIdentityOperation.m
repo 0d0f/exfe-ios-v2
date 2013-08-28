@@ -46,8 +46,21 @@ NSString *kEFNotificationNameRemoveNotificationIdentityFailure = @"notification.
                                                  
                                                  [self finish];
                                              }
+                                          apiFailure:^(Meta *meta) {
+                                              self.state = kEFNetworkOperationStateFailure;
+                                              NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:@{@"meta": meta}];
+                                              [userInfo setValue:@"exfee" forKey:@"type"];
+                                              [userInfo setValue:self.exfee.exfee_id forKey:@"id"];
+                                              self.failureUserInfo = userInfo;
+                                              
+                                              [self finish];
+                                          }
                                              failure:^(NSError *error) {
                                                  self.state = kEFNetworkOperationStateFailure;
+                                                 NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
+                                                 [userInfo setValue:@"exfee" forKey:@"type"];
+                                                 [userInfo setValue:self.exfee.exfee_id forKey:@"id"];
+                                                 self.failureUserInfo = userInfo;
                                                  self.error = error;
                                                  
                                                  [self finish];

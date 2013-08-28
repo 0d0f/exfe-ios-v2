@@ -8,6 +8,8 @@
 
 #import "EFLoadConversationOperation.h"
 
+#import "EFEntity.h"
+
 NSString *kEFNotificationNameLoadConversationSuccess = @"notificaiton.loadConversation.success";
 NSString *kEFNotificationNameLoadConversationFailure = @"notificaiton.loadConversation.failure";
 
@@ -36,12 +38,18 @@ NSString *kEFNotificationNameLoadConversationFailure = @"notificaiton.loadConver
                                               success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
                                                   self.state = kEFNetworkOperationStateSuccess;
                                                   NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];
+                                                  [userInfo setValue:@"exfee" forKey:@"type"];
+                                                  [userInfo setValue:self.exfee.exfee_id forKey:@"id"];
                                                   self.successUserInfo = userInfo;
                                                   
                                                   [self finish];
                                               }
                                               failure:^(RKObjectRequestOperation *operation, NSError *error){
                                                   self.state = kEFNetworkOperationStateFailure;
+                                                  NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
+                                                  [userInfo setValue:@"exfee" forKey:@"type"];
+                                                  [userInfo setValue:self.exfee.exfee_id forKey:@"id"];
+                                                  self.failureUserInfo = userInfo;
                                                   self.error = error;
                                                   
                                                   [self finish];

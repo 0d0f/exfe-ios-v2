@@ -622,7 +622,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
 #pragma mark - Logic Methods
 - (void)loadUserAndDismiss:(NSInteger)user_id withToken:(NSString*)token success:(void (^)(void))success
 {
-    NSAssert(user_id == [self.user.user_id integerValue], @"Should be same user");
+    NSAssert(user_id == [self.user.user_id unsignedIntegerValue], @"Should be same user");
     
     self.model.userToken = token;
     [self.model saveUserData];
@@ -781,7 +781,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                             [self dismissSelfWithNext];
                         };
                         
-                        if ([u integerValue] == [self.user.user_id integerValue]) {
+                        if ([u integerValue] == [self.user.user_id unsignedIntegerValue]) {
                             [self loadUserAndDismiss:[u integerValue] withToken:t success:success];
                         } else {
                             // Merge user?
@@ -1076,9 +1076,9 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
     if (kProviderTypeAuthorization == [Identity getProviderTypeByCode:provider]) {
         
         id su = ^(NSNumber *user_id, NSString *token) {
-            if ([user_id integerValue] == self.model.userId) {
+            if ([user_id unsignedIntegerValue] == self.model.userId) {
                 // nextStep
-                [self loadUserAndDismiss:[user_id integerValue] withToken:token success:success];
+                [self loadUserAndDismiss:[user_id unsignedIntegerValue] withToken:token success:success];
                 
             } else {
                 // merge
@@ -1228,7 +1228,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                                                                            // clean some timestamp
                                                                                            
                                                                                            // do following things
-                                                                                           [self loadUserAndDismiss:[user_id integerValue] withToken:newToken success:success];
+                                                                                           [self loadUserAndDismiss:[user_id unsignedIntegerValue] withToken:newToken success:success];
                                                                                        }  break;
                                                                                        case 4:
                                                                                            

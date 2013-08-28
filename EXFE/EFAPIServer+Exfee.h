@@ -8,25 +8,27 @@
 
 #import "EFAPIServer.h"
 
-@class Invitation, Exfee, Identity;
+@class Invitation, Exfee, Identity, Meta;
 @interface EFAPIServer (Exfee)
 
 - (void)submitRsvp:(NSString *)status
                 on:(Invitation *)invitation
         myIdentity:(Identity *)my_identity
            onExfee:(Exfee *)exfee
-           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+           success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))successHandler
+           failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failureHandler;
 
 - (void)removeNotificationIdentity:(IdentityId *)identityId
                               from:(Invitation *)invitation
                            onExfee:(Exfee *)exfee
                            success:(void (^)(Exfee *editExfee))successHandler
+                        apiFailure:(void (^)(Meta *meta))apiFailureHandler
                            failure:(void (^)(NSError *error))failureHandler;
 
 - (void)editExfee:(Exfee *)exfee
        byIdentity:(Identity *)identity
           success:(void (^)(Exfee *editedExfee))successHandler
+       apiFailure:(void (^)(Meta *meta))apiFailureHandler
           failure:(void (^)(NSError *error))failureHandler;
 
 @end

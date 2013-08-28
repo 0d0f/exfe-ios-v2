@@ -292,7 +292,7 @@
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Post"];
     NSPredicate *predicate = [NSPredicate
                               predicateWithFormat:@"(postable_type = %@) AND (postable_id = %u)",
-                              @"exfee", [self.exfee.exfee_id integerValue]];
+                              @"exfee", [self.exfee.exfee_id unsignedIntegerValue]];
     
     [request setPredicate:predicate];
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:YES];

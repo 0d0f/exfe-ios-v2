@@ -43,6 +43,9 @@ NSString *kEFNotificationNameLoadCrossListFailure = @"notification.loadCrossList
                                    }
                                    failure:^(RKObjectRequestOperation *operation, NSError *error) {
                                        self.state = kEFNetworkOperationStateFailure;
+                                       NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
+                                       userInfo[@"type"] = @"cross";
+                                       self.failureUserInfo = userInfo;
                                        self.error = error;
                                        
                                        [self finish];

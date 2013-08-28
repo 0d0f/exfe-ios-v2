@@ -82,6 +82,5 @@ EFTabBarDataSource
 @property (nonatomic, assign) CGRect initFrame;
 
 - (void)showPopup:(NSInteger)ctrlId;
-- (void)removeCrossAndExit;
 
 @end

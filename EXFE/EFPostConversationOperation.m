@@ -47,6 +47,10 @@ NSString *kEFNotificationNamePostConversationFailure = @"notification.postConver
                                    }
                                    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                        self.state = kEFNetworkOperationStateFailure;
+                                       NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
+                                       [userInfo setValue:@"exfee" forKey:@"type"];
+                                       [userInfo setValue:self.exfee.exfee_id forKey:@"id"];
+                                       self.failureUserInfo = userInfo;
                                        self.error = error;
                                        
                                        [self finish];

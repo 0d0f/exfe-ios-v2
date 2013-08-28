@@ -268,8 +268,8 @@ typedef enum {
             [self.model removeSelfInvitation:_selected_invitation fromExfee:self.exfee];
             
         } else {
-            Identity *myidentity = [self.exfee getMyInvitation].identity;
-            [self.model removeInvitation:_selected_invitation fromExfee:self.exfee byIdentity:myidentity];
+            
+            [self.model removeInvitation:_selected_invitation fromExfee:self.exfee];
         }
 
     }];
@@ -300,7 +300,7 @@ typedef enum {
 //                                                 
 //                                                 CrossGroupViewController *crossGroupViewController = viewControllers[0];
 //                                                 
-//                                                 [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id integerValue] updatedTime:nil];
+//                                                 [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id unsignedIntegerValue] updatedTime:nil];
 //                                             } failure:^(NSError *error) {
 //                                                 NSLog(@"error %@", error);
 //                                             }];
@@ -1051,9 +1051,7 @@ typedef enum {
                 
                 [exfee addInvitations:invitations];
                 
-                Identity *myidentity = [self.exfee getMyInvitation].identity;
-                
-                [self.model editExfee:exfee byIdentity:myidentity];
+                [self.model editExfee:exfee];
                 
 //                [self.model.apiServer editExfee:exfee
 //                                             byIdentity:myidentity
@@ -1243,9 +1241,7 @@ typedef enum {
 #pragma mark API request for modification.
 - (void)sendrsvp:(NSString*)status invitation:(Invitation*)_invitation {
     
-    Identity *myidentity = [self.exfee getMyInvitation].identity;
-    
-    [self.model changeRsvp:status on:_invitation from:self.exfee byIdentity:myidentity];
+    [self.model changeRsvp:status on:_invitation from:self.exfee];
 //    [self.model.apiServer submitRsvp:status
 //                                          on:_invitation
 //                                  myIdentity:[myidentity.identity_id intValue]
@@ -1267,7 +1263,7 @@ typedef enum {
 //                                                     
 //                                                     CrossGroupViewController *crossGroupViewController = viewControllers[0];
 //                                                     
-//                                                     [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id integerValue] updatedTime:nil];
+//                                                     [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id unsignedIntegerValue] updatedTime:nil];
 //                                                     
 //                                                     [exfeeContainer reloadData];
 //                                                 }
@@ -1331,7 +1327,7 @@ typedef enum {
     NSNumber *inv_id = _selected_invitation.invitation_id;
     for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {
         Invitation* inv = [self.sortedInvitations objectAtIndex:i];
-        if ([inv.invitation_id integerValue] == [inv_id integerValue]) {
+        if ([inv.invitation_id unsignedIntegerValue] == [inv_id unsignedIntegerValue]) {
             flag = YES;
             NSIndexPath * indexPath = [NSIndexPath indexPathForRow:i inSection:1];
             PSTCollectionViewCell* cell = [exfeeContainer cellForItemAtIndexPath:indexPath];

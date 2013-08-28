@@ -153,7 +153,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     
     for (NSArray *invitationList in invitations) {
         Invitation *invitation = invitationList[0];
-        NSString *userIdString = [NSString stringWithFormat:@"%d", [invitation.identity.connected_user_id integerValue]];
+        NSString *userIdString = [NSString stringWithFormat:@"%d", [invitation.identity.connected_user_id unsignedIntegerValue]];
         if (![self.peopleMap valueForKey:userIdString]) {
             hasChanged = YES;
             EFMapPerson *person = [[EFMapPerson alloc] initWithIdentity:invitation.identity];
@@ -601,7 +601,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSString *userToken = delegate.model.userToken;
     
-    NSInteger crossId = [self.cross.cross_id integerValue];
+    NSInteger crossId = [self.cross.cross_id unsignedIntegerValue];
     NSURL *streamingURL = [NSURL URLWithString:[NSString stringWithFormat:@"/v3/routex/crosses/%d?_method=WATCH&coordinate=mars&token=%@", crossId, userToken] relativeToURL:baseURL];
     
 #ifdef DEBUG

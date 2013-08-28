@@ -11,8 +11,10 @@
 @class Cross;
 @interface EFCrossTabBarViewController : EFTabBarViewController
 
-@property (nonatomic, strong) Cross * cross;
+@property (nonatomic, weak)   EXFEModel *model;
+@property (nonatomic, strong) Cross     *cross;
 
 - (void)refreshUI;
+- (void)fillHead:(Cross *)cross;
 
 @end

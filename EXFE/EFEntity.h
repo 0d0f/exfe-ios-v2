@@ -34,5 +34,5 @@
 #import "User+EXFE.h"
 #import "LocalContact+EXFE.h"
 #import "IdentityId+EXFE.h"
-
+#import "NSManagedObject+EXFE.h"
 #endif

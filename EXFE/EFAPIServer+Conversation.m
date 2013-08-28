@@ -18,7 +18,7 @@
                         updatedtime:(NSDate*)updatedtime
                             success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                             failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
-    NSString *endpoint = [NSString stringWithFormat:@"conversation/%u", [exfee.exfee_id integerValue]];
+    NSString *endpoint = [NSString stringWithFormat:@"conversation/%u", [exfee.exfee_id unsignedIntegerValue]];
     
     NSDictionary *param = nil;
     if (updatedtime != nil) {
@@ -66,7 +66,7 @@
                                @"type": @"post",
                                @"via": @"iOS"};
     
-    NSString *endpoint = [NSString stringWithFormat:@"conversation/%u/add?token=%@", [exfee.exfee_id integerValue], self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"conversation/%u/add?token=%@", [exfee.exfee_id unsignedIntegerValue], self.model.userToken];
     RKObjectManager *manager=[RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     
