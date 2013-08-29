@@ -13,6 +13,7 @@
 #import <Twitter/Twitter.h>
 #import <Accounts/Accounts.h>
 #import <FacebookSDK/FacebookSDK.h>
+#import "CCTemplate.h"
 #import "Util.h"
 #import "EFEntity.h"
 #import "EFKit.h"
@@ -274,8 +275,8 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
         forgotDetail.numberOfLines = 0;
         forgotDetail.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
         forgotDetail.textColor = [UIColor COLOR_BLACK_19];
-        NSString *full = NSLocalizedString(@"To reset EXFE password, please authenticate with your identity.", nil);
-        NSString *part = NSLocalizedString(@"EXFE", nil);
+        NSString *full = [NSLocalizedString(@"To reset {{PRODUCT_APP_NAME}} password, please authenticate with your identity.", nil) templateFromDict:[Util keywordDict]];
+        NSString *part = [NSLocalizedString(@"{{PRODUCT_APP_NAME}}", nil) templateFromDict:[Util keywordDict]];
         [forgotDetail setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
             NSRange titleRange = [[mutableAttributedString string] rangeOfString:part options:NSCaseInsensitiveSearch];
             [mutableAttributedString addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[[UIColor COLOR_BLUE_EXFE] CGColor] range:titleRange];
@@ -336,9 +337,9 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
         labelHead.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
         labelHead.textColor = [UIColor COLOR_BLACK_19];
         labelHead.numberOfLines = 0;
-        NSString *text = NSLocalizedString(@"You’re about to change import information of your account. For security concerns, please authenticate first and set your EXFE password.", nil);
+        NSString *text = [NSLocalizedString(@"You’re about to change import information of your account. For security concerns, please authenticate first and set your {{PRODUCT_APP_NAME}} password.", nil) templateFromDict:[Util keywordDict]];
         [labelHead setText:text afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
-            NSString *highlight = NSLocalizedString(@"EXFE", nil);
+            NSString *highlight = [NSLocalizedString(@"{{PRODUCT_APP_NAME}}", nil) templateFromDict:[Util keywordDict]];
             NSRange range = [[mutableAttributedString string] rangeOfString:highlight options:NSCaseInsensitiveSearch];
             
             [mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:range];
@@ -973,7 +974,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                  customizationBlock:^(WCAlertView *alertView) {
                      alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
                      UITextField *textField = [alertView textFieldAtIndex:0];
-                     textField.placeholder = NSLocalizedString(@"Set EXFE password", nil);
+                     textField.placeholder = [NSLocalizedString(@"Set {{PRODUCT_APP_NAME}} password", nil) templateFromDict:[Util keywordDict]];
                      textField.textAlignment = UITextAlignmentCenter;
                      //                     textField.delegate = self;
                      if (msg) {
@@ -1147,11 +1148,11 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                                              if (c == 401) {
                                                                  if ([@"no_signin" isEqualToString:errorType]) {
                                                                      // error: "Not sign in"
-                                                                     [self showInlineError:NSLocalizedString(@"Authentication failed.", nil) with:NSLocalizedString(@"Please check and allow EXFE to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.", nil)];
+                                                                     [self showInlineError:NSLocalizedString(@"Authentication failed.", nil) with:[NSLocalizedString(@"Please check and allow {{PRODUCT_APP_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.", nil) templateFromDict:[Util keywordDict]]];
                                                                  } else if ([@"token_staled" isEqualToString:errorType]) {
                                                                      // error: "Token expired"
                                                                      // retry verication/authentication again
-                                                                     [self showInlineError:NSLocalizedString(@"Authentication failed.", nil) with:NSLocalizedString(@"Please check and allow EXFE to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.", nil)];
+                                                                     [self showInlineError:NSLocalizedString(@"Authentication failed.", nil) with:[NSLocalizedString(@"Please check and allow {{PRODUCT_APP_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.", nil) templateFromDict:[Util keywordDict]]];
                                                                  }
                                                              } else if (c == 429){
                                                                  

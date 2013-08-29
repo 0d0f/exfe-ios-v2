@@ -8,6 +8,7 @@
 
 #import "ProfileViewController.h"
 #import <BlocksKit/BlocksKit.h>
+#import "CCTemplate.h"
 
 #import "EFEntity.h"
 #import "EFKit.h"
@@ -788,7 +789,7 @@
                  customizationBlock:^(WCAlertView *alertView) {
                      alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
                      UITextField *textField = [alertView textFieldAtIndex:0];
-                     textField.placeholder = NSLocalizedString(@"Set EXFE password", nil);
+                     textField.placeholder = [NSLocalizedString(@"Set {{PRODUCT_APP_NAME}} password", nil) templateFromDict:[Util keywordDict]];
                      textField.textAlignment = UITextAlignmentCenter;
                      //                     textField.delegate = self;
                      if (msg) {

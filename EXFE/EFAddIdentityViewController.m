@@ -15,6 +15,7 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "EFAPIServer.h"
 #import "TWAPIManager.h"
+#import "CCTemplate.h"
 #import "EXGradientToolbarView.h"
 #import "CSLinearLayoutView.h"
 #import "EFIdentityTextField.h"
@@ -901,7 +902,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 }
             } else {
                 
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:NSLocalizedString(@"Please allow EXFE to use your Twitter account. Go to the Settings app, select Twitter to set up.", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:[NSLocalizedString(@"Please allow {{PRODUCT_APP_NAME}} to use your Twitter account. Go to the Settings app, select Twitter to set up.", nil)  templateFromDict:[Util keywordDict]] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                 [alert show];
                 
             }

@@ -9,6 +9,7 @@
 #import "EFChangePasswordViewController.h"
 #import <BlocksKit/BlocksKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import "CCTemplate.h"
 
 #import "EFEntity.h"
 #import "EFModel.h"
@@ -238,8 +239,8 @@
     forgotDetail.numberOfLines = 0;
     forgotDetail.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
     forgotDetail.textColor = [UIColor COLOR_BLACK_19];
-    NSString *full = NSLocalizedString(@"To reset EXFE password, please authenticate with your identity.", nil);
-    NSString *part = NSLocalizedString(@"EXFE", nil);
+    NSString *full = [NSLocalizedString(@"To reset {{PRODUCT_APP_NAME}} password, please authenticate with your identity.", nil) templateFromDict:[Util keywordDict]];
+    NSString *part = [NSLocalizedString(@"{{PRODUCT_APP_NAME}}", nil) templateFromDict:[Util keywordDict]];
     [forgotDetail setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
         NSRange titleRange = [[mutableAttributedString string] rangeOfString:part options:NSCaseInsensitiveSearch];
         [mutableAttributedString addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[[UIColor COLOR_BLUE_EXFE] CGColor] range:titleRange];
@@ -949,7 +950,7 @@
                  customizationBlock:^(WCAlertView *alertView) {
                      alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
                      UITextField *textField = [alertView textFieldAtIndex:0];
-                     textField.placeholder = NSLocalizedString(@"Set EXFE password", nil);
+                     textField.placeholder = [NSLocalizedString(@"Set {{PRODUCT_APP_NAME}} password", nil) templateFromDict:[Util keywordDict]];
                      textField.textAlignment = UITextAlignmentCenter;
 //                     textField.delegate = self;
                      if (msg) {

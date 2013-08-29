@@ -14,6 +14,7 @@
 #import <Twitter/Twitter.h>
 #import <Accounts/Accounts.h>
 #import <FacebookSDK/FacebookSDK.h>
+#import "CCTemplate.h"
 
 #import "Util.h"
 #import "EFEntity.h"
@@ -558,7 +559,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _line2.hidden = NO;
             _textFieldFrame.frame = CGRectMake(15, 20, 290, 150);
             _inputIdentity.returnKeyType = UIReturnKeyNext;
-            _inputPassword.placeholder = NSLocalizedString(@"Set EXFE password", nil);
+            _inputPassword.placeholder = [NSLocalizedString(@"Set {{PRODUCT_APP_NAME}} password", nil) templateFromDict:[Util keywordDict]];
             _inputPassword.returnKeyType = UIReturnKeyNext;
             _inputPassword.btnForgot.hidden = YES;
             [_inputPassword becomeFirstResponder];
@@ -1403,7 +1404,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 }
             } else {
                 
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:NSLocalizedString(@"Please allow EXFE to use your Twitter account. Go to the Settings app, select Twitter to set up.", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:[NSLocalizedString(@"Please allow {{PRODUCT_APP_NAME}} to use your Twitter account. Go to the Settings app, select Twitter to set up.", nil) templateFromDict:[Util keywordDict]] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                 [alert show];
                 
             }
