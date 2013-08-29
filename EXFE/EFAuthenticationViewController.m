@@ -1206,10 +1206,10 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                NSString *name = [responseObject valueForKeyPath:@"response.user.name"];
                                NSArray *ids = [responseObject valueForKeyPath:@"response.user.identities.@distinctUnionOfObjects.id"];
                                
-                               [UIAlertView showAlertViewWithTitle:@"Merge accounts"
-                                                           message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?", name]
-                                                 cancelButtonTitle:@"Cancel"
-                                                 otherButtonTitles:@[@"Merge"]
+                               [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Merge accounts", nil)
+                                                           message:[NSString stringWithFormat:NSLocalizedString(@"Merge account %@ into your current signed-in account?", nil), name]
+                                                 cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                                 otherButtonTitles:@[NSLocalizedString(@"Merge", nil)]
                                                            handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
                                                                if (buttonIndex == alertView.firstOtherButtonIndex ) {
                                                                    

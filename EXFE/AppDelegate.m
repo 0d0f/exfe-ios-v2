@@ -424,10 +424,10 @@
             } else {
                 // merge identities
                 
-                [UIAlertView showAlertViewWithTitle:@"Merge accounts"
-                                            message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?", username]
-                                  cancelButtonTitle:@"Cancel"
-                                  otherButtonTitles:@[@"Merge"]
+                [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Merge accounts", nil)
+                                            message:[NSString stringWithFormat:NSLocalizedString(@"Merge account %@ into your current signed-in account?", nil), username]
+                                  cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                  otherButtonTitles:@[NSLocalizedString(@"Merge", nil)]
                                             handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
                                                 if (buttonIndex == alertView.firstOtherButtonIndex ) {
                                                     

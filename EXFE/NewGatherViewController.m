@@ -541,7 +541,7 @@
     EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
     [bigspin startAnimating];
     hud.customView = bigspin;
-    hud.labelText = @"Loading";
+    hud.labelText = NSLocalizedString(@"Loading", nil);
   
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
@@ -1087,7 +1087,7 @@
                 [pickertoolbar setHidden:NO];
             }
         } else {
-            [self showMenu:invitation items:[NSArray arrayWithObjects:@"Delete", nil]];
+            [self showMenu:invitation items:[NSArray arrayWithObjects:NSLocalizedString(@"Delete", nil), nil]];
         }
     }
 }

@@ -172,7 +172,7 @@
         EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
         [bigspin startAnimating];
         hud.customView = bigspin;
-        hud.labelText = @"Loading";
+        hud.labelText = NSLocalizedString(@"Loading", nil);
         
         isProgressHubVisible = YES;
     }
@@ -1046,8 +1046,8 @@
                                     }
                                 }
                             }
-                          cancelButtonTitle:@"Done"
-                          otherButtonTitles:@"Cancel", nil];
+                          cancelButtonTitle:NSLocalizedString(@"Done", nil)
+                          otherButtonTitles:NSLocalizedString(@"Cancel", nil), nil];
             
         } else {
             contactObject.selected = YES;

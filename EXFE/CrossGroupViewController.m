@@ -755,7 +755,7 @@
             NSInteger ctrlId = popupCtrolId;
             [self hidePopupIfShown:kPopupTypeEditStatus];
             if (ctrlId != kPopupTypeEditStatus) {
-                [self showMenu:invitation items:[NSArray arrayWithObjects:@"I'm in", @"Unavailable", nil]];
+                [self showMenu:invitation items:[NSArray arrayWithObjects:NSLocalizedString(@"I'm in", nil), NSLocalizedString(@"Unavailable", nil), nil]];
             }
         } else {
             rsvpstatusview.hidden = NO;

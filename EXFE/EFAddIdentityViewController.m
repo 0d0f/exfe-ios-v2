@@ -654,7 +654,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                 }
                                 
                                 UIAlertView *alertView = [UIAlertView alertViewWithTitle:@"Verification" message:message];
-                                [alertView addButtonWithTitle:@"OK" handler:^{
+                                [alertView addButtonWithTitle:NSLocalizedString(@"OK", nil) handler:^{
                                     [self loadUserAndExit];
                                 }];
                                 [alertView show];
