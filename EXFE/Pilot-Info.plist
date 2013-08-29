@@ -63,13 +63,17 @@
 	<key>CFBundleVersion</key>
 	<string>49</string>
 	<key>EXFE-build</key>
-	<string>m2B38O</string>
+	<string>m2B38T</string>
 	<key>FacebookAppID</key>
 	<string>624471647582234</string>
 	<key>FacebookDisplayName</key>
 	<string>0D0F panda</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Raleway-Regular.ttf</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
@@ -85,10 +89,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Raleway-Regular.ttf</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
