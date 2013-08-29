@@ -359,42 +359,42 @@ static NSDictionary * _keywordDict = nil;
         int moth=round(f_m+0.2);
         if(f_m<0)
             moth=round(f_m-0.2);
-        NSString *m_str=@"months";
-        NSString *y_str=@"years";
+        NSString *m_str=NSLocalizedString(@"months", nil);
+        NSString *y_str=NSLocalizedString(@"years", nil);
         if(abs(moth)==1)
-            m_str=@"month";
+            m_str=NSLocalizedString(@"month", nil);
         if(abs(year)==1)
-            y_str=@"year";
+            y_str=NSLocalizedString(@"year", nil);
         
         if(abs(year)>0) {
             if(abs(moth)>0) {
                 if(moth>0)
-                    relativeTime=[NSString stringWithFormat:@"In %u %@ %u %@",abs(year),y_str,abs(moth),m_str];
+                    relativeTime=[NSString stringWithFormat:NSLocalizedString(@"In %u %@ %u %@", nil),abs(year),y_str,abs(moth),m_str];
                 else
-                    relativeTime=[NSString stringWithFormat:@"%u %@ %u %@ ago",abs(year),y_str,abs(moth),m_str];
+                    relativeTime=[NSString stringWithFormat:NSLocalizedString(@"%u %@ %u %@ ago", nil),abs(year),y_str,abs(moth),m_str];
             }
             else if(abs(moth)==0){
                 if(year>0)
-                    relativeTime=[NSString stringWithFormat:@"In %u %@",abs(year),y_str];
+                    relativeTime=[NSString stringWithFormat:NSLocalizedString(@"In %u %@", nil),abs(year),y_str];
                 else
-                    relativeTime=[NSString stringWithFormat:@"%u %@ ago",abs(year),y_str];
+                    relativeTime=[NSString stringWithFormat:NSLocalizedString(@"%u %@ ago", nil),abs(year),y_str];
             }
         }
         else if(abs(year)==0){
             if(day<=-3 && day>=-30)
-                relativeTime=[NSString stringWithFormat:@"%u days ago",abs(day)];
+                relativeTime=[NSString stringWithFormat:NSLocalizedString(@"%u days ago", nil),abs(day)];
             else if(day==-2)
-                relativeTime=[NSString stringWithFormat:@"Two days ago"];
+                relativeTime=[NSString stringWithFormat:NSLocalizedString(@"Two days ago", nil)];
             
             //                relativeTime=[NSString stringWithFormat:@"The day before yesterday"];
             else if(day==2){
                 //                relativeTime=[NSString stringWithFormat:@"The day after tomorrow"];
-                relativeTime=[NSString stringWithFormat:@"In two days"];
+                relativeTime=[NSString stringWithFormat:NSLocalizedString(@"In two days", nil)];
             }
             else if(day>30)
-                relativeTime=[NSString stringWithFormat:@"In %u %@",abs(moth),m_str];
+                relativeTime=[NSString stringWithFormat:NSLocalizedString(@"In %u %@", nil),abs(moth),m_str];
             else if(day<-30)
-                relativeTime=[NSString stringWithFormat:@"%u %@ ago",abs(moth),m_str];
+                relativeTime=[NSString stringWithFormat:NSLocalizedString(@"%u %@ ago", nil),abs(moth),m_str];
             else if(day>0 && day<=30)
             {
                 NSDateFormatter *weekdayformatter = [[NSDateFormatter alloc] init];
@@ -405,19 +405,19 @@ static NSDictionary * _keywordDict = nil;
                 if(beginingofweek_tobegin_at_day<=7)
                     relativeTime=[NSString stringWithFormat:@"%@",weekdaysymbol];
                 else if(beginingofweek_tobegin_at_day<=13)
-                    relativeTime=[NSString stringWithFormat:@"Next %@",weekdaysymbol];
+                    relativeTime=[NSString stringWithFormat:NSLocalizedString(@"Next %@", nil),weekdaysymbol];
                 else if(beginingofweek_tobegin_at_day>=14)
-                    relativeTime=[NSString stringWithFormat:@"In %u days",abs(day)];
+                    relativeTime=[NSString stringWithFormat:NSLocalizedString(@"In %u days", nil),abs(day)];
             }
         }
     }
     else{
         if(day==-1)
-            relativeTime=[NSString stringWithFormat:@"Yesterday"];
+            relativeTime=[NSString stringWithFormat:NSLocalizedString(@"Yesterday", nil)];
         else if(day==1)
-            relativeTime=[NSString stringWithFormat:@"Tomorrow"];
+            relativeTime=[NSString stringWithFormat:NSLocalizedString(@"Tomorrow", nil)];
         else if(day==0)
-            relativeTime=[NSString stringWithFormat:@"Today"];
+            relativeTime=[NSString stringWithFormat:NSLocalizedString(@"Today", nil)];
     }
     
     if(day==0)
@@ -439,34 +439,34 @@ static NSDictionary * _keywordDict = nil;
             int hour=round(f_h-0.2);//round 8 away from zero, round 7 towards zero
             
             if(minute>=-1439 && minute<=-720)
-                relativeTime=[NSString stringWithFormat:@"%u hours ago",abs(hour)];
+                relativeTime=[NSString stringWithFormat:NSLocalizedString(@"%u hours ago", nil),abs(hour)];
             else if(minute>=-719 && minute<=-60){
-                relativeTime=[NSString stringWithFormat:@"%u hours ago",abs(hour)];
+                relativeTime=[NSString stringWithFormat:NSLocalizedString(@"%u hours ago", nil),abs(hour)];
             }
             else if(minute>=-59 && minute<=-31){
                 if([type isEqualToString:@"cross"])
-                    relativeTime=[NSString stringWithFormat:@"Just now"];
+                    relativeTime=[NSString stringWithFormat:NSLocalizedString(@"Just now", nil)];
                 else
-                    relativeTime=[NSString stringWithFormat:@"%u minutes ago",abs(minute)];
+                    relativeTime=[NSString stringWithFormat:NSLocalizedString(@"%u minutes ago", nil),abs(minute)];
             }
             else if(minute>=-30 && minute<-1){
                 if([type isEqualToString:@"cross"])
-                    relativeTime=[NSString stringWithFormat:@"Now"];
+                    relativeTime=[NSString stringWithFormat:NSLocalizedString(@"Now", nil)];
                 else
-                    relativeTime=[NSString stringWithFormat:@"%u minutes ago",abs(minute)];
+                    relativeTime=[NSString stringWithFormat:NSLocalizedString(@"%u minutes ago", nil),abs(minute)];
             }
             else if(minute>=-1 && minute<=0){
                 if([type isEqualToString:@"cross"])
-                    relativeTime=[NSString stringWithFormat:@"Now"];
+                    relativeTime=[NSString stringWithFormat:NSLocalizedString(@"Now", nil)];
                 else
-                    relativeTime=[NSString stringWithFormat:@"Seconds ago"];
+                    relativeTime=[NSString stringWithFormat:NSLocalizedString(@"Seconds ago", nil)];
             }
             else if(minute>=1 && minute<=59)
-                relativeTime=[NSString stringWithFormat:@"In %u minutes",abs(minute)];
+                relativeTime=[NSString stringWithFormat:NSLocalizedString(@"In %u minutes", nil),abs(minute)];
             else if(minute>=60 && minute<=749){
                 float f_h=minute/60.0;
                 int hour=round(f_h+0.2);//round 8 away from zero, round 7 towards zero
-                relativeTime=[NSString stringWithFormat:@"In %u hours",abs(hour)];
+                relativeTime=[NSString stringWithFormat:NSLocalizedString(@"In %u hours", nil),abs(hour)];
             }
         }
         
@@ -526,9 +526,9 @@ static NSDictionary * _keywordDict = nil;
         errormsg = @"Authentication failed due to security concerns, please sign in again.";
         
 #ifdef WWW
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:nil otherButtonTitles:@"OK",nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil),nil];
 #else
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil),nil];
 #endif
         
         alertView.tag = 500;
@@ -549,7 +549,7 @@ static NSDictionary * _keywordDict = nil;
         errormsg = @"Failed to connect to server. Please retry or wait awhile.";
     }
     if (![errormsg isEqualToString:@""]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:errorTitle message:errormsg delegate:delegate cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:errorTitle message:errormsg delegate:delegate cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [alert show];
     }
 }
@@ -717,5 +717,7 @@ static NSDictionary * _keywordDict = nil;
     
     return Sqlite;
 }
+
+// NSLocalizedString(@"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", "Test for Pseudo chars")
 
 @end

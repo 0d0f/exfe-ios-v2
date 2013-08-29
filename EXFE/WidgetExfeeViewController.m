@@ -373,7 +373,7 @@ typedef enum {
                             NSString *strWithMates = [NSString stringWithFormat:@"Accepted with %i mates", [inv.mates intValue]];
                             invRsvpLabel.textColor = [UIColor COLOR_BLUE_EXFE];
                             [invRsvpLabel setText:strWithMates afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
-                                NSRange rang = [strWithMates rangeOfString:@"Accepted"];
+                                NSRange rang = [strWithMates rangeOfString:NSLocalizedString(@"Accepted", nil)];
                                 CTFontRef textfontref2 = CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 18.0, NULL);
                                 if (rang.location > 0) {
                                     NSRange pre = NSMakeRange(0, rang.location);

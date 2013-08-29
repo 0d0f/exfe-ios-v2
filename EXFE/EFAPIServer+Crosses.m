@@ -79,7 +79,7 @@
                 if (exfeeQuota) {
                     EFErrorMessage *errorMessage = [[EFErrorMessage alloc] initAlertMessageWithTitle:NSLocalizedString(@"Quota limit exceeded", nil)
                                                                                              message:[NSString stringWithFormat:NSLocalizedString(@"%d people limit on gathering this ·X·. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!", nil), [exfeeQuota intValue]]
-                                                                                         buttonTitle:@"OK"
+                                                                                         buttonTitle:NSLocalizedString(@"OK", nil)
                                                                                 buttonPressedHandler:nil];
                     
                     [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:errorMessage];

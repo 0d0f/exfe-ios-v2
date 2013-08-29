@@ -137,7 +137,7 @@
         EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
         [bigspin startAnimating];
         hud.customView=bigspin;
-        hud.labelText = @"Loading";
+        hud.labelText = NSLocalizedString(@"Loading", nil);
     }
 }
 
