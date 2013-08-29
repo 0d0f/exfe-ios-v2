@@ -122,8 +122,7 @@
 }
 
 - (void)_startUpdating {
-    // register to update location
-    [self.mapDataSource registerToUpdateLocation];
+//    [self.mapDataSource registerToUpdateLocation];
     [self.mapDataSource getPeopleBreadcrumbs];
     
     [self.mapDataSource openStreaming];
@@ -526,6 +525,8 @@
             
             [self.mapView selectAnnotation:annotation animated:YES];
             
+            __weak typeof(self) weakSelf = self;
+            
             CLLocation *location = [[CLLocation alloc] initWithLatitude:coordinate.latitude longitude:coordinate.longitude];
             CLGeocoder *geocoder = [[CLGeocoder alloc] init];
             [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *geomarks, NSError *error){
@@ -535,13 +536,18 @@
                         routeLocation.title = placemark.name;
                         routeLocation.subtitle = [placemark.addressDictionary valueForKey:@"FormattedAddressLines"][0];
                         
-                        [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+                        [weakSelf.mapDataSource updateRouteLocation:routeLocation inMapView:weakSelf.mapView];
                         
-                        if (self.mapView.selectedAnnotations) {
-                            id<MKAnnotation> selectedAnnoation = self.mapView.selectedAnnotations[0];
-                            if (selectedAnnoation == annotation) {
-                                [self.mapView deselectAnnotation:annotation animated:NO];
-                                [self.mapView selectAnnotation:annotation animated:NO];
+                        if (weakSelf.currentCalloutAnnotation) {
+                            EFCalloutAnnotationView *calloutView = (EFCalloutAnnotationView *)[weakSelf.mapView viewForAnnotation:weakSelf.currentCalloutAnnotation];
+                            if (calloutView && calloutView.parentAnnotationView == view) {
+                                if (calloutView.isEditing) {
+                                    calloutView.titleTextField.text = routeLocation.title;
+                                    calloutView.subtitleTextView.text = routeLocation.subtitle;
+                                } else {
+                                    [weakSelf.mapView deselectAnnotation:annotation animated:NO];
+                                    [weakSelf.mapView selectAnnotation:annotation animated:NO];
+                                }
                             }
                         }
                     } else {

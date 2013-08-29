@@ -606,7 +606,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     NSString *userToken = delegate.model.userToken;
     
     NSInteger crossId = [self.cross.cross_id unsignedIntegerValue];
-    NSURL *streamingURL = [NSURL URLWithString:[NSString stringWithFormat:@"/v3/routex/crosses/%d?_method=WATCH&coordinate=mars&token=%@", crossId, userToken] relativeToURL:baseURL];
+    NSURL *streamingURL = [NSURL URLWithString:[NSString stringWithFormat:@"/v3/routex/crosses/%d?_method=WATCH&coordinate=mars&token=%@&force_window_open", crossId, userToken] relativeToURL:baseURL];
     
 #ifdef DEBUG
     NSLog(@"STREAMING: %@", streamingURL.absoluteString);
