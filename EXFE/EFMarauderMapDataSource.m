@@ -174,7 +174,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     NSInteger count = self.locationIdCharactors.count;
     
     while (YES) {
-        locationId = [NSString stringWithFormat:@"%@%@%@%@.location",
+        locationId = [NSString stringWithFormat:@"location.%@%@%@%@",
                       self.locationIdCharactors[rand() % count],
                       self.locationIdCharactors[rand() % count],
                       self.locationIdCharactors[rand() % count],
@@ -196,9 +196,9 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
 }
 
 - (NSString *)_userIdFromDirtyUserId:(NSString *)dirtyUserId {
-    NSRange exfeRange = [dirtyUserId rangeOfString:@".breadcrumbs"];
+    NSRange exfeRange = [dirtyUserId rangeOfString:@"breadcrumbs."];
     NSAssert(exfeRange.location != NSNotFound, @"there MUST be a .breadcrumbs");
-    NSString *userIdString = [dirtyUserId substringToIndex:exfeRange.location];
+    NSString *userIdString = [dirtyUserId substringFromIndex:exfeRange.location + exfeRange.length];
     
     return userIdString;
 }
@@ -799,7 +799,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
                 if ([type isEqualToString:@"command"]) {
                     self.hasStreamInited = YES;
                 }
-            } else if ([action isEqualToString:@"save"]) {
+            } else if ([action isEqualToString:@"save_to_history"]) {
                 if ([type isEqualToString:@"route"]) {
                     if ([tags[0] isEqualToString:@"breadcrumbs"]) {
                         EFRoutePath *path = [[EFRoutePath alloc] initWithDictionary:jsonDictionary];

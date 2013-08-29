@@ -28,11 +28,17 @@ CLLocationManagerDelegate
 >
 
 @property (nonatomic, readonly) EFUserLocation  *userLocation;
-@property (nonatomic, readonly) CLHeading   *userHeading;       // KVO
+@property (nonatomic, readonly) CLHeading       *userHeading;       // KVO
+@property (nonatomic, readonly) BOOL            isUpdating;
 
 + (instancetype)defaultManager;
 + (BOOL)locationServicesEnabled;
 + (BOOL)headingServicesEnabled;
+
+/**
+ * Location Notification
+ */
+- (void)handleNotificaiton:(UILocalNotification *)localNotification;
 
 /**
  * Check

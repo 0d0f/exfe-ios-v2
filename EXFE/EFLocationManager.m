@@ -34,6 +34,7 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 
 @property (nonatomic, strong) EFUserLocation    *userLocation;            // rewrite property
 @property (nonatomic, strong) CLHeading         *userHeading;             // rewrite property
+@property (nonatomic, assign) BOOL              isUpdating;               // rewrite property
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSTimer           *postTimer;
@@ -204,6 +205,31 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
     return self;
 }
 
+#pragma mark - Local Notification Handler
+
+- (void)handleNotificaiton:(UILocalNotification *)localNotification {
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"“活点地图”后台", nil)
+                                                        message:NSLocalizedString(@"无需保持应用开启，也能在您已开启的地图中展示一段时间内的位置。", nil)
+                                                       delegate:self
+                                              cancelButtonTitle:NSLocalizedString(@"关闭此功能", nil)
+                                              otherButtonTitles:NSLocalizedString(@"确定", nil), nil];
+    [alertView show];
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if (buttonIndex == alertView.firstOtherButtonIndex) {
+        [userDefaults setValue:[NSNumber numberWithBool:YES] forKey:EFKeyBackgroundUpdatingLocationEnabled];
+    } else {
+        [userDefaults setValue:[NSNumber numberWithBool:NO] forKey:EFKeyBackgroundUpdatingLocationEnabled];
+    }
+    
+    [userDefaults synchronize];
+}
+
 #pragma mark - Notification Handler
 
 - (void)handleNotification:(NSNotification *)notif {
@@ -211,11 +237,37 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
     
     if ([name isEqualToString:UIApplicationDidEnterBackgroundNotification]) {
         self.isInBackground = YES;
+        if (!self.isUpdating) {
+            return;
+        }
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSNumber *backgroundUpdatingEnabledNumber = [userDefaults valueForKey:EFKeyBackgroundUpdatingLocationEnabled];
+        
+        if (backgroundUpdatingEnabledNumber) {
+            BOOL backgroundUpdatingEnabled  = [backgroundUpdatingEnabledNumber boolValue];
+            
+            if (!backgroundUpdatingEnabled) {
+                [self stopUpdatingLocation];
+                [self stopUpdatingHeading];
+            }
+        } else {
+            [userDefaults setValue:[NSNumber numberWithBool:YES] forKey:EFKeyBackgroundUpdatingLocationEnabled];
+            [userDefaults synchronize];
+            
+            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+            localNotification.alertBody = NSLocalizedString(@"“活点地图”会显示您20分钟之内的方位，放心只有得到您同意的朋友们才能看到。", nil);
+            localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:2.33f];
+            localNotification.userInfo = @{@"key": @"backgroudLocationUpdate"};
+            [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+        }
         
         self.enterBackgroundTimestamp = [NSDate date];
         [self _invalideTimer];
     } else if ([name isEqualToString:UIApplicationWillEnterForegroundNotification]) {
         self.isInBackground = NO;
+        
+        [[UIApplication sharedApplication] cancelAllLocalNotifications];
         
         if ([CLLocationManager locationServicesEnabled] && ![self isFirstTimeToPostUserLocation]) {
             [self startUpdatingLocation];
@@ -263,6 +315,8 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 #pragma mark - Update Location
 
 - (void)startUpdatingLocation {
+    self.isUpdating = YES;
+    
     [[NSUserDefaults standardUserDefaults] setValue:@"YES" forKey:kHasPostUserLocationKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -273,6 +327,8 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 - (void)stopUpdatingLocation {
     [self _invalideTimer];
     [self.locationManager stopUpdatingLocation];
+    
+    self.isUpdating = NO;
 }
 
 #pragma mark - User Heading

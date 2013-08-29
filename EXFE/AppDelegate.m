@@ -31,6 +31,13 @@
     [WXApi registerApp:kWeixinAppID];
 }
 
+- (void)handleLocationNotificaiton:(UILocalNotification *)localNotificaiton {
+    NSString *key = [localNotificaiton.userInfo valueForKey:@"key"];
+    if ([key isEqualToString:@"backgroudLocationUpdate"]) {
+        [[EFLocationManager defaultManager] handleNotificaiton:localNotificaiton];
+    }
+}
+
 #pragma mark UIApplicationDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -121,6 +128,7 @@
     if (userinfo) {
         [self receivePushData:userinfo isOnForeground:NO];
     }
+
     
     // Version info
 #ifdef DEBUG
@@ -251,6 +259,12 @@
  */
 - (void)onResp:(BaseResp*)resp {
     
+}
+
+#pragma mark - Loation Notification
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    [self handleLocationNotificaiton:notification];
 }
 
 #pragma mark - Push Notification
