@@ -215,6 +215,7 @@
         [self addSubview:self.letterPickerView];
     }
     
+    self.letterPickerView.label.text = self.markLetter;
     self.letterPickerView.hidden = NO;
     
     [UIView setAnimationsEnabled:animated];
@@ -234,15 +235,9 @@
                              self.letterPickerView.alpha = 0.0f;
                          }
                          completion:^(BOOL finished){
-                             if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
-                                 [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
-                             }
                              self.letterPickerView.hidden = YES;
                          }];
     } else {
-        if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
-            [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
-        }
         self.letterPickerView.alpha = 0.0f;
         self.letterPickerView.hidden = YES;
     }
@@ -295,6 +290,8 @@
         self.markLetter = @" ";
     } else {
         self.markLetter = routeLocation.markTitle;
+        self.selectedIndex = [self.charactorArray indexOfObject:self.markLetter];
+        
         if (kEFRouteLocationColorRed == routeLocation.markColor) {
             [self _selectButton:self.redButton];
         } else {
@@ -337,35 +334,46 @@
 - (void)handlePan:(UIPanGestureRecognizer *)pan {
     static NSInteger s_count = 0;
     static CGPoint preTranslation = (CGPoint){0.0f, 0.0f};
-    CGPoint translation = [pan translationInView:self.label];
-    NSInteger count = (NSInteger)(translation.x - preTranslation.x) / 5.0f;
-    
-    if (s_count != count && count) {
-        s_count = count;
-        preTranslation = translation;
-        self.selectedIndex += (count > 0) ? 1 : -1;
-        if (self.selectedIndex < 0) {
-            self.selectedIndex = 0;
-        } else if (self.selectedIndex >= self.charactorArray.count) {
-            self.selectedIndex = self.charactorArray.count - 1;
-        }
-        
-        self.markLetter = [self.charactorArray objectAtIndex:self.selectedIndex];
-    }
     
     UIGestureRecognizerState state = pan.state;
     switch (state) {
         case UIGestureRecognizerStateBegan:
+            s_count = 0;
+            preTranslation = CGPointZero;
+            self.selectedIndex = [self.charactorArray indexOfObject:self.markLetter];
+            
             [self _invalidePickerHideTimer];
             [self _showLetterPickerViewAnimated:YES];
             break;
         case UIGestureRecognizerStateChanged:
+        {
+            CGPoint translation = [pan translationInView:self.label];
+            NSInteger count = (NSInteger)(translation.x - preTranslation.x) / 5.0f;
+            
+            if (s_count != count && count) {
+                s_count = count;
+                preTranslation = translation;
+                self.selectedIndex += (count > 0) ? 1 : -1;
+                if (self.selectedIndex < 0) {
+                    self.selectedIndex = 0;
+                } else if (self.selectedIndex >= self.charactorArray.count) {
+                    self.selectedIndex = self.charactorArray.count - 1;
+                }
+                
+                self.markLetter = [self.charactorArray objectAtIndex:self.selectedIndex];
+            }
+            
             if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:isChangingToTitle:)]) {
                 [self.delegate mapEditingAnnotationView:self isChangingToTitle:self.markLetter];
             }
+        }
             break;
         case UIGestureRecognizerStateEnded:
             [self _firePickerHideTimer];
+            
+            if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
+                [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
+            }
             break;
         default:
             break;
@@ -375,36 +383,47 @@
 - (void)handlePressDrag:(FPPressDragGestureRecognizer *)pressDrag {
     static NSInteger s_count = 0;
     static CGPoint preTranslation = (CGPoint){0.0f, 0.0f};
-    CGPoint translation = CGPointMake(pressDrag.dragPoint.x - pressDrag.anchorPoint.x, pressDrag.dragPoint.y - pressDrag.anchorPoint.y);
-    NSInteger count = (NSInteger)(translation.x - preTranslation.x) / 5.0f;
-    
-    if (s_count != count && count) {
-        s_count = count;
-        preTranslation = translation;
-        self.selectedIndex += (count > 0) ? 1 : -1;
-        if (self.selectedIndex < 0) {
-            self.selectedIndex = 0;
-        } else if (self.selectedIndex >= self.charactorArray.count) {
-            self.selectedIndex = self.charactorArray.count - 1;
-        }
-        
-        self.markLetter = [self.charactorArray objectAtIndex:self.selectedIndex];
-    }
     
     UIGestureRecognizerState state = pressDrag.state;
     
     switch (state) {
         case UIGestureRecognizerStateBegan:
+            s_count = 0;
+            preTranslation = (CGPoint){0.0f, 0.0f};
+            self.selectedIndex  = [self.charactorArray indexOfObject:self.markLetter];
+            
             [self _invalidePickerHideTimer];
             [self _showLetterPickerViewAnimated:YES];
             break;
         case UIGestureRecognizerStateChanged:
+        {
+            CGPoint translation = CGPointMake(pressDrag.dragPoint.x - pressDrag.anchorPoint.x, pressDrag.dragPoint.y - pressDrag.anchorPoint.y);
+            NSInteger count = (NSInteger)(translation.x - preTranslation.x) / 5.0f;
+            
+            if (s_count != count && count) {
+                s_count = count;
+                preTranslation = translation;
+                self.selectedIndex += (count > 0) ? 1 : -1;
+                if (self.selectedIndex < 0) {
+                    self.selectedIndex = 0;
+                } else if (self.selectedIndex >= self.charactorArray.count) {
+                    self.selectedIndex = self.charactorArray.count - 1;
+                }
+                
+                self.markLetter = [self.charactorArray objectAtIndex:self.selectedIndex];
+            }
+            
             if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:isChangingToTitle:)]) {
                 [self.delegate mapEditingAnnotationView:self isChangingToTitle:self.markLetter];
             }
+        }
             break;
         case UIGestureRecognizerStateEnded:
             [self _firePickerHideTimer];
+            
+            if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
+                [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
+            }
             break;
         default:
             break;

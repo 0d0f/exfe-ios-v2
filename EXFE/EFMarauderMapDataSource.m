@@ -480,6 +480,10 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     NSParameterAssert(mapView);
     
     EFAnnotation *annotation = [self.routeLocationAnnotationMap objectForKey:routeLocation.locationId];
+    if (!annotation) {
+        return;
+    }
+    
     annotation.coordinate = routeLocation.coordinate;
     annotation.title = routeLocation.title;
     annotation.subtitle = routeLocation.subtitle;
