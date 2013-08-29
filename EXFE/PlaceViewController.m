@@ -934,6 +934,9 @@
         }
         
         view.image = [UIImage imageNamed:@"map_mark_diamond_blue.png"];
+        
+        if (placeedit.hidden) {
+         
 //
         PlaceAnnotation *annot = view.annotation;
 //        if (annot.index == -2){
@@ -950,6 +953,9 @@
 //        location.longitude = [self.selecetedPlace.lng doubleValue];
 //        [map setCenterCoordinate:location animated:YES];
 //        [map selectAnnotation:annot animated:NO];
+        } else {
+             [mapView deselectAnnotation:view.annotation animated:YES];
+        }
 
     }
 }
