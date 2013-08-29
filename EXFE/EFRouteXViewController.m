@@ -58,6 +58,7 @@
 
 @property (nonatomic, strong) EFGeomarkGroupViewController  *geomarkGroupViewController;
 @property (nonatomic, strong) EFMapPersonViewController     *personViewController;
+@property (nonatomic, strong) EFRouteXAccessViewController  *accessViewController;
 
 @end
 
@@ -386,6 +387,10 @@
         [self.personViewController dismissAnimated:NO];
     }
     
+    if (self.accessViewController) {
+        [self.accessViewController.view removeFromSuperview];
+    }
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [super viewWillDisappear:animated];
@@ -403,6 +408,10 @@
     [self _invalidBreadcrumbUpdateTimer];
     [self.mapDataSource closeStreaming];
     [self.mapDataSource applicationDidEnterBackground];
+    
+    if (self.accessViewController) {
+        [self.accessViewController.view removeFromSuperview];
+    }
 }
 
 - (void)enterForeground {
@@ -482,7 +491,10 @@
         [self _startUpdating];
         [self _addRouteXStatuesWithStatus:YES];
     } else {
-        [self.tabBarViewController.tabBar setSelectedIndex:self.tabBarViewController.defaultIndex];
+        EFRouteXAccessViewController *routeXAccessViewController = [[EFRouteXAccessViewController alloc] initWithViewFrame:self.view.bounds];
+        routeXAccessViewController.delegate = self;
+        [self.view addSubview:routeXAccessViewController.view];
+        self.accessViewController = routeXAccessViewController;
     }
 }
 
@@ -660,6 +672,16 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     }
     
     [self _zoomToPersonLocation:person];
+}
+
+#pragma mark -
+#pragma mark EFRouteXAccessViewControllerDelegate
+
+- (void)routeXAccessViewControllerButtonPressed:(EFRouteXAccessViewController *)accessViewController {
+    [self.accessViewController.view removeFromSuperview];
+    
+    [self _startUpdating];
+    [self _addRouteXStatuesWithStatus:YES];
 }
 
 #pragma mark - UITableViewDataSource

@@ -1504,6 +1504,9 @@
 		761B24BB17CF53000091DD7B /* FPPressDragGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 761B24BA17CF53000091DD7B /* FPPressDragGestureRecognizer.m */; };
 		761B24BC17CF53000091DD7B /* FPPressDragGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 761B24BA17CF53000091DD7B /* FPPressDragGestureRecognizer.m */; };
 		761B24BD17CF53000091DD7B /* FPPressDragGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 761B24BA17CF53000091DD7B /* FPPressDragGestureRecognizer.m */; };
+		761B24C317CFBE160091DD7B /* EFRouteXAccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 761B24C217CFBE160091DD7B /* EFRouteXAccessViewController.m */; };
+		761B24C417CFBE160091DD7B /* EFRouteXAccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 761B24C217CFBE160091DD7B /* EFRouteXAccessViewController.m */; };
+		761B24C517CFBE160091DD7B /* EFRouteXAccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 761B24C217CFBE160091DD7B /* EFRouteXAccessViewController.m */; };
 		76295DBA174B2112002F5CEF /* EFTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB3174B2112002F5CEF /* EFTabBar.m */; };
 		76295DBB174B2112002F5CEF /* EFTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB3174B2112002F5CEF /* EFTabBar.m */; };
 		76295DBC174B2112002F5CEF /* EFTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB3174B2112002F5CEF /* EFTabBar.m */; };
@@ -2815,6 +2818,8 @@
 		761B24AE17CF4D270091DD7B /* map_arrow_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_arrow_blue.png; sourceTree = "<group>"; };
 		761B24B917CF53000091DD7B /* FPPressDragGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FPPressDragGestureRecognizer.h; path = Vendor/PressDrag/PressDrag/FPPressDragGestureRecognizer.h; sourceTree = SOURCE_ROOT; };
 		761B24BA17CF53000091DD7B /* FPPressDragGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FPPressDragGestureRecognizer.m; path = Vendor/PressDrag/PressDrag/FPPressDragGestureRecognizer.m; sourceTree = SOURCE_ROOT; };
+		761B24C117CFBE160091DD7B /* EFRouteXAccessViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRouteXAccessViewController.h; sourceTree = "<group>"; };
+		761B24C217CFBE160091DD7B /* EFRouteXAccessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRouteXAccessViewController.m; sourceTree = "<group>"; };
 		76295DB2174B2112002F5CEF /* EFTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTabBar.h; sourceTree = "<group>"; };
 		76295DB3174B2112002F5CEF /* EFTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTabBar.m; sourceTree = "<group>"; };
 		76295DB4174B2112002F5CEF /* EFTabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTabBarItem.h; sourceTree = "<group>"; };
@@ -4010,6 +4015,8 @@
 				7690B57017BF850900C45101 /* EFGeomarkGroupViewController.m */,
 				766032FB17C21C1B00B21A12 /* EFMapPersonViewController.h */,
 				766032FC17C21C1B00B21A12 /* EFMapPersonViewController.m */,
+				761B24C117CFBE160091DD7B /* EFRouteXAccessViewController.h */,
+				761B24C217CFBE160091DD7B /* EFRouteXAccessViewController.m */,
 			);
 			name = RouteX;
 			sourceTree = "<group>";
@@ -7017,6 +7024,7 @@
 				4F63DAA917172AA600136B7E /* EXQuoteView.m in Sources */,
 				4F63DAAA17172AA600136B7E /* EXInvitationQuoteView.m in Sources */,
 				4F63DAAC17172AA600136B7E /* FullScreenViewController.m in Sources */,
+				761B24C417CFBE160091DD7B /* EFRouteXAccessViewController.m in Sources */,
 				4F63DAB017172AA600136B7E /* EXBackgroundView.m in Sources */,
 				4F63DAB117172AA600136B7E /* ObjectToDict.m in Sources */,
 				4F63DAB317172AA600136B7E /* EXInvitationItem.m in Sources */,
@@ -7288,6 +7296,7 @@
 				4F63DC7817172B0700136B7E /* EXQuoteView.m in Sources */,
 				4F63DC7917172B0700136B7E /* EXInvitationQuoteView.m in Sources */,
 				4F63DC7B17172B0700136B7E /* FullScreenViewController.m in Sources */,
+				761B24C517CFBE160091DD7B /* EFRouteXAccessViewController.m in Sources */,
 				4F63DC7F17172B0700136B7E /* EXBackgroundView.m in Sources */,
 				4F63DC8017172B0700136B7E /* ObjectToDict.m in Sources */,
 				4F63DC8217172B0700136B7E /* EXInvitationItem.m in Sources */,
@@ -7559,6 +7568,7 @@
 				78B2AF6815DEABF400451EA2 /* EXQuoteView.m in Sources */,
 				78B22F9715DF4E5B008BEA47 /* EXInvitationQuoteView.m in Sources */,
 				783662DC15E3F4F900F4AEAC /* FullScreenViewController.m in Sources */,
+				761B24C317CFBE160091DD7B /* EFRouteXAccessViewController.m in Sources */,
 				78867BB715E78F0D0091A47C /* EXBackgroundView.m in Sources */,
 				7818FF1615EB415E0095E92F /* ObjectToDict.m in Sources */,
 				78FAE24415EFE04C0045DD67 /* EXInvitationItem.m in Sources */,

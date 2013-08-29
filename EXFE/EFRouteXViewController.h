@@ -17,6 +17,7 @@
 #import "EFMapPersonViewController.h"
 #import "EFCrossTabBarViewController.h"
 #import "EFViewController.h"
+#import "EFRouteXAccessViewController.h"
 
 typedef enum {
     kEFMapZoomTypeUnknow = 0,
@@ -40,7 +41,8 @@ EFMapStrokeViewDataSource,
 UIAlertViewDelegate,
 EFGeomarkGroupViewControllerDelegate,
 EFMapPersonViewControllerDelegate,
-EFMapPersonCellDelegate
+EFMapPersonCellDelegate,
+EFRouteXAccessViewControllerDelegate
 >
 
 @property (weak, nonatomic)     IBOutlet EFMapView      *mapView;
