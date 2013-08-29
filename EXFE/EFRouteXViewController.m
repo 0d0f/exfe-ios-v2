@@ -1,12 +1,11 @@
 //
-//  EFViewController.m
-//  MarauderMap
+//  EFRouteXViewController.m
 //
 //  Created by 0day on 13-7-3.
 //  Copyright (c) 2013年 exfe. All rights reserved.
 //
 
-#import "EFMarauderMapViewController.h"
+#import "EFRouteXViewController.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <BlocksKit/BlocksKit.h>
@@ -33,8 +32,9 @@
 #define kShadowOffset       (3.0f)
 #define kTapRectHalfWidth   (24.0f)
 
-@interface EFMarauderMapViewController ()
+@interface EFRouteXViewController ()
 
+@property (nonatomic, readonly)     Cross                   *cross;
 @property (nonatomic, strong) EFMarauderMapDataSource *mapDataSource;
 
 @property (nonatomic, strong) EFCalloutAnnotation   *currentCalloutAnnotation;
@@ -61,7 +61,7 @@
 
 @end
 
-@interface EFMarauderMapViewController (Private)
+@interface EFRouteXViewController (Private)
 
 - (BOOL)_isRouteXAvalibleForThisCorss;
 - (BOOL)_isUserHiddenForThisCross;
@@ -83,7 +83,7 @@
 
 @end
 
-@implementation EFMarauderMapViewController (Private)
+@implementation EFRouteXViewController (Private)
 
 - (BOOL)_isRouteXAvalibleForThisCorss {
     NSArray *widgets = self.cross.widget;
@@ -273,7 +273,7 @@
 
 @end
 
-@implementation EFMarauderMapViewController
+@implementation EFRouteXViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -381,6 +381,12 @@
     }
     
     [super viewDidDisappear:animated];
+}
+
+#pragma mark -
+
+- (Cross *)cross {
+    return self.tabBarViewController.cross;
 }
 
 #pragma mark - Notification Handler
@@ -1233,28 +1239,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     crumPathView.mapView = self.mapView;
     
     return crumPathView;
-}
-
-#pragma mark - Action
-
-- (IBAction)parkButtonPressed:(id)sender {
-    if (kEFMapViewEditingStateEditingPath != self.mapView.editingState) {
-        self.mapView.editingState = kEFMapViewEditingStateEditingPath;
-    } else {
-        self.mapView.editingState = kEFMapViewEditingStateNormal;
-    }
-}
-
-- (IBAction)headingButtonPressed:(id)sender {
-    if (self.mapView.userTrackingMode == MKUserTrackingModeFollowWithHeading) {
-        [self.mapView setUserTrackingMode:MKUserTrackingModeNone animated:YES];
-    } else {
-        [self.mapView setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
-    }
-}
-
-- (IBAction)cleanButtonPressed:(id)sender {
-//    [self.mapEditView clean];
 }
 
 @end

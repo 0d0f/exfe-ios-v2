@@ -296,7 +296,7 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
             return;
         } else {
             // post
-            [self _postUserLocationInBackground];
+            [self _postUserLocationInBackground];   
         }
     }
 }

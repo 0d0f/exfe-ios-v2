@@ -22,6 +22,4 @@
 #import "EFMapOverlay.h"
 #import "EFMapData.h"
 
-#import "EFMarauderMapViewController.h"
-
 #endif

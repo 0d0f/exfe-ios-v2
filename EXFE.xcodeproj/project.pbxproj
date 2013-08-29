@@ -1781,9 +1781,9 @@
 		76B123A91796470C00A73E59 /* EFMarauderMapDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236D1796470C00A73E59 /* EFMarauderMapDataSource.m */; };
 		76B123AA1796470C00A73E59 /* EFMarauderMapDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236D1796470C00A73E59 /* EFMarauderMapDataSource.m */; };
 		76B123AB1796470C00A73E59 /* EFMarauderMapDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236D1796470C00A73E59 /* EFMarauderMapDataSource.m */; };
-		76B123AC1796470C00A73E59 /* EFMarauderMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236F1796470C00A73E59 /* EFMarauderMapViewController.m */; };
-		76B123AD1796470C00A73E59 /* EFMarauderMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236F1796470C00A73E59 /* EFMarauderMapViewController.m */; };
-		76B123AE1796470C00A73E59 /* EFMarauderMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236F1796470C00A73E59 /* EFMarauderMapViewController.m */; };
+		76B123AC1796470C00A73E59 /* EFRouteXViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236F1796470C00A73E59 /* EFRouteXViewController.m */; };
+		76B123AD1796470C00A73E59 /* EFRouteXViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236F1796470C00A73E59 /* EFRouteXViewController.m */; };
+		76B123AE1796470C00A73E59 /* EFRouteXViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236F1796470C00A73E59 /* EFRouteXViewController.m */; };
 		76B123AF1796470C00A73E59 /* EFRouteLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123711796470C00A73E59 /* EFRouteLocation.m */; };
 		76B123B01796470C00A73E59 /* EFRouteLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123711796470C00A73E59 /* EFRouteLocation.m */; };
 		76B123B11796470C00A73E59 /* EFRouteLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123711796470C00A73E59 /* EFRouteLocation.m */; };
@@ -1793,9 +1793,9 @@
 		76B123B51796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */; };
 		76B123B61796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */; };
 		76B123B71796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */; };
-		76B123C81796496100A73E59 /* EFMarauderMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */; };
-		76B123C91796496100A73E59 /* EFMarauderMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */; };
-		76B123CA1796496100A73E59 /* EFMarauderMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */; };
+		76B123C81796496100A73E59 /* EFRouteXViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFRouteXViewController.xib */; };
+		76B123C91796496100A73E59 /* EFRouteXViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFRouteXViewController.xib */; };
+		76B123CA1796496100A73E59 /* EFRouteXViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFRouteXViewController.xib */; };
 		76B123CD17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123CC17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m */; };
 		76B123CE17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123CC17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m */; };
 		76B123CF17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123CC17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m */; };
@@ -2969,15 +2969,15 @@
 		76B1236B1796470C00A73E59 /* EFMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapView.m; sourceTree = "<group>"; };
 		76B1236C1796470C00A73E59 /* EFMarauderMapDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMarauderMapDataSource.h; sourceTree = "<group>"; };
 		76B1236D1796470C00A73E59 /* EFMarauderMapDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMarauderMapDataSource.m; sourceTree = "<group>"; };
-		76B1236E1796470C00A73E59 /* EFMarauderMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMarauderMapViewController.h; sourceTree = "<group>"; };
-		76B1236F1796470C00A73E59 /* EFMarauderMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMarauderMapViewController.m; sourceTree = "<group>"; };
+		76B1236E1796470C00A73E59 /* EFRouteXViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRouteXViewController.h; sourceTree = "<group>"; };
+		76B1236F1796470C00A73E59 /* EFRouteXViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRouteXViewController.m; sourceTree = "<group>"; };
 		76B123701796470C00A73E59 /* EFRouteLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRouteLocation.h; sourceTree = "<group>"; };
 		76B123711796470C00A73E59 /* EFRouteLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRouteLocation.m; sourceTree = "<group>"; };
 		76B123721796470C00A73E59 /* EFRoutePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRoutePath.h; sourceTree = "<group>"; };
 		76B123731796470C00A73E59 /* EFRoutePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRoutePath.m; sourceTree = "<group>"; };
 		76B123741796470C00A73E59 /* EFTouchDownGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTouchDownGestureRecognizer.h; sourceTree = "<group>"; };
 		76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTouchDownGestureRecognizer.m; sourceTree = "<group>"; };
-		76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFMarauderMapViewController.xib; sourceTree = "<group>"; };
+		76B123C71796496100A73E59 /* EFRouteXViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFRouteXViewController.xib; sourceTree = "<group>"; };
 		76B123CB17964B2E00A73E59 /* EFAPIServer+MadaurerMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFAPIServer+MadaurerMap.h"; sourceTree = "<group>"; };
 		76B123CC17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFAPIServer+MadaurerMap.m"; sourceTree = "<group>"; };
 		76B123D01796583900A73E59 /* widget_routex_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_routex_30.png; sourceTree = "<group>"; };
@@ -3985,9 +3985,9 @@
 		761165A417B88D18005B248A /* RouteX */ = {
 			isa = PBXGroup;
 			children = (
-				76B1236E1796470C00A73E59 /* EFMarauderMapViewController.h */,
-				76B1236F1796470C00A73E59 /* EFMarauderMapViewController.m */,
-				76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */,
+				76B1236E1796470C00A73E59 /* EFRouteXViewController.h */,
+				76B1236F1796470C00A73E59 /* EFRouteXViewController.m */,
+				76B123C71796496100A73E59 /* EFRouteXViewController.xib */,
 				7690B56F17BF850900C45101 /* EFGeomarkGroupViewController.h */,
 				7690B57017BF850900C45101 /* EFGeomarkGroupViewController.m */,
 				766032FB17C21C1B00B21A12 /* EFMapPersonViewController.h */,
@@ -5970,7 +5970,7 @@
 				4F77ABC41791AD4B000EE499 /* chevron_d20g5@2x.png in Resources */,
 				4F7AA1B2179662E1005C4223 /* camera_30.png in Resources */,
 				4F7AA1B5179662E1005C4223 /* camera_30@2x.png in Resources */,
-				76B123C91796496100A73E59 /* EFMarauderMapViewController.xib in Resources */,
+				76B123C91796496100A73E59 /* EFRouteXViewController.xib in Resources */,
 				76B123D51796583900A73E59 /* widget_routex_30.png in Resources */,
 				76B123D81796583900A73E59 /* widget_routex_30@2x.png in Resources */,
 				76B123DB1796583900A73E59 /* widget_routex_30shine.png in Resources */,
@@ -6431,7 +6431,7 @@
 				4F77ABC51791AD4B000EE499 /* chevron_d20g5@2x.png in Resources */,
 				4F7AA1B3179662E1005C4223 /* camera_30.png in Resources */,
 				4F7AA1B6179662E1005C4223 /* camera_30@2x.png in Resources */,
-				76B123CA1796496100A73E59 /* EFMarauderMapViewController.xib in Resources */,
+				76B123CA1796496100A73E59 /* EFRouteXViewController.xib in Resources */,
 				76B123D61796583900A73E59 /* widget_routex_30.png in Resources */,
 				76B123D91796583900A73E59 /* widget_routex_30@2x.png in Resources */,
 				76B123DC1796583900A73E59 /* widget_routex_30shine.png in Resources */,
@@ -6889,7 +6889,7 @@
 				4F77ABC31791AD4B000EE499 /* chevron_d20g5@2x.png in Resources */,
 				4F7AA1B1179662E1005C4223 /* camera_30.png in Resources */,
 				4F7AA1B4179662E1005C4223 /* camera_30@2x.png in Resources */,
-				76B123C81796496100A73E59 /* EFMarauderMapViewController.xib in Resources */,
+				76B123C81796496100A73E59 /* EFRouteXViewController.xib in Resources */,
 				76B123D41796583900A73E59 /* widget_routex_30.png in Resources */,
 				76B123D71796583900A73E59 /* widget_routex_30@2x.png in Resources */,
 				76B123DA1796583900A73E59 /* widget_routex_30shine.png in Resources */,
@@ -7172,7 +7172,7 @@
 				76B123A41796470C00A73E59 /* EFMapPoint.m in Sources */,
 				76B123A71796470C00A73E59 /* EFMapView.m in Sources */,
 				76B123AA1796470C00A73E59 /* EFMarauderMapDataSource.m in Sources */,
-				76B123AD1796470C00A73E59 /* EFMarauderMapViewController.m in Sources */,
+				76B123AD1796470C00A73E59 /* EFRouteXViewController.m in Sources */,
 				76B123B01796470C00A73E59 /* EFRouteLocation.m in Sources */,
 				76B123B31796470C00A73E59 /* EFRoutePath.m in Sources */,
 				76B123B61796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */,
@@ -7443,7 +7443,7 @@
 				76B123A51796470C00A73E59 /* EFMapPoint.m in Sources */,
 				76B123A81796470C00A73E59 /* EFMapView.m in Sources */,
 				76B123AB1796470C00A73E59 /* EFMarauderMapDataSource.m in Sources */,
-				76B123AE1796470C00A73E59 /* EFMarauderMapViewController.m in Sources */,
+				76B123AE1796470C00A73E59 /* EFRouteXViewController.m in Sources */,
 				76B123B11796470C00A73E59 /* EFRouteLocation.m in Sources */,
 				76B123B41796470C00A73E59 /* EFRoutePath.m in Sources */,
 				76B123B71796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */,
@@ -7713,7 +7713,7 @@
 				76B123A31796470C00A73E59 /* EFMapPoint.m in Sources */,
 				76B123A61796470C00A73E59 /* EFMapView.m in Sources */,
 				76B123A91796470C00A73E59 /* EFMarauderMapDataSource.m in Sources */,
-				76B123AC1796470C00A73E59 /* EFMarauderMapViewController.m in Sources */,
+				76B123AC1796470C00A73E59 /* EFRouteXViewController.m in Sources */,
 				76B123AF1796470C00A73E59 /* EFRouteLocation.m in Sources */,
 				76B123B21796470C00A73E59 /* EFRoutePath.m in Sources */,
 				76B123B51796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */,
