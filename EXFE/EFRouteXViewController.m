@@ -121,6 +121,17 @@
     return NO;
 }
 
+- (void)_addRouteXStatuesWithStatus:(BOOL)status {
+    NSMutableArray *widgets = [[NSMutableArray alloc] initWithArray:self.cross.widget];
+    NSDictionary *widget = @{@"type": @"routex", @"my_status": [NSNumber numberWithBool:status]};
+    [widgets addObject:widget];
+    self.cross.widget = widgets;
+    
+    [self.cross.managedObjectContext performBlock:^{
+        [self.cross.managedObjectContext save:nil];
+    }];
+}
+
 - (void)_startUpdating {
 //    [self.mapDataSource registerToUpdateLocation];
     [self.mapDataSource getPeopleBreadcrumbs];
@@ -469,6 +480,7 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == alertView.firstOtherButtonIndex) {
         [self _startUpdating];
+        [self _addRouteXStatuesWithStatus:YES];
     } else {
         [self.tabBarViewController.tabBar setSelectedIndex:self.tabBarViewController.defaultIndex];
     }
