@@ -361,9 +361,6 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self _zoomToPerson:[self.mapDataSource me]];
-    self.recentZoomedPerson = [self.mapDataSource me];
-    
     [self _checkRouteXStatus];
 }
 
@@ -400,6 +397,11 @@
 
 - (void)userLocationDidChange {
     [self.mapView userLocationDidChange];
+    
+    if (!self.recentZoomedPerson) {
+        [self _zoomToPerson:[self.mapDataSource me]];
+        self.recentZoomedPerson = [self.mapDataSource me];
+    }
     
     EFUserLocationAnnotationView *locationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
     CLLocationCoordinate2D latestCoordinate = [EFLocationManager defaultManager].userLocation.coordinate;
