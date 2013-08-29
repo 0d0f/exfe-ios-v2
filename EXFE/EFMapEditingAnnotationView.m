@@ -11,8 +11,13 @@
 #import <QuartzCore/QuartzCore.h>
 #import "EFMapColorButton.h"
 #import "EFRouteLocation.h"
+#import "FPPressDragGestureRecognizer.h"
 
 #define kDefaultCharactor   @"P"
+
+#define kDefaultShowPickerDuration  (0.144f)
+#define kDefaultHidePickerDuration  (0.144f)
+#define kDefaultHidePickerDelay     (1.0f)
 
 @interface EFLetterPickerView : UIView
 
@@ -94,9 +99,24 @@
 @property (nonatomic, strong) NSMutableArray    *charactorArray;
 @property (nonatomic, assign) NSInteger         selectedIndex;
 
+@property (nonatomic, strong) NSTimer           *pickerHideTimer;
+
 @end
 
-@implementation EFMapEditingAnnotationView
+@interface EFMapEditingAnnotationView (Private)
+
+- (void)_init;
+- (void)_selectButton:(EFMapColorButton *)button;
+
+- (void)_showLetterPickerViewAnimated:(BOOL)animated;
+- (void)_hideLetterPickerViewAnimated:(BOOL)animated;
+
+- (void)_firePickerHideTimer;
+- (void)_invalidePickerHideTimer;
+
+@end
+
+@implementation EFMapEditingAnnotationView (Private)
 
 - (void)_init {
     self.charactorArray = [[NSMutableArray alloc] init];
@@ -152,9 +172,11 @@
                                                                           action:@selector(handlePan:)];
     [self.label addGestureRecognizer:pan];
     
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                                            action:@selector(handleLongPressed:)];
-    [self.label addGestureRecognizer:longPress];
+    FPPressDragGestureRecognizer *pressDrag = [[FPPressDragGestureRecognizer alloc] initWithTarget:self
+                                                                                            action:@selector(handlePressDrag:)];
+    [self.label addGestureRecognizer:pressDrag];
+    
+    [singleTap requireGestureRecognizerToFail:pressDrag ];
     
     self.markLetter = kDefaultCharactor;
     
@@ -183,23 +205,69 @@
     }
 }
 
-- (void)_showLetterPickerView {
+- (void)_showLetterPickerViewAnimated:(BOOL)animated {
     if (!self.letterPickerView) {
         CGRect viewBounds = self.bounds;
         viewBounds.origin.y -= (CGRectGetHeight(viewBounds) + 12.0f);
         self.letterPickerView = [[EFLetterPickerView alloc] initWithFrame:viewBounds];
         self.letterPickerView.hidden = YES;
+        self.letterPickerView.alpha = 0.0f;
         [self addSubview:self.letterPickerView];
     }
+    
     self.letterPickerView.hidden = NO;
+    
+    [UIView setAnimationsEnabled:animated];
+    [UIView animateWithDuration:kDefaultShowPickerDuration
+                     animations:^{
+                         self.letterPickerView.alpha = 1.0f;
+                     }
+                     completion:^(BOOL finished){
+                         [UIView setAnimationsEnabled:YES];
+                     }];
 }
 
-- (void)_hideLetterPickerView {
-    if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
-        [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
+- (void)_hideLetterPickerViewAnimated:(BOOL)animated {
+    if (animated) {
+        [UIView animateWithDuration:kDefaultHidePickerDuration
+                         animations:^{
+                             self.letterPickerView.alpha = 0.0f;
+                         }
+                         completion:^(BOOL finished){
+                             if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
+                                 [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
+                             }
+                             self.letterPickerView.hidden = YES;
+                         }];
+    } else {
+        if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
+            [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
+        }
+        self.letterPickerView.alpha = 0.0f;
+        self.letterPickerView.hidden = YES;
     }
-    self.letterPickerView.hidden = YES;
 }
+
+- (void)_firePickerHideTimer {
+    [self _invalidePickerHideTimer];
+    
+    self.pickerHideTimer = [NSTimer scheduledTimerWithTimeInterval:kDefaultHidePickerDelay
+                                                            target:self
+                                                          selector:@selector(timerRunloop:)
+                                                          userInfo:nil
+                                                           repeats:NO];
+}
+
+- (void)_invalidePickerHideTimer {
+    if (self.pickerHideTimer) {
+        [self.pickerHideTimer invalidate];
+        self.pickerHideTimer = nil;
+    }
+}
+
+@end
+
+@implementation EFMapEditingAnnotationView
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -235,6 +303,26 @@
     }
 }
 
+#pragma mark -
+#pragma mark NSTimer
+
+- (void)timerRunloop:(NSTimer *)timer {
+    [self _invalidePickerHideTimer];
+    [self _hideLetterPickerViewAnimated:YES];
+}
+
+#pragma mark -
+#pragma mark Override
+
+- (void)setHidden:(BOOL)hidden {
+    [self _invalidePickerHideTimer];
+    if (!self.letterPickerView.hidden) {
+        [self _hideLetterPickerViewAnimated:NO];
+    }
+    
+    [super setHidden:hidden];
+}
+
 #pragma mark - Gesture
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)tap {
@@ -268,7 +356,8 @@
     UIGestureRecognizerState state = pan.state;
     switch (state) {
         case UIGestureRecognizerStateBegan:
-            [self _showLetterPickerView];
+            [self _invalidePickerHideTimer];
+            [self _showLetterPickerViewAnimated:YES];
             break;
         case UIGestureRecognizerStateChanged:
             if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:isChangingToTitle:)]) {
@@ -276,14 +365,50 @@
             }
             break;
         case UIGestureRecognizerStateEnded:
-            [self _hideLetterPickerView];
+            [self _firePickerHideTimer];
             break;
         default:
             break;
     }
 }
 
-- (void)handleLongPressed:(UILongPressGestureRecognizer *)gesture {
+- (void)handlePressDrag:(FPPressDragGestureRecognizer *)pressDrag {
+    static NSInteger s_count = 0;
+    static CGPoint preTranslation = (CGPoint){0.0f, 0.0f};
+    CGPoint translation = CGPointMake(pressDrag.dragPoint.x - pressDrag.anchorPoint.x, pressDrag.dragPoint.y - pressDrag.anchorPoint.y);
+    NSInteger count = (NSInteger)(translation.x - preTranslation.x) / 5.0f;
+    
+    if (s_count != count && count) {
+        s_count = count;
+        preTranslation = translation;
+        self.selectedIndex += (count > 0) ? 1 : -1;
+        if (self.selectedIndex < 0) {
+            self.selectedIndex = 0;
+        } else if (self.selectedIndex >= self.charactorArray.count) {
+            self.selectedIndex = self.charactorArray.count - 1;
+        }
+        
+        self.markLetter = [self.charactorArray objectAtIndex:self.selectedIndex];
+    }
+    
+    UIGestureRecognizerState state = pressDrag.state;
+    
+    switch (state) {
+        case UIGestureRecognizerStateBegan:
+            [self _invalidePickerHideTimer];
+            [self _showLetterPickerViewAnimated:YES];
+            break;
+        case UIGestureRecognizerStateChanged:
+            if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:isChangingToTitle:)]) {
+                [self.delegate mapEditingAnnotationView:self isChangingToTitle:self.markLetter];
+            }
+            break;
+        case UIGestureRecognizerStateEnded:
+            [self _firePickerHideTimer];
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - Property Accessor
