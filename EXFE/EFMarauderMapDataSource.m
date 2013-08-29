@@ -28,7 +28,7 @@
 #import "EFMapDataDefines.h"
 
 #define kTimestampDuration  (5.0f * 60.0f)
-#define kTimestampBlank     (15.0f)
+#define kTimestampBlank     (25.0f)
 
 #define DegreesToRadians(x)     (M_PI * x / 180.0)
 #define RadiansToDegrees(x)    (x * 180.0 / M_PI)
@@ -956,7 +956,11 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     NSArray *locations = person.locations;
     NSMutableArray *annotations = [[NSMutableArray alloc] init];
     
-    EFLocation *preLocation = nil;
+    if (!lastLocation) {
+        return;
+    }
+    
+    EFLocation *lastAddedLocation = nil;
     
     if (kEFMapPersonConnectStateOnline != person.connectState) {
         EFTimestampAnnotation *firstTimestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:lastLocation.coordinate
@@ -964,10 +968,11 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
         [annotations addObject:firstTimestamp];
     }
     
-    preLocation = lastLocation;
+    lastAddedLocation = lastLocation;
     
     for (EFLocation *location in locations) {
-        NSTimeInterval timeInterval = [preLocation.timestamp timeIntervalSinceDate:location.timestamp];
+        NSTimeInterval timeInterval = [lastLocation.timestamp timeIntervalSinceDate:location.timestamp];
+        
         if (timeInterval >= kTimestampDuration) {
             CGPoint viewPoint = [mapView convertCoordinate:location.coordinate toPointToView:mapView];
             
@@ -981,7 +986,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
                 EFTimestampAnnotation *timestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:location.coordinate
                                                                                            timestamp:location.timestamp];
                 [annotations addObject:timestamp];
-                preLocation = location;
+                lastAddedLocation = location;
             }
         }
     }
