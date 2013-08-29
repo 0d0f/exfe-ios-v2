@@ -128,8 +128,9 @@
     [widgets addObject:widget];
     self.cross.widget = widgets;
     
-    [self.cross.managedObjectContext performBlock:^{
-        [self.cross.managedObjectContext save:nil];
+    __weak typeof(self) weakSelf = self;
+    [self.model.objectManager.managedObjectStore.persistentStoreManagedObjectContext performBlock:^{
+        [weakSelf.model.objectManager.managedObjectStore.persistentStoreManagedObjectContext save:nil];
     }];
 }
 

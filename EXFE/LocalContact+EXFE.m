@@ -29,6 +29,10 @@ NSString *kEFProviderNameTwitter = @"twitter";
             roughIdentity.externalID = phone;
             roughIdentity.externalUsername = self.name;
             
+            if (!roughIdentity.externalID && !roughIdentity.externalUsername) {
+                continue;
+            }
+            
             [identities addObject:roughIdentity];
         }
         
@@ -45,6 +49,10 @@ NSString *kEFProviderNameTwitter = @"twitter";
                 roughIdentity.externalID = nil;
                 roughIdentity.externalUsername = [imDict objectForKey:@"username"];
                 
+                if (!roughIdentity.externalID && !roughIdentity.externalUsername) {
+                    continue;
+                }
+                
                 [identities addObject:roughIdentity];
             }
         }
@@ -58,6 +66,10 @@ NSString *kEFProviderNameTwitter = @"twitter";
             roughIdentity.provider = kEFProviderNameEmail;
             roughIdentity.externalID = email;
             roughIdentity.externalUsername = self.name;
+            
+            if (!roughIdentity.externalID && !roughIdentity.externalUsername) {
+                continue;
+            }
             
             [identities addObject:roughIdentity];
         }
@@ -74,12 +86,20 @@ NSString *kEFProviderNameTwitter = @"twitter";
                 roughIdentity.externalID = [socialDict valueForKey:@"identifier"];
                 roughIdentity.externalUsername = [socialDict valueForKey:@"username"];
                 
+                if (!roughIdentity.externalID && !roughIdentity.externalUsername) {
+                    continue;
+                }
+                
                 [identities addObject:roughIdentity];
             } else if ([providerName isEqualToString:@"facebook"]) {
                 RoughIdentity *roughIdentity = [RoughIdentity identity];
                 roughIdentity.provider = kEFProviderNameFacebook;
                 roughIdentity.externalID = [socialDict valueForKey:@"identifier"];
                 roughIdentity.externalUsername = [socialDict valueForKey:@"username"];
+                
+                if (!roughIdentity.externalID && !roughIdentity.externalUsername) {
+                    continue;
+                }
                 
                 BOOL shouldSkip = NO;
                 for (RoughIdentity *identity in identities) {
