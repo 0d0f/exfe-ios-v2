@@ -283,10 +283,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -318,23 +314,6 @@
     self.annotationAnimationDelay = 0.233f;
     
     self.hasGotOffset = NO;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(enterBackground)
-                                                 name:UIApplicationDidEnterBackgroundNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(enterForeground)
-                                                 name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(userLocationDidChange)
-                                                 name:EFNotificationUserLocationDidChange
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(userLocationOffsetDidGet)
-                                                 name:EFNotificationUserLocationOffsetDidGet
-                                               object:nil];
 }
 
 - (void)viewDidUnload {
@@ -355,6 +334,23 @@
                                          forKeyPath:@"userHeading"
                                             options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                                             context:NULL];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(enterBackground)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(enterForeground)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(userLocationDidChange)
+                                                 name:EFNotificationUserLocationDidChange
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(userLocationOffsetDidGet)
+                                                 name:EFNotificationUserLocationOffsetDidGet
+                                               object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -379,7 +375,9 @@
         [self.personViewController dismissAnimated:NO];
     }
     
-    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [super viewWillDisappear:animated];
 }
 
 #pragma mark -
