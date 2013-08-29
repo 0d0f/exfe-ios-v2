@@ -186,13 +186,16 @@
             
             meRadian = HeadingInRadian([self.mapDataSource me].lastLocation.coordinate, self.person.lastLocation.coordinate);
         }
-    } else {
-        personInfo = NSLocalizedString(@"方位未知", nil);
     }
     
-    self.personInfoLabel.text = personInfo;
-    height += CGRectGetHeight(self.personInfoLabel.frame);
-    self.personInfoLabel.center = (CGPoint){kDefaultWidth * 0.5f, height + 0.74f * CGRectGetHeight(self.personInfoLabel.frame) + offsetY};
+    if (personInfo) {
+        self.personInfoLabel.text = personInfo;
+        height += CGRectGetHeight(self.personInfoLabel.frame);
+        self.personInfoLabel.center = (CGPoint){kDefaultWidth * 0.5f, height + 0.74f * CGRectGetHeight(self.personInfoLabel.frame) + offsetY};
+        self.personInfoLabel.hidden = NO;
+    } else {
+        self.personInfoLabel.hidden = YES;
+    }
     
     height += 7.0f;
     
