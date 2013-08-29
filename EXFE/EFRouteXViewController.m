@@ -543,22 +543,37 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (geomarks && geomarks.count) {
                         CLPlacemark *placemark = geomarks[0];
-                        routeLocation.title = placemark.name;
-                        routeLocation.subtitle = [placemark.addressDictionary valueForKey:@"FormattedAddressLines"][0];
                         
-                        [weakSelf.mapDataSource updateRouteLocation:routeLocation inMapView:weakSelf.mapView];
+                        NSString *title = placemark.name;
+                        NSString *subtitle = [placemark.addressDictionary valueForKey:@"FormattedAddressLines"][0];
+                        
+                        if (!title || !title.length) {
+                            if (!subtitle || !subtitle.length) {
+                                title = NSLocalizedString(@"这里", nil);
+                            } else {
+                                title = subtitle;
+                                subtitle = nil;
+                            }
+                        }
                         
                         if (weakSelf.currentCalloutAnnotation) {
                             EFCalloutAnnotationView *calloutView = (EFCalloutAnnotationView *)[weakSelf.mapView viewForAnnotation:weakSelf.currentCalloutAnnotation];
                             if (calloutView && calloutView.parentAnnotationView == view) {
-                                if (calloutView.isEditing) {
-                                    calloutView.titleTextField.text = routeLocation.title;
-                                    calloutView.subtitleTextView.text = routeLocation.subtitle;
-                                } else {
+                                if (!calloutView.isEditing) {
+                                    routeLocation.title = title;
+                                    routeLocation.subtitle = subtitle;
+                                    
+                                    [weakSelf.mapDataSource updateRouteLocation:routeLocation inMapView:weakSelf.mapView];
+                                    
                                     [weakSelf.mapView deselectAnnotation:annotation animated:NO];
                                     [weakSelf.mapView selectAnnotation:annotation animated:NO];
                                 }
                             }
+                        } else if ([routeLocation.createdDate isEqualToDate:routeLocation.updateDate]) {
+                            routeLocation.title = title;
+                            routeLocation.subtitle = subtitle;
+                            
+                            [weakSelf.mapDataSource updateRouteLocation:routeLocation inMapView:weakSelf.mapView];
                         }
                     } else {
                         NSLog(@"%@", error);
