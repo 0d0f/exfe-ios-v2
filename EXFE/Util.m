@@ -11,6 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <math.h>
 #import <BlocksKit/BlocksKit.h>
+#import "CCTemplate.h"
 #import "UIApplication+EXFE.h"
 #import "CrossTime.h"
 #import "EFTime.h"
@@ -25,9 +26,22 @@
 NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 
 
+static NSDictionary * _keywordDict = nil;
 
 @implementation Util
 {}
++ (NSDictionary *) keywordDict
+{
+    if (!_keywordDict) {
+        _keywordDict = @{
+                         @"PRODUCT_NAME":[NSLocalizedString(@"EXFE", @"Name for Product") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],
+                         @"APP_NAME":[NSLocalizedString(@" EXFE", @"Name for App") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],
+                         @"PRODUCT_APP_NAME":[NSLocalizedString(@"EXFE ", @"Name for Both Product and App") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
+                         };
+    }
+    return _keywordDict;
+}
+
 #pragma mark URL query param tool
 + (NSString*) decodeFromPercentEscapeString:(NSString*)string {
     CFStringRef sref = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL,(CFStringRef) string,CFSTR(""),kCFStringEncodingUTF8);
@@ -673,7 +687,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
             NSString *localVersion = [UIApplication appVersion];
             if ([UIApplication isNewVersion:version]) {
                 
-                NSString *message = [NSString stringWithFormat:NSLocalizedString(@"EXFE %@ is available. You’re using version %@. Update now?", nil), version, localVersion];
+                NSString *message = [NSString stringWithFormat:[NSLocalizedString(@"{{PRODUCT_APP_NAME}} %@ is available. You’re using version %@. Update now?", nil) templateFromDict:[Util keywordDict]], version, localVersion];
                 
                 [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Update available", nil)
                                             message:message

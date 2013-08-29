@@ -8,6 +8,7 @@
 
 #import "CrossesViewController.h"
 #import <BlocksKit/BlocksKit.h>
+#import "CCTemplate.h"
 
 #import "Util.h"
 #import "EFKit.h"
@@ -227,10 +228,10 @@
     welcome_exfe.textAlignment = NSTextAlignmentCenter;
     welcome_exfe.textColor = [UIColor COLOR_CARBON];
     welcome_exfe.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:30];
-    NSString *full = NSLocalizedString(@"Welcome to EXFE", nil);
+    NSString *full = [NSLocalizedString(@"Welcome to {{PRODUCT_APP_NAME}}", nil) templateFromDict:[Util keywordDict]];
     
     [welcome_exfe setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
-        NSString *highlight = NSLocalizedString(@"EXFE", nil);
+        NSString *highlight = [NSLocalizedString(@"{{PRODUCT_APP_NAME}}", nil) templateFromDict:[Util keywordDict]];
         NSRange range = [[mutableAttributedString string] rangeOfString:highlight options:NSCaseInsensitiveSearch];
         
         [mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:range];

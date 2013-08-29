@@ -77,6 +77,8 @@ extern NSString *const EXCrossListDidChangeNotification;
 
 @interface Util : NSObject
 
++ (NSDictionary *) keywordDict;
+
 + (NSString *) getBackgroundLink:(NSString*)imgname;
 
 // Provider and Identity

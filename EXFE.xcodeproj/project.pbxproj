@@ -110,6 +110,9 @@
 		4F0E3551179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0E3550179E8DF400FFA0E4 /* EFIdentityBar.m */; };
 		4F0E3552179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0E3550179E8DF400FFA0E4 /* EFIdentityBar.m */; };
 		4F0E3553179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0E3550179E8DF400FFA0E4 /* EFIdentityBar.m */; };
+		4F0F831217CF56D9001DD47E /* CCTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F831117CF56D9001DD47E /* CCTemplate.m */; };
+		4F0F831317CF56D9001DD47E /* CCTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F831117CF56D9001DD47E /* CCTemplate.m */; };
+		4F0F831417CF56D9001DD47E /* CCTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F831117CF56D9001DD47E /* CCTemplate.m */; };
 		4F1142D716AE40B000C30179 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1142D616AE40B000C30179 /* SenTestingKit.framework */; };
 		4F1142D816AE40B000C30179 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8B1560F832009E0806 /* UIKit.framework */; };
 		4F1142D916AE40B000C30179 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8D1560F832009E0806 /* Foundation.framework */; };
@@ -256,7 +259,6 @@
 		4F63DAB317172AA600136B7E /* EXInvitationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FAE24315EFE04C0045DD67 /* EXInvitationItem.m */; };
 		4F63DAB417172AA600136B7E /* EXCollectionMask.m in Sources */ = {isa = PBXBuildFile; fileRef = 789FBD8415F0980000E3BE80 /* EXCollectionMask.m */; };
 		4F63DAB517172AA600136B7E /* CustomStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */; };
-		4F63DAB617172AA600136B7E /* WelcomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CAE88D15F51E6E00C2BAF2 /* WelcomeView.m */; };
 		4F63DAB717172AA600136B7E /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AF496315FBAF09004B1EBB /* Place.m */; };
 		4F63DAB817172AA600136B7E /* EXSpinView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7852709B15FC7A1E001AF618 /* EXSpinView.m */; };
 		4F63DAB917172AA600136B7E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B46B6C15FC87DB006738D7 /* MBProgressHUD.m */; };
@@ -656,7 +658,6 @@
 		4F63DC8217172B0700136B7E /* EXInvitationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FAE24315EFE04C0045DD67 /* EXInvitationItem.m */; };
 		4F63DC8317172B0700136B7E /* EXCollectionMask.m in Sources */ = {isa = PBXBuildFile; fileRef = 789FBD8415F0980000E3BE80 /* EXCollectionMask.m */; };
 		4F63DC8417172B0700136B7E /* CustomStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */; };
-		4F63DC8517172B0700136B7E /* WelcomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CAE88D15F51E6E00C2BAF2 /* WelcomeView.m */; };
 		4F63DC8617172B0700136B7E /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AF496315FBAF09004B1EBB /* Place.m */; };
 		4F63DC8717172B0700136B7E /* EXSpinView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7852709B15FC7A1E001AF618 /* EXSpinView.m */; };
 		4F63DC8817172B0700136B7E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B46B6C15FC87DB006738D7 /* MBProgressHUD.m */; };
@@ -2198,7 +2199,6 @@
 		78C8E9A415EAA7D1001E495B /* exfee_inputfield@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C8E9A215EAA7D1001E495B /* exfee_inputfield@2x.png */; };
 		78CA7C1C15ECD3E700AAD1DF /* time_18@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CA7C1A15ECD3E700AAD1DF /* time_18@2x.png */; };
 		78CA7C1D15ECD3E700AAD1DF /* time_18.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CA7C1B15ECD3E700AAD1DF /* time_18.png */; };
-		78CAE88E15F51E6E00C2BAF2 /* WelcomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CAE88D15F51E6E00C2BAF2 /* WelcomeView.m */; };
 		78CD517B15EF61CF00086036 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CD517715EF61CF00086036 /* Icon-Small.png */; };
 		78CD517C15EF61CF00086036 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CD517815EF61CF00086036 /* Icon-Small@2x.png */; };
 		78CD517D15EF61CF00086036 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CD517915EF61CF00086036 /* Icon.png */; };
@@ -2416,6 +2416,8 @@
 		4F0E159A16A95C390086AC4A /* edit_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30@2x.png"; sourceTree = "<group>"; };
 		4F0E354F179E8DF400FFA0E4 /* EFIdentityBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFIdentityBar.h; sourceTree = "<group>"; };
 		4F0E3550179E8DF400FFA0E4 /* EFIdentityBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFIdentityBar.m; sourceTree = "<group>"; };
+		4F0F831017CF56D9001DD47E /* CCTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCTemplate.h; sourceTree = "<group>"; };
+		4F0F831117CF56D9001DD47E /* CCTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCTemplate.m; sourceTree = "<group>"; };
 		4F1142D516AE40B000C30179 /* EXFETests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EXFETests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F1142D616AE40B000C30179 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4F1142DC16AE40B000C30179 /* EXFETests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EXFETests-Info.plist"; sourceTree = "<group>"; };
@@ -3353,8 +3355,6 @@
 		78C8E9A215EAA7D1001E495B /* exfee_inputfield@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exfee_inputfield@2x.png"; sourceTree = "<group>"; };
 		78CA7C1A15ECD3E700AAD1DF /* time_18@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "time_18@2x.png"; sourceTree = "<group>"; };
 		78CA7C1B15ECD3E700AAD1DF /* time_18.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = time_18.png; sourceTree = "<group>"; };
-		78CAE88C15F51E6E00C2BAF2 /* WelcomeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeView.h; sourceTree = "<group>"; };
-		78CAE88D15F51E6E00C2BAF2 /* WelcomeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeView.m; sourceTree = "<group>"; };
 		78CD517715EF61CF00086036 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
 		78CD517815EF61CF00086036 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
 		78CD517915EF61CF00086036 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
@@ -3543,6 +3543,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F0F830817CF56B1001DD47E /* CocoaTemplateEngine */ = {
+			isa = PBXGroup;
+			children = (
+				4F0F831017CF56D9001DD47E /* CCTemplate.h */,
+				4F0F831117CF56D9001DD47E /* CCTemplate.m */,
+			);
+			name = CocoaTemplateEngine;
+			sourceTree = "<group>";
+		};
 		4F1142DA16AE40B000C30179 /* EXFETests */ = {
 			isa = PBXGroup;
 			children = (
@@ -4534,8 +4543,6 @@
 				785F6F6115820A0000BF8EA0 /* ProfileViewController.h */,
 				785F6F6215820A0000BF8EA0 /* ProfileViewController.m */,
 				785F6F6315820A0000BF8EA0 /* ProfileViewController.xib */,
-				78CAE88C15F51E6E00C2BAF2 /* WelcomeView.h */,
-				78CAE88D15F51E6E00C2BAF2 /* WelcomeView.m */,
 				76073D07174F6EA5007CBFC3 /* EFRomeViewController.h */,
 				76073D08174F6EA5007CBFC3 /* EFRomeViewController.m */,
 				76073D09174F6EA5007CBFC3 /* EFRomeViewController.xib */,
@@ -4804,6 +4811,7 @@
 		785FD54E158065610056590D /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				4F0F830817CF56B1001DD47E /* CocoaTemplateEngine */,
 				761B24BE17CF53050091DD7B /* PressDrag */,
 				76A8370E17BCA59400CE5D54 /* MKMapViewZoom */,
 				76555B51179E78D600BCC5A7 /* WeixinSDK */,
@@ -7014,7 +7022,6 @@
 				4F63DAB317172AA600136B7E /* EXInvitationItem.m in Sources */,
 				4F63DAB417172AA600136B7E /* EXCollectionMask.m in Sources */,
 				4F63DAB517172AA600136B7E /* CustomStatusBar.m in Sources */,
-				4F63DAB617172AA600136B7E /* WelcomeView.m in Sources */,
 				4F63DAB717172AA600136B7E /* Place.m in Sources */,
 				4F63DAB817172AA600136B7E /* EXSpinView.m in Sources */,
 				4F63DAB917172AA600136B7E /* MBProgressHUD.m in Sources */,
@@ -7231,6 +7238,7 @@
 				4F0C546317CC879B00649C4F /* EFRemoveNotificationIdentityOperation.m in Sources */,
 				4F0C546817CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */,
 				4F0C546E17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
+				4F0F831317CF56D9001DD47E /* CCTemplate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7285,7 +7293,6 @@
 				4F63DC8217172B0700136B7E /* EXInvitationItem.m in Sources */,
 				4F63DC8317172B0700136B7E /* EXCollectionMask.m in Sources */,
 				4F63DC8417172B0700136B7E /* CustomStatusBar.m in Sources */,
-				4F63DC8517172B0700136B7E /* WelcomeView.m in Sources */,
 				4F63DC8617172B0700136B7E /* Place.m in Sources */,
 				4F63DC8717172B0700136B7E /* EXSpinView.m in Sources */,
 				4F63DC8817172B0700136B7E /* MBProgressHUD.m in Sources */,
@@ -7502,6 +7509,7 @@
 				4F0C546417CC879B00649C4F /* EFRemoveNotificationIdentityOperation.m in Sources */,
 				4F0C546917CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */,
 				4F0C546F17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
+				4F0F831417CF56D9001DD47E /* CCTemplate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7556,7 +7564,6 @@
 				78FAE24415EFE04C0045DD67 /* EXInvitationItem.m in Sources */,
 				789FBD8515F0980000E3BE80 /* EXCollectionMask.m in Sources */,
 				785659FC15F3AD660003CDF8 /* CustomStatusBar.m in Sources */,
-				78CAE88E15F51E6E00C2BAF2 /* WelcomeView.m in Sources */,
 				78AF496415FBAF0A004B1EBB /* Place.m in Sources */,
 				7852709C15FC7A1E001AF618 /* EXSpinView.m in Sources */,
 				78B46B6E15FC89DB006738D7 /* MBProgressHUD.m in Sources */,
@@ -7773,6 +7780,7 @@
 				4F0C546217CC879B00649C4F /* EFRemoveNotificationIdentityOperation.m in Sources */,
 				4F0C546717CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */,
 				4F0C546D17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
+				4F0F831217CF56D9001DD47E /* CCTemplate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
