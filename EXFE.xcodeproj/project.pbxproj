@@ -1497,6 +1497,9 @@
 		7615B33B172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
 		7615B33C172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
 		7615B33D172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
+		761B24AF17CF4D270091DD7B /* map_arrow_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 761B24AE17CF4D270091DD7B /* map_arrow_blue.png */; };
+		761B24B017CF4D270091DD7B /* map_arrow_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 761B24AE17CF4D270091DD7B /* map_arrow_blue.png */; };
+		761B24B117CF4D270091DD7B /* map_arrow_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 761B24AE17CF4D270091DD7B /* map_arrow_blue.png */; };
 		76295DBA174B2112002F5CEF /* EFTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB3174B2112002F5CEF /* EFTabBar.m */; };
 		76295DBB174B2112002F5CEF /* EFTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB3174B2112002F5CEF /* EFTabBar.m */; };
 		76295DBC174B2112002F5CEF /* EFTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB3174B2112002F5CEF /* EFTabBar.m */; };
@@ -2804,6 +2807,7 @@
 		7615B339172AB7D200C54031 /* EFLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLabel.h; sourceTree = "<group>"; };
 		7615B33A172AB7D200C54031 /* EFLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLabel.m; sourceTree = "<group>"; };
 		7619DCE417CDD8C70095951B /* EFUserDefaultsKeyDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFUserDefaultsKeyDefines.h; sourceTree = "<group>"; };
+		761B24AE17CF4D270091DD7B /* map_arrow_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_arrow_blue.png; sourceTree = "<group>"; };
 		76295DB2174B2112002F5CEF /* EFTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTabBar.h; sourceTree = "<group>"; };
 		76295DB3174B2112002F5CEF /* EFTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTabBar.m; sourceTree = "<group>"; };
 		76295DB4174B2112002F5CEF /* EFTabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTabBarItem.h; sourceTree = "<group>"; };
@@ -4532,6 +4536,7 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				761B24AE17CF4D270091DD7B /* map_arrow_blue.png */,
 				766176D117C93AE500E98E74 /* portrait_frame_40.png */,
 				766176D217C93AE500E98E74 /* portrait_frame_40@2x.png */,
 				766176C617C9227300E98E74 /* Raleway-Regular.ttf */,
@@ -5647,6 +5652,7 @@
 				4F63DB8217172AA600136B7E /* spin_80_1.png in Resources */,
 				4F63DB8317172AA600136B7E /* spin_80_2.png in Resources */,
 				4F63DB8417172AA600136B7E /* spin_80_3.png in Resources */,
+				761B24B017CF4D270091DD7B /* map_arrow_blue.png in Resources */,
 				4F63DB8B17172AA600136B7E /* Default-568h@2x.png in Resources */,
 				766176C817C9227300E98E74 /* Raleway-Regular.ttf in Resources */,
 				4F63DB8C17172AA600136B7E /* Default.png in Resources */,
@@ -6164,6 +6170,7 @@
 				4F63DD9117172B0700136B7E /* glassbar_light.png in Resources */,
 				4F63DD9217172B0700136B7E /* glassbar_light@2x.png in Resources */,
 				4F63DD9317172B0700136B7E /* btn_glass_blue.png in Resources */,
+				761B24B117CF4D270091DD7B /* map_arrow_blue.png in Resources */,
 				4F63DD9417172B0700136B7E /* btn_glass_blue@2x.png in Resources */,
 				4F63DD9517172B0700136B7E /* edit_30.png in Resources */,
 				4F63DD9617172B0700136B7E /* edit_30@2x.png in Resources */,
@@ -6884,6 +6891,7 @@
 				4FF9D1D21790724E00D01765 /* textbox@2x.png in Resources */,
 				4F77ABB11791AD1F000EE499 /* btn_blue_30.png in Resources */,
 				4F77ABB41791AD1F000EE499 /* btn_blue_30@2x.png in Resources */,
+				761B24AF17CF4D270091DD7B /* map_arrow_blue.png in Resources */,
 				76DA465E17CD07D200E897B5 /* map_remove_30.png in Resources */,
 				4F77ABC01791AD4B000EE499 /* chevron_d20g5.png in Resources */,
 				4F77ABC31791AD4B000EE499 /* chevron_d20g5@2x.png in Resources */,
