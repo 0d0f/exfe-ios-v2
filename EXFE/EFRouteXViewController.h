@@ -1,6 +1,5 @@
 //
-//  EFViewController.h
-//  MarauderMap
+//  EFRouteXViewController.h
 //
 //  Created by 0day on 13-7-3.
 //  Copyright (c) 2013年 exfe. All rights reserved.
@@ -17,6 +16,7 @@
 #import "EFGeomarkGroupViewController.h"
 #import "EFMapPersonViewController.h"
 #import "EFCrossTabBarViewController.h"
+#import "EFViewController.h"
 
 typedef enum {
     kEFMapZoomTypeUnknow = 0,
@@ -26,7 +26,7 @@ typedef enum {
 
 @class EFMapPerson, EXFEModel, Cross;
 
-@interface EFMarauderMapViewController : UIViewController
+@interface EFRouteXViewController : EFViewController
 <
 UIGestureRecognizerDelegate,
 CLLocationManagerDelegate,
@@ -43,9 +43,6 @@ EFMapPersonViewControllerDelegate,
 EFMapPersonCellDelegate
 >
 
-@property (nonatomic, weak)     EXFEModel               *model;
-@property (nonatomic, weak)     Cross                   *cross;
-
 @property (weak, nonatomic)     IBOutlet EFMapView      *mapView;
 @property (weak, nonatomic)     IBOutlet UIView         *leftBaseView;
 @property (weak, nonatomic)     IBOutlet UITableView    *selfTableView;
@@ -58,9 +55,5 @@ EFMapPersonCellDelegate
 @property (nonatomic, weak)     EFCrossTabBarViewController  *tabBarViewController;
 @property (nonatomic, copy)     UIImage                 *shadowImage;
 @property (nonatomic, assign)   CGRect                  initFrame;
-
-- (IBAction)parkButtonPressed:(id)sender;
-- (IBAction)headingButtonPressed:(id)sender;
-- (IBAction)cleanButtonPressed:(id)sender;
 
 @end

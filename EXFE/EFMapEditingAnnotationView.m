@@ -100,6 +100,10 @@
 
 - (void)_init {
     self.charactorArray = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 10; i++) {
+        [self.charactorArray addObject:[NSString stringWithFormat:@"%d", i]];
+    }
+    
     [self.charactorArray addObject:@" "];
     for (int i = 0; i < 26; i++) {
         NSString *string = [NSString stringWithFormat:@"%c", 'A' + i];

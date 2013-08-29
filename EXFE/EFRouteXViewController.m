@@ -1,12 +1,11 @@
 //
-//  EFViewController.m
-//  MarauderMap
+//  EFRouteXViewController.m
 //
 //  Created by 0day on 13-7-3.
 //  Copyright (c) 2013年 exfe. All rights reserved.
 //
 
-#import "EFMarauderMapViewController.h"
+#import "EFRouteXViewController.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <BlocksKit/BlocksKit.h>
@@ -33,8 +32,9 @@
 #define kShadowOffset       (3.0f)
 #define kTapRectHalfWidth   (24.0f)
 
-@interface EFMarauderMapViewController ()
+@interface EFRouteXViewController ()
 
+@property (nonatomic, readonly)     Cross                   *cross;
 @property (nonatomic, strong) EFMarauderMapDataSource *mapDataSource;
 
 @property (nonatomic, strong) EFCalloutAnnotation   *currentCalloutAnnotation;
@@ -61,7 +61,12 @@
 
 @end
 
-@interface EFMarauderMapViewController (Private)
+@interface EFRouteXViewController (Private)
+
+- (BOOL)_isRouteXAvalibleForThisCorss;
+- (BOOL)_isUserHiddenForThisCross;
+- (void)_checkRouteXStatus;
+- (void)_startUpdating;
 
 - (void)_hideCalloutView;
 - (void)_layoutAnnotationView;
@@ -78,7 +83,73 @@
 
 @end
 
-@implementation EFMarauderMapViewController (Private)
+@implementation EFRouteXViewController (Private)
+
+- (BOOL)_isRouteXAvalibleForThisCorss {
+    NSArray *widgets = self.cross.widget;
+    for (NSDictionary *widget in widgets) {
+        NSString *type = [widget valueForKey:@"type"];
+        
+        if ([type isEqualToString:@"routex"]) {
+            NSNumber *status = [widget valueForKey:@"my_status"];
+            if ((NSNull *)status == [NSNull null]) {
+                return NO;
+            } else {
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
+- (BOOL)_isUserHiddenForThisCross {
+    NSArray *widgets = self.cross.widget;
+    for (NSDictionary *widget in widgets) {
+        NSString *type = [widget valueForKey:@"type"];
+        
+        if ([type isEqualToString:@"routex"]) {
+            NSNumber *status = [widget valueForKey:@"my_status"];
+            if ([status boolValue]) {
+                return YES;
+            } else {
+                return NO;
+            }
+        }
+    }
+    
+    return NO;
+}
+
+- (void)_startUpdating {
+    // register to update location
+    [self.mapDataSource registerToUpdateLocation];
+    [self.mapDataSource getPeopleBreadcrumbs];
+    
+    [self.mapDataSource openStreaming];
+    
+    // start updating location
+    [[EFLocationManager defaultManager] startUpdatingLocation];
+    [[EFLocationManager defaultManager] startUpdatingHeading];
+    
+    if ([EFLocationManager defaultManager].userLocation.location) {
+        [self performSelector:@selector(userLocationDidChange)];
+    }
+    [self _fireBreadcrumbUpdateTimer];
+}
+
+- (void)_checkRouteXStatus {
+    if ([self _isRouteXAvalibleForThisCorss]) {
+        [self _startUpdating];
+    } else {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"开启活点地图", nil)
+                                                            message:NSLocalizedString(@"这张“活点地图”将会展现您未来1小时内的方位。", nil)
+                                                           delegate:self
+                                                  cancelButtonTitle:NSLocalizedString(@"取消", nil)
+                                                  otherButtonTitles:NSLocalizedString(@"确定", nil), nil];
+        [alertView show];
+    }
+}
 
 - (void)_hideCalloutView {
     if (self.currentCalloutAnnotation) {
@@ -202,7 +273,7 @@
 
 @end
 
-@implementation EFMarauderMapViewController
+@implementation EFRouteXViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -281,37 +352,16 @@
     
     [self.mapStrokeView reloadData];
     
-    [self.mapDataSource openStreaming];
-    
-    if ([[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"开启活点地图", nil)
-                                                            message:NSLocalizedString(@"这张“活点地图”将会展现您未来1小时内的方位。", nil)
-                                                           delegate:self
-                                                  cancelButtonTitle:NSLocalizedString(@"取消", nil)
-                                                  otherButtonTitles:NSLocalizedString(@"确定", nil), nil];
-        [alertView show];
-    } else {
-        // register to update location
-        [self.mapDataSource registerToUpdateLocation];
-        [self.mapDataSource getPeopleBreadcrumbs];
-    }
-    
     [[EFLocationManager defaultManager] addObserver:self
                                          forKeyPath:@"userHeading"
                                             options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                                             context:NULL];
-    
-    if ([EFLocationManager defaultManager].userLocation.location) {
-        [self userLocationDidChange];
-    }
-    [self _fireBreadcrumbUpdateTimer];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self _zoomToPerson:[self.mapDataSource me]];
-    self.recentZoomedPerson = [self.mapDataSource me];
+    [self _checkRouteXStatus];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -333,6 +383,12 @@
     [super viewDidDisappear:animated];
 }
 
+#pragma mark -
+
+- (Cross *)cross {
+    return self.tabBarViewController.cross;
+}
+
 #pragma mark - Notification Handler
 
 - (void)enterBackground {
@@ -342,27 +398,16 @@
 }
 
 - (void)enterForeground {
-    [self.mapDataSource openStreaming];
-    if ([[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"开启活点地图", nil)
-                                                            message:NSLocalizedString(@"这张“活点地图”将会展现您未来1小时内的方位。", nil)
-                                                           delegate:self
-                                                  cancelButtonTitle:NSLocalizedString(@"取消", nil)
-                                                  otherButtonTitles:NSLocalizedString(@"确定", nil), nil];
-        [alertView show];
-    } else {
-        // register to update location
-        [self.mapDataSource applicationDidEnterForeground];
-    }
-    
-    if ([EFLocationManager defaultManager].userLocation.location) {
-        [self userLocationDidChange];
-    }
-    [self _fireBreadcrumbUpdateTimer];
+    [self _checkRouteXStatus];
 }
 
 - (void)userLocationDidChange {
     [self.mapView userLocationDidChange];
+    
+    if (!self.recentZoomedPerson) {
+        [self _zoomToPerson:[self.mapDataSource me]];
+        self.recentZoomedPerson = [self.mapDataSource me];
+    }
     
     EFUserLocationAnnotationView *locationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
     CLLocationCoordinate2D latestCoordinate = [EFLocationManager defaultManager].userLocation.coordinate;
@@ -426,13 +471,7 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == alertView.firstOtherButtonIndex) {
-        // register to update location
-        [self.mapDataSource registerToUpdateLocation];
-        [self.mapDataSource getPeopleBreadcrumbs];
-        
-        // start updating location
-        [[EFLocationManager defaultManager] startUpdatingLocation];
-        [[EFLocationManager defaultManager] startUpdatingHeading];
+        [self _startUpdating];
     } else {
         [self.tabBarViewController.tabBar setSelectedIndex:self.tabBarViewController.defaultIndex];
     }
@@ -1200,28 +1239,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     crumPathView.mapView = self.mapView;
     
     return crumPathView;
-}
-
-#pragma mark - Action
-
-- (IBAction)parkButtonPressed:(id)sender {
-    if (kEFMapViewEditingStateEditingPath != self.mapView.editingState) {
-        self.mapView.editingState = kEFMapViewEditingStateEditingPath;
-    } else {
-        self.mapView.editingState = kEFMapViewEditingStateNormal;
-    }
-}
-
-- (IBAction)headingButtonPressed:(id)sender {
-    if (self.mapView.userTrackingMode == MKUserTrackingModeFollowWithHeading) {
-        [self.mapView setUserTrackingMode:MKUserTrackingModeNone animated:YES];
-    } else {
-        [self.mapView setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
-    }
-}
-
-- (IBAction)cleanButtonPressed:(id)sender {
-//    [self.mapEditView clean];
 }
 
 @end

@@ -55,7 +55,7 @@
                 NSMutableArray *positions = [[NSMutableArray alloc] initWithCapacity:[obj count]];
                 NSString *action = [param valueForKey:@"action"];
                 BOOL needToSave = NO;
-                if (action && [action isEqualToString:@"save"]) {
+                if (action && [action isEqualToString:@"save_to_history"]) {
                     needToSave = YES;
                 }
                 

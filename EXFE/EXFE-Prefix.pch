@@ -13,6 +13,7 @@
     #import <Foundation/Foundation.h>
     #import "UILog.h"
     #import "EFConfig.h"
+    #import "EFUserDefaultsKeyDefines.h"
     #import "Constants.h"
     #import "Flurry/Flurry.h"
     #import "AppDelegate.h"

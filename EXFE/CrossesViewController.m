@@ -24,6 +24,7 @@
 #import "CrossGroupViewController.h"
 #import "WidgetConvViewController.h"
 #import "WidgetExfeeViewController.h"
+#import "EFRouteXViewController.h"
 
 #import "EFHeadView.h"
 #import "CrossCard.h"
@@ -788,19 +789,19 @@
     exfeeViewController.shadowImage = [UIImage imageNamed:@"tabshadow_x.png"];
     
     // MadaurerMapViewController
-    EFMarauderMapViewController *mapViewController = [[EFMarauderMapViewController alloc] initWithNibName:@"EFMarauderMapViewController" bundle:nil];
+    EFRouteXViewController *routeXViewController = [[EFRouteXViewController alloc] initWithNibName:@"EFRouteXViewController" bundle:nil];
+    routeXViewController.model = model;
     
     EFTabBarItem *tabBarItem4 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_routex_30.png"]];
     tabBarItem4.highlightImage = [UIImage imageNamed:@"widget_routex_30shine.png"];
     
-    mapViewController.customTabBarItem = tabBarItem4;
-    mapViewController.tabBarStyle = kEFTabBarStyleNormal;
-    mapViewController.shadowImage = nil;
-    mapViewController.cross = cross;
-    mapViewController.model = model;
+    routeXViewController.customTabBarItem = tabBarItem4;
+    routeXViewController.tabBarStyle = kEFTabBarStyleNormal;
+    routeXViewController.shadowImage = nil;
+    routeXViewController.model = model;
     
     // Init TabBarViewController
-    EFCrossTabBarViewController *tabBarViewController = [[EFCrossTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController, mapViewController]];
+    EFCrossTabBarViewController *tabBarViewController = [[EFCrossTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController, routeXViewController]];
     tabBarViewController.model = self.model;
     tabBarViewController.cross = cross;
     
