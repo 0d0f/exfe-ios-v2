@@ -9,20 +9,24 @@
 #import "EFChangePasswordViewController.h"
 #import <BlocksKit/BlocksKit.h>
 #import <QuartzCore/QuartzCore.h>
-#import "EFPasswordField.h"
-#import "WCAlertView.h"
+
+#import "EFEntity.h"
 #import "EFModel.h"
-#import "CSLinearLayoutView.h"
 #import "Util.h"
-#import "TTTAttributedLabel.h"
 #import "EFAPI.h"
-#import "User+EXFE.h"
-#import "Identity+EXFE.h"
 #import "EFKit.h"
-#import "EXGradientToolbarView.h"
-#import "UILabel+EXFE.h"
 
 #import "OAuthLoginViewController.h"
+
+#import "EFPasswordField.h"
+#import "WCAlertView.h"
+#import "CSLinearLayoutView.h"
+#import "TTTAttributedLabel.h"
+#import "EXGradientToolbarView.h"
+#import "UILabel+EXFE.h"
+#import "MBProgressHUD.h"
+
+
 
 #define kTagOldPassword     233
 #define kTagFreshPassword   234
@@ -965,12 +969,12 @@
                             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                             hud.mode = MBProgressHUDModeIndeterminate;
                             
-                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                                UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-                                    [hud hide:YES];
-                                }];
-                                [hud addGestureRecognizer:tap];
-                            });
+//                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+//                                UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+//                                    [hud hide:YES];
+//                                }];
+//                                [hud addGestureRecognizer:tap];
+//                            });
                             
                             [self.model.apiServer changePassword:nil
                                                             with:password

@@ -8,21 +8,24 @@
 
 #import "ProfileViewController.h"
 #import <BlocksKit/BlocksKit.h>
-#import "User+EXFE.h"
-#import "Identity+EXFE.h"
-#import "CrossesViewController.h"
-#import "AppDelegate.h"
-#import "WCAlertView.h"
-#import "EFAPIServer.h"
-#import "EFRomeViewController.h"
+
+#import "EFEntity.h"
 #import "EFKit.h"
 #import "EFModel.h"
+#import "EFAPIServer.h"
+
+#import "AppDelegate.h"
+
+#import "CrossesViewController.h"
+#import "EFRomeViewController.h"
 #import "EFChangePasswordViewController.h"
 #import "EFEditProfileViewController.h"
 #import "EFAuthenticationViewController.h"
-#import "AYUIButton.h"
 #import "OAuthLoginViewController.h"
-#import "Avatar.h"
+
+#import "WCAlertView.h"
+#import "MBProgressHUD.h"
+#import "AYUIButton.h"
 
 #define DECTOR_HEIGHT                    (100)
 
@@ -805,12 +808,12 @@
                             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                             hud.mode = MBProgressHUDModeIndeterminate;
                             
-                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                                UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-                                    [hud hide:YES];
-                                }];
-                                [hud addGestureRecognizer:tap];
-                            });
+//                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+//                                UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+//                                    [hud hide:YES];
+//                                }];
+//                                [hud addGestureRecognizer:tap];
+//                            });
                             
                             [self.model.apiServer changePassword:nil
                                                             with:password

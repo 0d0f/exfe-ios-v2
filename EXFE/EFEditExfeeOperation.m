@@ -1,32 +1,33 @@
 //
-//  EFRemoveMyInvitationOperation.m
+//  EFEditExfeeOperation.m
 //  EXFE
 //
-//  Created by Stony Wang on 13-8-23.
+//  Created by Stony Wang on 13-8-27.
 //
 //
 
-#import "EFRemoveMyInvitationOperation.h"
+#import "EFEditExfeeOperation.h"
 
 #import "EFEntity.h"
 
-NSString *kEFNotificationNameRemoveMyInvitationSuccess = @"notification.removeMyInvitation.success";
-NSString *kEFNotificationNameRemoveMyInvitationFailure = @"notification.removeMyInvitation.failure";
+NSString *kEFNotificationNameEditExfeeSuccess = @"notification.EditExfee.success";
+NSString *kEFNotificationNameEditExfeeFailure = @"notification.EditExfee.failure";
 
-@implementation EFRemoveMyInvitationOperation
+
+@implementation EFEditExfeeOperation
+
 
 - (id)initWithModel:(EXFEModel *)model {
     NSParameterAssert(model);
     
     self = [super initWithModel:model];
     if (self) {
-        self.successNotificationName = kEFNotificationNameRemoveMyInvitationSuccess;
-        self.failureNotificationName = kEFNotificationNameRemoveMyInvitationFailure;
+        self.successNotificationName = kEFNotificationNameEditExfeeSuccess;
+        self.failureNotificationName = kEFNotificationNameEditExfeeFailure;
     }
     
     return self;
 }
-
 
 - (void)operationDidStart {
     [super operationDidStart];
@@ -34,9 +35,8 @@ NSString *kEFNotificationNameRemoveMyInvitationFailure = @"notification.removeMy
     NSAssert(self.model, @"model shouldn't be nill.");
     NSAssert(self.model.apiServer, @"api shouldn't be nill.");
     
-//    self.invitation.rsvp_status = @"REMOVED";
     [self.model.apiServer editExfee:self.exfee
-                         byIdentity:self.invitation.identity
+                         byIdentity:self.byIdentity
                             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                 if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
                                 {
@@ -81,4 +81,5 @@ NSString *kEFNotificationNameRemoveMyInvitationFailure = @"notification.removeMy
                                 [self finish];
                             }];
 }
+
 @end

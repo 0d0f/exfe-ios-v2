@@ -8,28 +8,25 @@
 
 #import "CrossesViewController.h"
 #import <BlocksKit/BlocksKit.h>
-#import "UIApplication+EXFE.h"
-#import "ProfileViewController.h"
-#import "EFLandingViewController.h"
-#import "Cross.h"
-#import "Exfee+EXFE.h"
-#import "User+EXFE.h"
-#import "Identity+EXFE.h"
-#import "Rsvp.h"
-#import "CrossCard.h"
+
 #import "Util.h"
-#import "CrossTime+Helper.h"
-#import "EFTime+Helper.h"
-#import "Place+Helper.h"
-#import "NSString+EXFE.h"
-#import "CrossGroupViewController.h"
-#import "EFHeadView.h"
 #import "EFKit.h"
-#import "WidgetConvViewController.h"
-#import "WidgetExfeeViewController.h"
+#import "EFEntity.h"
 #import "EFModel.h"
 #import "EFMapKit.h"
 
+#import "NSString+EXFE.h"
+#import "UIApplication+EXFE.h"
+
+
+#import "ProfileViewController.h"
+#import "EFLandingViewController.h"
+#import "CrossGroupViewController.h"
+#import "WidgetConvViewController.h"
+#import "WidgetExfeeViewController.h"
+
+#import "EFHeadView.h"
+#import "CrossCard.h"
 
 @interface CrossesViewController ()
 
@@ -63,7 +60,7 @@
 - (Cross*) crossWithId:(NSInteger)cross_id
 {
     for (Cross *c in self.crossList) {
-        if ([c.cross_id integerValue] == cross_id) {
+        if ([c.cross_id unsignedIntegerValue] == cross_id) {
             return c;
         }
     }
@@ -312,6 +309,8 @@
     [super viewWillAppear:animated];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    
+    [self refreshAll];
     [self.tableView reloadData];
 }
 
@@ -564,7 +563,7 @@
         
         NSString *avatarimgurl = nil;
         for(Invitation *invitation in cross.exfee.invitations) {
-            NSInteger connected_uid = [invitation.identity.connected_user_id integerValue];
+            NSInteger connected_uid = [invitation.identity.connected_user_id unsignedIntegerValue];
             if (connected_uid == self.model.userId) {
                 if(invitation && invitation.invited_by &&
                    invitation.invited_by.avatar_filename ) {
@@ -697,7 +696,7 @@
         [self.navigationController popToRootViewControllerAnimated:NO];
         EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:self.model];
         __weak EFTabBarViewController *weakTab = tabBarViewController;
-        tabBarViewController.viewWillAppearHandler = ^{
+        tabBarViewController.viewInitHandler = ^{
             EFTabBarViewController * strongTab = weakTab;
             if (!strongTab) {
                 return;
@@ -744,7 +743,6 @@
 - (EFTabBarViewController *)_detailViewControllerWithCross:(Cross *)cross withModel:(EXFEModel *)model {
     // CrossGroupViewController
     CrossGroupViewController *crossGroupViewController = [[CrossGroupViewController alloc] initWithModel:model];
-    crossGroupViewController.cross = cross;
     
     EFTabBarItem *tabBarItem1 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_x_30.png"]];
     tabBarItem1.highlightImage = [UIImage imageNamed:@"widget_x_30shine.png"];
@@ -755,12 +753,12 @@
     
     // ConvViewController
     WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithModel:model] ;
-    // prepare data for conversation
-    conversationViewController.exfee_id = [cross.exfee.exfee_id intValue];
-    Invitation* myInvitation = [cross.exfee getMyInvitation];
-    if (myInvitation != nil) {
-        conversationViewController.myIdentity = myInvitation.identity;
-    }
+//    // prepare data for conversation
+//    conversationViewController.exfee_id = [cross.exfee.exfee_id intValue];
+//    Invitation* myInvitation = [cross.exfee getMyInvitation];
+//    if (myInvitation != nil) {
+//        conversationViewController.myIdentity = myInvitation.identity;
+//    }
     
     NSUInteger conversationCount = [cross.conversation_count unsignedIntegerValue];
     
@@ -775,12 +773,12 @@
     
     // ExfeeViewController
     WidgetExfeeViewController *exfeeViewController = [[WidgetExfeeViewController alloc] initWithModel:model];
-    exfeeViewController.exfee = cross.exfee;
-    __weak Exfee * weakExfee = exfeeViewController.exfee;
-    exfeeViewController.onExitBlock = ^{
-        [crossGroupViewController performSelector:@selector(fillExfee:)
-                                       withObject:weakExfee];
-    };
+//    exfeeViewController.exfee = cross.exfee;
+//    __weak Exfee * weakExfee = exfeeViewController.exfee;
+//    exfeeViewController.onExitBlock = ^{
+//        [crossGroupViewController performSelector:@selector(fillExfee:)
+//                                       withObject:weakExfee];
+//    };
     
     EFTabBarItem *tabBarItem3 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_exfee_30.png"]];
     tabBarItem3.highlightImage = [UIImage imageNamed:@"widget_exfee_30shine.png"];
@@ -802,7 +800,9 @@
     mapViewController.model = model;
     
     // Init TabBarViewController
-    EFTabBarViewController *tabBarViewController = [[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController, mapViewController]];
+    EFCrossTabBarViewController *tabBarViewController = [[EFCrossTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController, mapViewController]];
+    tabBarViewController.model = self.model;
+    tabBarViewController.cross = cross;
     
     __weak EFTabBarViewController *weakTab = tabBarViewController;
     tabBarViewController.titlePressedHandler = ^{
@@ -821,37 +821,6 @@
         [objectManager.operationQueue cancelAllOperations];
         [self.navigationController popToRootViewControllerAnimated:YES];
     };
-    
-    tabBarViewController.title = cross.title;
-    
-    // Fetch background image
-    BOOL flag = NO;
-    for(NSDictionary *widget in cross.widget) {
-        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-            NSString* url = [widget objectForKey:@"image"];
-            
-            if (url && url.length > 0) {
-                NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
-                
-                if (!imgurl) {
-                    tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
-                } else { 
-                    [[EFDataManager imageManager] loadImageForView:tabBarViewController.tabBar
-                                                  setImageSelector:@selector(setBackgroundImage:)
-                                                       placeHolder:[UIImage imageNamed:@"x_titlebg_default.jpg"]
-                                                               key:imgurl
-                                                   completeHandler:nil];
-                }
-                
-                flag = YES;
-                break;
-            }
-        }
-    }
-    if (flag == NO) {
-        // Missing Background widget
-        tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
-    }
     
     return tabBarViewController;
 }
@@ -895,8 +864,8 @@
                 }
                 NSInteger crossId = [crossIdString integerValue];
                 Class cls = NSClassFromString(@"CrossGroupViewController");
-                if (pathComponents.count > 2) {
-                    NSString *tab = [pathComponents objectAtIndex:2];
+                if (pathComponents.count > 1) {
+                    NSString *tab = [pathComponents objectAtIndex:1];
                     if ([@"conversation" caseInsensitiveCompare:tab] == NSOrderedSame) {
                         cls = NSClassFromString(@"WidgetConvViewController");
                     } else if ([@"exfee" caseInsensitiveCompare:tab] == NSOrderedSame) {

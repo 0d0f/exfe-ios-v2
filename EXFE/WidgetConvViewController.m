@@ -8,13 +8,16 @@
 
 #import "WidgetConvViewController.h"
 
-#import "Post.h"
-#import "PostCell.h"
 #import "Util.h"
-#import "EFAPI.h"
+#import "EFEntity.h"
 #import "EFKit.h"
 #import "EFModel.h"
-#import "CrossGroupViewController.h"
+
+#import "EFCrossTabBarViewController.h"
+
+#import "Post.h"
+#import "PostCell.h"
+
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
@@ -30,16 +33,30 @@
 
 @interface WidgetConvViewController ()
 
-@property (nonatomic, strong) NSMutableArray* posts;
+@property (nonatomic, strong) NSMutableArray     *posts;
+@property (nonatomic, weak, readonly) Exfee      *exfee;
+@property (nonatomic, weak, readonly) Invitation *myInvitation;
+
+@property (nonatomic, strong) ConversationTableView  * tableView;
 
 @end
 
 @implementation WidgetConvViewController
-@synthesize exfee_id;
-@synthesize myIdentity;
+{}
+#pragma mark Getter/Setter
 @synthesize inputToolbar;
 
+- (Exfee *)exfee
+{
+    return self.tabBarViewController.cross.exfee;
+}
 
+- (Invitation *)myInvitation
+{
+    return [self.tabBarViewController.cross.exfee getMyInvitation];
+}
+
+#pragma mark lifecycle
 - (id)initWithModel:(EXFEModel *)exfeModel
 {
     self = [super initWithModel:exfeModel];
@@ -48,19 +65,6 @@
         self.posts = [NSMutableArray array];
     }
     return self;
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    // Clear Data
-    NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"CrossGroupViewController")];
-    NSAssert(viewControllers != nil && viewControllers.count, @"viewControllers 不应该为空");
-    
-    CrossGroupViewController *crossGroupViewController = viewControllers[0];
-    crossGroupViewController.cross.conversation_count = 0;
-    
-    [self refreshConversation];
 }
 
 - (void)viewDidLoad
@@ -75,13 +79,13 @@
     [super viewDidLoad];
     [Flurry logEvent:@"WIDGET_CONVERSATION"];
     
-    _tableView=[[ConversationTableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame) - kDefaultToolbarHeight + 2)];
-    _tableView.dataSource=self;
-    _tableView.delegate=self;
-    [self.view addSubview:_tableView];
+    self.tableView=[[ConversationTableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame) - kDefaultToolbarHeight + 2)];
+    self.tableView.dataSource=self;
+    self.tableView.delegate=self;
+    [self.view addSubview:self.tableView];
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
-    [_tableView addGestureRecognizer:gestureRecognizer];
+    [self.tableView addGestureRecognizer:gestureRecognizer];
     
     hintGroup = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(b), 100, CGRectGetWidth(b), CGRectGetHeight(b) - 100 - 42)];
     {
@@ -119,8 +123,8 @@
     cellsepator=[UIImage imageNamed:@"conv_line_h.png"];
     avatarframe=[UIImage imageNamed:@"conv_portrait_frame.png"];
     
-    _tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
-    _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
+    self.tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
+    self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     
     istimehidden=YES;
     showTimeMode=0;
@@ -129,10 +133,42 @@
     inputaccessoryview=[[ConversationInputAccessoryView alloc] initWithFrame:CGRectMake(10.0, 0.0, 310.0, 40.0)];
     [inputaccessoryview setBackgroundColor:[UIColor lightGrayColor]];
     [inputaccessoryview setAlpha: 0.8];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     
-    [self loadObjectsFromDataStore];
+    [self regObserver];
     
+    [self refreshConversation];
+    [self loadConversation];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (self.tabBarViewController.cross.conversation_count > 0) {
+        [self.tabBarViewController setValue:@(0) forKeyPath:@"cross.conversation_count"];
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    [self unregObserver];
+    
+}
+
+#pragma mark - Notification Handler
+
+- (void)regObserver
+{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameLoadConversationSuccess
@@ -141,54 +177,76 @@
                                              selector:@selector(handleNotification:)
                                                  name:kEFNotificationNameLoadConversationFailure
                                                object:nil];
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-#ifdef __IPHONE_5_0
-    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
-    if (version >= 5.0) {
-        
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
-    }
-#endif
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    RKObjectManager* manager =[RKObjectManager sharedManager];
-    [manager.operationQueue cancelAllOperations];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-    self.posts = nil;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNamePostConversationSuccess
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNamePostConversationFailure
+                                               object:nil];
+    
+    // we may need to reg before appear ...
+    [self.tabBarViewController addObserver:self
+                                forKeyPath:@"cross.conversation_count"
+                                   options:NSKeyValueObservingOptionNew
+                                   context:NULL];
 }
 
-//- (void)dealloc {
-//    
-////    [_shadowImage release];
-//	
-////    [cellbackground release];
-////    [cellsepator release];
-////    [avatarframe release];
-////    [_tableView release];
-////    [inputToolbar release];
-//
-//    [super dealloc];
-//}
+- (void)unregObserver
+{
+    [self.tabBarViewController removeObserver:self
+                                   forKeyPath:@"cross.conversation_count"
+                                      context:NULL];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
-#pragma mark - Notification Handler
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    
+    if ([keyPath isEqualToString:@"cross.conversation_count"]) {
+        
+        NSNumber *num= [change objectForKey:NSKeyValueChangeNewKey];
+        if (num && ![[NSNull null] isEqual:num]) {
+            NSUInteger count = [num unsignedIntegerValue];
+            if (count) {
+                self.customTabBarItem.shouldPop = YES;
+                if (count > 55) {
+                    self.customTabBarItem.image = [UIImage imageNamed:@"widget_conv_many_30shine.png"];
+                    self.customTabBarItem.highlightImage = [UIImage imageNamed:@"widget_conv_many_30shine.png"];
+                    self.customTabBarItem.title = nil;
+                } else {
+                    self.customTabBarItem.image = [UIImage imageNamed:@"widget_conv_30.png"];
+                    self.customTabBarItem.highlightImage = [UIImage imageNamed:@"widget_conv_30shine.png"];
+                    self.customTabBarItem.title = [NSString stringWithFormat:@"%u", count];
+                }
+            } else {
+                self.customTabBarItem.shouldPop = NO;
+                self.customTabBarItem.image = [UIImage imageNamed:@"widget_conv_30.png"];
+                self.customTabBarItem.highlightImage = [UIImage imageNamed:@"widget_conv_30shine.png"];
+                self.customTabBarItem.title = nil;
+            }
+        }
+    }
+}
 
 - (void)handleNotification:(NSNotification *)notification {
     NSString *name = notification.name;
     
     if ([name isEqualToString:kEFNotificationNameLoadConversationSuccess]) {
-        NSDictionary *userInfo = notification.userInfo;
-        Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
-        if (meta != nil && 200 == [meta.code intValue]) {
-            [self loadObjectsFromDataStore];
-        }
+        [self refreshConversation];
     } else if ([name isEqualToString:kEFNotificationNameLoadConversationFailure]) {
+        [self showOrHideHint];
+    } else if ([name isEqualToString:kEFNotificationNamePostConversationSuccess]) {
+        [inputToolbar setInputEnabled:YES];
+        [inputToolbar.textView clearText];
+        [self refreshConversation];
+//            [self loadConversation];
+    } else if ([name isEqualToString:kEFNotificationNamePostConversationFailure]) {
+        [inputToolbar setInputEnabled:YES];
         [self showOrHideHint];
     }
 }
@@ -209,14 +267,14 @@
     
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
         frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height;
-        if(_tableView.contentSize.height>_tableView.frame.size.height - keyboardEndFrame.size.height)
+        if(self.tableView.contentSize.height>self.tableView.frame.size.height - keyboardEndFrame.size.height)
         {
-            CGRect f = _tableView.frame;
-            f.size.height = CGRectGetHeight(_tableView.superview.frame) - kDefaultToolbarHeight + 2 - keyboardEndFrame.size.height;
-            CGPoint offset = _tableView.contentOffset;
-            offset.y = _tableView.contentSize.height - CGRectGetHeight(f);
-            _tableView.contentOffset = offset;
-            _tableView.frame = f;
+            CGRect f = self.tableView.frame;
+            f.size.height = CGRectGetHeight(self.tableView.superview.frame) - kDefaultToolbarHeight + 2 - keyboardEndFrame.size.height;
+            CGPoint offset = self.tableView.contentOffset;
+            offset.y = self.tableView.contentSize.height - CGRectGetHeight(f);
+            self.tableView.contentOffset = offset;
+            self.tableView.frame = f;
         }
     }
     else {
@@ -235,12 +293,12 @@
 	CGRect frame = self.inputToolbar.frame;
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
         frame.origin.y = self.view.frame.size.height - frame.size.height;
-        if(_tableView.contentSize.height>_tableView.frame.size.height){
-            CGRect _tableviewrect=_tableView.frame;
+        if(self.tableView.contentSize.height>self.tableView.frame.size.height){
+            CGRect _tableviewrect=self.tableView.frame;
             //_tableviewrect.origin.y=DECTOR_HEIGHT;
             _tableviewrect.origin.y = 0;
-            _tableviewrect.size.height = CGRectGetHeight(_tableView.superview.frame) - kDefaultToolbarHeight + 2;
-            [_tableView setFrame:_tableviewrect];
+            _tableviewrect.size.height = CGRectGetHeight(self.tableView.superview.frame) - kDefaultToolbarHeight + 2;
+            [self.tableView setFrame:_tableviewrect];
         }
 
     }
@@ -259,43 +317,33 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (void)refreshConversation {
+- (void)loadConversation {
     NSDate *updated_at = nil;
-    if ([_posts count] > 0) {
-        Post *post = [_posts objectAtIndex:0];
+    if ([self.posts count] > 0) {
+        Post *post = [self.posts objectAtIndex:0];
         if (post && post.updated_at != nil) {
             updated_at = post.updated_at;
         }
     }
     
-    [self.model loadConversationWithExfeeId:exfee_id updatedTime:updated_at];
+    [self.model loadConversationWithExfee:self.exfee updatedTime:updated_at];
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [inputToolbar hidekeyboard];
 }
-- (void)loadObjectsFromDataStore {
+
+- (void)refreshConversation {
     
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Post"];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"(postable_type = %@) AND (postable_id = %u)",
-                              @"exfee", exfee_id];
-    
-    [request setPredicate:predicate];
-	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:YES];
-	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
-    
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    NSArray *list = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
-    
+    NSArray *list = [self.model getConversationOf:self.exfee];
     if (list) {
-        [_posts removeAllObjects];
-        [_posts addObjectsFromArray: list];
-        [_tableView reloadData];
-        if(_tableView.contentSize.height>_tableView.frame.size.height) {
-            CGPoint bottomOffset = CGPointMake(0, _tableView.contentSize.height - _tableView.frame.size.height);
+        [self.posts removeAllObjects];
+        [self.posts addObjectsFromArray: list];
+        [self.tableView reloadData];
+        if(self.tableView.contentSize.height>self.tableView.frame.size.height) {
+            CGPoint bottomOffset = CGPointMake(0, self.tableView.contentSize.height - self.tableView.frame.size.height);
             showfloattime=NO;
-            [_tableView setContentOffset:bottomOffset animated:NO];
+            [self.tableView setContentOffset:bottomOffset animated:NO];
         }
     }
     [self showOrHideHint];
@@ -318,6 +366,7 @@
 - (void) setShowTime:(BOOL)show{
     
 }
+
 - (void) hiddenTime{
     CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
     fadeoutAnimation.fillMode = kCAFillModeForwards;
@@ -357,18 +406,18 @@
 }
 
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
-    //CGPoint location = [sender locationInView:_tableView];
+    //CGPoint location = [sender locationInView:self.tableView];
     CGPoint location = [sender locationInView:self.view];
-    location.y = location.y - CGRectGetMinY(_tableView.frame);
+    location.y = location.y - CGRectGetMinY(self.tableView.frame);
     CGRect showTimeRect=[self.view frame];
     
 // TODO: right 60px for touch area
     if(CGRectContainsPoint(showTimeRect, location))
     {
-        CGPoint point=_tableView.contentOffset;
-        NSArray *paths = [_tableView indexPathsForVisibleRows];
+        CGPoint point=self.tableView.contentOffset;
+        NSArray *paths = [self.tableView indexPathsForVisibleRows];
         for(NSIndexPath *path in paths){
-            CGRect rect=[_tableView rectForRowAtIndexPath:path];
+            CGRect rect=[self.tableView rectForRowAtIndexPath:path];
             rect.origin.y-=point.y;
             if(CGRectContainsPoint(rect, location))
             {
@@ -388,7 +437,7 @@
                 }
                     
                 istimehidden=NO;
-                Post *post=[_posts objectAtIndex:path.row];
+                Post *post=[self.posts objectAtIndex:path.row];
               
                 if(post && !timetextlayer){
                     timetextlayer=[CATextLayer layer];
@@ -396,7 +445,7 @@
                     timetextlayer.cornerRadius = 2.0;
                     timetextlayer.backgroundColor=FONT_COLOR_232737.CGColor;
                     [timetextlayer setAlignmentMode:kCAAlignmentCenter];
-                    [_tableView.layer addSublayer:timetextlayer];
+                    [self.tableView.layer addSublayer:timetextlayer];
                 }
                 int textheight=14;
                 NSMutableAttributedString *timeattribstring=nil;
@@ -466,11 +515,12 @@
     [inputToolbar expandingTextView:expandingTextView willChangeHeight:height];
 }
 
-#pragma mark UIScrollView methods
+#pragma mark UIScrollViewDelegate methods
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     showfloattime=YES;
     [inputToolbar hidekeyboard];
 }
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     if(showfloattime==YES)
@@ -494,8 +544,8 @@
         [self hiddenTimeNow];
     }
     
-    CGPoint point=_tableView.contentOffset;
-    NSArray *paths = [_tableView indexPathsForVisibleRows];
+    CGPoint point=self.tableView.contentOffset;
+    NSArray *paths = [self.tableView indexPathsForVisibleRows];
     if(paths!=nil && [paths count]>0)
     {
         NSIndexPath *path=(NSIndexPath*)[paths objectAtIndex:0];
@@ -513,7 +563,7 @@
             
             [floattimetextlayer removeAnimationForKey:@"fadeout"];
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
-            Post *post = [_posts objectAtIndex:path.row];
+            Post *post = [self.posts objectAtIndex:path.row];
             NSDate *post_created_at = post.created_at;
 
             NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
@@ -547,14 +597,21 @@
     }
 }
 
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (decelerate) {
+        [self loadConversation];
+    }
+}
+
 #pragma mark UITableViewDataSource methods
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-	return [_posts count];
+	return [self.posts count];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Post *post=[_posts objectAtIndex:indexPath.row];
+    Post *post=[self.posts objectAtIndex:indexPath.row];
     NSString *name=post.by_identity.nickname;
     if(name==nil || [name isEqualToString:@""])
         name=post.by_identity.name;
@@ -584,7 +641,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
 
-    Post *post=[_posts objectAtIndex:indexPath.row];
+    Post *post=[self.posts objectAtIndex:indexPath.row];
     cell.content=[post.content stringByTrimmingCharactersInSet:
     [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     cell.time=@"";
@@ -617,29 +674,18 @@
 {
     [inputToolbar hidekeyboard];
 }
+
 - (void) addPost:(NSString*)content{
     [Flurry logEvent:@"SEND_CONVERSATION"];
     
+    if (content.length == 0) {
+        return;
+    }
     [inputToolbar setInputEnabled:NO];
-    [self.model.apiServer postConversation:content
-                                                by:myIdentity
-                                                on:exfee_id
-                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                               [inputToolbar setInputEnabled:YES];
-                                               if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                                                   [inputToolbar.textView clearText];
-                                                   [self refreshConversation];
-                                               } else {
-                                               }
-                                           }
-                                           failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                               [inputToolbar setInputEnabled:YES];
-                                               [Util showConnectError:error delegate:self];
-                                           }];
-    
+    [self.model postConversation:content by:self.myInvitation.identity on:self.exfee];
 }
 
 - (void)showOrHideHint{
-    hintGroup.hidden = (_posts.count > 0);
+    hintGroup.hidden = (self.posts.count > 0);
 }
 @end

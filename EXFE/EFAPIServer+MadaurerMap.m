@@ -24,7 +24,7 @@
     
     NSDictionary *param = [accessInfo dictionaryValue];
     
-    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/users/crosses/%d?token=%@", [cross.cross_id integerValue], self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/users/crosses/%d?token=%@", [cross.cross_id unsignedIntegerValue], self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
@@ -96,7 +96,7 @@
                   isEarthCoordinate:(BOOL)isEarthCoordinate
                             success:(void (^)(NSArray *breadcrumbs))successHandler
                             failure:(void (^)(NSError *error))failureHandler {
-    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/breadcrumbs/crosses/%d?coordinate=%@&token=%@", [cross.cross_id integerValue], isEarthCoordinate ? @"earth" : @"mars", self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/breadcrumbs/crosses/%d?coordinate=%@&token=%@", [cross.cross_id unsignedIntegerValue], isEarthCoordinate ? @"earth" : @"mars", self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
@@ -136,7 +136,7 @@
                   isEarthCoordinate:(BOOL)isEarthCoordinate
                             success:(void (^)(EFRoutePath *))successHandler
                             failure:(void (^)(NSError *error))failureHandler {
-    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/breadcrumbs/crosses/%d/users/%@?coordinate=%@&token=%@", [cross.cross_id integerValue], identityIdString, isEarthCoordinate ? @"earth" : @"mars", self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/breadcrumbs/crosses/%d/users/%@?coordinate=%@&token=%@", [cross.cross_id unsignedIntegerValue], identityIdString, isEarthCoordinate ? @"earth" : @"mars", self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
@@ -179,7 +179,7 @@
     NSDictionary *param = [routeLocationOrRoutePath dictionaryValue];
     NSString *geomarkId = [param valueForKey:@"id"];
     
-    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/geomarks/crosses/%d/%@/%@?coordinate=%@&token=%@", [cross.cross_id integerValue], type, geomarkId, isEarthCoordinate ? @"earth" : @"mars", self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/geomarks/crosses/%d/%@/%@?coordinate=%@&token=%@", [cross.cross_id unsignedIntegerValue], type, geomarkId, isEarthCoordinate ? @"earth" : @"mars", self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
@@ -209,7 +209,7 @@
     NSDictionary *routeDictionary = [routeLocationOrRoutePath dictionaryValue];
     NSString *geomarkId = [routeDictionary valueForKey:@"id"];
     
-    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/geomarks/crosses/%d/%@/%@?token=%@", [cross.cross_id integerValue], type, geomarkId, self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/geomarks/crosses/%d/%@/%@?token=%@", [cross.cross_id unsignedIntegerValue], type, geomarkId, self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
@@ -235,7 +235,7 @@
                   isEarthCoordinate:(BOOL)isEarthCoordinate
                             success:(void (^)(NSArray *locations, NSArray *paths))successHandler
                             failure:(void (^)(NSError *error))failureHandler {
-    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/geomarks/crosses/%d?coordinate=%@&token=%@", [cross.cross_id integerValue], isEarthCoordinate ? @"earth" : @"mars", self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/geomarks/crosses/%d?coordinate=%@&token=%@", [cross.cross_id unsignedIntegerValue], isEarthCoordinate ? @"earth" : @"mars", self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
@@ -280,7 +280,7 @@
 - (void)getRouteXUrlInCross:(Cross *)cross
                     success:(void (^)(NSString *url))successHandler
                     failure:(void (^)(NSError *error))failureHandler {
-    NSString *endpoint = [NSString stringWithFormat:@"/v2/crosses/%d/getroutexurl", [cross.cross_id integerValue]];
+    NSString *endpoint = [NSString stringWithFormat:@"/v2/crosses/%d/getroutexurl", [cross.cross_id unsignedIntegerValue]];
     NSDictionary *param = @{@"token": self.model.userToken};
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
@@ -316,7 +316,7 @@
                             inCross:(Cross *)cross
                             success:(void (^)(void))successHandler
                             failure:(void (^)(NSError *error))failureHandler {
-    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/notification/crosses/%d/%@?token=%@", [cross.cross_id integerValue], identityId, self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/notification/crosses/%d/%@?token=%@", [cross.cross_id unsignedIntegerValue], identityId, self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;

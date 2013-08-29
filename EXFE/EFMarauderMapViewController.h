@@ -16,6 +16,7 @@
 #import "EFMapStrokeView.h"
 #import "EFGeomarkGroupViewController.h"
 #import "EFMapPersonViewController.h"
+#import "EFCrossTabBarViewController.h"
 
 typedef enum {
     kEFMapZoomTypeUnknow = 0,
@@ -54,7 +55,7 @@ EFMapPersonCellDelegate
 // EFTabBarDataSource
 @property (nonatomic, strong)   EFTabBarItem            *customTabBarItem;
 @property (nonatomic, assign)   EFTabBarStyle           tabBarStyle;
-@property (nonatomic, weak)     EFTabBarViewController  *tabBarViewController;
+@property (nonatomic, weak)     EFCrossTabBarViewController  *tabBarViewController;
 @property (nonatomic, copy)     UIImage                 *shadowImage;
 @property (nonatomic, assign)   CGRect                  initFrame;
 

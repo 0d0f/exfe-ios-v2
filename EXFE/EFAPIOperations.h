@@ -23,14 +23,20 @@
 #import "EFUpdateIdentityOperation.h"
 
 // Conversation API
+#import "EFPostConversationOperation.h"
 #import "EFLoadConversationOperation.h"
 
 // Crosses API
 #import "EFLoadCrossOperation.h"
 #import "EFLoadCrossListOperation.h"
 #import "EFEditCrossOperation.h"
+
+// Exfee API
+#import "EFEditExfeeOperation.h"
 #import "EFRemoveInvitationOperation.h"
 #import "EFRemoveMyInvitationOperation.h"
+#import "EFRsvpOperation.h"
+#import "EFRemoveNotificationIdentityOperation.h"
 
 // Place API
 #import "EFReverseGeocodingOperation.h"

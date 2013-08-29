@@ -13,22 +13,28 @@
 #import <Twitter/Twitter.h>
 #import <Accounts/Accounts.h>
 #import <FacebookSDK/FacebookSDK.h>
-#import "UIApplication+EXFE.h"
-#import "TWAPIManager.h"
-#import "WCAlertView.h"
-#import "EFModel.h"
-#import "CSLinearLayoutView.h"
 #import "Util.h"
-#import "TTTAttributedLabel.h"
-#import "EFAPI.h"
-#import "User+EXFE.h"
-#import "Identity+EXFE.h"
+#import "EFEntity.h"
 #import "EFKit.h"
-#import "EXGradientToolbarView.h"
-#import "UILabel+EXFE.h"
-#import "EFIdentityBar.h"
-#import "EFPasswordField.h"
+#import "EFModel.h"
+
+#import "EFAPIServer.h"
+
 #import "OAuthLoginViewController.h"
+
+#import "UIApplication+EXFE.h"
+#import "UILabel+EXFE.h"
+
+#import "CSLinearLayoutView.h"
+#import "EFIdentityTextField.h"
+#import "TWAPIManager.h"
+#import "MBProgressHUD.h"
+#import "EXSpinView.h"
+#import "EFIdentityBar.h"
+#import "TTTAttributedLabel.h"
+#import "EXGradientToolbarView.h"
+#import "EFPasswordField.h"
+#import "WCAlertView.h"
 
 #define kTagPassword        233
 #define kTagBtnAuthPwd      234
@@ -616,7 +622,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
 #pragma mark - Logic Methods
 - (void)loadUserAndDismiss:(NSInteger)user_id withToken:(NSString*)token success:(void (^)(void))success
 {
-    NSAssert(user_id == [self.user.user_id integerValue], @"Should be same user");
+    NSAssert(user_id == [self.user.user_id unsignedIntegerValue], @"Should be same user");
     
     self.model.userToken = token;
     [self.model saveUserData];
@@ -775,7 +781,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                             [self dismissSelfWithNext];
                         };
                         
-                        if ([u integerValue] == [self.user.user_id integerValue]) {
+                        if ([u integerValue] == [self.user.user_id unsignedIntegerValue]) {
                             [self loadUserAndDismiss:[u integerValue] withToken:t success:success];
                         } else {
                             // Merge user?
@@ -987,12 +993,12 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                             hud.mode = MBProgressHUDModeIndeterminate;
                             
-                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                                UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-                                    [hud hide:YES];
-                                }];
-                                [hud addGestureRecognizer:tap];
-                            });
+//                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+//                                UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+//                                    [hud hide:YES];
+//                                }];
+//                                [hud addGestureRecognizer:tap];
+//                            });
                             
                             [self.model.apiServer changePassword:nil
                                                             with:password
@@ -1070,9 +1076,9 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
     if (kProviderTypeAuthorization == [Identity getProviderTypeByCode:provider]) {
         
         id su = ^(NSNumber *user_id, NSString *token) {
-            if ([user_id integerValue] == self.model.userId) {
+            if ([user_id unsignedIntegerValue] == self.model.userId) {
                 // nextStep
-                [self loadUserAndDismiss:[user_id integerValue] withToken:token success:success];
+                [self loadUserAndDismiss:[user_id unsignedIntegerValue] withToken:token success:success];
                 
             } else {
                 // merge
@@ -1222,7 +1228,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                                                                            // clean some timestamp
                                                                                            
                                                                                            // do following things
-                                                                                           [self loadUserAndDismiss:[user_id integerValue] withToken:newToken success:success];
+                                                                                           [self loadUserAndDismiss:[user_id unsignedIntegerValue] withToken:newToken success:success];
                                                                                        }  break;
                                                                                        case 4:
                                                                                            

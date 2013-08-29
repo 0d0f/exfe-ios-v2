@@ -13,10 +13,9 @@
 #import "EditCrossDelegate.h"
 #import "EXImagesCollectionView.h"
 #import "EXRSVPMenuView.h"
-#import "EXTabLayer.h"
-#import "EXTabWidget.h"
 #import "EXRSVPStatusView.h"
 #import "EFKit.h"
+#import "EFCrossTabBarViewController.h"
 
 @class Cross;
 @class User;
@@ -58,12 +57,7 @@ EFTabBarDataSource
     UIButton *timeEditMenu;
     UIButton *placeEditMenu;
     UIButton *titleAndDescEditMenu;
-    
-//    // Header
-//    UILabel* titleView;
-    // Content
-    //    UIScrollView* xContainer;
-    //    UIView* container;
+
     UIScrollView* container;
     EXLabel* descView;
     EXImagesCollectionView *exfeeShowview;
@@ -74,34 +68,19 @@ EFTabBarDataSource
     UILabel *placeDescView;
     MKMapView *mapView;
     UIView *mapShadow;
-//    // WidgetTab
-//    EXTabLayer *tabLayer;
-//    EXTabWidget* tabWidget;
-//    // Navigation
-//    UIButton* btnBack;
-    
-    
-//    UIImageView *headerShadow;
     
     
     UISwipeGestureRecognizer *swipeRightRecognizer;
     UISwipeGestureRecognizer *swipeLeftRecognizer;
 }
 
-@property (nonatomic, strong) UIViewController *currentViewController;
-@property (nonatomic, strong) Cross* cross;
-@property (nonatomic, assign) NSInteger headerStyle;
-@property (nonatomic, assign) NSUInteger widgetId;
-@property (nonatomic, strong) NSArray *sortedInvitations;
-
 // EFTabBarDataSource
 @property (nonatomic, strong) EFTabBarItem *customTabBarItem;
 @property (nonatomic, assign) EFTabBarStyle tabBarStyle;
-@property (nonatomic, weak) EFTabBarViewController *tabBarViewController;
+@property (nonatomic, weak) EFCrossTabBarViewController *tabBarViewController;
 @property (nonatomic, copy) UIImage *shadowImage;
 @property (nonatomic, assign) CGRect initFrame;
 
 - (void)showPopup:(NSInteger)ctrlId;
-- (void)removeCrossAndExit;
 
 @end

@@ -8,7 +8,7 @@
 
 #import "EFEditCrossOperation.h"
 
-#import "Cross.h"
+#import "EFEntity.h"
 
 NSString *kEFNotificationNameEditCrossSuccess = @"notification.editCross.success";
 NSString *kEFNotificationNameEditCrossFailure = @"notification.editCross.failure";
@@ -43,18 +43,41 @@ NSString *kEFNotificationNameEditCrossFailure = @"notification.editCross.failure
     NSAssert(self.model, @"model shouldn't be nill.");
     NSAssert(self.model.apiServer, @"api shouldn't be nill.");
     
+//    [self.cross addToContext:self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext];
+    
     [self.model.apiServer editCross:self.cross
                             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                self.state = kEFNetworkOperationStateSuccess;
-                                NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];
-                                [userInfo setValue:@"cross" forKey:@"type"];
-                                [userInfo setValue:self.cross.cross_id forKey:@"id"];
-                                self.successUserInfo = userInfo;
+                                Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
+                                NSInteger c = [meta.code integerValue];
+                                NSInteger t = c / 100;
                                 
-                                [self finish];
+                                switch (t) {
+                                    case 2:{
+                                        self.state = kEFNetworkOperationStateSuccess;
+                                        NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];
+                                        [userInfo setValue:@"cross" forKey:@"type"];
+                                        [userInfo setValue:self.cross.cross_id forKey:@"id"];
+//                                        [self.cross.managedObjectContext deleteObject:self.cross];
+                                        self.successUserInfo = userInfo;
+                                        [self finish];
+                                    } break;
+                                        
+                                    default:{
+                                        self.state = kEFNetworkOperationStateFailure;
+                                        NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];
+                                        [userInfo setValue:@"cross" forKey:@"type"];
+                                        [userInfo setValue:self.cross.cross_id forKey:@"id"];
+                                        self.failureUserInfo = userInfo;
+                                        [self finish];
+                                    } break;
+                                }
                             }
                             failure:^(RKObjectRequestOperation *operation, NSError *error) {
                                 self.state = kEFNetworkOperationStateFailure;
+                                NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:2];
+                                [userInfo setValue:@"cross" forKey:@"type"];
+                                [userInfo setValue:self.cross.cross_id forKey:@"id"];
+                                self.failureUserInfo = userInfo;
                                 self.error = error;
                                 
                                 [self finish];

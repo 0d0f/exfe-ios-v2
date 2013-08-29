@@ -67,7 +67,7 @@
                         }
                         [self.failureUserInfo setValue:self.error forKey:@"error"];
                     }
-                    [[NSNotificationCenter defaultCenter] postNotificationName:self.successNotificationName object:nil userInfo:self.failureUserInfo];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:self.failureNotificationName object:nil userInfo:self.failureUserInfo];
                 });
             }
         }

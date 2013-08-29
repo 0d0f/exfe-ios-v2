@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <AddressBook/AddressBook.h>
 #import "EXSpinView.h"
-#import "MBProgressHUD.h"
 #import "AppDelegate.h"
 #import "LocalContact.h"
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>

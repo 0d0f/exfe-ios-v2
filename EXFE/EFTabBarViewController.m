@@ -14,6 +14,7 @@
 @property (weak, nonatomic) EFTabBar *tabBar;
 @property (nonatomic, strong) UIView *containView;
 @property (nonatomic, weak) UIViewController<EFTabBarDataSource> *preSelectedViewController;
+@property (nonatomic, assign) BOOL once;
 @end
 
 @interface EFTabBarViewController (Private)
@@ -51,6 +52,8 @@
         // view controllers
         _selectedIndex = NSNotFound;
         self.viewControllers = viewControllers;
+        
+        self.once = YES;
     }
     
     return self;
@@ -58,6 +61,13 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    if (self.once) {
+        self.once = NO;
+        if (_viewInitHandler) {
+            self.viewInitHandler();
+        }
+    }
     
     if (_viewWillAppearHandler) {
         self.viewWillAppearHandler();

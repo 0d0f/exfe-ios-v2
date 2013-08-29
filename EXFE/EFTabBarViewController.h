@@ -42,6 +42,7 @@ typedef void (^EFTabBarViewControllerBehaviorBlock)(void);
 @property (nonatomic, copy) EFTabBarBackButtonBlock backButtonActionHandler;    // Default as nil, if you set it, you should handle the dismiss or pop action.
 
 // behavior handler
+@property (nonatomic, copy) EFTabBarViewControllerBehaviorBlock viewInitHandler;
 @property (nonatomic, copy) EFTabBarViewControllerBehaviorBlock viewWillAppearHandler;
 @property (nonatomic, copy) EFTabBarViewControllerBehaviorBlock viewDidAppearHandler;
 @property (nonatomic, copy) EFTabBarViewControllerBehaviorBlock viewWillDisappearHandler;

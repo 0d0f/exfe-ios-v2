@@ -8,8 +8,12 @@
 
 #import "EXFEModel.h"
 
+@class Exfee;
+@class Identity;
 @interface EXFEModel (ConversationAPI)
 
-- (void)loadConversationWithExfeeId:(int)exfeeId updatedTime:(NSDate *)updatedTime;
+- (NSArray *)getConversationOf:(Exfee *)exfee;
+- (void)loadConversationWithExfee:(Exfee *)exfee updatedTime:(NSDate *)updatedTime;
+- (void)postConversation:(NSString *)content by:(Identity *)myIdentity on:(Exfee *)exfee;
 
 @end

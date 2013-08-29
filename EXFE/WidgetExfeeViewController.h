@@ -11,6 +11,7 @@
 #import "UIBorderLabel.h"
 #import "EFKit.h"
 #import "TTTAttributedLabel.h"
+#import "EFCrossTabBarViewController.h"
 
 typedef enum {
     ScrollDirectionNone,
@@ -48,11 +49,6 @@ EFTabBarDataSource
     
     EXBasicMenu *rsvpMenu;
     
-//    CALayer *layer1;
-//    CALayer *layer2;
-//    CALayer *layer3;
-//    CALayer *layer4;
-    
     UITableView* invTable;
     UITableViewCell *tableHeader;
     UITableViewCell *tableRsvp;
@@ -67,7 +63,6 @@ EFTabBarDataSource
     NSDictionary *myRsvpDict;
 }
 
-@property (nonatomic, strong) Exfee *exfee;
 @property (nonatomic, strong) Invitation* selected_invitation;
 @property (nonatomic, strong) NSArray *sortedInvitations;
 @property (nonatomic, copy) id onExitBlock;
@@ -75,7 +70,7 @@ EFTabBarDataSource
 // EFTabBarDataSource
 @property (nonatomic, strong) EFTabBarItem *customTabBarItem;
 @property (nonatomic, assign) EFTabBarStyle tabBarStyle;
-@property (nonatomic, weak) EFTabBarViewController *tabBarViewController;
+@property (nonatomic, weak) EFCrossTabBarViewController *tabBarViewController;
 @property (nonatomic, copy) UIImage *shadowImage;
 @property (nonatomic, assign) CGRect initFrame;
 

@@ -461,7 +461,10 @@
     ];
     [conversationMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"by_identity" toKeyPath:@"by_identity" withMapping:identityMapping]];
     
-    RKResponseDescriptor *conversationresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:conversationMapping pathPattern:nil keyPath:@"response.conversation" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    RKResponseDescriptor *conversationresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:conversationMapping method:RKRequestMethodGET pathPattern:nil keyPath:@"response.conversation" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:conversationresponseDescriptor];
+    
+    RKResponseDescriptor *postResopnseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:conversationMapping method:RKRequestMethodPOST pathPattern:nil keyPath:@"response.post" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    [objectManager addResponseDescriptor:postResopnseDescriptor];
 }
 @end

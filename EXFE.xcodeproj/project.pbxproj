@@ -87,6 +87,24 @@
 		4F0C544317C74B7800649C4F /* EFRemoveMyInvitationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C544217C74B7800649C4F /* EFRemoveMyInvitationOperation.m */; };
 		4F0C544417C74B7800649C4F /* EFRemoveMyInvitationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C544217C74B7800649C4F /* EFRemoveMyInvitationOperation.m */; };
 		4F0C544517C74B7800649C4F /* EFRemoveMyInvitationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C544217C74B7800649C4F /* EFRemoveMyInvitationOperation.m */; };
+		4F0C544C17CB65BA00649C4F /* EFCrossTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C544B17CB65B900649C4F /* EFCrossTabBarViewController.m */; };
+		4F0C544D17CB65BA00649C4F /* EFCrossTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C544B17CB65B900649C4F /* EFCrossTabBarViewController.m */; };
+		4F0C544E17CB65BA00649C4F /* EFCrossTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C544B17CB65B900649C4F /* EFCrossTabBarViewController.m */; };
+		4F0C545817CC874700649C4F /* EFEditExfeeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C545717CC874400649C4F /* EFEditExfeeOperation.m */; };
+		4F0C545917CC874700649C4F /* EFEditExfeeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C545717CC874400649C4F /* EFEditExfeeOperation.m */; };
+		4F0C545A17CC874700649C4F /* EFEditExfeeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C545717CC874400649C4F /* EFEditExfeeOperation.m */; };
+		4F0C545D17CC876400649C4F /* EFRsvpOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C545C17CC876100649C4F /* EFRsvpOperation.m */; };
+		4F0C545E17CC876400649C4F /* EFRsvpOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C545C17CC876100649C4F /* EFRsvpOperation.m */; };
+		4F0C545F17CC876400649C4F /* EFRsvpOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C545C17CC876100649C4F /* EFRsvpOperation.m */; };
+		4F0C546217CC879B00649C4F /* EFRemoveNotificationIdentityOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546117CC879900649C4F /* EFRemoveNotificationIdentityOperation.m */; };
+		4F0C546317CC879B00649C4F /* EFRemoveNotificationIdentityOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546117CC879900649C4F /* EFRemoveNotificationIdentityOperation.m */; };
+		4F0C546417CC879B00649C4F /* EFRemoveNotificationIdentityOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546117CC879900649C4F /* EFRemoveNotificationIdentityOperation.m */; };
+		4F0C546717CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546617CC9CD500649C4F /* EFPostConversationOperation.m */; };
+		4F0C546817CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546617CC9CD500649C4F /* EFPostConversationOperation.m */; };
+		4F0C546917CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546617CC9CD500649C4F /* EFPostConversationOperation.m */; };
+		4F0C546D17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546C17CCF6CD00649C4F /* NSManagedObject+EXFE.m */; };
+		4F0C546E17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546C17CCF6CD00649C4F /* NSManagedObject+EXFE.m */; };
+		4F0C546F17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C546C17CCF6CD00649C4F /* NSManagedObject+EXFE.m */; };
 		4F0E159B16A95C390086AC4A /* edit_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159916A95C390086AC4A /* edit_30.png */; };
 		4F0E159C16A95C390086AC4A /* edit_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159A16A95C390086AC4A /* edit_30@2x.png */; };
 		4F0E3551179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0E3550179E8DF400FFA0E4 /* EFIdentityBar.m */; };
@@ -329,7 +347,6 @@
 		4F63DB2017172AA600136B7E /* location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B9FD3515B5568D00F5E4D3 /* location@2x.png */; };
 		4F63DB2117172AA600136B7E /* gather_describe_area.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D697915BFCB6A00226A23 /* gather_describe_area.png */; };
 		4F63DB2217172AA600136B7E /* gather_describe_area@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D697A15BFCB6A00226A23 /* gather_describe_area@2x.png */; };
-		4F63DB2317172AA600136B7E /* ExfeeInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78CEBFEF15BFE7BE002BCA27 /* ExfeeInputViewController.xib */; };
 		4F63DB2417172AA600136B7E /* cross_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 78465E0D15C920BE00BA5C1F /* cross_bg.png */; };
 		4F63DB2517172AA600136B7E /* cross_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78465E0E15C920BE00BA5C1F /* cross_bg@2x.png */; };
 		4F63DB2617172AA600136B7E /* toolbar_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 7820A0B515CB8E37008D0BB5 /* toolbar_bg.png */; };
@@ -729,7 +746,6 @@
 		4F63DCEF17172B0700136B7E /* location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B9FD3515B5568D00F5E4D3 /* location@2x.png */; };
 		4F63DCF017172B0700136B7E /* gather_describe_area.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D697915BFCB6A00226A23 /* gather_describe_area.png */; };
 		4F63DCF117172B0700136B7E /* gather_describe_area@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 784D697A15BFCB6A00226A23 /* gather_describe_area@2x.png */; };
-		4F63DCF217172B0700136B7E /* ExfeeInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78CEBFEF15BFE7BE002BCA27 /* ExfeeInputViewController.xib */; };
 		4F63DCF317172B0700136B7E /* cross_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 78465E0D15C920BE00BA5C1F /* cross_bg.png */; };
 		4F63DCF417172B0700136B7E /* cross_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78465E0E15C920BE00BA5C1F /* cross_bg@2x.png */; };
 		4F63DCF517172B0700136B7E /* toolbar_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 7820A0B515CB8E37008D0BB5 /* toolbar_bg.png */; };
@@ -1418,9 +1434,6 @@
 		4FFD701B17638546009836F5 /* IdentityId+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD701A17638546009836F5 /* IdentityId+EXFE.m */; };
 		4FFD701C17638546009836F5 /* IdentityId+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD701A17638546009836F5 /* IdentityId+EXFE.m */; };
 		4FFD701D17638546009836F5 /* IdentityId+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD701A17638546009836F5 /* IdentityId+EXFE.m */; };
-		7601F5641725861000032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
-		7601F56C1725861100032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
-		7601F56D1725861200032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
 		7601F5721727B94800032044 /* EFSearchIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7601F5711727B94700032044 /* EFSearchIdentityCell.m */; };
 		7601F5731727B94800032044 /* EFSearchIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7601F5711727B94700032044 /* EFSearchIdentityCell.m */; };
 		7601F5741727B94800032044 /* EFSearchIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7601F5711727B94700032044 /* EFSearchIdentityCell.m */; };
@@ -2185,7 +2198,6 @@
 		78CD517D15EF61CF00086036 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CD517915EF61CF00086036 /* Icon.png */; };
 		78CD517E15EF61CF00086036 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CD517A15EF61CF00086036 /* Icon@2x.png */; };
 		78CD518115EF620600086036 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CD517F15EF620600086036 /* iTunesArtwork.png */; };
-		78CEBFF115BFE7BE002BCA27 /* ExfeeInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78CEBFEF15BFE7BE002BCA27 /* ExfeeInputViewController.xib */; };
 		78D0A600158CFB4C00401BCA /* OAuthLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */; };
 		78D0A601158CFB5F00401BCA /* URLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FF158CFAD200401BCA /* URLParser.m */; };
 		78D0A602158CFE1900401BCA /* OAuthLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */; };
@@ -2381,6 +2393,19 @@
 		4F0C543617C7389300649C4F /* EFRemoveInvitationOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRemoveInvitationOperation.m; sourceTree = "<group>"; };
 		4F0C544117C74B7700649C4F /* EFRemoveMyInvitationOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRemoveMyInvitationOperation.h; sourceTree = "<group>"; };
 		4F0C544217C74B7800649C4F /* EFRemoveMyInvitationOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRemoveMyInvitationOperation.m; sourceTree = "<group>"; };
+		4F0C544A17CB65B900649C4F /* EFCrossTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFCrossTabBarViewController.h; sourceTree = "<group>"; };
+		4F0C544B17CB65B900649C4F /* EFCrossTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFCrossTabBarViewController.m; sourceTree = "<group>"; };
+		4F0C545617CC874200649C4F /* EFEditExfeeOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFEditExfeeOperation.h; sourceTree = "<group>"; };
+		4F0C545717CC874400649C4F /* EFEditExfeeOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFEditExfeeOperation.m; sourceTree = "<group>"; };
+		4F0C545B17CC875F00649C4F /* EFRsvpOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRsvpOperation.h; sourceTree = "<group>"; };
+		4F0C545C17CC876100649C4F /* EFRsvpOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRsvpOperation.m; sourceTree = "<group>"; };
+		4F0C546017CC879700649C4F /* EFRemoveNotificationIdentityOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRemoveNotificationIdentityOperation.h; sourceTree = "<group>"; };
+		4F0C546117CC879900649C4F /* EFRemoveNotificationIdentityOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRemoveNotificationIdentityOperation.m; sourceTree = "<group>"; };
+		4F0C546517CC9CD100649C4F /* EFPostConversationOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPostConversationOperation.h; sourceTree = "<group>"; };
+		4F0C546617CC9CD500649C4F /* EFPostConversationOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPostConversationOperation.m; sourceTree = "<group>"; };
+		4F0C546A17CCA62A00649C4F /* EFEntity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EFEntity.h; sourceTree = "<group>"; };
+		4F0C546B17CCF6CC00649C4F /* NSManagedObject+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+EXFE.h"; sourceTree = "<group>"; };
+		4F0C546C17CCF6CD00649C4F /* NSManagedObject+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+EXFE.m"; sourceTree = "<group>"; };
 		4F0E159916A95C390086AC4A /* edit_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30.png; sourceTree = "<group>"; };
 		4F0E159A16A95C390086AC4A /* edit_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30@2x.png"; sourceTree = "<group>"; };
 		4F0E354F179E8DF400FFA0E4 /* EFIdentityBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFIdentityBar.h; sourceTree = "<group>"; };
@@ -3326,9 +3351,6 @@
 		78CD517915EF61CF00086036 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		78CD517A15EF61CF00086036 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		78CD517F15EF620600086036 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
-		78CEBFED15BFE7BE002BCA27 /* ExfeeInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExfeeInputViewController.h; sourceTree = "<group>"; };
-		78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExfeeInputViewController.m; sourceTree = "<group>"; };
-		78CEBFEF15BFE7BE002BCA27 /* ExfeeInputViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExfeeInputViewController.xib; sourceTree = "<group>"; };
 		78D0A5FB158CFAD200401BCA /* OAuthLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAuthLoginViewController.h; sourceTree = "<group>"; };
 		78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAuthLoginViewController.m; sourceTree = "<group>"; };
 		78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAuthLoginViewController.xib; sourceTree = "<group>"; };
@@ -3722,6 +3744,7 @@
 		4FD9376016D6025500ED6677 /* Entity Extention */ = {
 			isa = PBXGroup;
 			children = (
+				4F0C546A17CCA62A00649C4F /* EFEntity.h */,
 				4FAD642516968C7F001870FF /* CrossTime+Helper.h */,
 				4FAD642616968C7F001870FF /* CrossTime+Helper.m */,
 				4FC8FCE9168D912E00409779 /* EFTime+Helper.h */,
@@ -3740,6 +3763,8 @@
 				763A01C11721222C0082CC9E /* LocalContact+EXFE.m */,
 				4FFD701917638546009836F5 /* IdentityId+EXFE.h */,
 				4FFD701A17638546009836F5 /* IdentityId+EXFE.m */,
+				4F0C546B17CCF6CC00649C4F /* NSManagedObject+EXFE.h */,
+				4F0C546C17CCF6CD00649C4F /* NSManagedObject+EXFE.m */,
 			);
 			name = "Entity Extention";
 			sourceTree = "<group>";
@@ -3803,6 +3828,8 @@
 				783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */,
 				4F64BA8A16ED9A2700B9594E /* WidgetExfeeViewController.h */,
 				4F64BA8B16ED9A2700B9594E /* WidgetExfeeViewController.m */,
+				4F0C544A17CB65B900649C4F /* EFCrossTabBarViewController.h */,
+				4F0C544B17CB65B900649C4F /* EFCrossTabBarViewController.m */,
 			);
 			name = Tab;
 			sourceTree = "<group>";
@@ -4384,6 +4411,8 @@
 		76E96BB9177AEBAE00C06ECD /* Conversation API Operation */ = {
 			isa = PBXGroup;
 			children = (
+				4F0C546517CC9CD100649C4F /* EFPostConversationOperation.h */,
+				4F0C546617CC9CD500649C4F /* EFPostConversationOperation.m */,
 				76E96BBA177AEBE100C06ECD /* EFLoadConversationOperation.h */,
 				76E96BBB177AEBE100C06ECD /* EFLoadConversationOperation.m */,
 			);
@@ -4403,6 +4432,12 @@
 				4F0C543617C7389300649C4F /* EFRemoveInvitationOperation.m */,
 				4F0C544117C74B7700649C4F /* EFRemoveMyInvitationOperation.h */,
 				4F0C544217C74B7800649C4F /* EFRemoveMyInvitationOperation.m */,
+				4F0C545617CC874200649C4F /* EFEditExfeeOperation.h */,
+				4F0C545717CC874400649C4F /* EFEditExfeeOperation.m */,
+				4F0C545B17CC875F00649C4F /* EFRsvpOperation.h */,
+				4F0C545C17CC876100649C4F /* EFRsvpOperation.m */,
+				4F0C546017CC879700649C4F /* EFRemoveNotificationIdentityOperation.h */,
+				4F0C546117CC879900649C4F /* EFRemoveNotificationIdentityOperation.m */,
 			);
 			name = "Crosses API Operation";
 			sourceTree = "<group>";
@@ -4451,9 +4486,6 @@
 				76D1A801171D5DFA00A35BBD /* EFChoosePeopleViewController.h */,
 				76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */,
 				76D1A803171D5DFA00A35BBD /* EFChoosePeopleViewController.xib */,
-				78CEBFED15BFE7BE002BCA27 /* ExfeeInputViewController.h */,
-				78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */,
-				78CEBFEF15BFE7BE002BCA27 /* ExfeeInputViewController.xib */,
 				78606CDF1696DA3F0014806A /* NewGatherViewController.h */,
 				78606CE01696DA3F0014806A /* NewGatherViewController.m */,
 				78606CE11696DA3F0014806A /* NewGatherViewController.xib */,
@@ -5519,7 +5551,6 @@
 				4F63DB2017172AA600136B7E /* location@2x.png in Resources */,
 				4F63DB2117172AA600136B7E /* gather_describe_area.png in Resources */,
 				4F63DB2217172AA600136B7E /* gather_describe_area@2x.png in Resources */,
-				4F63DB2317172AA600136B7E /* ExfeeInputViewController.xib in Resources */,
 				4F63DB2417172AA600136B7E /* cross_bg.png in Resources */,
 				4F63DB2517172AA600136B7E /* cross_bg@2x.png in Resources */,
 				762D9F9017B35798002A528B /* map_arrow_22blue@2x.png in Resources */,
@@ -5980,7 +6011,6 @@
 				4F63DCEF17172B0700136B7E /* location@2x.png in Resources */,
 				4F63DCF017172B0700136B7E /* gather_describe_area.png in Resources */,
 				4F63DCF117172B0700136B7E /* gather_describe_area@2x.png in Resources */,
-				4F63DCF217172B0700136B7E /* ExfeeInputViewController.xib in Resources */,
 				4F63DCF317172B0700136B7E /* cross_bg.png in Resources */,
 				4F63DCF417172B0700136B7E /* cross_bg@2x.png in Resources */,
 				4F63DCF517172B0700136B7E /* toolbar_bg.png in Resources */,
@@ -6441,7 +6471,6 @@
 				784D697B15BFCB6B00226A23 /* gather_describe_area.png in Resources */,
 				784D697C15BFCB6B00226A23 /* gather_describe_area@2x.png in Resources */,
 				762D9F8F17B35798002A528B /* map_arrow_22blue@2x.png in Resources */,
-				78CEBFF115BFE7BE002BCA27 /* ExfeeInputViewController.xib in Resources */,
 				78465E1115C920BE00BA5C1F /* cross_bg.png in Resources */,
 				78465E1215C920BE00BA5C1F /* cross_bg@2x.png in Resources */,
 				7820A0B715CB8E37008D0BB5 /* toolbar_bg.png in Resources */,
@@ -7041,7 +7070,6 @@
 				4F25A1C2171FBA2A000513B5 /* CSLinearLayoutView.m in Sources */,
 				763A01C31721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
 				763A01D017212B080082CC9E /* RoughIdentity.m in Sources */,
-				7601F56C1725861100032044 /* ExfeeInputViewController.m in Sources */,
 				7601F5731727B94800032044 /* EFSearchIdentityCell.m in Sources */,
 				4F00546D172836F500D4B429 /* EFTextField.m in Sources */,
 				7670126F1729054500B5445E /* EFPopoverController.m in Sources */,
@@ -7173,6 +7201,12 @@
 				4FB14BE417C228B400EFC3F9 /* EFEditCrossOperation.m in Sources */,
 				4F0C543817C7389300649C4F /* EFRemoveInvitationOperation.m in Sources */,
 				4F0C544417C74B7800649C4F /* EFRemoveMyInvitationOperation.m in Sources */,
+				4F0C544D17CB65BA00649C4F /* EFCrossTabBarViewController.m in Sources */,
+				4F0C545917CC874700649C4F /* EFEditExfeeOperation.m in Sources */,
+				4F0C545E17CC876400649C4F /* EFRsvpOperation.m in Sources */,
+				4F0C546317CC879B00649C4F /* EFRemoveNotificationIdentityOperation.m in Sources */,
+				4F0C546817CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */,
+				4F0C546E17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7306,7 +7340,6 @@
 				4F25A1C3171FBA2B000513B5 /* CSLinearLayoutView.m in Sources */,
 				763A01C41721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
 				763A01D117212B080082CC9E /* RoughIdentity.m in Sources */,
-				7601F56D1725861200032044 /* ExfeeInputViewController.m in Sources */,
 				7601F5741727B94800032044 /* EFSearchIdentityCell.m in Sources */,
 				4F00546E172836F500D4B429 /* EFTextField.m in Sources */,
 				767012701729054500B5445E /* EFPopoverController.m in Sources */,
@@ -7438,6 +7471,12 @@
 				4FB14BE517C228B400EFC3F9 /* EFEditCrossOperation.m in Sources */,
 				4F0C543917C7389300649C4F /* EFRemoveInvitationOperation.m in Sources */,
 				4F0C544517C74B7800649C4F /* EFRemoveMyInvitationOperation.m in Sources */,
+				4F0C544E17CB65BA00649C4F /* EFCrossTabBarViewController.m in Sources */,
+				4F0C545A17CC874700649C4F /* EFEditExfeeOperation.m in Sources */,
+				4F0C545F17CC876400649C4F /* EFRsvpOperation.m in Sources */,
+				4F0C546417CC879B00649C4F /* EFRemoveNotificationIdentityOperation.m in Sources */,
+				4F0C546917CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */,
+				4F0C546F17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7571,7 +7610,6 @@
 				4F25A1BA171FB9FF000513B5 /* CSLinearLayoutView.m in Sources */,
 				763A01C21721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
 				763A01CF17212B080082CC9E /* RoughIdentity.m in Sources */,
-				7601F5641725861000032044 /* ExfeeInputViewController.m in Sources */,
 				7601F5721727B94800032044 /* EFSearchIdentityCell.m in Sources */,
 				4F00546C172836F500D4B429 /* EFTextField.m in Sources */,
 				7670126E1729054500B5445E /* EFPopoverController.m in Sources */,
@@ -7703,6 +7741,12 @@
 				4FB14BE317C228B400EFC3F9 /* EFEditCrossOperation.m in Sources */,
 				4F0C543717C7389300649C4F /* EFRemoveInvitationOperation.m in Sources */,
 				4F0C544317C74B7800649C4F /* EFRemoveMyInvitationOperation.m in Sources */,
+				4F0C544C17CB65BA00649C4F /* EFCrossTabBarViewController.m in Sources */,
+				4F0C545817CC874700649C4F /* EFEditExfeeOperation.m in Sources */,
+				4F0C545D17CC876400649C4F /* EFRsvpOperation.m in Sources */,
+				4F0C546217CC879B00649C4F /* EFRemoveNotificationIdentityOperation.m in Sources */,
+				4F0C546717CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */,
+				4F0C546D17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

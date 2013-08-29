@@ -1220,7 +1220,7 @@
 //                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
 //                    if(code)
 //                        if([code intValue]==200) {
-//                            [APICrosses LoadCrossWithCrossId:[cross.cross_id integerValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
+//                            [APICrosses LoadCrossWithCrossId:[cross.cross_id unsignedIntegerValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
 //                        }
 //                }
 //                //We got an error!
