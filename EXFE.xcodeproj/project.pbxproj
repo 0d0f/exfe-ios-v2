@@ -1500,6 +1500,9 @@
 		761B24AF17CF4D270091DD7B /* map_arrow_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 761B24AE17CF4D270091DD7B /* map_arrow_blue.png */; };
 		761B24B017CF4D270091DD7B /* map_arrow_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 761B24AE17CF4D270091DD7B /* map_arrow_blue.png */; };
 		761B24B117CF4D270091DD7B /* map_arrow_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 761B24AE17CF4D270091DD7B /* map_arrow_blue.png */; };
+		761B24BB17CF53000091DD7B /* FPPressDragGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 761B24BA17CF53000091DD7B /* FPPressDragGestureRecognizer.m */; };
+		761B24BC17CF53000091DD7B /* FPPressDragGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 761B24BA17CF53000091DD7B /* FPPressDragGestureRecognizer.m */; };
+		761B24BD17CF53000091DD7B /* FPPressDragGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 761B24BA17CF53000091DD7B /* FPPressDragGestureRecognizer.m */; };
 		76295DBA174B2112002F5CEF /* EFTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB3174B2112002F5CEF /* EFTabBar.m */; };
 		76295DBB174B2112002F5CEF /* EFTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB3174B2112002F5CEF /* EFTabBar.m */; };
 		76295DBC174B2112002F5CEF /* EFTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB3174B2112002F5CEF /* EFTabBar.m */; };
@@ -2808,6 +2811,8 @@
 		7615B33A172AB7D200C54031 /* EFLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLabel.m; sourceTree = "<group>"; };
 		7619DCE417CDD8C70095951B /* EFUserDefaultsKeyDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFUserDefaultsKeyDefines.h; sourceTree = "<group>"; };
 		761B24AE17CF4D270091DD7B /* map_arrow_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_arrow_blue.png; sourceTree = "<group>"; };
+		761B24B917CF53000091DD7B /* FPPressDragGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FPPressDragGestureRecognizer.h; path = Vendor/PressDrag/PressDrag/FPPressDragGestureRecognizer.h; sourceTree = SOURCE_ROOT; };
+		761B24BA17CF53000091DD7B /* FPPressDragGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FPPressDragGestureRecognizer.m; path = Vendor/PressDrag/PressDrag/FPPressDragGestureRecognizer.m; sourceTree = SOURCE_ROOT; };
 		76295DB2174B2112002F5CEF /* EFTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTabBar.h; sourceTree = "<group>"; };
 		76295DB3174B2112002F5CEF /* EFTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTabBar.m; sourceTree = "<group>"; };
 		76295DB4174B2112002F5CEF /* EFTabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTabBarItem.h; sourceTree = "<group>"; };
@@ -4000,6 +4005,15 @@
 			name = RouteX;
 			sourceTree = "<group>";
 		};
+		761B24BE17CF53050091DD7B /* PressDrag */ = {
+			isa = PBXGroup;
+			children = (
+				761B24B917CF53000091DD7B /* FPPressDragGestureRecognizer.h */,
+				761B24BA17CF53000091DD7B /* FPPressDragGestureRecognizer.m */,
+			);
+			name = PressDrag;
+			sourceTree = "<group>";
+		};
 		76295DA8174B20B3002F5CEF /* Popover */ = {
 			isa = PBXGroup;
 			children = (
@@ -4790,6 +4804,7 @@
 		785FD54E158065610056590D /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				761B24BE17CF53050091DD7B /* PressDrag */,
 				76A8370E17BCA59400CE5D54 /* MKMapViewZoom */,
 				76555B51179E78D600BCC5A7 /* WeixinSDK */,
 				76B1240B1796F44900A73E59 /* Sqlite */,
@@ -7185,6 +7200,7 @@
 				76B123B31796470C00A73E59 /* EFRoutePath.m in Sources */,
 				76B123B61796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */,
 				76B123CE17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */,
+				761B24BC17CF53000091DD7B /* FPPressDragGestureRecognizer.m in Sources */,
 				76B123E117965DDB00A73E59 /* EFDownloadOperation.m in Sources */,
 				76B124131796F44900A73E59 /* CSqlite.m in Sources */,
 				4F7AA1C517969A55005C4223 /* EFChangeUserBasicProfileOperation.m in Sources */,
@@ -7455,6 +7471,7 @@
 				76B123B11796470C00A73E59 /* EFRouteLocation.m in Sources */,
 				76B123B41796470C00A73E59 /* EFRoutePath.m in Sources */,
 				76B123B71796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */,
+				761B24BD17CF53000091DD7B /* FPPressDragGestureRecognizer.m in Sources */,
 				76B123CF17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */,
 				76B124141796F44900A73E59 /* CSqlite.m in Sources */,
 				4F7AA1C617969A55005C4223 /* EFChangeUserBasicProfileOperation.m in Sources */,
@@ -7725,6 +7742,7 @@
 				76B123AF1796470C00A73E59 /* EFRouteLocation.m in Sources */,
 				76B123B21796470C00A73E59 /* EFRoutePath.m in Sources */,
 				76B123B51796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */,
+				761B24BB17CF53000091DD7B /* FPPressDragGestureRecognizer.m in Sources */,
 				76B123CD17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */,
 				76B124121796F44900A73E59 /* CSqlite.m in Sources */,
 				4F7AA1C417969A55005C4223 /* EFChangeUserBasicProfileOperation.m in Sources */,
