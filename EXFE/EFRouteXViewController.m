@@ -122,8 +122,7 @@
 }
 
 - (void)_startUpdating {
-    // register to update location
-    [self.mapDataSource registerToUpdateLocation];
+//    [self.mapDataSource registerToUpdateLocation];
     [self.mapDataSource getPeopleBreadcrumbs];
     
     [self.mapDataSource openStreaming];

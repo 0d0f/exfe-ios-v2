@@ -53,7 +53,7 @@
     if (location .y - viewHalfHeight < blank) {
         location.y = viewHalfHeight + blank;
     } else if (location.y + viewHalfHeight > CGRectGetHeight(baseViewBounds)) {
-        location.y = viewHalfHeight + blank;
+        location.y = CGRectGetHeight(baseViewBounds) - (viewHalfHeight + blank);
     }
     
     return location;
