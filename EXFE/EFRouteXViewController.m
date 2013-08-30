@@ -994,23 +994,28 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations {
-    for (EFRouteLocation *routeLocation in locations) {
-        [dataSource addRouteLocation:routeLocation toMapView:self.mapView canChangeType:NO];
-    }
-    
-    if ([EFLocationManager defaultManager].userLocation) {
-        EFRouteLocation *destination = self.mapDataSource.destinationLocation;
-        EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
-        if (userLocationView) {
-            if (destination) {
-                userLocationView.showNavigation = YES;
-                CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
-                userLocationView.radianBetweenDestination = radian;
-            } else {
-                userLocationView.showNavigation = NO;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (EFRouteLocation *routeLocation in locations) {
+            [dataSource addRouteLocation:routeLocation toMapView:self.mapView canChangeType:NO];
+        }
+        
+        if ([EFLocationManager defaultManager].userLocation) {
+            EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+            EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
+            if (userLocationView) {
+                if (destination) {
+                    userLocationView.showNavigation = YES;
+                    CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
+                    userLocationView.radianBetweenDestination = radian;
+                } else {
+                    userLocationView.showNavigation = NO;
+                }
             }
         }
-    }
+        
+        [self.selfTableView reloadData];
+        [self.tableView reloadData];
+    });
 }
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRoutePaths:(NSArray *)paths {
@@ -1018,24 +1023,29 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource needDeleteRouteLocation:(NSString *)routeLocationId {
-    EFRouteLocation *routeLocation = [dataSource routeLocationForRouteLocationId:routeLocationId];
-    if (routeLocation) {
-        [dataSource removeRouteLocation:routeLocation fromMapView:self.mapView];
-    }
-    
-    if ([EFLocationManager defaultManager].userLocation) {
-        EFRouteLocation *destination = self.mapDataSource.destinationLocation;
-        EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
-        if (userLocationView) {
-            if (destination) {
-                userLocationView.showNavigation = YES;
-                CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
-                userLocationView.radianBetweenDestination = radian;
-            } else {
-                userLocationView.showNavigation = NO;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        EFRouteLocation *routeLocation = [dataSource routeLocationForRouteLocationId:routeLocationId];
+        if (routeLocation) {
+            [dataSource removeRouteLocation:routeLocation fromMapView:self.mapView];
+        }
+        
+        if ([EFLocationManager defaultManager].userLocation) {
+            EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+            EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
+            if (userLocationView) {
+                if (destination) {
+                    userLocationView.showNavigation = YES;
+                    CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
+                    userLocationView.radianBetweenDestination = radian;
+                } else {
+                    userLocationView.showNavigation = NO;
+                }
             }
         }
-    }
+        
+        [self.selfTableView reloadData];
+        [self.tableView reloadData];
+    });
 }
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource routeLocationDidGetGeomarkInfo:(EFRouteLocation *)routeLocation {
