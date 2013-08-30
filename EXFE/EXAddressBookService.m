@@ -158,7 +158,10 @@ typedef void (^EFFetchPeopleCompleteBlock)(void);
 //                    NSLog(@"%@", (NSString *)CFErrorCopyDescription(errorRef));
                 }
             } else if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
                 _addressBookRef = ABAddressBookCreate();
+#pragma clang diagnostic pop
             }
         }];
         
@@ -343,7 +346,10 @@ typedef void (^EFFetchPeopleCompleteBlock)(void);
 //                NSLog(@"%@", (NSString *)CFErrorCopyDescription(errorRef));
             }
         } else if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
             _addressBookRef = ABAddressBookCreate();
+#pragma clang diagnostic pop
         }
     }];
     

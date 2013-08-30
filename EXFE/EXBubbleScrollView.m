@@ -109,7 +109,7 @@
 	[[button titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     [[button titleLabel] setShadowColor:[UIColor blackColor]];
     [[button titleLabel] setShadowOffset:CGSizeMake(1.0, 1.0)];
-	[[button titleLabel] setLineBreakMode:UILineBreakModeTailTruncation];
+	[[button titleLabel] setLineBreakMode:NSLineBreakByTruncatingTail];
 	[button setTitleEdgeInsets:UIEdgeInsetsMake(2, 10, 0, 10)];
 	[button setTitle:title forState:UIControlStateNormal];
     

@@ -180,7 +180,7 @@
         [self.headView showAnimated:NO];
         
         EFLandingViewController *viewController = [[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil];
-        [app.window.rootViewController presentModalViewController:viewController animated:NO];
+        [app.window.rootViewController presentViewController:viewController animated:NO completion:nil];
         
     }
     

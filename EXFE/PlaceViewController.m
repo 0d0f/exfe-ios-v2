@@ -317,7 +317,7 @@
 #pragma mark handler
 - (void) Close{
     [[RKObjectManager sharedManager].operationQueue cancelAllOperations];
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) done{
@@ -327,7 +327,7 @@
     } else {
         
         [self storeSelectedPlace:self.customPlace];
-        
+    
 //        self.selecetedPlace.title = [self.customPlace valueForKeyPath:@"title"];
 //        self.selecetedPlace.place_description = [self.customPlace valueForKeyPath:@"description"];
 //
@@ -343,7 +343,7 @@
     }
 
     [self.delegate setPlace:self.selecetedPlace];
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) maplongpress:(UILongPressGestureRecognizer *)gestureRecognizer{

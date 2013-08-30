@@ -63,7 +63,7 @@
         _name = [[UILabel alloc] initWithFrame:rectName];
         _name.textColor = [UIColor COLOR_SNOW];
         _name.font = [UIFont fontWithName:@"HelveticaNeue" size:13];
-        _name.lineBreakMode = UILineBreakModeCharacterWrap;
+        _name.lineBreakMode = NSLineBreakByCharWrapping;
         _name.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _name.backgroundColor = [UIColor clearColor];
         [self addSubview:_name];

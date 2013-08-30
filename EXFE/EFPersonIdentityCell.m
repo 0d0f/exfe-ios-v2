@@ -50,7 +50,7 @@
     label.shadowOffset = (CGSize){0, 1};
     if ([label respondsToSelector:@selector(lineBreakMode)]) {
         // ios 6
-        label.lineBreakMode = UILineBreakModeClip;
+        label.lineBreakMode = NSLineBreakByClipping;
     }
     label.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:14];
     [button addSubview:label];

@@ -681,7 +681,7 @@ static NSDictionary * _keywordDict = nil;
             
             NSDictionary *iosVersionObject = [JSON valueForKeyPath:@"response.ios"];
             NSString *version = [iosVersionObject valueForKey:@"version"];
-            NSString *description = [iosVersionObject valueForKey:@"description"];
+            NSString *description __attribute__((unused)) = [iosVersionObject valueForKey:@"description"];
             NSString *url = [iosVersionObject valueForKey:@"url"];
             
             NSString *localVersion = [UIApplication appVersion];

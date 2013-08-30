@@ -139,7 +139,7 @@
         if(name!=nil){
             [[UIColor whiteColor] set];
             UIFont *font=[UIFont fontWithName:@"HelveticaNeue" size:11];
-            [name drawInRect:CGRectMake(5, rect.size.height-5-15+2, rect.size.width-10, 15) withFont:font lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
+            [name drawInRect:CGRectMake(5, rect.size.height-5-15+2, rect.size.width-10, 15) withFont:font lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentCenter];
         }
     }
     

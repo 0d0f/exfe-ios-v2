@@ -284,7 +284,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
         [label wrapContent];
-        label.lineBreakMode = UILineBreakModeWordWrap;
+        label.lineBreakMode = NSLineBreakByWordWrapping;
         self.labelVerifyDescription = label;
         self.labelVerifyDescription.tag = kViewTagVerificationDescription;
     }
@@ -297,7 +297,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         label.numberOfLines = 1;
         label.backgroundColor = [UIColor whiteColor];
         label.hidden = YES;
-        label.textAlignment = UITextAlignmentRight;
+        label.textAlignment = NSTextAlignmentRight;
         UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
             
             [self hide:sender.view withAnmated:NO];
@@ -325,7 +325,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
         label.textColor = [UIColor COLOR_WA(25, 0xFF)];
-        label.lineBreakMode = UILineBreakModeWordWrap;
+        label.lineBreakMode = NSLineBreakByWordWrapping;
         label.numberOfLines = 0;
         label.tag = kViewTagErrorInline;
         self.inlineError = label;
@@ -720,7 +720,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             };
             oauth.oAuthURL = oAuthURL;
             oauth.external_username = username;
-            [self presentModalViewController:oauth animated:YES];
+            [self presentViewController:oauth animated:YES completion:nil];
             return;
         } else {
             // unsupported provider
@@ -985,7 +985,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                             };
                                             oauth.oAuthURL = url;
                                             oauth.external_username = [identity valueForKey:@"external_username"];
-                                            [self presentModalViewController:oauth animated:YES];
+                                            [self presentViewController:oauth animated:YES completion:nil];
 
                                         }
                                     }
@@ -1382,17 +1382,20 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         }];
                     } else if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")){
                         // iOS 5 http://stackoverflow.com/questions/9667921/prompt-login-alert-with-twitter-framework-in-ios5
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
                         TWTweetComposeViewController *viewController = [[TWTweetComposeViewController alloc] init];
+#pragma clang diagnostic pop
                         //hide the tweet screen
                         viewController.view.hidden = YES;
                         
                         //fire tweetComposeView to show "No Twitter Accounts" alert view on iOS5.1
                         viewController.completionHandler = ^(TWTweetComposeViewControllerResult result) {
                             if (result == TWTweetComposeViewControllerResultCancelled) {
-                                [self dismissModalViewControllerAnimated:NO];
+                                [self dismissViewControllerAnimated:NO completion:nil];
                             }
                         };
-                        [self presentModalViewController:viewController animated:NO];
+                        [self presentViewController:viewController animated:NO completion:nil];
                         
                         //hide the keyboard
                         [viewController.view endEditing:YES];
@@ -1417,7 +1420,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [_accountStore requestAccessToAccountsWithType:twitterType options:nil completion:handler];
         }
         else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
             [_accountStore requestAccessToAccountsWithType:twitterType withCompletionHandler:handler];
+#pragma clang diagnostic pop
         }
     }
 

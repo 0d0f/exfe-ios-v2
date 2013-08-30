@@ -315,7 +315,7 @@
         label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
         label.textColor = [UIColor blackColor];
         if ([label respondsToSelector:@selector(lineBreakMode)]) {
-            label.lineBreakMode = UILineBreakModeClip;
+            label.lineBreakMode = NSLineBreakByClipping;
         }
         [self.contentView addSubview:label];
         self.userNameLabel = label;

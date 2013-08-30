@@ -190,7 +190,7 @@
         titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
         titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         titleView.backgroundColor = [UIColor clearColor];
-        titleView.lineBreakMode = UILineBreakModeWordWrap;
+        titleView.lineBreakMode = NSLineBreakByWordWrapping;
         titleView.numberOfLines = 2;
         titleView.textAlignment = NSTextAlignmentCenter;
         titleView.shadowColor = [UIColor blackColor];
@@ -437,7 +437,7 @@
         }
         titleViewController.imgurl=imgurl;
         titleViewController.editFieldHint = editHint;
-        [self presentModalViewController:titleViewController animated:YES];
+        [self presentViewController:titleViewController animated:YES completion:nil];
         [titleViewController setCrossTitle:_cross.title desc:_cross.cross_description];
     }
 
@@ -446,7 +446,7 @@
         TimeViewController *timeViewController=[[TimeViewController alloc] initWithNibName:@"TimeViewController" bundle:nil];
         timeViewController.delegate=self;
         [timeViewController setDateTime:_cross.time];
-        [self presentModalViewController:timeViewController animated:YES];
+        [self presentViewController:timeViewController animated:YES completion:nil];
     }
     if (CGRectContainsPoint([placeTitleView frame], containerLocation) || CGRectContainsPoint([placeDescView frame], location))
     {
@@ -590,7 +590,7 @@
     }else if([status isEqualToString:@"search"]){
         placeViewController.showtableview=YES;
     }
-    [self presentModalViewController:placeViewController animated:YES];
+    [self presentViewController:placeViewController animated:YES completion:nil];
 }
 
 #pragma mark Refresh UI content methods

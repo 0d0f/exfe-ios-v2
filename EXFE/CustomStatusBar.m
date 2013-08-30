@@ -23,7 +23,7 @@
 //		[self addSubview:_indicator];
 		
 		_statusLabel = [[UILabel alloc] initWithFrame:self.frame];
-        _statusLabel.textAlignment=UITextAlignmentRight;
+        _statusLabel.textAlignment = NSTextAlignmentRight;
 		_statusLabel.backgroundColor = [UIColor blackColor];
 		_statusLabel.textColor = [UIColor whiteColor];
 		_statusLabel.font = [UIFont boldSystemFontOfSize:10.0f];

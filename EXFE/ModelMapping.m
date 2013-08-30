@@ -36,6 +36,7 @@
      ]
     ];
     RKResponseDescriptor *metaresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:metaMapping
+                                                                                                method:RKRequestMethodGET|RKRequestMethodPOST
                                                                                            pathPattern:nil
                                                                                                keyPath:@"meta"
                                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
@@ -98,6 +99,7 @@
     [identityMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"avatar" toKeyPath:@"avatar" withMapping:avatarEntityMapping]];
     
     RKResponseDescriptor *identityResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:identityMapping
+                                                                                                    method:RKRequestMethodGET|RKRequestMethodPOST
                                                                                                pathPattern:nil
                                                                                                    keyPath:@"response.identities"
                                                                                                statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
@@ -136,6 +138,7 @@
     [identityIdMapping addPropertyMapping:[RKAttributeMapping attributeMappingFromKeyPath:nil toKeyPath:@"identity_id"]];
     
     RKResponseDescriptor *identityIdResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:identityIdMapping
+                                                                                                      method:RKRequestMethodGET|RKRequestMethodPOST
                                                                                                  pathPattern:nil
                                                                                                      keyPath:@"notification_identities"
                                                                                                  statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
@@ -276,7 +279,7 @@
     [userMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"devices" toKeyPath:@"devices" withMapping:deviceMapping]];
     [userMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"avatar" toKeyPath:@"avatar" withMapping:avatarEntityMapping]];
     
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping pathPattern:nil keyPath:@"response.user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping method:RKRequestMethodGET|RKRequestMethodPOST pathPattern:nil keyPath:@"response.user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:responseDescriptor];
     
 #pragma mark EFTime
@@ -397,10 +400,10 @@
     [crossMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"time" toKeyPath:@"time" withMapping:crosstimeMapping]];
     [crossMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"place" toKeyPath:@"place" withMapping:placeMapping]];
     
-    RKResponseDescriptor *crossesresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping pathPattern:nil keyPath:@"response.crosses" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    RKResponseDescriptor *crossesresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping method:RKRequestMethodGET|RKRequestMethodPOST pathPattern:nil keyPath:@"response.crosses" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:crossesresponseDescriptor];
     
-    RKResponseDescriptor *crossresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping pathPattern:nil keyPath:@"response.cross" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    RKResponseDescriptor *crossresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping method:RKRequestMethodGET|RKRequestMethodPOST pathPattern:nil keyPath:@"response.cross" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:crossresponseDescriptor];
 
 #pragma mark Cross
@@ -431,13 +434,14 @@
     [crossrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"time" toKeyPath:@"time" withMapping:crosstimerequestMapping]];
     [crossrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"place" toKeyPath:@"place" withMapping:placerequestMapping]];
     
-    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:crossrequestMapping objectClass:[Cross class] rootKeyPath:@"cross"];
+    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:crossrequestMapping objectClass:[Cross class] rootKeyPath:@"cross" method:RKRequestMethodPOST];
     [objectManager addRequestDescriptor:requestDescriptor];
     
-    RKRequestDescriptor *exfeeRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:exfeerequestMapping objectClass:[Exfee class] rootKeyPath:@"exfee"];
+    RKRequestDescriptor *exfeeRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:exfeerequestMapping objectClass:[Exfee class] rootKeyPath:@"exfee" method:RKRequestMethodPOST];
     [objectManager addRequestDescriptor:exfeeRequestDescriptor];
     
-    RKResponseDescriptor *exfeeResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:exfeeMapping pathPattern:nil keyPath:@"response.exfee" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    RKResponseDescriptor *exfeeResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:exfeeMapping method:RKRequestMethodPOST|RKRequestMethodGET pathPattern:nil keyPath:@"response.exfee" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
     [objectManager addResponseDescriptor:exfeeResponseDescriptor];
     
     

@@ -833,7 +833,7 @@
     if (!cell) {
         cell = [[EFChoosePeopleViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ShowAllIdentity];
         UILabel *label = [[UILabel alloc] initWithFrame:(CGRect){{0, 0}, {320, 50}}];
-        label.textAlignment = UITextAlignmentCenter;
+        label.textAlignment = NSTextAlignmentCenter;
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
         label.textColor = [UIColor COLOR_ALUMINUM];
@@ -1022,7 +1022,7 @@
                              alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
                              UITextField *textField = [alertView textFieldAtIndex:0];
                              textField.placeholder = NSLocalizedString(@"Enter contact name", nil);
-                             textField.textAlignment = UITextAlignmentCenter;
+                             textField.textAlignment = NSTextAlignmentCenter;
                          }
                             completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
                                 if (buttonIndex == alertView.cancelButtonIndex) {

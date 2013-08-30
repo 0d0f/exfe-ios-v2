@@ -97,7 +97,7 @@
                 }
             });
         });
-        dispatch_release(fetch_queue);
+//        dispatch_release(fetch_queue);
     } else {
     // download
         dispatch_queue_t download_queue = dispatch_queue_create("queue.download.image", NULL);
@@ -118,7 +118,7 @@
                 }
              });
         });
-        dispatch_release(download_queue);
+//        dispatch_release(download_queue);
     }
 }
 
@@ -140,7 +140,7 @@
             NSString *imagePath = [self.cachePath stringByAppendingPathComponent:md5ImageKey];
             [imageData writeToFile:imagePath atomically:YES];
         });
-        dispatch_release(persist_queue);
+//        dispatch_release(persist_queue);
     }
 }
 

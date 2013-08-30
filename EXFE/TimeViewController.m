@@ -248,7 +248,7 @@
 
 }
 - (void) uselasttime{
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 - (void)didReceiveMemoryWarning
 {
@@ -293,18 +293,18 @@
 - (IBAction) Done:(id) sender{
 //    if(datechanged==YES)
     [self saveDate:nil];
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 //    
 }
 
 - (void) Close{
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
 - (void) saveDate:(NSString*) time_word{
     if([time_word isEqualToString:@"Sometime"])
-            [self dismissModalViewControllerAnimated:YES];
+            [self dismissViewControllerAnimated:YES completion:nil];
   
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     NSEntityDescription *eftimeEntity = [NSEntityDescription entityForName:@"EFTime" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
@@ -373,7 +373,7 @@
         NSString *timeword=[_times objectAtIndex:indexPath.row];
         [self saveDate:timeword];
     }
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) cleanDate{

@@ -95,7 +95,7 @@
     }
     
     titlelabel.backgroundColor=[UIColor clearColor];
-    titlelabel.textAlignment=UITextAlignmentCenter;
+    titlelabel.textAlignment = NSTextAlignmentCenter;
     [titlelabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:20]];
     [titlelabel setShadowColor:[UIColor colorWithWhite:0 alpha:0.75]];
     [titlelabel setShadowOffset:CGSizeMake(0, 1)];

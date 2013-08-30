@@ -218,7 +218,7 @@
                             } break;
                         }
                     } else {
-                        NSError *error = userInfo[@"error"];
+                        NSError *error __attribute__((unused)) = userInfo[@"error"];
                         
                     }
                     
@@ -255,7 +255,7 @@
                         } break;
                     }
                 } else {
-                    NSError *error = userInfo[@"error"];
+                    NSError *error __attribute__((unused)) = userInfo[@"error"];
                     // RKObjectManager *objectManager = [RKObjectManager sharedManager];
                     // [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
                 }
