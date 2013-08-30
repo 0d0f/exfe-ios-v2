@@ -287,7 +287,7 @@
 }
 
 - (void)_refreshTableViewFrame {
-    CGFloat height = [self.mapDataSource numberOfPeople] * [EFMapPersonCell defaultCellHeight];
+    CGFloat height = [self.mapDataSource numberOfPeople] * [EFMapPersonCell defaultCellHeight] + 4.0f;
     if (height + 100 > CGRectGetHeight(self.view.frame)) {
         height = CGRectGetHeight(self.view.frame) - 100.0f;
         self.tableView.scrollEnabled = YES;
