@@ -21,6 +21,7 @@ extern CGFloat HeadingInRadian(CLLocationCoordinate2D location1, CLLocationCoord
 - (void)mapDataSourcePeopleDidChange:(EFMarauderMapDataSource *)dataSource;
 
 // streaming
+- (void)mapDataRourceInitCompleted:(EFMarauderMapDataSource *)dataSource;
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didGetRouteLocations:(NSArray *)location;
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(EFMapPerson *)person;
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations;   // action: update, type: location

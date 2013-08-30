@@ -192,7 +192,8 @@
                                        failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                        }];
     
-    if (![[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
+    if (![[EFLocationManager defaultManager] isFirstTimeToPostUserLocation] &&
+        [[EFLocationManager defaultManager] canPostUserLocationInBackground]) {
         [[EFLocationManager defaultManager] startUpdatingLocation];
         [[EFLocationManager defaultManager] startUpdatingHeading];
     }
