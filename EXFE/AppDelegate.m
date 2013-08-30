@@ -328,9 +328,7 @@
                 NSLog(@"receive old push");
             } else  {
                 NSString * path = [userInfo valueForKeyPath:@"path"];
-                NSLog(@"path: %@", path);
                 if (path && [path isKindOfClass:[NSString class]]) {
-                    NSLog(@"receive new push");
                     NSURL *url = nil;
                     if (path.length > 0) {
                         url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:@"" path:path];
