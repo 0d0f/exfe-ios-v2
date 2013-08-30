@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Raleway-Regular.ttf</string>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -67,13 +63,17 @@
 	<key>CFBundleVersion</key>
 	<string>49</string>
 	<key>EXFE-build</key>
-	<string>m2B38H</string>
+	<string>m2B38U</string>
 	<key>FacebookAppID</key>
 	<string>434182423298466</string>
 	<key>FacebookDisplayName</key>
 	<string>0D0F</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Raleway-Regular.ttf</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
