@@ -791,7 +791,7 @@
     [sheet addButtonWithTitle:NSLocalizedString(@"Take photo", nil) handler:^{
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-            [self presentModalViewController:picker animated:YES];
+            [self presentViewController:picker animated:YES completion:nil];
         }else{
             // Simulator
         }
@@ -799,7 +799,7 @@
     }];
     [sheet addButtonWithTitle:NSLocalizedString(@"Choose photo", nil) handler:^{
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        [self presentModalViewController:picker animated:YES];
+        [self presentViewController:picker animated:YES completion:nil];
     }];
     [sheet addButtonWithTitle:NSLocalizedString(@"Clear portrait", nil) handler:^{
         // TODO: clear portrait
@@ -1011,7 +1011,7 @@
 #pragma mark UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
     
     if ([mediaType isEqualToString:@"public.image"]){
@@ -1043,7 +1043,7 @@
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo

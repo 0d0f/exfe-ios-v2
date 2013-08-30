@@ -327,7 +327,7 @@
         label.numberOfLines = 1;
         label.backgroundColor = [UIColor whiteColor];
         label.hidden = YES;
-        label.textAlignment = UITextAlignmentRight;
+        label.textAlignment = NSTextAlignmentRight;
         UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
             
             [self hide:sender.view withAnmated:NO];
@@ -351,7 +351,7 @@
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
         label.textColor = [UIColor COLOR_WA(25, 0xFF)];
-        label.lineBreakMode = UILineBreakModeWordWrap;
+        label.lineBreakMode = NSLineBreakByWordWrapping;
         label.numberOfLines = 0;
         label.tag = kViewTagErrorInline;
         self.inlineError = label;
@@ -587,7 +587,7 @@
 #pragma mark UIButton action
 - (void)goBack:(UIControl*)sender
 {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)forgetPwd:(id)view
@@ -806,7 +806,7 @@
                                                                          }
                                                                      };
                                                                      
-                                                                     [self presentModalViewController:oauth animated:YES];
+                                                                     [self presentViewController:oauth animated:YES completion:nil];
                                                                  }
                                                              } else if ([@"VERIFYING" isEqualToString:action]) {
                                                                  // show verifying message
@@ -951,7 +951,7 @@
                      alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
                      UITextField *textField = [alertView textFieldAtIndex:0];
                      textField.placeholder = [NSLocalizedString(@"Set {{PRODUCT_APP_NAME}} password", nil) templateFromDict:[Util keywordDict]];
-                     textField.textAlignment = UITextAlignmentCenter;
+                     textField.textAlignment = NSTextAlignmentCenter;
 //                     textField.delegate = self;
                      if (msg) {
                          [self showErrorInfo:msg over:textField on:[textField superview]];

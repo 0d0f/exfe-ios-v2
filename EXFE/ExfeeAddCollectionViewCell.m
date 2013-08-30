@@ -22,14 +22,14 @@
         [self.contentView addSubview:_avatar];
         
         _description = [[UILabel alloc] initWithFrame:CGRectMake(0, 66, CGRectGetWidth(frame), 16)];
-        _description.textAlignment = UITextAlignmentCenter;
+        _description.textAlignment = NSTextAlignmentCenter;
         _description.backgroundColor = [UIColor clearColor];
         _description.textColor = [UIColor whiteColor];
         _description.font = [UIFont fontWithName:@"Helvetica Neue" size:13];
         [self.contentView addSubview:_description];
         
         _rsvp = [[UILabel alloc] initWithFrame:CGRectMake(0, 79, CGRectGetWidth(frame), 16)];
-        _rsvp.textAlignment = UITextAlignmentCenter;
+        _rsvp.textAlignment = NSTextAlignmentCenter;
         _rsvp.backgroundColor = [UIColor clearColor];
         _rsvp.textColor = [UIColor whiteColor];
         _rsvp.text = NSLocalizedString(@"Accepted", @"Accepted in Add Exfee");

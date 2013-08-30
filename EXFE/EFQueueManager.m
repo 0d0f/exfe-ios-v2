@@ -143,19 +143,15 @@
 
 - (void)operationDone:(NSOperation *)operation {
     CompleteBlock completeBlock = nil;
-#warning ARC change mark
+    
     @synchronized (self) {
         completeBlock = [self.runningOperationToHandlerMap objectForKey:[NSValue valueWithNonretainedObject:operation]];
-//        if (completeBlock) {
-//            [completeBlock retain];
-//        }
         [self.runningOperationToHandlerMap removeObjectForKey:[NSValue valueWithNonretainedObject:operation]];
     }
     
     if (![operation isCancelled] && completeBlock) {
         dispatch_async(dispatch_get_main_queue(), ^{
             completeBlock();
-//            Block_release(completeBlock);
         });
     }
 }

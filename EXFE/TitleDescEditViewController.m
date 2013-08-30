@@ -234,11 +234,11 @@
 
 
 - (void) Close{
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 - (void) done:(id)sender{
     [self.delegate setTitle:titleView.text Description:descView.text];
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) setCrossTitle:(NSString*)title desc:(NSString*)desc{

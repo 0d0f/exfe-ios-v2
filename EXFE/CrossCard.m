@@ -211,27 +211,27 @@
     
     if (time == nil || time.length == 0) {
         [[UIColor COLOR_ALUMINUM] set];
-        [NSLocalizedString(@"Sometime", nil) drawInRect:timeRect withFont:font17 lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+        [NSLocalizedString(@"Sometime", nil) drawInRect:timeRect withFont:font17 lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentLeft];
     }else{
         if (hlTime){
             [[UIColor COLOR_BLUE_SEA] set];
         }else{
             [[UIColor COLOR_BLACK] set];
         }
-        [time drawInRect:timeRect withFont:font17 lineBreakMode:UILineBreakModeCharacterWrap alignment:UITextAlignmentLeft];
+        [time drawInRect:timeRect withFont:font17 lineBreakMode:NSLineBreakByCharWrapping alignment:NSTextAlignmentLeft];
     }
     [[UIImage imageNamed:@"xlist_fadeout.png"] drawInRect:timeFadingRect];
     
     if (place == nil || place.length == 0) {
         [[UIColor COLOR_ALUMINUM] set];
-        [NSLocalizedString(@"Somewhere", nil) drawInRect:placeRect withFont:font17 lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+        [NSLocalizedString(@"Somewhere", nil) drawInRect:placeRect withFont:font17 lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentLeft];
     }else{
         if (hlPlace){
             [[UIColor COLOR_BLUE_SEA] set];
         }else{
             [[UIColor COLOR_BLACK] set];
         }
-        [place drawInRect:placeRect withFont:font17 lineBreakMode:UILineBreakModeCharacterWrap alignment:UITextAlignmentLeft];
+        [place drawInRect:placeRect withFont:font17 lineBreakMode:NSLineBreakByCharWrapping alignment:NSTextAlignmentLeft];
     }
     [[UIImage imageNamed:@"xlist_fadeout.png"] drawInRect:placeFadingRect];
     

@@ -191,7 +191,7 @@
     CGGradientRelease(gradient);
     CGColorSpaceRelease(colorSpace);
     
-    [_title drawInRect:CGRectMake(60, 11, 190, 20) withFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft];
+    [_title drawInRect:CGRectMake(60, 11, 190, 20) withFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentLeft];
     [_avatar drawInRect:CGRectMake(10, 5, 40, 40)];
     
     if (_providerIconSet != nil) {

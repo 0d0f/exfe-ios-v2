@@ -367,7 +367,7 @@
 
 - (void)showLanding:(UIViewController*)parent {
     EFLandingViewController *viewController = [[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil];
-    [parent presentModalViewController:viewController animated:NO];
+    [parent presentViewController:viewController animated:NO completion:nil];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -398,7 +398,7 @@
     if (!username) {
         username = @"";
     }
-    NSString *identity_id = [params objectForKey:@"identity_id"];
+    NSString *identity_id __attribute__((unused)) = [params objectForKey:@"identity_id"];
     
     self.url = url;
     
@@ -615,7 +615,7 @@
         
         [self.model loadCrossList];
         
-        [self.navigationController dismissModalViewControllerAnimated:YES];
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
@@ -639,7 +639,7 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
     
     EFLandingViewController *viewController = [[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil];
-    [self.navigationController presentModalViewController:viewController animated:NO];
+    [self.navigationController presentViewController:viewController animated:NO completion:nil];
 }
 
 - (void)switchContextByUserId:(NSUInteger)user_id withAbandon:(BOOL)flag

@@ -94,7 +94,7 @@
         
         username = [[UILabel alloc] initWithFrame:CGRectMake(40, DECTOR_HEIGHT / 2 - 56 / 2, 180, 56)];
         username.backgroundColor = [UIColor clearColor];
-        username.lineBreakMode = UILineBreakModeWordWrap;
+        username.lineBreakMode = NSLineBreakByWordWrapping;
         username.numberOfLines = 2;
         username.textColor = [UIColor COLOR_SNOW];
         username.font=[UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
@@ -146,7 +146,7 @@
         label.numberOfLines = 1;
         label.backgroundColor = [UIColor whiteColor];
         label.hidden = YES;
-        label.textAlignment = UITextAlignmentRight;
+        label.textAlignment = NSTextAlignmentRight;
         UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
             [self hide:sender.view withAnmated:NO];
         }];
@@ -227,7 +227,7 @@
         viewcontroller.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         viewcontroller.defaultImage = useravatar.image;
         viewcontroller.imageUrl = self.user.avatar.original;
-        [self presentModalViewController:viewcontroller animated:YES];
+        [self presentViewController:viewcontroller animated:YES completion:nil];
     }
     
 }
@@ -625,7 +625,7 @@
     if ([self.user.password boolValue]) {
         EFChangePasswordViewController *viewController = [[EFChangePasswordViewController alloc] initWithModel:self.model];
         viewController.user = self.user;
-        [self presentModalViewController:viewController animated:YES];
+        [self presentViewController:viewController animated:YES completion:nil];
     } else {
         [self setPwd:view];
     }
@@ -709,7 +709,7 @@
                                                                         };
                                                                         oauth.oAuthURL = url;
                                                                         oauth.external_username = [identity valueForKey:@"external_username"];
-                                                                        [self presentModalViewController:oauth animated:YES];
+                                                                        [self presentViewController:oauth animated:YES completion:nil];
 
                                                                     }
                                                                 }
@@ -790,7 +790,7 @@
                      alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
                      UITextField *textField = [alertView textFieldAtIndex:0];
                      textField.placeholder = [NSLocalizedString(@"Set {{PRODUCT_APP_NAME}} password", nil) templateFromDict:[Util keywordDict]];
-                     textField.textAlignment = UITextAlignmentCenter;
+                     textField.textAlignment = NSTextAlignmentCenter;
                      //                     textField.delegate = self;
                      if (msg) {
                          [self showErrorInfo:msg over:textField on:[textField superview]];

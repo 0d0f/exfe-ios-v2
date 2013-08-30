@@ -417,7 +417,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
         label.textColor = [UIColor COLOR_WA(25, 0xFF)];
-        label.lineBreakMode = UILineBreakModeWordWrap;
+        label.lineBreakMode = NSLineBreakByWordWrapping;
         label.numberOfLines = 0;
         label.tag = kViewTagErrorInline;
         self.inlineError = label;
@@ -655,7 +655,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
 #pragma mark UIButton action
 - (void)goBack:(UIControl*)sender
 {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)forgetPwd:(id)view
@@ -975,7 +975,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                      alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
                      UITextField *textField = [alertView textFieldAtIndex:0];
                      textField.placeholder = [NSLocalizedString(@"Set {{PRODUCT_APP_NAME}} password", nil) templateFromDict:[Util keywordDict]];
-                     textField.textAlignment = UITextAlignmentCenter;
+                     textField.textAlignment = NSTextAlignmentCenter;
                      //                     textField.delegate = self;
                      if (msg) {
                          [self showErrorInfo:msg over:textField on:[textField superview]];
@@ -1371,7 +1371,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                 NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback", [UIApplication sharedApplication].defaultScheme];
                 oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
                 
-                [self presentModalViewController:oauth animated:YES];
+                [self presentViewController:oauth animated:YES completion:nil];
             }
         }
     }];
@@ -1410,7 +1410,10 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
             [_accountStore requestAccessToAccountsWithType:twitterType options:nil completion:handler];
         }
         else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
             [_accountStore requestAccessToAccountsWithType:twitterType withCompletionHandler:handler];
+#pragma clang diagnostic pop
         }
     }
 }
@@ -1449,7 +1452,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                     NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback", [UIApplication sharedApplication].defaultScheme];
                     oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
                     
-                    [self presentModalViewController:oauth animated:YES];
+                    [self presentViewController:oauth animated:YES completion:nil];
                 }
             }
         }

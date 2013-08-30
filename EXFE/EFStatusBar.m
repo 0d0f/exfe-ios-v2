@@ -41,7 +41,7 @@
         label.backgroundColor = [UIColor blackColor];
         label.textColor = [UIColor whiteColor];
         label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:14];
-        label.textAlignment = UITextAlignmentRight;
+        label.textAlignment = NSTextAlignmentRight;
         [self addSubview:label];
         self.messageLabel = label;
         
