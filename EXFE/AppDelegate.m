@@ -192,7 +192,8 @@
                                        failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                        }];
     
-    if (![[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
+    if (![[EFLocationManager defaultManager] isFirstTimeToPostUserLocation] &&
+        [[EFLocationManager defaultManager] canPostUserLocationInBackground]) {
         [[EFLocationManager defaultManager] startUpdatingLocation];
         [[EFLocationManager defaultManager] startUpdatingHeading];
     }
@@ -318,42 +319,22 @@
 }
 
 - (void)receivePushData:(NSDictionary *)userInfo isOnForeground:(BOOL)isForeground {
+    
     if (isForeground == NO) {
-        CrossesViewController *crossViewController = self.crossesViewController;
         
         if (userInfo != nil) {
-            id arg = [userInfo objectForKey:@"args"];
+            id arg = [userInfo valueForKeyPath:@"args"];
             if(arg && [arg isKindOfClass:[NSDictionary class]]) {
-                id cid = [arg objectForKey:@"cid"];
-                id msg_type = [arg objectForKey:@"t"];
-                
-                if (cid != nil && [cid isKindOfClass:[NSNumber class]] && msg_type != nil && [msg_type isKindOfClass:[NSString class]]) {
-                    if ([cid intValue] > 0 ) {
-                        int cross_id = [cid intValue];
-                        NSString *type = (NSString *)msg_type;
-                        if ([type isEqualToString:@"i"]) {
-                            if ([crossViewController pushToCross:cross_id] == NO) {
-//                                [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
-                            }
-                        }
-                        
-                        if ([type isEqualToString:@"c"]) {
-                            if ([crossViewController pushToConversation:cross_id] == NO) {
-//                                [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
-                            }
-                        }
-                    }
-                }
-            } else {
-                NSString * path = [userInfo objectForKey:@"path"];
-                if (path && [arg isKindOfClass:[NSString class]]) {
+                NSLog(@"receive old push");
+            } else  {
+                NSString * path = [userInfo valueForKeyPath:@"path"];
+                if (path && [path isKindOfClass:[NSString class]]) {
                     NSURL *url = nil;
                     if (path.length > 0) {
                         url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:@"" path:path];
                     } else {
                         url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:@"" path:@"/"];
                     }
-                    NSLog(@"Got url path: %@", url);
                     [self jumpTo:url];
                 }
             }
@@ -523,7 +504,6 @@
 
 - (void)jumpTo:(NSURL *)url
 {
-//    NSString *host = [url host];
     NSArray *pathComps = [url pathComponents];
     NSDictionary * params = [url queryComponents];
     NSArray *anim = [params objectForKey:@"animated"];
@@ -561,7 +541,6 @@
     
     NSArray *pathComps = [url pathComponents];
     CrossesViewController *crossViewController = self.crossesViewController;
-    
     
     if ([host isEqualToString:@"crosses"]) {
         if (self.navigationController.viewControllers.count > 1) {

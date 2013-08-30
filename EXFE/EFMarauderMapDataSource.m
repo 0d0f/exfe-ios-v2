@@ -802,6 +802,9 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
             } else if ([action isEqualToString:@"init_end"]) {
                 if ([type isEqualToString:@"command"]) {
                     self.hasStreamInited = YES;
+                    if ([self.delegate respondsToSelector:@selector(mapDataRourceInitCompleted:)]) {
+                        [self.delegate mapDataRourceInitCompleted:self];
+                    }
                 }
             } else if ([action isEqualToString:@"save_to_history"]) {
                 if ([type isEqualToString:@"route"]) {

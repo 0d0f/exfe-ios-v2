@@ -60,6 +60,9 @@
 @property (nonatomic, strong) EFMapPersonViewController     *personViewController;
 @property (nonatomic, strong) EFRouteXAccessViewController  *accessViewController;
 
+@property (nonatomic, strong) UIAlertView           *backgroundAlertView;
+@property (nonatomic, strong) UIAlertView           *noGPSAlertView;
+
 @end
 
 @interface EFRouteXViewController (Private)
@@ -151,15 +154,29 @@
 }
 
 - (void)_checkRouteXStatus {
-    if ([self _isRouteXAvalibleForThisCorss]) {
-        [self _startUpdating];
+    if (![EFLocationManager locationServicesEnabled]) {
+        if (!self.noGPSAlertView) {
+#warning - 文案待替换
+            self.noGPSAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"定位服务未启动", nil)
+                                                             message:NSLocalizedString(@"您可以在设置内开启（文案待替换）", nil)
+                                                            delegate:self
+                                                   cancelButtonTitle:NSLocalizedString(@"好的", nil)
+                                                   otherButtonTitles:nil];
+            [self.noGPSAlertView show];
+        }
     } else {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"开启活点地图", nil)
-                                                            message:NSLocalizedString(@"这张“活点地图”将会展现您未来1小时内的方位。", nil)
-                                                           delegate:self
-                                                  cancelButtonTitle:NSLocalizedString(@"取消", nil)
-                                                  otherButtonTitles:NSLocalizedString(@"确定", nil), nil];
-        [alertView show];
+        if ([self _isRouteXAvalibleForThisCorss]) {
+            [self _startUpdating];
+        } else {
+            if (!self.backgroundAlertView) {
+                self.backgroundAlertView  = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"开启活点地图", nil)
+                                                                       message:NSLocalizedString(@"这张“活点地图”将会展现您未来1小时内的方位。", nil)
+                                                                      delegate:self
+                                                             cancelButtonTitle:NSLocalizedString(@"取消", nil)
+                                                             otherButtonTitles:NSLocalizedString(@"确定", nil), nil];
+                [self.backgroundAlertView show];
+            }
+        }
     }
 }
 
@@ -380,6 +397,10 @@
     
     [self _invalidBreadcrumbUpdateTimer];
     
+    if (![[EFLocationManager defaultManager] canPostUserLocationInBackground]) {
+        [[EFLocationManager defaultManager] stopUpdatingLocation];
+    }
+    
     if (self.geomarkGroupViewController) {
         [self.geomarkGroupViewController dismissAnimated:NO];
     }
@@ -488,14 +509,24 @@
 #pragma mark - UIAlertView
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == alertView.firstOtherButtonIndex) {
-        [self _startUpdating];
-        [self _addRouteXStatuesWithStatus:YES];
-    } else {
-        EFRouteXAccessViewController *routeXAccessViewController = [[EFRouteXAccessViewController alloc] initWithViewFrame:self.view.bounds];
-        routeXAccessViewController.delegate = self;
-        [self.view addSubview:routeXAccessViewController.view];
-        self.accessViewController = routeXAccessViewController;
+    if (alertView == self.backgroundAlertView) {
+        if (buttonIndex == alertView.firstOtherButtonIndex) {
+            [self _startUpdating];
+            [self _addRouteXStatuesWithStatus:YES];
+        } else {
+            EFRouteXAccessViewController *routeXAccessViewController = [[EFRouteXAccessViewController alloc] initWithViewFrame:self.view.bounds];
+            routeXAccessViewController.delegate = self;
+            [self.view addSubview:routeXAccessViewController.view];
+            self.accessViewController = routeXAccessViewController;
+        }
+        
+        self.backgroundAlertView = nil;
+    } else if (alertView == self.noGPSAlertView) {
+        if (buttonIndex == alertView.cancelButtonIndex) {
+#warning - DIFF action base on target
+            [self.tabBarViewController.navigationController popViewControllerAnimated:YES];
+            self.noGPSAlertView = nil;
+        }
     }
 }
 
@@ -866,6 +897,49 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 #pragma mark - EFMarauderMapDataSourceDelegate
 
+- (void)mapDataRourceInitCompleted:(EFMarauderMapDataSource *)dataSource {
+    if (![EFLocationManager defaultManager].userLocation.location) {
+        NSArray *routeLocations = [dataSource allRouteLocations];
+        NSArray *people = [dataSource allPeople];
+        NSMutableDictionary *peopleLocationMap = [[NSMutableDictionary alloc] init];
+        for (EFMapPerson *person in people) {
+            if (person.lastLocation) {
+                [peopleLocationMap setValue:person.lastLocation forKey:person.userIdString];
+            }
+        }
+        
+        if ((!routeLocations || !routeLocations.count) && (!peopleLocationMap.count)) {
+            return;
+        }
+        
+        if (1 == routeLocations.count + peopleLocationMap.count) {
+            CLLocationCoordinate2D centerCoordinate;
+            if (routeLocations.count) {
+                centerCoordinate = ((EFRouteLocation *)routeLocations[0]).coordinate;
+            } else {
+                centerCoordinate = ((EFLocation *)peopleLocationMap.allValues[0]).coordinate;
+            }
+            
+            MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(centerCoordinate, 5000.0f, 5000.0f);
+            MKMapRect mapRect = MKMapRectForCoordinateRegion(region);
+            [self.mapView setVisibleMapRect:mapRect animated:YES];
+        } else {
+            CGFloat minX = CGFLOAT_MAX, minY = CGFLOAT_MAX, maxX = CGFLOAT_MIN, maxY = CGFLOAT_MIN;
+            for (EFRouteLocation *routeLocation in routeLocations) {
+                MKMapPoint mapPoint = MKMapPointForCoordinate(routeLocation.coordinate);
+                
+                minX = MIN(minX, mapPoint.x);
+                minY = MIN(minY, mapPoint.y);
+                maxX = MAX(maxX, mapPoint.x);
+                maxY = MAX(maxY, mapPoint.y);
+            }
+            
+            MKMapRect mapRect = MKMapRectMake(minX, minY, maxX - minX, maxY - minY);
+            [self.mapView setVisibleMapRect:mapRect animated:YES];
+        }
+    }
+}
+
 - (void)mapDataSourcePeopleDidChange:(EFMarauderMapDataSource *)dataSource {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self _refreshTableViewFrame];
@@ -874,6 +948,114 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         [self.tableView reloadData];
         [self.mapStrokeView reloadData];
     });
+}
+
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didGetRouteLocations:(NSArray *)locations {
+    for (EFRouteLocation *routeLocation in locations) {
+        double delayInSeconds = self.annotationAnimationDelay;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [dataSource addRouteLocation:routeLocation toMapView:self.mapView canChangeType:NO];
+            
+            if ([EFLocationManager defaultManager].userLocation) {
+                EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+                EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
+                if (userLocationView) {
+                    if (destination) {
+                        userLocationView.showNavigation = YES;
+                        CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
+                        userLocationView.radianBetweenDestination = radian;
+                    } else {
+                        userLocationView.showNavigation = NO;
+                    }
+                }
+            }
+            
+            [self.selfTableView reloadData];
+            [self.tableView reloadData];
+        });
+        self.annotationAnimationDelay += 0.233f;
+    }
+}
+
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(EFMapPerson *)person {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.selfTableView reloadData];
+        [self.tableView reloadData];
+        [self.mapStrokeView reloadData];
+        
+        if (person != [self.mapDataSource me]) {
+            [self.mapDataSource updatePersonAnnotationForPerson:person toMapView:self.mapView];
+        }
+        if (person == self.mapDataSource.selectedPerson) {
+            [self.mapDataSource updateBreadcrumPathForPerson:person toMapView:self.mapView];
+        }
+    });
+}
+
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (EFRouteLocation *routeLocation in locations) {
+            [dataSource addRouteLocation:routeLocation toMapView:self.mapView canChangeType:NO];
+        }
+        
+        if ([EFLocationManager defaultManager].userLocation) {
+            EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+            EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
+            if (userLocationView) {
+                if (destination) {
+                    userLocationView.showNavigation = YES;
+                    CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
+                    userLocationView.radianBetweenDestination = radian;
+                } else {
+                    userLocationView.showNavigation = NO;
+                }
+            }
+        }
+        
+        [self.selfTableView reloadData];
+        [self.tableView reloadData];
+    });
+}
+
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRoutePaths:(NSArray *)paths {
+    
+}
+
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource needDeleteRouteLocation:(NSString *)routeLocationId {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        EFRouteLocation *routeLocation = [dataSource routeLocationForRouteLocationId:routeLocationId];
+        if (routeLocation) {
+            [dataSource removeRouteLocation:routeLocation fromMapView:self.mapView];
+        }
+        
+        if ([EFLocationManager defaultManager].userLocation) {
+            EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+            EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
+            if (userLocationView) {
+                if (destination) {
+                    userLocationView.showNavigation = YES;
+                    CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
+                    userLocationView.radianBetweenDestination = radian;
+                } else {
+                    userLocationView.showNavigation = NO;
+                }
+            }
+        }
+        
+        [self.selfTableView reloadData];
+        [self.tableView reloadData];
+    });
+}
+
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource routeLocationDidGetGeomarkInfo:(EFRouteLocation *)routeLocation {
+    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+}
+
+#pragma mark - EFMapViewDelegate
+
+- (void)mapViewDidScroll:(EFMapView *)mapView {
+    self.mapZoomType = kEFMapZoomTypeUnknow;
 }
 
 - (void)mapView:(EFMapView *)mapView tappedAtCoordinate:(CLLocationCoordinate2D)coordinate {
@@ -926,101 +1108,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             self.geomarkGroupViewController = geomarkGroupViewController;
         }
     }
-}
-
-- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didGetRouteLocations:(NSArray *)locations {
-    for (EFRouteLocation *routeLocation in locations) {
-        double delayInSeconds = self.annotationAnimationDelay;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [dataSource addRouteLocation:routeLocation toMapView:self.mapView canChangeType:NO];
-            
-            if ([EFLocationManager defaultManager].userLocation) {
-                EFRouteLocation *destination = self.mapDataSource.destinationLocation;
-                EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
-                if (userLocationView) {
-                    if (destination) {
-                        userLocationView.showNavigation = YES;
-                        CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
-                        userLocationView.radianBetweenDestination = radian;
-                    } else {
-                        userLocationView.showNavigation = NO;
-                    }
-                }
-            }
-        });
-        self.annotationAnimationDelay += 0.233f;
-    }
-}
-
-- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(EFMapPerson *)person {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.selfTableView reloadData];
-        [self.tableView reloadData];
-        [self.mapStrokeView reloadData];
-        
-        if (person != [self.mapDataSource me]) {
-            [self.mapDataSource updatePersonAnnotationForPerson:person toMapView:self.mapView];
-        }
-        if (person == self.mapDataSource.selectedPerson) {
-            [self.mapDataSource updateBreadcrumPathForPerson:person toMapView:self.mapView];
-        }
-    });
-}
-
-- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations {
-    for (EFRouteLocation *routeLocation in locations) {
-        [dataSource addRouteLocation:routeLocation toMapView:self.mapView canChangeType:NO];
-    }
-    
-    if ([EFLocationManager defaultManager].userLocation) {
-        EFRouteLocation *destination = self.mapDataSource.destinationLocation;
-        EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
-        if (userLocationView) {
-            if (destination) {
-                userLocationView.showNavigation = YES;
-                CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
-                userLocationView.radianBetweenDestination = radian;
-            } else {
-                userLocationView.showNavigation = NO;
-            }
-        }
-    }
-}
-
-- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRoutePaths:(NSArray *)paths {
-    
-}
-
-- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource needDeleteRouteLocation:(NSString *)routeLocationId {
-    EFRouteLocation *routeLocation = [dataSource routeLocationForRouteLocationId:routeLocationId];
-    if (routeLocation) {
-        [dataSource removeRouteLocation:routeLocation fromMapView:self.mapView];
-    }
-    
-    if ([EFLocationManager defaultManager].userLocation) {
-        EFRouteLocation *destination = self.mapDataSource.destinationLocation;
-        EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:[EFLocationManager defaultManager].userLocation];
-        if (userLocationView) {
-            if (destination) {
-                userLocationView.showNavigation = YES;
-                CGFloat radian = HeadingInRadian(destination.coordinate, [EFLocationManager defaultManager].userLocation.coordinate);
-                userLocationView.radianBetweenDestination = radian;
-            } else {
-                userLocationView.showNavigation = NO;
-            }
-        }
-    }
-}
-
-- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource routeLocationDidGetGeomarkInfo:(EFRouteLocation *)routeLocation {
-    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
-}
-
-#pragma mark - EFMapViewDelegate
-
-- (void)mapViewDidScroll:(EFMapView *)mapView {
-    self.mapZoomType = kEFMapZoomTypeUnknow;
 }
 
 - (void)mapView:(EFMapView *)mapView isChangingSelectedAnnotationTitle:(NSString *)title {

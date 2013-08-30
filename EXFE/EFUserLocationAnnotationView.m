@@ -135,7 +135,7 @@
     self.animationView.layer.transform = CATransform3DIdentity;
     CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
     scaleAnimation.duration = 1.0f;
-    scaleAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    scaleAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
     scaleAnimation.fromValue = [self.animationView.layer valueForKey:@"transform"];
     scaleAnimation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(2.0f, 2.0f, 1.0f)];
     scaleAnimation.delegate = self;
@@ -146,7 +146,7 @@
     self.animationView.layer.opacity = 0.0f;
     CABasicAnimation *opacityAnimation1 = [CABasicAnimation animationWithKeyPath:@"opacity"];
     opacityAnimation1.duration = 0.2f;
-    opacityAnimation1.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    opacityAnimation1.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
     opacityAnimation1.fromValue = [self.animationView.layer valueForKey:@"opacity"];
     opacityAnimation1.toValue = [NSNumber numberWithDouble:1.0f];
     opacityAnimation1.fillMode = kCAFillModeForwards;
@@ -158,7 +158,7 @@
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
         opacityAnimation.duration = 0.8f;
-        opacityAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        opacityAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
         opacityAnimation.fromValue = [self.animationView.layer valueForKey:@"opacity"];
         opacityAnimation.toValue = [NSNumber numberWithDouble:0.0f];
         opacityAnimation.fillMode = kCAFillModeForwards;

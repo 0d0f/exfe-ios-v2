@@ -241,20 +241,12 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
             return;
         }
         
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSNumber *backgroundUpdatingEnabledNumber = [userDefaults valueForKey:EFKeyBackgroundUpdatingLocationEnabled];
-        
-        if (backgroundUpdatingEnabledNumber) {
-            BOOL backgroundUpdatingEnabled  = [backgroundUpdatingEnabledNumber boolValue];
-            
-            if (!backgroundUpdatingEnabled) {
+        if (![self isFirstTimeToPostUserLocation]) {
+            if (![self canPostUserLocationInBackground]) {
                 [self stopUpdatingLocation];
                 [self stopUpdatingHeading];
             }
         } else {
-            [userDefaults setValue:[NSNumber numberWithBool:YES] forKey:EFKeyBackgroundUpdatingLocationEnabled];
-            [userDefaults synchronize];
-            
             UILocalNotification *localNotification = [[UILocalNotification alloc] init];
             localNotification.alertBody = NSLocalizedString(@"“活点地图”会显示您20分钟之内的方位，放心只有得到您同意的朋友们才能看到。", nil);
             localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:2.33f];
@@ -315,13 +307,12 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 #pragma mark - Update Location
 
 - (void)startUpdatingLocation {
-    self.isUpdating = YES;
-    
-    [[NSUserDefaults standardUserDefaults] setValue:@"YES" forKey:kHasPostUserLocationKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    [self.locationManager startUpdatingLocation];
-    [self _fireTimer];
+    if ([EFLocationManager locationServicesEnabled]) {
+        self.isUpdating = YES;
+        
+        [self.locationManager startUpdatingLocation];
+        [self _fireTimer];
+    }
 }
 
 - (void)stopUpdatingLocation {
@@ -345,7 +336,13 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 
 - (BOOL)isFirstTimeToPostUserLocation {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    return ![userDefaults valueForKey:kHasPostUserLocationKey];
+    return ![userDefaults valueForKey:EFKeyBackgroundUpdatingLocationEnabled];
+}
+
+- (BOOL)canPostUserLocationInBackground {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *flag = [userDefaults valueForKey:EFKeyBackgroundUpdatingLocationEnabled];
+    return [flag boolValue];
 }
 
 #pragma mark - Cross Register

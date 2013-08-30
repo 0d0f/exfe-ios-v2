@@ -44,6 +44,7 @@ CLLocationManagerDelegate
  * Check
  */
 - (BOOL)isFirstTimeToPostUserLocation;
+- (BOOL)canPostUserLocationInBackground;
 
 /**
  * Update Location
