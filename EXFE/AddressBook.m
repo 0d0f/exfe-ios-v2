@@ -206,9 +206,12 @@
             CFRelease(multi_im);
         }
     }
-  RKObjectManager *objectManager = [RKObjectManager sharedManager];
-  NSError *err;
-  [objectManager.managedObjectStore.persistentStoreManagedObjectContext save:&err];
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+  
+    [objectManager.managedObjectStore.persistentStoreManagedObjectContext performBlock:^{
+        NSError *err;
+        [objectManager.managedObjectStore.persistentStoreManagedObjectContext save:&err];
+    }];
 //  [objectManager.managedObjectStore.mainQueueManagedObjectContext save:&err];
 //  [self.managedObjectStore.persistentStoreManagedObjectContext save:nil];
   CFRelease(allPeople);

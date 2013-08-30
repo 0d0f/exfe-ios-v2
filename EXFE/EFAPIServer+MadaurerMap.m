@@ -316,7 +316,7 @@
                             inCross:(Cross *)cross
                             success:(void (^)(void))successHandler
                             failure:(void (^)(NSError *error))failureHandler {
-    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/notification/crosses/%d/%@?token=%@", [cross.cross_id unsignedIntegerValue], identityId, self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/notification/crosses/%d?id=%@&token=%@", [cross.cross_id unsignedIntegerValue], identityId, self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;

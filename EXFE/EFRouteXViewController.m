@@ -58,6 +58,7 @@
 
 @property (nonatomic, strong) EFGeomarkGroupViewController  *geomarkGroupViewController;
 @property (nonatomic, strong) EFMapPersonViewController     *personViewController;
+@property (nonatomic, strong) EFRouteXAccessViewController  *accessViewController;
 
 @end
 
@@ -119,6 +120,18 @@
     }
     
     return NO;
+}
+
+- (void)_addRouteXStatuesWithStatus:(BOOL)status {
+    NSMutableArray *widgets = [[NSMutableArray alloc] initWithArray:self.cross.widget];
+    NSDictionary *widget = @{@"type": @"routex", @"my_status": [NSNumber numberWithBool:status]};
+    [widgets addObject:widget];
+    self.cross.widget = widgets;
+    
+    __weak typeof(self) weakSelf = self;
+    [self.model.objectManager.managedObjectStore.persistentStoreManagedObjectContext performBlock:^{
+        [weakSelf.model.objectManager.managedObjectStore.persistentStoreManagedObjectContext save:nil];
+    }];
 }
 
 - (void)_startUpdating {
@@ -283,10 +296,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -318,23 +327,6 @@
     self.annotationAnimationDelay = 0.233f;
     
     self.hasGotOffset = NO;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(enterBackground)
-                                                 name:UIApplicationDidEnterBackgroundNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(enterForeground)
-                                                 name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(userLocationDidChange)
-                                                 name:EFNotificationUserLocationDidChange
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(userLocationOffsetDidGet)
-                                                 name:EFNotificationUserLocationOffsetDidGet
-                                               object:nil];
 }
 
 - (void)viewDidUnload {
@@ -355,6 +347,23 @@
                                          forKeyPath:@"userHeading"
                                             options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                                             context:NULL];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(enterBackground)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(enterForeground)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(userLocationDidChange)
+                                                 name:EFNotificationUserLocationDidChange
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(userLocationOffsetDidGet)
+                                                 name:EFNotificationUserLocationOffsetDidGet
+                                               object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -379,7 +388,13 @@
         [self.personViewController dismissAnimated:NO];
     }
     
-    [super viewDidDisappear:animated];
+    if (self.accessViewController) {
+        [self.accessViewController.view removeFromSuperview];
+    }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [super viewWillDisappear:animated];
 }
 
 #pragma mark -
@@ -394,6 +409,10 @@
     [self _invalidBreadcrumbUpdateTimer];
     [self.mapDataSource closeStreaming];
     [self.mapDataSource applicationDidEnterBackground];
+    
+    if (self.accessViewController) {
+        [self.accessViewController.view removeFromSuperview];
+    }
 }
 
 - (void)enterForeground {
@@ -471,8 +490,12 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == alertView.firstOtherButtonIndex) {
         [self _startUpdating];
+        [self _addRouteXStatuesWithStatus:YES];
     } else {
-        [self.tabBarViewController.tabBar setSelectedIndex:self.tabBarViewController.defaultIndex];
+        EFRouteXAccessViewController *routeXAccessViewController = [[EFRouteXAccessViewController alloc] initWithViewFrame:self.view.bounds];
+        routeXAccessViewController.delegate = self;
+        [self.view addSubview:routeXAccessViewController.view];
+        self.accessViewController = routeXAccessViewController;
     }
 }
 
@@ -533,22 +556,37 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (geomarks && geomarks.count) {
                         CLPlacemark *placemark = geomarks[0];
-                        routeLocation.title = placemark.name;
-                        routeLocation.subtitle = [placemark.addressDictionary valueForKey:@"FormattedAddressLines"][0];
                         
-                        [weakSelf.mapDataSource updateRouteLocation:routeLocation inMapView:weakSelf.mapView];
+                        NSString *title = placemark.name;
+                        NSString *subtitle = [placemark.addressDictionary valueForKey:@"FormattedAddressLines"][0];
+                        
+                        if (!title || !title.length) {
+                            if (!subtitle || !subtitle.length) {
+                                title = NSLocalizedString(@"这里", nil);
+                            } else {
+                                title = subtitle;
+                                subtitle = nil;
+                            }
+                        }
                         
                         if (weakSelf.currentCalloutAnnotation) {
                             EFCalloutAnnotationView *calloutView = (EFCalloutAnnotationView *)[weakSelf.mapView viewForAnnotation:weakSelf.currentCalloutAnnotation];
                             if (calloutView && calloutView.parentAnnotationView == view) {
-                                if (calloutView.isEditing) {
-                                    calloutView.titleTextField.text = routeLocation.title;
-                                    calloutView.subtitleTextView.text = routeLocation.subtitle;
-                                } else {
+                                if (!calloutView.isEditing) {
+                                    routeLocation.title = title;
+                                    routeLocation.subtitle = subtitle;
+                                    
+                                    [weakSelf.mapDataSource updateRouteLocation:routeLocation inMapView:weakSelf.mapView];
+                                    
                                     [weakSelf.mapView deselectAnnotation:annotation animated:NO];
                                     [weakSelf.mapView selectAnnotation:annotation animated:NO];
                                 }
                             }
+                        } else if ([routeLocation.createdDate isEqualToDate:routeLocation.updateDate]) {
+                            routeLocation.title = title;
+                            routeLocation.subtitle = subtitle;
+                            
+                            [weakSelf.mapDataSource updateRouteLocation:routeLocation inMapView:weakSelf.mapView];
                         }
                     } else {
                         NSLog(@"%@", error);
@@ -635,6 +673,16 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     }
     
     [self _zoomToPersonLocation:person];
+}
+
+#pragma mark -
+#pragma mark EFRouteXAccessViewControllerDelegate
+
+- (void)routeXAccessViewControllerButtonPressed:(EFRouteXAccessViewController *)accessViewController {
+    [self.accessViewController.view removeFromSuperview];
+    
+    [self _startUpdating];
+    [self _addRouteXStatuesWithStatus:YES];
 }
 
 #pragma mark - UITableViewDataSource
