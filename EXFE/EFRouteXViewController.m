@@ -26,7 +26,9 @@
 #import "EFUserLocationAnnotationView.h"
 #import "EFTimestampAnnotation.h"
 #import "EFTimestampAnnotationView.h"
+#import "Util.h"
 #import "WXApi.h"
+#import "CCTemplate.h"
 
 #define kAnnotationOffsetY  (-50.0f)
 #define kShadowOffset       (3.0f)
@@ -156,11 +158,10 @@
 - (void)_checkRouteXStatus {
     if (![EFLocationManager locationServicesEnabled]) {
         if (!self.noGPSAlertView) {
-#warning - 文案待替换
-            self.noGPSAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"定位服务未启动", nil)
-                                                             message:NSLocalizedString(@"您可以在设置内开启（文案待替换）", nil)
+            self.noGPSAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Location unavailable", nil)
+                                                             message:[NSLocalizedString(@"Please proceed to “Settings” app » Privacy » Location Service,\nthen turn it on for “{{PRODUCT_APP_NAME}}”.", nil) templateFromDict:[Util keywordDict]]
                                                             delegate:self
-                                                   cancelButtonTitle:NSLocalizedString(@"好的", nil)
+                                                   cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                                    otherButtonTitles:nil];
             [self.noGPSAlertView show];
         }
