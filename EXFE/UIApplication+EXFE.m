@@ -64,9 +64,15 @@
 
 - (NSString *)defaultScheme {
     NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
-    NSAssert([schemes objectAtIndex:1] != nil, @"Missing url sheme in main bundle.");
-    
-    return [schemes objectAtIndex:1];
+    NSAssert(schemes.count > 0, @"Missing url sheme in main bundle.");
+
+    NSString *result = nil;
+    for (NSString *scheme in schemes) {
+        if (result == nil || scheme.length < result.length) {
+            result = scheme;
+        }
+    }
+    return result;
 }
 
 @end
