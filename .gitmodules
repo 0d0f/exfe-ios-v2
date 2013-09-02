@@ -25,9 +25,6 @@
 [submodule "Vendor/MKMapViewZoom"]
 	path = Vendor/MKMapViewZoom
 	url = https://github.com/0day2010/MKMapViewZoom.git
-[submodule "PressDrag"]
-	path = PressDrag
-	url = https://github.com/0day2010/PressDrag.git
 [submodule "Vendor/PressDrag"]
 	path = Vendor/PressDrag
 	url = https://github.com/0day2010/PressDrag.git
