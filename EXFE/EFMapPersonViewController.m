@@ -164,10 +164,19 @@
             CLLocationDistance distanceFromDest = ceil([[self.mapDataSource me].lastLocation distanceFromRouteLocation:destination]);
             NSString *unit = NSLocalizedString(@"米", nil);
             
-            if (distanceFromDest > 1000.0f) {
-                distanceFromDest = ceil(distanceFromDest / 1000.0f);
+            if (distanceFromDest > 1000) {
                 unit = NSLocalizedString(@"公里", nil);
+                distanceFromDest = distanceFromDest / 1000;
+                if (distanceFromDest >= 99) {
+                    distanceFromDest = 99;
+                    unit = NSLocalizedString(@"+公里", nil);
+                }
+            } else {
+                if (distanceFromDest > 10) {
+                    distanceFromDest = (distanceFromDest / 10) * 10;
+                }
             }
+            
             destDistanceInfo = [NSString stringWithFormat:@"%ld%@", (long)distanceFromDest, unit];
             
             destRadian = HeadingInRadian(destination.coordinate, self.person.lastLocation.coordinate);

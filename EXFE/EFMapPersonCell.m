@@ -80,13 +80,13 @@
             }
             
             NSUInteger distance = (NSUInteger)self.person.distance;
-            NSString *m = @"米";
+            NSString *m = NSLocalizedString(@"米", nil);
             if (distance > 1000) {
-                m = @"公里";
+                m = NSLocalizedString(@"公里", nil);
                 distance = distance / 1000;
-                if (distance >= 9) {
-                    distance = 9;
-                    m = @"+公里";
+                if (distance >= 99) {
+                    distance = 99;
+                    m = NSLocalizedString(@"+公里", nil);
                 }
             } else {
                 if (distance > 10) {

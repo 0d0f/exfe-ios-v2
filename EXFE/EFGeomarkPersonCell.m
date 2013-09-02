@@ -76,10 +76,17 @@
         
         CLLocationDistance distanceFromDest = self.person.distance;
         NSString *destUnit = NSLocalizedString(@"米", nil);
-        
-        if (distanceFromDest > 1000.0f) {
-            distanceFromDest = ceil(distanceFromDest / 1000.0f);
+        if (distanceFromDest > 1000) {
             destUnit = NSLocalizedString(@"公里", nil);
+            distanceFromDest = distanceFromDest / 1000;
+            if (distanceFromDest >= 99) {
+                distanceFromDest = 99;
+                destUnit = NSLocalizedString(@"+公里", nil);
+            }
+        } else {
+            if (distanceFromDest > 10) {
+                distanceFromDest = (distanceFromDest / 10) * 10;
+            }
         }
         
         NSString *distanceDestString = [NSString stringWithFormat:@"%ld%@", (long)distanceFromDest, destUnit];
@@ -88,10 +95,19 @@
             CLLocationDistance distanceFromMe = ceil([self.person.lastLocation distanceFromLocation:[self.mapDataSource me].lastLocation]);
             NSString *unit = NSLocalizedString(@"米", nil);
             
-            if (distanceFromMe > 1000.0f) {
-                distanceFromMe = ceil(distanceFromMe / 1000.0f);
+            if (distanceFromMe > 1000) {
                 unit = NSLocalizedString(@"公里", nil);
+                distanceFromMe = distanceFromMe / 1000;
+                if (distanceFromMe >= 99) {
+                    distanceFromMe = 99;
+                    unit = NSLocalizedString(@"+公里", nil);
+                }
+            } else {
+                if (distanceFromMe > 10) {
+                    distanceFromMe = (distanceFromMe / 10) * 10;
+                }
             }
+            
             NSString *distanceString = [NSString stringWithFormat:@"%ld%@", (long)distanceFromMe, unit];
             
             locationInfo = [NSString stringWithFormat:NSLocalizedString(@"至目的地%@ 与您相距%@", nil), distanceDestString, distanceString];
