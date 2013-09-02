@@ -28,7 +28,7 @@
 #import "EFMapDataDefines.h"
 
 #define kTimestampDuration  (5.0f * 60.0f)
-#define kTimestampBlank     (25.0f)
+#define kTimestampMinLength     (120.0f)
 
 #define DegreesToRadians(x)     (M_PI * x / 180.0)
 #define RadiansToDegrees(x)    (x * 180.0 / M_PI)
@@ -899,7 +899,14 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     NSParameterAssert(person);
     NSParameterAssert(mapView);
     
-    EFCrumPath *path = [[EFCrumPath alloc] initWithMapPoints:person.locations];
+    NSMutableArray *locations = [[NSMutableArray alloc] initWithArray:person.locations];
+    [locations insertObject:person.lastLocation atIndex:0];
+    
+    if (!locations.count) {
+        return;
+    }
+    
+    EFCrumPath *path = [[EFCrumPath alloc] initWithMapPoints:locations];
     
     EFCrumPathView *pathView = (EFCrumPathView *)[mapView viewForOverlay:path];
     if (pathView) {
@@ -976,22 +983,29 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     lastAddedLocation = lastLocation;
     
     for (EFLocation *location in locations) {
-        NSTimeInterval timeInterval = [lastLocation.timestamp timeIntervalSinceDate:location.timestamp];
+        NSTimeInterval timeIntervalSinceLastAddedLocation = [lastAddedLocation.timestamp timeIntervalSinceDate:location.timestamp];
+        NSTimeInterval timeIntervalSinceFirstLocation = [lastLocation.timestamp timeIntervalSinceDate:location.timestamp];
         
-        if (timeInterval >= kTimestampDuration) {
-            CGPoint viewPoint = [mapView convertCoordinate:location.coordinate toPointToView:mapView];
-            
-            CGFloat length = HUGE_VALF;
-            for (EFTimestampAnnotation *preTimestamp in annotations) {
-                CGPoint preViewPoint = [mapView convertCoordinate:preTimestamp.coordinate toPointToView:mapView];
-                length = MIN(length, LengthBetweenPoints(viewPoint, preViewPoint));
-            }
-            
-            if (length > kTimestampBlank) {
-                EFTimestampAnnotation *timestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:location.coordinate
-                                                                                           timestamp:location.timestamp];
-                [annotations addObject:timestamp];
-                lastAddedLocation = location;
+        CGPoint preViewPoint = [mapView convertCoordinate:lastAddedLocation.coordinate toPointToView:mapView];
+        CGPoint viewPoint = [mapView convertCoordinate:location.coordinate toPointToView:mapView];
+        
+        CGFloat length = LengthBetweenPoints(preViewPoint, viewPoint);
+        
+        if (length >= kTimestampMinLength) {
+            if (timeIntervalSinceFirstLocation >= 60.0f && timeIntervalSinceFirstLocation <= 90.0f * 60.0f) {
+                // less than 1.5h
+                if (timeIntervalSinceLastAddedLocation >= 60.0f) {
+                    EFTimestampAnnotation *timestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:location.coordinate timestamp:location.timestamp];
+                    [annotations addObject:timestamp];
+                    lastAddedLocation = location;
+                }
+            } else {
+                // longer than 1.5h
+                if (timeIntervalSinceLastAddedLocation >= 30.0f * 60.0f) {
+                    EFTimestampAnnotation *timestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:location.coordinate timestamp:location.timestamp];
+                    [annotations addObject:timestamp];
+                    lastAddedLocation = location;
+                }
             }
         }
     }
