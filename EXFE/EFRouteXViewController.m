@@ -134,8 +134,8 @@
     self.cross.widget = widgets;
     
     __weak typeof(self) weakSelf = self;
-    [self.model.objectManager.managedObjectStore.persistentStoreManagedObjectContext performBlock:^{
-        [weakSelf.model.objectManager.managedObjectStore.persistentStoreManagedObjectContext save:nil];
+    [self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext performBlock:^{
+        [weakSelf.model.objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
     }];
 }
 
@@ -1053,14 +1053,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
 }
 
-#pragma mark - EFMapViewDelegate
-
-- (void)mapViewDidScroll:(EFMapView *)mapView {
-    self.mapZoomType = kEFMapZoomTypeUnknow;
-}
-
-- (void)mapView:(EFMapView *)mapView tappedAtCoordinate:(CLLocationCoordinate2D)coordinate {
-    CGPoint tapLocation = [mapView convertCoordinate:coordinate toPointToView:self.mapView];
+- (void)coordinateTapped:(CLLocationCoordinate2D)coordinate {
+    CGPoint tapLocation = [self.mapView convertCoordinate:coordinate toPointToView:self.mapView];
     
     CGRect tapRect = (CGRect){{tapLocation.x - kTapRectHalfWidth, tapLocation.y - kTapRectHalfWidth}, {2 * kTapRectHalfWidth, 2 * kTapRectHalfWidth}};
     
@@ -1068,7 +1062,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     NSMutableArray *filterdPeople = [[NSMutableArray alloc] init];
     
     for (EFRouteLocation *routeLocation in [self.mapDataSource allRouteLocations]) {
-        CGPoint location = [mapView convertCoordinate:routeLocation.coordinate toPointToView:self.mapView];
+        CGPoint location = [self.mapView convertCoordinate:routeLocation.coordinate toPointToView:self.mapView];
         if (CGRectContainsPoint(tapRect, location)) {
             [filterdRouteLocations addObject:routeLocation];
         }
@@ -1076,7 +1070,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     for (EFMapPerson *person in [self.mapDataSource allPeople]) {
         if (person != [self.mapDataSource me] && person.lastLocation) {
-            CGPoint location = [mapView convertCoordinate:person.lastLocation.coordinate toPointToView:self.mapView];
+            CGPoint location = [self.mapView convertCoordinate:person.lastLocation.coordinate toPointToView:self.mapView];
             if (CGRectContainsPoint(tapRect, location)) {
                 [filterdPeople addObject:person];
             }
@@ -1109,6 +1103,22 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             self.geomarkGroupViewController = geomarkGroupViewController;
         }
     }
+}
+
+#pragma mark - EFAnnotationViewDelegate
+
+- (void)annotationView:(EFAnnotationView *)view didTapAtCoordinate:(CLLocationCoordinate2D)coordinate {
+    [self coordinateTapped:coordinate];
+}
+
+#pragma mark - EFMapViewDelegate
+
+- (void)mapViewDidScroll:(EFMapView *)mapView {
+    self.mapZoomType = kEFMapZoomTypeUnknow;
+}
+
+- (void)mapView:(EFMapView *)mapView tappedAtCoordinate:(CLLocationCoordinate2D)coordinate {
+    [self coordinateTapped:coordinate];
 }
 
 - (void)mapView:(EFMapView *)mapView isChangingSelectedAnnotationTitle:(NSString *)title {
@@ -1190,6 +1200,39 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 #pragma mark - MKMapViewDelegate
+
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view didChangeDragState:(MKAnnotationViewDragState)newState
+   fromOldState:(MKAnnotationViewDragState)oldState {
+    switch (newState) {
+        case MKAnnotationViewDragStateStarting:
+        {
+            if ([view isKindOfClass:[EFAnnotationView class]]) {
+                EFAnnotation *annotation = (EFAnnotation *)view.annotation;
+                EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
+                routeLocation.isChanged = YES;
+            }
+        }
+            break;
+        case MKAnnotationViewDragStateEnding:
+        {
+            if ([view isKindOfClass:[EFAnnotationView class]]) {
+                CGPoint point = (CGPoint){CGRectGetMidX(view.frame), CGRectGetMaxY(view.frame)};   //(CGPoint){view.center.x, view.center.y + kAnnotationOffsetY};
+                CLLocationCoordinate2D coordinate = [self.mapView convertPoint:point toCoordinateFromView:view.superview];
+                
+                EFAnnotation *annotation = (EFAnnotation *)view.annotation;
+                EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
+                routeLocation.coordinate = coordinate;
+                
+                if (routeLocation.isChanged) {
+                    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+                }
+            }
+        }
+            break;
+        default:
+            break;
+    }
+}
 
 - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
     self.mapStrokeView.hidden = YES;
@@ -1273,6 +1316,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             annotationView.canShowCallout = NO;
             annotationView.mapView = self.mapView;
             annotationView.mapDataSource = self.mapDataSource;
+            annotationView.delegate = self;
         }
         
         [annotationView reloadWithAnnotation:annotation];

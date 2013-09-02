@@ -12,7 +12,7 @@
 #import "EFAnnotation.h"
 #import "EFMarauderMapDataSource.h"
 
-#define kUnpinOffset    (CGPoint){0.0f, -20.0f}
+#define kUnpinOffset    (50.0f)
 
 @interface EFAnnotationView ()
 
@@ -26,7 +26,8 @@
 {
     self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.userInteractionEnabled = NO;
+//        self.userInteractionEnabled = NO;
+        self.draggable = YES;
         
         UILabel *markTitleLabel = [[UILabel alloc] initWithFrame:(CGRect){{3.0f, 0.0f}, {18, 26}}];
         markTitleLabel.textAlignment = NSTextAlignmentCenter;
@@ -51,9 +52,71 @@
     return self;
 }
 
+- (void)setDragState:(MKAnnotationViewDragState)dragState animated:(BOOL)animated {
+    switch (dragState) {
+        case MKAnnotationViewDragStateStarting:
+        {
+            CGPoint center = (CGPoint){self.center.x, self.center.y - kUnpinOffset - 10.0f};
+            [UIView animateWithDuration:0.133f
+                                  delay:0.0f
+                                options:UIViewAnimationOptionCurveEaseOut
+                             animations:^{
+                                 self.center = center;
+                             }
+                             completion:^(BOOL finished){
+                                 CGPoint nextCenter = (CGPoint){self.center.x, self.center.y + 10.0f};
+                                 [UIView animateWithDuration:0.1f
+                                                       delay:0.0f
+                                                     options:UIViewAnimationOptionCurveEaseIn
+                                                  animations:^{
+                                                      self.center = nextCenter;
+                                                  }
+                                                  completion:^(BOOL finished){
+                                                      [super setDragState:dragState animated:animated];
+                                                  }];
+                             }];
+        }
+            break;
+        case MKAnnotationViewDragStateEnding:
+        case MKAnnotationViewDragStateCanceling:
+        {
+            CGPoint center = (CGPoint){self.center.x, self.center.y - kUnpinOffset};
+            [UIView animateWithDuration:0.133f
+                                  delay:0.0f
+                                options:UIViewAnimationOptionCurveEaseOut
+                             animations:^{
+                                 self.center = center;
+                             }
+                             completion:^(BOOL finished){
+                                 CGPoint nextCenter = (CGPoint){self.center.x, self.center.y + kUnpinOffset};
+                                 [UIView animateWithDuration:0.1f
+                                                       delay:0.0f
+                                                     options:UIViewAnimationOptionCurveEaseIn
+                                                  animations:^{
+                                                      self.center = nextCenter;
+                                                  }
+                                                  completion:^(BOOL finished){
+                                                      [super setDragState:dragState animated:animated];
+                                                  }];
+                             }];
+        }
+            break;
+        case MKAnnotationViewDragStateDragging:
+            [super setDragState:dragState animated:animated];
+            break;
+        default:
+            break;
+    }
+}
+
 #pragma mark - Gesture Handler
 
 - (void)handleTap:(UITapGestureRecognizer *)gesture {
+    if ([self.delegate respondsToSelector:@selector(annotationView:didTapAtCoordinate:)]) {
+        [self.delegate annotationView:self didTapAtCoordinate:self.annotation.coordinate];
+    }
+    
+    return;
     UIGestureRecognizerState state = gesture.state;
     
     if (UIGestureRecognizerStateEnded == state) {
@@ -62,44 +125,6 @@
         } else {
             [self.mapView selectAnnotation:self.annotation animated:YES];
         }
-    }
-}
-
-- (void)handleLongPress:(UILongPressGestureRecognizer *)gesture {
-    static CGPoint startPoint;
-    static CGPoint lastPoint;
-    
-    CGPoint location = [gesture locationInView:self.mapView];
-    location = (CGPoint){location.x + kUnpinOffset.x, location.y + kUnpinOffset.y};
-    
-    UIGestureRecognizerState state = gesture.state;
-    
-    switch (state) {
-        case UIGestureRecognizerStateBegan:
-        {
-            [self.mapView deselectAnnotation:self.annotation animated:YES];
-            startPoint = location;
-        }
-            break;
-        case UIGestureRecognizerStateChanged:
-        {
-            CATransform3D transform = CATransform3DMakeTranslation(location.x - startPoint.x, location.y - startPoint.y, 0.0f);
-            self.layer.transform = transform;
-            lastPoint = location;
-        }
-            break;
-        case UIGestureRecognizerStateEnded:
-        {
-            self.layer.transform = CATransform3DIdentity;
-            CLLocationCoordinate2D coordinate = [self.mapView convertPoint:lastPoint toCoordinateFromView:self.mapView];
-            EFAnnotation *annotation = (EFAnnotation *)self.annotation;
-            EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
-            routeLocation.coordinate = coordinate;
-            [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
-        }
-            break;
-        default:
-            break;
     }
 }
 
