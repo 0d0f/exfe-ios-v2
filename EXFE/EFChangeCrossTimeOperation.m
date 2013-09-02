@@ -1,37 +1,38 @@
 //
-//  EFEditCrossOperation.m
+//  EFChangeCrossTimeOperation.m
 //  EXFE
 //
-//  Created by Stony Wang on 13-8-19.
+//  Created by Stony Wang on 13-9-2.
 //
 //
 
-#import "EFEditCrossOperation.h"
+#import "EFChangeCrossTimeOperation.h"
 
 #import "EFEntity.h"
 
-NSString *kEFNotificationNameEditCrossSuccess = @"notification.editCross.success";
-NSString *kEFNotificationNameEditCrossFailure = @"notification.editCross.failure";
+NSString *kEFNotificationNameChangeCrossTimeSuccess = @"notification.changeCrossTime.success";
+NSString *kEFNotificationNameChangeCrossTimeFailure = @"notification.changeCrossTime.failure";
 
-@implementation EFEditCrossOperation
+@implementation EFChangeCrossTimeOperation
 
 - (id)initWithModel:(EXFEModel *)model {
     NSParameterAssert(model);
     
     self = [super initWithModel:model];
     if (self) {
-        self.successNotificationName = kEFNotificationNameEditCrossSuccess;
-        self.failureNotificationName = kEFNotificationNameEditCrossFailure;
+        self.successNotificationName = kEFNotificationNameChangeCrossTimeSuccess;
+        self.failureNotificationName = kEFNotificationNameChangeCrossTimeFailure;
     }
     
     return self;
 }
 
-- (id)initWithModel:(EXFEModel *)model dupelicateFrom:(EFEditCrossOperation *)operation
+- (id)initWithModel:(EXFEModel *)model dupelicateFrom:(EFChangeCrossTimeOperation *)operation
 {
     self = [super initWithModel:model dupelicateFrom:operation];
     if (self) {
         self.cross = operation.cross;
+        self.crossTime = operation.crossTime;
     }
     return self;
 }
@@ -55,7 +56,7 @@ NSString *kEFNotificationNameEditCrossFailure = @"notification.editCross.failure
                                         NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];
                                         [userInfo setValue:@"cross" forKey:@"type"];
                                         [userInfo setValue:self.cross.cross_id forKey:@"id"];
-
+                                        
                                         self.successUserInfo = userInfo;
                                         [self finish];
                                     } break;

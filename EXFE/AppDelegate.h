@@ -8,12 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import <RestKit/RestKit.h>
-#import <objc/runtime.h>
 #import "WXApi.h"
-#import "Flurry.h"
-#import "User.h"
-#import "ModelMapping.h"
 
 // https://gist.github.com/953657
 // http://stackoverflow.com/questions/3339722/check-iphone-ios-version

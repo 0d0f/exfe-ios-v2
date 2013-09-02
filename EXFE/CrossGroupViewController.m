@@ -1289,31 +1289,6 @@
     [self.model changeRsvp:status on:_invitation from:self.cross.exfee];
     _invitation.rsvp_status = status;
     [self fillExfee:self.cross.exfee];
-    
-//    [self.model.apiServer submitRsvp:status
-//                                          on:_invitation
-//                                  myIdentity:[myidentity.identity_id intValue]
-//                                     onExfee:[self.cross.exfee.exfee_id unsignedIntegerValue]
-//                                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//                                         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
-//                                             if([responseObject isKindOfClass:[NSDictionary class]]) {
-//                                                 NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
-//                                                 if ([[meta objectForKey:@"code"] intValue] == 403) {
-//                                                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Privacy Control", nil) message:NSLocalizedString(@"You have no access to this private ·X·.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-//                                                     alert.tag = 403;
-//                                                     [alert show];
-//                                                 } else if ([[meta objectForKey:@"code"] intValue] == 200) {
-//                                                     [self.model loadCrossWithCrossId:[self.cross.cross_id unsignedIntegerValue] updatedTime:nil];
-//                                                     
-//                                                     [self refreshUI];
-//                                                 }
-//                                                 
-//                                             }
-//                                         }
-//                                     }
-//                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                         [Util showConnectError:error delegate:self]; 
-//                                     }];
 }
 
 #pragma mark - EditCrossDelegate

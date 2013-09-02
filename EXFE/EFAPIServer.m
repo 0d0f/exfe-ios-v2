@@ -1090,7 +1090,7 @@
                                                                       }];
         AFHTTPRequestOperation *operation = [objectManager.HTTPClient HTTPRequestOperationWithRequest:request success:success failure:failure];
         [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-            //        NSLog(@"Sent %lld of %lld bytes", totalBytesWritten, totalBytesExpectedToWrite);
+            RKLogDebug(@"Sent %lld of %lld bytes", totalBytesWritten, totalBytesExpectedToWrite);
         }];
         [objectManager.HTTPClient.operationQueue addOperation:operation];
     }

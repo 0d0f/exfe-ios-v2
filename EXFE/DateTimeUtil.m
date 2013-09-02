@@ -360,7 +360,7 @@ static NSDate* s_Now = nil;
     if (!NSEqualRanges([tcResult range], NSMakeRange(NSNotFound, 0))) {
         
         //NSString *matchedString = [zoneString substringWithRange:[tcResult range]];
-        //NSLog(@"mached: %@", matchedString);
+        //RKLogDebug(@"mached: %@", matchedString);
         
         NSString * hstr = [zoneString substringWithRange:[tcResult rangeAtIndex:1]];
         NSString * mstr = [zoneString substringWithRange:[tcResult rangeAtIndex:2]];

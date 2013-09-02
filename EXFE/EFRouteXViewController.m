@@ -621,7 +621,7 @@
                             [weakSelf.mapDataSource updateRouteLocation:routeLocation inMapView:weakSelf.mapView];
                         }
                     } else {
-                        NSLog(@"%@", error);
+                        RKLogError(@"%@", error);
                     }
                 });
             }];

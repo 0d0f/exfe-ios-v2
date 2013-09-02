@@ -9,7 +9,6 @@
 #import "EFStatusBar.h"
 
 #import "Util.h"
-#import "AppDelegate.h"
 
 #define kRight
 

@@ -8,7 +8,6 @@
 
 #import "EFPopoverController.h"
 
-#import "AppDelegate.h"
 #import "Util.h"
 
 #define kMinEdgeDistance    (10.0f)

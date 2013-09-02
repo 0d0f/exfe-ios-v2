@@ -1479,10 +1479,10 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                     block(accounts);
                 }
 //                ACAccount *account = [accounts objectAtIndex:0];
-//                NSLog(@"identifier %@ username %@", account.identifier, account.username);
+//                RKLogDebug(@"identifier %@ username %@", account.identifier, account.username);
 //                NSString *fullname = [[account valueForKey:@"properties"] valueForKey:@"fullname"];
 //                NSString *userID = [[account valueForKey:@"properties"] valueForKey:@"uid"];
-//                NSLog(@"fullname %@ userid %@", fullname, userID);
+//                RKLogDebug(@"fullname %@ userid %@", fullname, userID);
 //                
 //                NSURL *meurl = [NSURL URLWithString:@"https://graph.facebook.com/me"];
 //                
@@ -1496,7 +1496,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
 //                [merequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
 //                    NSString *meDataString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 //                    
-//                    NSLog(@"%@", meDataString);
+//                    RKLogDebug(@"%@", meDataString);
 //                    
 //                }];
             } else {

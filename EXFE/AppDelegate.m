@@ -7,16 +7,24 @@
 //
 
 #import "AppDelegate.h"
+
+#import <RestKit/RestKit.h>
+#import <objc/runtime.h>
 #import <BlocksKit/BlocksKit.h>
 #import <FacebookSDK/FacebookSDK.h>
-#import "UIApplication+EXFE.h"
-#import "EXFEModel.h"
-#import "CrossesViewController.h"
-#import "EFAPIServer.h"
-#import "EFLandingViewController.h"
-#import "Util.h"
+
+
+#import "Flurry.h"
+
+#import "EFEntity.h"
 #import "EFKit.h"
 #import "EFModel.h"
+#import "EFAPI.h"
+#import "Util.h"
+#import "UIApplication+EXFE.h"
+
+#import "CrossesViewController.h"
+#import "EFLandingViewController.h"
 #import "XQueryComponents.h"
 
 @interface AppDelegate ()
@@ -51,6 +59,7 @@
 #endif
     
     // Setup RKLog
+    RKLogSetAppLoggingLevel(RKLogLevelDefault);
 #ifdef DEBUG
     RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
     //    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelDebug);
@@ -60,9 +69,7 @@
     RKLogConfigureByName("*", RKLogLevelOff);
 #endif
     
-#ifdef DEBUG
-    NSLog(@"API ROOT: %@", API_ROOT);
-#endif
+    RKLogInfo(@"API ROOT: %@", API_ROOT);
     
     [self registerWeixin];
     
@@ -304,7 +311,7 @@
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
-    //    NSLog(@"Error in registration. Error: %@", err);
+    RKLogError(@"Error in registration. Error: %@", err);
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
@@ -325,7 +332,7 @@
         if (userInfo != nil) {
             id arg = [userInfo valueForKeyPath:@"args"];
             if(arg && [arg isKindOfClass:[NSDictionary class]]) {
-                NSLog(@"receive old push");
+                RKLogInfo(@"receive old push");
             } else  {
                 NSString * path = [userInfo valueForKeyPath:@"path"];
                 if (path && [path isKindOfClass:[NSString class]]) {

@@ -230,7 +230,7 @@
             if (i < allcount) {
                 [_delegate imageCollectionView:self didSelectRowAtIndex:i row:(i / maxColumn) col:(i % maxColumn) frame:rect];
             } else if (i == allcount){
-                //                NSLog(@"click the sum grid: x=%i y=%i count=%i",x_count,y_count,allcount);
+                //                RKLogDebug(@"click the sum grid: x=%i y=%i count=%i",x_count,y_count,allcount);
             }
         }
 
