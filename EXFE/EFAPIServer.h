@@ -131,14 +131,17 @@
  @param failure
  @return void
  */
-- (void)loadMeSuccess:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+- (void)loadMeAfter:(NSDate *)updatedtime
+             success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
 - (void)loadUserBy:(NSInteger)user_id
+             after:(NSDate *)updatedtime
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 - (void)loadUserBy:(NSInteger)user_id
+             after:(NSDate *)updatedtime
          withToken:(NSString*)token
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;

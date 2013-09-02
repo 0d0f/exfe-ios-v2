@@ -35,34 +35,35 @@ NSString *kEFNotificationNameLoadMeFailure = @"notification.loadMe.failure";
     
     NSArray * list = [[User getDefaultUser] getIdentitiesForCrossEntry];
 
-    [self.model.apiServer loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
-        self.state = kEFNetworkOperationStateSuccess;
-        
-        NSArray * newList = [[User getDefaultUser] getIdentitiesForCrossEntry];
-        BOOL diff = (list.count != newList.count);
-        if (!diff) {
-            for (NSUInteger i = 0; i < newList.count; i ++) {
-                Identity * previous = [list objectAtIndex:i];
-                Identity * latest = [list objectAtIndex:i];
-                if (![previous compareWithExternalIdAndProvider:latest]) {
-                    diff = YES;
-                    break;
-                }
-            }
-        }
-        
-        if (diff) {
-            [self.model loadCrossList];
-        }
-        
-        [self finish];
-    }
-                                failure:^(RKObjectRequestOperation *operation, NSError *error){
-                                    self.state = kEFNetworkOperationStateFailure;
-                                    self.error = error;
-                                    
-                                    [self finish];
-                                }];
+    [self.model.apiServer loadMeAfter:self.lastUpdate
+                              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
+                                  self.state = kEFNetworkOperationStateSuccess;
+                                  
+                                  NSArray * newList = [[User getDefaultUser] getIdentitiesForCrossEntry];
+                                  BOOL diff = (list.count != newList.count);
+                                  if (!diff) {
+                                      for (NSUInteger i = 0; i < newList.count; i ++) {
+                                          Identity * previous = [list objectAtIndex:i];
+                                          Identity * latest = [list objectAtIndex:i];
+                                          if (![previous compareWithExternalIdAndProvider:latest]) {
+                                              diff = YES;
+                                              break;
+                                          }
+                                      }
+                                  }
+                                  
+                                  if (diff) {
+                                      [self.model loadCrossList];
+                                  }
+                                  
+                                  [self finish];
+                              }
+                              failure:^(RKObjectRequestOperation *operation, NSError *error){
+                                  self.state = kEFNetworkOperationStateFailure;
+                                  self.error = error;
+                                  
+                                  [self finish];
+                              }];
 }
 
 @end

@@ -235,7 +235,6 @@
                 if (meta) {
                     NSInteger c = [meta.code integerValue];
                     NSInteger t = c / 100;
-                    // RKObjectManager *objectManager = [RKObjectManager sharedManager];
                     // [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
                     switch (t) {
                         case 3:{
@@ -256,7 +255,6 @@
                     }
                 } else {
                     NSError *error __attribute__((unused)) = userInfo[@"error"];
-                    // RKObjectManager *objectManager = [RKObjectManager sharedManager];
                     // [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
                 }
             } else if ([@"rsvp" isEqualToString:cat]) {

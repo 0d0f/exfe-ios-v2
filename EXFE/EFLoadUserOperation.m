@@ -8,6 +8,9 @@
 
 #import "EFLoadUserOperation.h"
 
+#import "EFAPI.h"
+#import "EFModel.h"
+
 NSString *kEFNotificationNameLoadUserSuccess = @"notification.loadUser.success";
 NSString *kEFNotificationNameLoadUserFailure = @"notification.loadUser.failure";
 
@@ -34,6 +37,7 @@ NSString *kEFNotificationNameLoadUserFailure = @"notification.loadUser.failure";
     NSAssert(self.model.apiServer, @"api shouldn't be nill.");
     NSAssert(self.token && self.token.length > 0, @"token shouldn't be nill.");
     [self.model.apiServer loadUserBy:self.userId
+                               after:self.updateTime
                            withToken:self.token
                              success:^(AFHTTPRequestOperation *operation, id responseObject){
                                  self.state = kEFNetworkOperationStateSuccess;

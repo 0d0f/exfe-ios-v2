@@ -64,8 +64,7 @@ NSString *kEFNotificationNameRsvpFailure = @"notification.RSVP.failure";
                                                  [userInfo setValue:self.exfee.exfee_id forKey:@"id"];
                                                  self.failureUserInfo = userInfo;
                                                  
-                                                 RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                                                 [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+//                                                 [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
                                                  
                                                  [self finish];
                                              } break;

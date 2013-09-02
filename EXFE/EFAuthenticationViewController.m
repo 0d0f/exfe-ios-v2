@@ -1196,61 +1196,62 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
 {
     // Load identities to merge from another user
     [self.model.apiServer loadUserBy:[newUserId integerValue]
-             withToken:newToken
-               success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                   NSDictionary *body = responseObject;
-                   if([body isKindOfClass:[NSDictionary class]]) {
-                       NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
-                       if(code){
-                           if([code integerValue] == 200) {
-                               NSString *name = [responseObject valueForKeyPath:@"response.user.name"];
-                               NSArray *ids = [responseObject valueForKeyPath:@"response.user.identities.@distinctUnionOfObjects.id"];
-                               
-                               [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Merge accounts", nil)
-                                                           message:[NSString stringWithFormat:NSLocalizedString(@"Merge account %@ into your current signed-in account?", nil), name]
-                                                 cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                                 otherButtonTitles:@[NSLocalizedString(@"Merge", nil)]
-                                                           handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                                               if (buttonIndex == alertView.firstOtherButtonIndex ) {
-                                                                   
-                                                                   [self.model.apiServer mergeIdentities:ids byToken:newToken success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                                       if ([operation.response statusCode] == 200){
-                                                                           if ([responseObject isKindOfClass:[NSDictionary class]]) {
-                                                                               NSDictionary *body = responseObject;
-                                                                               id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
-                                                                               if (code) {
-                                                                                   NSInteger c = [code integerValue];
-                                                                                   NSInteger t = c / 100;
-                                                                                   
-                                                                                   switch (t) {
-                                                                                       case 2:{
-                                                                                           NSNumber *user_id = [body valueForKeyPath:@"response.mergeable_user.id"];
-                                                                                           
-                                                                                           // clean some timestamp
-                                                                                           
-                                                                                           // do following things
-                                                                                           [self loadUserAndDismiss:[user_id unsignedIntegerValue] withToken:newToken success:success];
-                                                                                       }  break;
-                                                                                       case 4:
-                                                                                           
-                                                                                       default:
-                                                                                           break;
-                                                                                   }
-                                                                               }
-                                                                               
-                                                                           }
-                                                                       }
-                                                                   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                                       
-                                                                   }];
-                                                               }
-                                                           }];
-                           }
-                       }
-                   }
-                   
-               }
-               failure:nil];
+                               after:nil
+                           withToken:newToken
+                             success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                 NSDictionary *body = responseObject;
+                                 if([body isKindOfClass:[NSDictionary class]]) {
+                                     NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                                     if(code){
+                                         if([code integerValue] == 200) {
+                                             NSString *name = [responseObject valueForKeyPath:@"response.user.name"];
+                                             NSArray *ids = [responseObject valueForKeyPath:@"response.user.identities.@distinctUnionOfObjects.id"];
+                                             
+                                             [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Merge accounts", nil)
+                                                                         message:[NSString stringWithFormat:NSLocalizedString(@"Merge account %@ into your current signed-in account?", nil), name]
+                                                               cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                                               otherButtonTitles:@[NSLocalizedString(@"Merge", nil)]
+                                                                         handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                                                             if (buttonIndex == alertView.firstOtherButtonIndex ) {
+                                                                                 
+                                                                                 [self.model.apiServer mergeIdentities:ids byToken:newToken success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                                                     if ([operation.response statusCode] == 200){
+                                                                                         if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                                                                                             NSDictionary *body = responseObject;
+                                                                                             id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
+                                                                                             if (code) {
+                                                                                                 NSInteger c = [code integerValue];
+                                                                                                 NSInteger t = c / 100;
+                                                                                                 
+                                                                                                 switch (t) {
+                                                                                                     case 2:{
+                                                                                                         NSNumber *user_id = [body valueForKeyPath:@"response.mergeable_user.id"];
+                                                                                                         
+                                                                                                         // clean some timestamp
+                                                                                                         
+                                                                                                         // do following things
+                                                                                                         [self loadUserAndDismiss:[user_id unsignedIntegerValue] withToken:newToken success:success];
+                                                                                                     }  break;
+                                                                                                     case 4:
+                                                                                                         
+                                                                                                     default:
+                                                                                                         break;
+                                                                                                 }
+                                                                                             }
+                                                                                             
+                                                                                         }
+                                                                                     }
+                                                                                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                                                     
+                                                                                 }];
+                                                                             }
+                                                                         }];
+                                         }
+                                     }
+                                 }
+                                 
+                             }
+                             failure:nil];
     
 }
 

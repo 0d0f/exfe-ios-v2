@@ -9,4 +9,7 @@
 #import "EFNetworkOperation.h"
 
 @interface EFLoadMeOperation : EFNetworkOperation
+
+@property (nonatomic, strong) NSDate *lastUpdate;
+
 @end

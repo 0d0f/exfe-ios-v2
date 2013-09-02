@@ -11,6 +11,7 @@
 @interface EFLoadUserOperation : EFNetworkOperation
 
 @property (nonatomic, assign) NSInteger     userId;
+@property (nonatomic, strong) NSDate        *updateTime;
 @property (nonatomic, copy)   NSString      *token;     // Default as self.model.userToken
 
 @end

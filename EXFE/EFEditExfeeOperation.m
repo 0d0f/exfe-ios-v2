@@ -55,9 +55,6 @@ NSString *kEFNotificationNameEditExfeeFailure = @"notification.EditExfee.failure
                                             [self finish];
                                         } break;
                                         default:{
-                                            // RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                                            // [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
-                                            
                                             // 400 Over people max limited
                                             self.state = kEFNetworkOperationStateFailure;
                                             NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];

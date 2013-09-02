@@ -77,8 +77,8 @@
                                    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     NSString *endpoint = [NSString stringWithFormat:@"Backgrounds/GetAvailableBackgrounds"];
-    RKObjectManager *manager = [RKObjectManager sharedManager] ;
-    [manager.HTTPClient getPath:endpoint
+    
+    [self.model.objectManager.HTTPClient getPath:endpoint
                      parameters:nil
                         success:^(AFHTTPRequestOperation *operation, id responseObject){
                             [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
@@ -103,7 +103,7 @@
 - (void)checkAppVersionSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     [Flurry logEvent:@"API_CHECK_UPDATE"];
-    RKObjectManager *manager = [RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     NSString *endpoint = [NSString stringWithFormat:@"/versions/"];
     
     //    manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
@@ -133,38 +133,12 @@
 }
 
 - (void)getIdentitiesWithParams:(NSArray *)params success:(void (^)(NSArray *))success failure:(void (^)(NSError *))failure {
-    RKObjectManager *manager =[RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
     NSDictionary *param = @{@"identities": params};
     NSString *path = [NSString stringWithFormat:@"identities/get"];
-    
-    //    [manager postObject:nil
-    //                   path:path
-    //             parameters:param
-    //                success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
-    //                    if (operation.HTTPRequestOperation.response.statusCode == 200) {
-    //                        if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
-    //                            Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
-    //                            if ([meta.code intValue] == 200) {
-    //                                NSArray *identities = [[mappingResult dictionary] objectForKey:@"response.identities"];
-    //                                if (success) {
-    //                                    success(identities);
-    //                                }
-    //                            } else if (failure) {
-    //                                failure(nil);
-    //                            }
-    //                        }
-    //                    } else if (failure) {
-    //                        failure(nil);
-    //                    }
-    //                }
-    //                failure:^(RKObjectRequestOperation *operation, NSError *error){
-    //                    if (failure) {
-    //                        failure(error);
-    //                    }
-    //                }];
     
     [manager.HTTPClient postPath:path
                       parameters:param
@@ -289,7 +263,7 @@
                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     NSString *endpoint = [NSString stringWithFormat:@"users/verifyidentity"];
-    RKObjectManager *manager = [RKObjectManager sharedManager] ;
+    RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     
     NSDictionary* params = @{@"external_username": identity, @"provider": [Identity getProviderString:provider]};
@@ -407,7 +381,7 @@
     
     
     NSString *endpoint = [NSString stringWithFormat:@"users/GetRegistrationFlag"];
-    RKObjectManager *manager = [RKObjectManager sharedManager] ;
+    RKObjectManager *manager = self.model.objectManager;
     
     
     NSDictionary* params = @{@"external_username": identity, @"provider": [Identity getProviderString:provider]};
@@ -442,7 +416,7 @@
     
     
     NSString *endpoint = [NSString stringWithFormat:@"users/GetRegistrationFlag"];
-    RKObjectManager *manager = [RKObjectManager sharedManager] ;
+    RKObjectManager *manager = self.model.objectManager;
     
     
     NSDictionary* params = @{@"external_username": identity, @"provider": [Identity getProviderString:provider]};
@@ -476,7 +450,7 @@
        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     NSString *endpoint = [NSString stringWithFormat:@"users/signin"];
-    RKObjectManager *manager = [RKObjectManager sharedManager] ;
+    RKObjectManager *manager = self.model.objectManager;
     NSDictionary *params = @{
                            @"provider": [Identity getProviderString:provider],
                            @"external_username": identity,
@@ -509,7 +483,7 @@
                  failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     NSString *endpoint = [NSString stringWithFormat:@"users/%u/signout?token=%@",self.model.userId, self.model.userToken];
-    RKObjectManager *manager = [RKObjectManager sharedManager] ;
+    RKObjectManager *manager = self.model.objectManager;
     NSDictionary *params = @{@"udid":udid, @"os_name":@"iOS"};
     manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
     [manager.HTTPClient postPath:endpoint
@@ -542,7 +516,7 @@
        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     NSString *endpoint = [NSString stringWithFormat:@"users/signin"];
-    RKObjectManager *manager = [RKObjectManager sharedManager] ;
+    RKObjectManager *manager = self.model.objectManager;
     NSDictionary *params = @{
                              @"provider": [Identity getProviderString:provider],
                              @"external_username": identity,
@@ -589,7 +563,7 @@
     }
     
     NSString *endpoint = [NSString stringWithFormat:@"/oauth/reverseauth"];
-    RKObjectManager *manager = [RKObjectManager sharedManager] ;
+    RKObjectManager *manager = self.model.objectManager;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:[Identity getProviderString:provider] forKey:@"provider"];
     [params setValue:token forKey:@"oauth_token"];
@@ -624,7 +598,7 @@
           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     NSString *endpoint = [NSString stringWithFormat:@"users/%u/regdevice?token=%@", self.model.userId, self.model.userToken];
-    RKObjectManager *manager = [RKObjectManager sharedManager] ;
+    RKObjectManager *manager = self.model.objectManager;
     
     NSDictionary *param = @{@"udid": pushToken,
                             @"push_token": pushToken,
@@ -700,7 +674,7 @@
         param = @{@"token": self.model.userToken};
     }
     
-    [[RKObjectManager sharedManager] getObjectsAtPath:endpoint
+    [self.model.objectManager getObjectsAtPath:endpoint
                                            parameters:param
                                               success:^(RKObjectRequestOperation *operation, id responseObject){
                                                   [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
@@ -725,51 +699,63 @@
 
 #pragma mark User API
 
-- (void)loadMeSuccess:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
-           failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
+- (void)loadMeAfter:(NSDate *)updatedtime
+            success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+            failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
 {
     NSAssert(self.model.userToken, @"Token should not be nil.");
     NSDictionary *param = @{@"token": self.model.userToken};
     NSString *endpoint = [NSString stringWithFormat:@"users/%u", self.model.userId];
-    [self.model.objectManager getObjectsAtPath:endpoint
-                                           parameters:param
-                                              success:^(RKObjectRequestOperation *operation, id responseObject){
-                                                  [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
-                                                  
-                                                  if (success) {
-                                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                                          success(operation, responseObject);
-                                                      });
-                                                  }
-                                              }
-                                              failure:^(RKObjectRequestOperation *operation, NSError *error){
-                                                  [self _handleFailureWithRequestOperation:operation andError:error];
-                                                  
-                                                  if (failure) {
-                                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                                          failure(operation, error);
-                                                      });
-                                                  }
-                                              }];
+    [self.model.objectManager getObject:nil
+                                   path:endpoint
+                             parameters:param
+                                success:^(RKObjectRequestOperation *operation, id responseObject){
+        [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+        
+        if (success) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                success(operation, responseObject);
+            });
+        }
+    }
+                                failure:^(RKObjectRequestOperation *operation, NSError *error){
+                                    [self _handleFailureWithRequestOperation:operation andError:error];
+                                    
+                                    if (failure) {
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            failure(operation, error);
+                                        });
+                                    }
+                                }];
 }
 
 - (void)loadUserBy:(NSInteger)user_id
+             after:(NSDate *)updatedtime
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     NSParameterAssert(user_id > 0);
     NSParameterAssert(self.model.userToken.length > 0);
-    [self loadUserBy:user_id withToken:self.model.userToken success:success failure:failure];
+    [self loadUserBy:user_id after:updatedtime withToken:self.model.userToken success:success failure:failure];
 }
 
 - (void)loadUserBy:(NSInteger)user_id
+             after:(NSDate *)updatedtime
          withToken:(NSString*)token
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     NSParameterAssert(user_id > 0);
     NSParameterAssert(token > 0);
-    NSDictionary *param = @{@"token": token};
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithCapacity:2];
+    if (updatedtime) {
+        NSDateFormatter *fmt = [DateTimeUtil defaultDateTimeFormatter];
+        param[@"updated_at"] = [fmt stringFromDate:updatedtime];
+    }
+    if (token) {
+        param[@"token"] = token;
+    }
+    
     NSString *endpoint = [NSString stringWithFormat:@"users/%u",user_id];
     [self.model.objectManager.HTTPClient getPath:endpoint
                                              parameters:param

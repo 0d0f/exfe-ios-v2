@@ -16,7 +16,7 @@
     NSDictionary *param = @{@"token": self.model.userToken};
     NSString *endpoint = [NSString stringWithFormat:@"identities/complete?key=%@", key];
     
-    [[RKObjectManager sharedManager].HTTPClient getPath:endpoint
+    [self.model.objectManager.HTTPClient getPath:endpoint
                                              parameters:param
                                                 success:^(AFHTTPRequestOperation *operation, id responseObject){
                                                     [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
