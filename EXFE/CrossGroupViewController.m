@@ -1329,6 +1329,7 @@
     cross.cross_id = [self.cross.cross_id copy];
     cross.by_identity = [self.cross.exfee getMyInvitation].identity;
     [self.model editCross:cross];
+    
     [self fillTime:time];
     [self relayoutUI];
 }
@@ -1338,6 +1339,8 @@
     cross.place = place;
     cross.cross_id = [self.cross.cross_id copy];
     cross.by_identity = [self.cross.exfee getMyInvitation].identity;
+    [self.model editCross:cross];
+    
     [self fillPlace:place];
     [self relayoutUI];
 }
