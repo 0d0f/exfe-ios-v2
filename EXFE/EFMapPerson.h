@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+#import "EFEntity.h"
 #import "EFMapDataDefines.h"
 
 @class EFLocation;

@@ -286,15 +286,13 @@
 }
 
 - (void)debugPrint{
-#ifdef DEBUG
-    NSLog(@"exfee id: %@", self.exfee_id);
-    NSLog(@"exfee accepted: %@", self.accepted);
-    NSLog(@"exfee total: %@", self.total);
-    NSLog(@"exfee invitation count: %i", self.invitations.count);
+    RKLogDebug(@"exfee id: %@", self.exfee_id);
+    RKLogDebug(@"exfee accepted: %@", self.accepted);
+    RKLogDebug(@"exfee total: %@", self.total);
+    RKLogDebug(@"exfee invitation count: %i", self.invitations.count);
     for (Invitation *inv in self.invitations) {
-        NSLog(@"exfee invitation item: %@", [inv.identity getDisplayName]);
+        RKLogDebug(@"exfee invitation item: %@", [inv.identity getDisplayName]);
     }
-#endif
 }
 
 

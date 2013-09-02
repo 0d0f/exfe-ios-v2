@@ -109,9 +109,9 @@ static NSString * kExtension           = @"exfe";
     BOOL isDir  = NO;
     if(![fileManager fileExistsAtPath:usersDirectoryPath isDirectory:&isDir]){
         if(![fileManager createDirectoryAtPath:usersDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL]){
-//            NSLog(@"Error: Create folder failed %@", usersDirectoryPath);
+//            RKLogError(@"Error: Create folder failed %@", usersDirectoryPath);
         } else {
-//            NSLog(@"OK: Created folder %@", usersDirectoryPath);
+//            RKLogInfo(@"OK: Created folder %@", usersDirectoryPath);
         }
     }
     
@@ -412,7 +412,7 @@ static NSString * kExtension           = @"exfe";
         NSString *plistPath = [userDirectoryPath stringByAppendingPathComponent:kInfoFileName];
         if(![fileManager fileExistsAtPath:userDirectoryPath isDirectory:&isDir]){
             if(![fileManager createDirectoryAtPath:userDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL]){
-                //                NSLog(@"Error: Create folder failed %@", userDirectoryPath);
+                //                RKLogError(@"Error: Create folder failed %@", userDirectoryPath);
                 return NO;
             }
         }
@@ -456,7 +456,7 @@ static NSString * kExtension           = @"exfe";
                     // error;
                 }
             } else {
-//                NSLog(@"normal start up");
+//                RKLogTrace(@"normal start up");
             }
         } else {
             // remove db for default user

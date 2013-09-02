@@ -1910,6 +1910,10 @@
 		4FC4110617D04A5700D64105 /* map_shadow_gap.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE926179FD836003BF97C /* map_shadow_gap.png */; };
 		4FC4110717D04A5700D64105 /* cautionbar_cancel_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2CF04E17BEA43800E3A4B2 /* cautionbar_cancel_pressed.png */; };
 		4FC4110817D04A5700D64105 /* cautionbar_cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2CF04F17BEA43800E3A4B2 /* cautionbar_cancel.png */; };
+		4FC4113D17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */; };
+		4FC4113E17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */; };
+		4FC4113F17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */; };
+		4FC4114017D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */; };
 		4FC6E94516AFB6D00023AD1C /* xlist_conv_badge_many.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC6E94316AFB6D00023AD1C /* xlist_conv_badge_many.png */; };
 		4FC6E94616AFB6D00023AD1C /* xlist_conv_badge_many@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC6E94416AFB6D00023AD1C /* xlist_conv_badge_many@2x.png */; };
 		4FC8FCE8168D7E5700409779 /* Place+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCE7168D7E5700409779 /* Place+Helper.m */; };
@@ -3422,6 +3426,8 @@
 		4FBF2484167AE89D007C04E2 /* CrossCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossCard.m; sourceTree = "<group>"; };
 		4FC4110C17D04A5700D64105 /* Shuady.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shuady.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FC4110D17D04A5700D64105 /* Shuady-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Shuady-Info.plist"; path = "/Users/stony/git/exfe_ios/Shuady-Info.plist"; sourceTree = "<absolute>"; };
+		4FC4113B17D490FF00D64105 /* EFChangeCrossTimeOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChangeCrossTimeOperation.h; sourceTree = "<group>"; };
+		4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChangeCrossTimeOperation.m; sourceTree = "<group>"; };
 		4FC6E94316AFB6D00023AD1C /* xlist_conv_badge_many.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xlist_conv_badge_many.png; sourceTree = "<group>"; };
 		4FC6E94416AFB6D00023AD1C /* xlist_conv_badge_many@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xlist_conv_badge_many@2x.png"; sourceTree = "<group>"; };
 		4FC8FCE6168D7E5700409779 /* Place+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Place+Helper.h"; sourceTree = "<group>"; };
@@ -4367,11 +4373,12 @@
 			children = (
 				76E96BB3177AB35B00C06ECD /* EFAPIOperations.h */,
 				76E96BB1177AB2E100C06ECD /* EFNotificationDefines.h */,
-				769794F2177C267F0052A1DC /* Profile API Operation */,
-				769794E2177C01AA0052A1DC /* Place API Operation */,
 				76E96BC9177AF9EB00C06ECD /* Crosses API Operation */,
+				4FC4113317D4903900D64105 /* Exfee API Operation */,
 				76E96BB9177AEBAE00C06ECD /* Conversation API Operation */,
 				76E96BB2177AB2EE00C06ECD /* User API Operation */,
+				769794F2177C267F0052A1DC /* Profile API Operation */,
+				769794E2177C01AA0052A1DC /* Place API Operation */,
 				4F2D22E2176AF32E00FEA139 /* RecursiveDeleteOperation.h */,
 				4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */,
 			);
@@ -4482,6 +4489,23 @@
 			name = OAuthCore;
 			path = Vendor/TWReverseAuth/OAuthCore;
 			sourceTree = SOURCE_ROOT;
+		};
+		4FC4113317D4903900D64105 /* Exfee API Operation */ = {
+			isa = PBXGroup;
+			children = (
+				4F0C543517C7389200649C4F /* EFRemoveInvitationOperation.h */,
+				4F0C543617C7389300649C4F /* EFRemoveInvitationOperation.m */,
+				4F0C544117C74B7700649C4F /* EFRemoveMyInvitationOperation.h */,
+				4F0C544217C74B7800649C4F /* EFRemoveMyInvitationOperation.m */,
+				4F0C545617CC874200649C4F /* EFEditExfeeOperation.h */,
+				4F0C545717CC874400649C4F /* EFEditExfeeOperation.m */,
+				4F0C545B17CC875F00649C4F /* EFRsvpOperation.h */,
+				4F0C545C17CC876100649C4F /* EFRsvpOperation.m */,
+				4F0C546017CC879700649C4F /* EFRemoveNotificationIdentityOperation.h */,
+				4F0C546117CC879900649C4F /* EFRemoveNotificationIdentityOperation.m */,
+			);
+			name = "Exfee API Operation";
+			sourceTree = "<group>";
 		};
 		4FC6E95416B0E6EC0023AD1C /* dock */ = {
 			isa = PBXGroup;
@@ -5239,22 +5263,14 @@
 		76E96BC9177AF9EB00C06ECD /* Crosses API Operation */ = {
 			isa = PBXGroup;
 			children = (
+				4FB14BD517C21EB000EFC3F9 /* EFLoadCrossListOperation.h */,
+				4FB14BD617C21EB000EFC3F9 /* EFLoadCrossListOperation.m */,
 				76E96BCA177AFA0D00C06ECD /* EFLoadCrossOperation.h */,
 				76E96BCB177AFA0D00C06ECD /* EFLoadCrossOperation.m */,
 				4FB14BE117C228B400EFC3F9 /* EFEditCrossOperation.h */,
 				4FB14BE217C228B400EFC3F9 /* EFEditCrossOperation.m */,
-				4FB14BD517C21EB000EFC3F9 /* EFLoadCrossListOperation.h */,
-				4FB14BD617C21EB000EFC3F9 /* EFLoadCrossListOperation.m */,
-				4F0C543517C7389200649C4F /* EFRemoveInvitationOperation.h */,
-				4F0C543617C7389300649C4F /* EFRemoveInvitationOperation.m */,
-				4F0C544117C74B7700649C4F /* EFRemoveMyInvitationOperation.h */,
-				4F0C544217C74B7800649C4F /* EFRemoveMyInvitationOperation.m */,
-				4F0C545617CC874200649C4F /* EFEditExfeeOperation.h */,
-				4F0C545717CC874400649C4F /* EFEditExfeeOperation.m */,
-				4F0C545B17CC875F00649C4F /* EFRsvpOperation.h */,
-				4F0C545C17CC876100649C4F /* EFRsvpOperation.m */,
-				4F0C546017CC879700649C4F /* EFRemoveNotificationIdentityOperation.h */,
-				4F0C546117CC879900649C4F /* EFRemoveNotificationIdentityOperation.m */,
+				4FC4113B17D490FF00D64105 /* EFChangeCrossTimeOperation.h */,
+				4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */,
 			);
 			name = "Crosses API Operation";
 			sourceTree = "<group>";
@@ -8504,6 +8520,7 @@
 				4F0C546817CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */,
 				4F0C546E17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 				4F0F831317CF56D9001DD47E /* CCTemplate.m in Sources */,
+				4FC4113E17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8775,6 +8792,7 @@
 				4F0C546917CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */,
 				4F0C546F17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 				4F0F831417CF56D9001DD47E /* CCTemplate.m in Sources */,
+				4FC4113F17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9045,6 +9063,7 @@
 				4FC40F2417D04A5700D64105 /* EFPostConversationOperation.m in Sources */,
 				4FC40F2517D04A5700D64105 /* NSManagedObject+EXFE.m in Sources */,
 				4FC40F2617D04A5700D64105 /* CCTemplate.m in Sources */,
+				4FC4114017D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9316,6 +9335,7 @@
 				4F0C546717CC9CDA00649C4F /* EFPostConversationOperation.m in Sources */,
 				4F0C546D17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 				4F0F831217CF56D9001DD47E /* CCTemplate.m in Sources */,
+				4FC4113D17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

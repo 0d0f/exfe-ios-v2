@@ -829,7 +829,7 @@
 #pragma mark Relayout methods
 - (void)relayoutUI{
     if (layoutDirty == YES){
-//        NSLog(@"relayoutUI");
+//        RKLogTrace(@"relayoutUI");
         //CGRect f = self.view.frame;
         CGRect c = container.frame;
         
@@ -1120,11 +1120,11 @@
 }
 
 - (void)mapView:(MKMapView *)map didSelectAnnotationView:(MKAnnotationView *)view{
-//    NSLog(@"Click on the annotation");
+//    RKLogTrace(@"Click on the annotation");
 }
 
 - (void)onClick:(id)sender{
-//    NSLog(@"Click to Navigation");
+//    RKLogTrace(@"Click to Navigation");
 }
 
 - (void) showMenu:(Invitation*)_invitation items:(NSArray*)itemslist{
@@ -1200,7 +1200,7 @@
 }
 
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
-//  NSLog(@"send rsvp");
+//  RKLogTrace(@"send rsvp");
     //    NSError *error;
 //    Identity *myidentity=[_cross.exfee getMyInvitation].identity;
 //    NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:_invitation.identity.identity_id,@"identity_id",myidentity.identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
@@ -1304,7 +1304,7 @@
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
-//    NSLog(@"select %i",row);
+    RKLogDebug(@"select %i",row);
 }
 
 - (void)pickdone {

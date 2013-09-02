@@ -8,6 +8,10 @@
 
 #import "EXInvitationItem.h"
 
+#import <CoreText/CoreText.h>
+#import "UIImage+RoundedCorner.h"
+#import "Util.h"
+
 @implementation EXInvitationItem
 @synthesize avatar;
 @synthesize isHost;

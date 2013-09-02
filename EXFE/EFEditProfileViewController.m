@@ -1048,7 +1048,7 @@
 
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
 {
-    //NSLog(@"Image saved.");
+    RKLogInfo(@"Image saved.");
 }
 
 #pragma mark - Private methods

@@ -10,12 +10,8 @@
 #import <BlocksKit/BlocksKit.h>
 #import "CCTemplate.h"
 
-#import "EFEntity.h"
 #import "EFKit.h"
-#import "EFModel.h"
 #import "EFAPIServer.h"
-
-#import "AppDelegate.h"
 
 #import "CrossesViewController.h"
 #import "EFRomeViewController.h"
@@ -63,7 +59,7 @@
     // as well.
     
     if ([NotificationRefreshUserSelf isEqualToString:[notification name]]){
-//        NSLog (@"Successfully received the test notification!");
+//        RKLogTrace (@"Successfully received the test notification!");
         
         [self syncUser];
     }
@@ -641,7 +637,7 @@
 //    EFAuthenticationViewController *vc = [[EFAuthenticationViewController alloc] initWithModel:self.model];
 //    vc.user = self.user;
 //    vc.nextStep = ^void(void){
-//        NSLog(@"call next step");
+//        RKLogTrace(@"call next step");
 //    };
 //    [self presentViewController:vc animated:YES completion:nil];
 //}

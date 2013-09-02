@@ -11,11 +11,14 @@
 #import <CoreLocation/CoreLocation.h>
 #import <math.h>
 #import <BlocksKit/BlocksKit.h>
+#import <RestKit/RestKit.h>
+#import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
 #import "CCTemplate.h"
 #import "UIApplication+EXFE.h"
-#import "CrossTime.h"
-#import "EFTime.h"
-#import "EFAPIServer.h"
+#import "EFAPI.h"
 #import "NBPhoneNumberUtil.h"
 #import "NBPhoneNumber.h"
 #import "NBPhoneNumberDefines.h"
@@ -701,7 +704,7 @@ static NSDictionary * _keywordDict = nil;
             }
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//            NSLog(@"check version fail");
+            RKLogInfo(@"check version fail");
         }];
     }
 }

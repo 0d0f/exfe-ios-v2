@@ -13,7 +13,6 @@
 #import <CoreTelephony/CTCarrier.h>
 #import <RestKit/RestKit.h>
 
-#import "AppDelegate.h"
 #import "NSString+Format.h"
 
 #define KeyChoosePeopleLastUpdateDate   @"Key.ChoosePeople.LastUpdateDate"
@@ -155,7 +154,7 @@ typedef void (^EFFetchPeopleCompleteBlock)(void);
                 CFErrorRef errorRef = NULL;
                 _addressBookRef = ABAddressBookCreateWithOptions(NULL, &errorRef);
                 if (!_addressBookRef && errorRef) {
-//                    NSLog(@"%@", (NSString *)CFErrorCopyDescription(errorRef));
+//                    RKLogDebug(@"%@", (NSString *)CFErrorCopyDescription(errorRef));
                 }
             } else if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")) {
 #pragma clang diagnostic push
@@ -343,7 +342,7 @@ typedef void (^EFFetchPeopleCompleteBlock)(void);
             CFErrorRef errorRef = NULL;
             _addressBookRef = ABAddressBookCreateWithOptions(NULL, &errorRef);
             if (!_addressBookRef && errorRef) {
-//                NSLog(@"%@", (NSString *)CFErrorCopyDescription(errorRef));
+//                RKLogDebug(@"%@", (NSString *)CFErrorCopyDescription(errorRef));
             }
         } else if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")) {
 #pragma clang diagnostic push

@@ -6,9 +6,6 @@
 //
 //
 
-#import "User+EXFE.h"
-#import "Identity+EXFE.h"
-#import "AppDelegate.h"
 #import "EFAPIServer.h"
 
 @implementation User (EXFE)
