@@ -8,9 +8,17 @@
 
 #import <MapKit/MapKit.h>
 
+@class EFAnnotationView;
+@protocol EFAnnotationViewDelegate <NSObject>
+
+- (void)annotationView:(EFAnnotationView *)view didTapAtCoordinate:(CLLocationCoordinate2D)coordinate;
+
+@end
+
 @class EFAnnotation, EFMarauderMapDataSource;
 @interface EFAnnotationView : MKAnnotationView
 
+@property (nonatomic, weak) id<EFAnnotationViewDelegate> delegate;
 @property (nonatomic, weak) MKMapView *mapView;
 @property (nonatomic, weak) EFMarauderMapDataSource *mapDataSource;
 

@@ -42,7 +42,8 @@ UIAlertViewDelegate,
 EFGeomarkGroupViewControllerDelegate,
 EFMapPersonViewControllerDelegate,
 EFMapPersonCellDelegate,
-EFRouteXAccessViewControllerDelegate
+EFRouteXAccessViewControllerDelegate,
+EFAnnotationViewDelegate
 >
 
 @property (weak, nonatomic)     IBOutlet EFMapView      *mapView;
