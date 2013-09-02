@@ -241,12 +241,9 @@
     } else if ([name isEqualToString:kEFNotificationNameLoadConversationFailure]) {
         [self showOrHideHint];
     } else if ([name isEqualToString:kEFNotificationNamePostConversationSuccess]) {
-        [inputToolbar setInputEnabled:YES];
-        [inputToolbar.textView clearText];
         [self refreshConversation];
 //            [self loadConversation];
     } else if ([name isEqualToString:kEFNotificationNamePostConversationFailure]) {
-        [inputToolbar setInputEnabled:YES];
         [self showOrHideHint];
     }
 }
@@ -508,6 +505,7 @@
 #pragma mark UIExpandingTextViewDelegate methods
 - (BOOL)expandingTextViewShouldReturn:(UIExpandingTextView *)expandingTextView{
     [self addPost:expandingTextView.internalTextView.text];
+    [expandingTextView clearText];
     return YES;
 }
 -(void)expandingTextView:(UIExpandingTextView *)expandingTextView willChangeHeight:(float)height
@@ -680,8 +678,7 @@
     
     if (content.length == 0) {
         return;
-    }
-    [inputToolbar setInputEnabled:NO];
+    };
     [self.model postConversation:content by:self.myInvitation.identity on:self.exfee];
 }
 
