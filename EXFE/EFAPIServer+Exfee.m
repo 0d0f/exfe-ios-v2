@@ -28,8 +28,8 @@
     
     NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/rsvp?token=%@", [exfee.exfee_id unsignedIntegerValue], self.model.userToken];
     
-    RKObjectManager *manager = [RKObjectManager sharedManager];
-    manager.requestSerializationMIMEType = RKMIMETypeJSON;
+    RKObjectManager *manager = self.model.objectManager;
+    manager.requestSerializationMIMEType = RKMIMETypeFormURLEncoded;
     
     [manager postObject2:exfee
                     path:endpoint
@@ -69,7 +69,7 @@
     NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/removenotificationidentity?token=%@", [exfee.exfee_id unsignedIntegerValue], self.model.userToken];
     
     RKObjectManager *manager = self.model.objectManager;
-    manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    manager.requestSerializationMIMEType = RKMIMETypeFormURLEncoded;
     
     [manager postObject2:exfee
                     path:endpoint
@@ -102,10 +102,9 @@
        byIdentity:(Identity *)identity
           success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))successHandler
           failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failureHandler {
-    RKObjectManager *manager = [RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/edit?token=%@&by_identity_id=%u", [exfee.exfee_id intValue], self.model.userToken, [identity.identity_id intValue]];
     
-//    manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
     RKObjectRequestOperation *operation = [manager appropriateObjectRequestOperationWithObject:exfee

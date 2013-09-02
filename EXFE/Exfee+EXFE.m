@@ -13,17 +13,6 @@
 #import "DateTimeUtil.h"
 
 @implementation Exfee (EXFE)
-
-+ (id)disconnectedEntity {
-    NSManagedObjectContext *context = [RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext;
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Exfee" inManagedObjectContext:context];
-    return [[self alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:nil];
-}
-
-- (void)addToContext:(NSManagedObjectContext *)context {
-    [context insertObject:self];
-}
-
 -(Invitation*)getMyInvitation{
     Invitation * me = nil;
     for(Invitation *invitation in self.invitations)

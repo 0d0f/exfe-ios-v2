@@ -29,36 +29,37 @@
         param = @{@"token": self.model.userToken};
     }
     
-    [[RKObjectManager sharedManager] getObjectsAtPath:endpoint
-                                           parameters:param
-                                              success:^(RKObjectRequestOperation *operation, id responseObject){
-                                                  [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
-                                                             withObject:operation
-                                                             withObject:responseObject];
-                                                  
-                                                  if (success) {
-                                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                                          success(operation, responseObject);
-                                                      });
-                                                  }
-                                              }
-                                              failure:^(RKObjectRequestOperation *operation, NSError *error){
-                                                  [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
-                                                             withObject:operation
-                                                             withObject:error];
-                                                  
-                                                  if (failure) {
-                                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                                          failure(operation, error);
-                                                      });
-                                                  }
-                                              }];
+    [self.model.objectManager getObject:nil
+                                   path:endpoint
+                             parameters:param
+                                success:^(RKObjectRequestOperation *operation, id responseObject){
+                                    [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                                               withObject:operation
+                                               withObject:responseObject];
+                                    
+                                    if (success) {
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            success(operation, responseObject);
+                                        });
+                                    }
+                                }
+                                failure:^(RKObjectRequestOperation *operation, NSError *error){
+                                    [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                               withObject:operation
+                                               withObject:error];
+                                    
+                                    if (failure) {
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            failure(operation, error);
+                                        });
+                                    }
+                                }];
 }
 
 - (void)gatherCross:(Cross *)cross
             success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
             failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
-    RKObjectManager* manager =[RKObjectManager sharedManager];
+    RKObjectManager* manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
@@ -119,8 +120,7 @@
 - (void)editCross:(Cross *)cross
           success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
           failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
-    RKObjectManager* manager = [RKObjectManager sharedManager];
-    manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
+    RKObjectManager* manager = self.model.objectManager;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
     NSString *endpoint = [NSString stringWithFormat:@"crosses/%u/edit?token=%@", [cross.cross_id intValue], self.model.userToken];

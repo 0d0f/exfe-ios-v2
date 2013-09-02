@@ -990,13 +990,11 @@ typedef enum {
 //                hud.customView = bigspin;
                 
                 
-                Exfee *exfee = [Exfee disconnectedEntity];
-                [exfee addToContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+                Exfee *exfee = [Exfee disconnectedEntity: self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext];
                 exfee.exfee_id = [self.exfee.exfee_id copy];
                 
                 NSMutableSet *invitations = [[NSMutableSet alloc] init];
-                RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
+                NSManagedObjectContext *context = self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext;
                 
                 for (EFContactObject *object in contactObjects) {
                     RoughIdentity *firstRoughIdentity = nil;

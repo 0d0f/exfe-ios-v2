@@ -20,9 +20,6 @@ typedef NS_ENUM(NSInteger, InvitationSortType){
 
 @interface Exfee (EXFE)
 
-+ (id)disconnectedEntity;
-- (void)addToContext:(NSManagedObjectContext *)context;
-
 - (Invitation*)getMyInvitation;
 - (void) addDefaultInvitationBy:(Identity*)identity;
 

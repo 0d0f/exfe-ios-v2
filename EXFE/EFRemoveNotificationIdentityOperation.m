@@ -57,7 +57,6 @@ NSString *kEFNotificationNameRemoveNotificationIdentityFailure = @"notification.
                                                                  
                                                              }  break;
                                                              default:{
-                                                                 // RKObjectManager *objectManager = [RKObjectManager sharedManager];
                                                                  // [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
                                                                  self.state = kEFNetworkOperationStateFailure;
                                                                  NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];

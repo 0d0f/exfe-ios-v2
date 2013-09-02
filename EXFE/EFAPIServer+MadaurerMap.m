@@ -26,7 +26,7 @@
     
     NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/users/crosses/%d?token=%@", [cross.cross_id unsignedIntegerValue], self.model.userToken];
     
-    RKObjectManager *manager = [RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     
     [manager.HTTPClient postPath:endpoint
@@ -64,7 +64,7 @@
     
     NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/breadcrumbs?coordinate=%@&token=%@", isEarthCoordinate ? @"earth" : @"mars", self.model.userToken];
     
-    RKObjectManager *manager = [RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     
     [manager.HTTPClient postPath:endpoint
@@ -98,7 +98,7 @@
                             failure:(void (^)(NSError *error))failureHandler {
     NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/breadcrumbs/crosses/%d?coordinate=%@&token=%@", [cross.cross_id unsignedIntegerValue], isEarthCoordinate ? @"earth" : @"mars", self.model.userToken];
     
-    RKObjectManager *manager = [RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     
     [manager.HTTPClient getPath:endpoint
@@ -138,7 +138,7 @@
                             failure:(void (^)(NSError *error))failureHandler {
     NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/breadcrumbs/crosses/%d/users/%@?coordinate=%@&token=%@", [cross.cross_id unsignedIntegerValue], identityIdString, isEarthCoordinate ? @"earth" : @"mars", self.model.userToken];
     
-    RKObjectManager *manager = [RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     
     [manager.HTTPClient getPath:endpoint
@@ -181,7 +181,7 @@
     
     NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/geomarks/crosses/%d/%@/%@?coordinate=%@&token=%@", [cross.cross_id unsignedIntegerValue], type, geomarkId, isEarthCoordinate ? @"earth" : @"mars", self.model.userToken];
     
-    RKObjectManager *manager = [RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     
     [manager.HTTPClient putPath:endpoint
@@ -211,7 +211,7 @@
     
     NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/geomarks/crosses/%d/%@/%@?token=%@", [cross.cross_id unsignedIntegerValue], type, geomarkId, self.model.userToken];
     
-    RKObjectManager *manager = [RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     
     [manager.HTTPClient deletePath:endpoint
@@ -237,7 +237,7 @@
                             failure:(void (^)(NSError *error))failureHandler {
     NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/geomarks/crosses/%d?coordinate=%@&token=%@", [cross.cross_id unsignedIntegerValue], isEarthCoordinate ? @"earth" : @"mars", self.model.userToken];
     
-    RKObjectManager *manager = [RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     
     [manager.HTTPClient getPath:endpoint
@@ -283,7 +283,7 @@
     NSString *endpoint = [NSString stringWithFormat:@"/v2/crosses/%d/getroutexurl", [cross.cross_id unsignedIntegerValue]];
     NSDictionary *param = @{@"token": self.model.userToken};
     
-    RKObjectManager *manager = [RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     
     [manager.HTTPClient getPath:endpoint
@@ -318,7 +318,7 @@
                             failure:(void (^)(NSError *error))failureHandler {
     NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/notification/crosses/%d?id=%@&token=%@", [cross.cross_id unsignedIntegerValue], identityId, self.model.userToken];
     
-    RKObjectManager *manager = [RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     
     [manager.HTTPClient postPath:endpoint

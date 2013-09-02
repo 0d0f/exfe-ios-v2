@@ -23,7 +23,7 @@
                              @"sensor": @"true"};
     //@"key": GOOGLE_API_KEY
     
-    RKObjectManager *manager = [RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     [manager.HTTPClient.operationQueue cancelAllOperations];
     
     [manager.HTTPClient getPath:endpoint
@@ -65,7 +65,7 @@
                              @"key": GOOGLE_API_KEY};
     
     
-    RKObjectManager *manager = [RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     [manager.HTTPClient.operationQueue cancelAllOperations];
     
     [manager.HTTPClient getPath:endpoint
@@ -113,7 +113,7 @@
          @"radius": @"1000"}];
     }
     
-    RKObjectManager *manager = [RKObjectManager sharedManager];
+    RKObjectManager *manager = self.model.objectManager;
     [manager.HTTPClient.operationQueue cancelAllOperations];
     
     [manager.HTTPClient getPath:endpoint

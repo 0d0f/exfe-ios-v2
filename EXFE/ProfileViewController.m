@@ -188,7 +188,6 @@
 }
 
 - (void)gotoBack:(UIButton*)sender{
-    [[RKObjectManager sharedManager].operationQueue cancelAllOperations];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

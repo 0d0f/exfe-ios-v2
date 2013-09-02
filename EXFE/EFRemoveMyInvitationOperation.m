@@ -55,7 +55,6 @@ NSString *kEFNotificationNameRemoveMyInvitationFailure = @"notification.removeMy
                                             [self finish];
                                         } break;
                                         default:{
-                                            // RKObjectManager *objectManager = [RKObjectManager sharedManager];
                                             // [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
                                             
                                             // 400 Over people max limited
