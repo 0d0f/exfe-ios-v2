@@ -865,13 +865,15 @@
                     [self.navigationController popToRootViewControllerAnimated:NO];
                 }
                 NSInteger crossId = [crossIdString integerValue];
-                Class cls = NSClassFromString(@"CrossGroupViewController");
+                Class cls = [CrossGroupViewController class];
                 if (pathComponents.count > 1) {
                     NSString *tab = [pathComponents objectAtIndex:1];
                     if ([@"conversation" caseInsensitiveCompare:tab] == NSOrderedSame) {
-                        cls = NSClassFromString(@"WidgetConvViewController");
+                        cls = [WidgetConvViewController class];
                     } else if ([@"exfee" caseInsensitiveCompare:tab] == NSOrderedSame) {
-                        cls = NSClassFromString(@"WidgetExfeeViewController");
+                        cls = [WidgetExfeeViewController class];
+                    } else if ([@"routex" caseInsensitiveCompare:tab] == NSOrderedSame) {
+                        cls = [EFRouteXViewController class];
                     }
                 }
                 [self showCross:crossId withTabClass:cls animated:animated];
