@@ -19,6 +19,9 @@
 #define kDefaultHidePickerDuration  (0.144f)
 #define kDefaultHidePickerDelay     (1.0f)
 
+#define kViewHeight                 (25.0f)
+#define kBlankHeight                (12.0f)
+
 @interface EFLetterPickerView : UIView
 
 @property (nonatomic, strong) UILabel *label;
@@ -140,11 +143,11 @@
     
     self.selectedIndex = [self.charactorArray indexOfObject:kDefaultCharactor];
     
-    CGRect viewBounds = self.bounds;
-    CGRect panViewFrame = (CGRect){CGPointZero, {30.0f, 30.0f}};
+    CGRect viewFrame = (CGRect){{0.0f, kBlankHeight + kViewHeight}, {CGRectGetWidth(self.bounds), kViewHeight}};
+    CGRect panViewFrame = (CGRect){{0.0f, kBlankHeight + kViewHeight}, {30.0f, 30.0f}};
     
     UIView *panView = [[UIView alloc] initWithFrame:panViewFrame];
-    panView.center = (CGPoint){CGRectGetMidX(viewBounds), CGRectGetMidY(viewBounds)};
+    panView.center = (CGPoint){CGRectGetMidX(viewFrame), CGRectGetMidY(viewFrame)};
     panView.backgroundColor = [UIColor colorWithRed:(51.0f / 255.0f) green:(51.0f / 255.0f) blue:(51.0f / 255.0f) alpha:0.8f];
     panView.layer.cornerRadius = 2.0f;
     [self addSubview:panView];
@@ -176,18 +179,18 @@
                                                                                             action:@selector(handlePressDrag:)];
     [self.label addGestureRecognizer:pressDrag];
     
-    [singleTap requireGestureRecognizerToFail:pressDrag ];
+//    [pressDrag requireGestureRecognizerToFail:singleTap];
     
     self.markLetter = kDefaultCharactor;
     
-    CGRect buttonFrame = (CGRect){CGPointZero, {CGRectGetMidX(viewBounds) - 20.0f, CGRectGetHeight(viewBounds)}};
+    CGRect buttonFrame = (CGRect){{0.0f, kBlankHeight + kViewHeight}, {CGRectGetMidX(viewFrame) - 20.0f, CGRectGetHeight(viewFrame)}};
     EFMapColorButton *blueButton = [EFMapColorButton buttonWithColor:[UIColor colorWithRed:0.0f green:(123.0f / 255.0f) blue:1.0f alpha:1.0f]];
     [blueButton addTarget:self action:@selector(colorButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     blueButton.frame = buttonFrame;
     [self addSubview:blueButton];
     self.blueButton = blueButton;
     
-    buttonFrame.origin = (CGPoint){CGRectGetWidth(viewBounds) - CGRectGetWidth(buttonFrame), 0.0f};
+    buttonFrame.origin = (CGPoint){CGRectGetWidth(viewFrame) - CGRectGetWidth(buttonFrame), kBlankHeight + kViewHeight};
     EFMapColorButton *redButton = [EFMapColorButton buttonWithColor:[UIColor colorWithRed:1.0f green:0.0f blue:(51.0f / 255.0f) alpha:1.0f]];
     [redButton addTarget:self action:@selector(colorButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     redButton.frame = buttonFrame;
@@ -207,12 +210,16 @@
 
 - (void)_showLetterPickerViewAnimated:(BOOL)animated {
     if (!self.letterPickerView) {
-        CGRect viewBounds = self.bounds;
-        viewBounds.origin.y -= (CGRectGetHeight(viewBounds) + 12.0f);
-        self.letterPickerView = [[EFLetterPickerView alloc] initWithFrame:viewBounds];
+        CGRect viewFrame = (CGRect){{0.0f, 0.0f}, {CGRectGetWidth(self.bounds), kViewHeight}};
+        self.letterPickerView = [[EFLetterPickerView alloc] initWithFrame:viewFrame];
         self.letterPickerView.hidden = YES;
         self.letterPickerView.alpha = 0.0f;
+        self.letterPickerView.userInteractionEnabled = YES;
         [self addSubview:self.letterPickerView];
+        
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                              action:@selector(handlePickerPan:)];
+        [self.letterPickerView addGestureRecognizer:pan];
     }
     
     self.letterPickerView.label.text = self.markLetter;
@@ -328,6 +335,54 @@
     
     if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
         [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
+    }
+}
+
+- (void)handlePickerPan:(UIPanGestureRecognizer *)pan {
+    static NSInteger s_count = 0;
+    static CGPoint preTranslation = (CGPoint){0.0f, 0.0f};
+    
+    UIGestureRecognizerState state = pan.state;
+    switch (state) {
+        case UIGestureRecognizerStateBegan:
+            s_count = 0;
+            preTranslation = CGPointZero;
+            self.selectedIndex = [self.charactorArray indexOfObject:self.markLetter];
+            
+            [self _invalidePickerHideTimer];
+            break;
+        case UIGestureRecognizerStateChanged:
+        {
+            CGPoint translation = [pan translationInView:self.letterPickerView];
+            NSInteger count = (NSInteger)(translation.x - preTranslation.x) / 5.0f;
+            
+            if (s_count != count && count) {
+                s_count = count;
+                preTranslation = translation;
+                self.selectedIndex += (count > 0) ? 1 : -1;
+                if (self.selectedIndex < 0) {
+                    self.selectedIndex = 0;
+                } else if (self.selectedIndex >= self.charactorArray.count) {
+                    self.selectedIndex = self.charactorArray.count - 1;
+                }
+                
+                self.markLetter = [self.charactorArray objectAtIndex:self.selectedIndex];
+            }
+            
+            if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:isChangingToTitle:)]) {
+                [self.delegate mapEditingAnnotationView:self isChangingToTitle:self.markLetter];
+            }
+        }
+            break;
+        case UIGestureRecognizerStateEnded:
+            [self _firePickerHideTimer];
+            
+            if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
+                [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
+            }
+            break;
+        default:
+            break;
     }
 }
 

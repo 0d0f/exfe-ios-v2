@@ -301,7 +301,7 @@ static UIView * ReverseSubviews(UIView *view) {
 
 - (void)_initOperationBaseView {
     CGRect viewBounds = self.bounds;
-    CGRect operationBaseViewFrame = (CGRect){{0.0f, CGRectGetHeight(viewBounds) - 50.0f}, {CGRectGetWidth(viewBounds), 50.0f}};
+    CGRect operationBaseViewFrame = (CGRect){{0.0f, CGRectGetHeight(viewBounds) - 74.0f}, {CGRectGetWidth(viewBounds), 74.0f}};
     UIView *operationBaseView = [[UIView alloc] initWithFrame:operationBaseViewFrame];
     [self addSubview:operationBaseView];
     self.operationBaseView = operationBaseView;
@@ -310,7 +310,7 @@ static UIView * ReverseSubviews(UIView *view) {
 - (void)_initEditingViews {
     CGRect viewBounds = self.bounds;
     CGRect operationBaseViewFrame = self.operationBaseView.frame;
-    CGRect baseViewFrame = (CGRect){{50.0f, CGRectGetHeight(operationBaseViewFrame) - 37.0f}, {CGRectGetWidth(viewBounds) - 100.0f, 25.0f}};
+    CGRect baseViewFrame = (CGRect){{50.0f, 0.0f}, {CGRectGetWidth(viewBounds) - 100.0f, CGRectGetHeight(operationBaseViewFrame)}};
     
     UIView *baseView = [[UIView alloc] initWithFrame:baseViewFrame];
     baseView.backgroundColor = [UIColor clearColor];
@@ -320,16 +320,16 @@ static UIView * ReverseSubviews(UIView *view) {
     
     CGRect baseViewBounds = baseView.bounds;
     
-    EFMapEditingReadyView *readyView = [[EFMapEditingReadyView alloc] initWithFrame:baseViewBounds];
+    EFMapEditingReadyView *readyView = [[EFMapEditingReadyView alloc] initWithFrame:(CGRect){{0.0f, CGRectGetHeight(baseViewBounds) - 37.0f}, {CGRectGetWidth(baseViewBounds), 25.0f}}];
     [baseView addSubview:readyView];
     self.editingReadyView = readyView;
     
-    CGRect pathViewFrame = (CGRect){CGPointZero, {CGRectGetWidth(baseViewBounds), 37}};
+    CGRect pathViewFrame = (CGRect){{0.0f, CGRectGetHeight(baseViewBounds) - 37.0f}, {CGRectGetWidth(baseViewBounds), 25.0f}};
     EFMapEditingPathView *pathView = [[EFMapEditingPathView alloc] initWithFrame:pathViewFrame];
     [baseView addSubview:pathView];
     self.editingPathView = pathView;
     
-    EFMapEditingAnnotationView *annatationView = [[EFMapEditingAnnotationView alloc] initWithFrame:baseViewBounds];
+    EFMapEditingAnnotationView *annatationView = [[EFMapEditingAnnotationView alloc] initWithFrame:(CGRect){{0.0f, 0.0f}, {CGRectGetWidth(baseViewBounds), 62.0f}}];
     annatationView.delegate = self;
     [baseView addSubview:annatationView];
     self.editingAnnotatoinView = annatationView;
@@ -341,7 +341,7 @@ static UIView * ReverseSubviews(UIView *view) {
     UIButton *editingButton = [UIButton buttonWithType:UIButtonTypeCustom];
     editingButton.layer.cornerRadius = 4.0f;
     editingButton.backgroundColor = [UIColor blueColor];
-    editingButton.frame = (CGRect){{10.0f, 10.0f}, {30.0f, 30.0f}};
+    editingButton.frame = (CGRect){{10.0f, 34.0f}, {30.0f, 30.0f}};
     [editingButton addTarget:self action:@selector(editingButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
 #warning test only
 //    [self.operationBaseView addSubview:editingButton];
@@ -350,7 +350,7 @@ static UIView * ReverseSubviews(UIView *view) {
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     cancelButton.backgroundColor = [UIColor clearColor];
     [cancelButton setBackgroundImage:[UIImage imageNamed:@"map_remove_30.png"] forState:UIControlStateNormal];
-    cancelButton.frame = (CGRect){{CGRectGetWidth(viewBounds) - 40.0f, 10.0f}, {30.0f, 30.0f}};
+    cancelButton.frame = (CGRect){{CGRectGetWidth(viewBounds) - 40.0f, 34.0f}, {30.0f, 30.0f}};
     [cancelButton addTarget:self action:@selector(cancelButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.operationBaseView addSubview:cancelButton];
     self.cancelButton = cancelButton;
@@ -359,7 +359,7 @@ static UIView * ReverseSubviews(UIView *view) {
     headingButton.backgroundColor = [UIColor clearColor];
     [headingButton setBackgroundImage:[UIImage imageNamed:@"btn_pad.png"] forState:UIControlStateNormal];
     [headingButton setImage:[UIImage imageNamed:@"map_arrow_g5.png"] forState:UIControlStateNormal];
-    headingButton.frame = (CGRect){{CGRectGetWidth(viewBounds) - 42.0f, 10.0f}, {32.0f, 32.0f}};
+    headingButton.frame = (CGRect){{CGRectGetWidth(viewBounds) - 42.0f, 34.0f}, {32.0f, 32.0f}};
     [headingButton addTarget:self action:@selector(headingButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.operationBaseView addSubview:headingButton];
     self.headingButton = headingButton;
@@ -482,7 +482,7 @@ static UIView * ReverseSubviews(UIView *view) {
     [super layoutSubviews];
     
     CGRect viewBounds = self.bounds;
-    CGRect operationBaseViewFrame = (CGRect){{0.0f, CGRectGetHeight(viewBounds) - 50.0f}, {CGRectGetWidth(viewBounds), 50.0f}};
+    CGRect operationBaseViewFrame = (CGRect){{0.0f, CGRectGetHeight(viewBounds) - 74.0f}, {CGRectGetWidth(viewBounds), 74.0f}};
     self.operationBaseView.frame = operationBaseViewFrame;
 }
 
