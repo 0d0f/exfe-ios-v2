@@ -1299,18 +1299,27 @@
 }
 
 - (void)setTime:(CrossTime *)time {
-    Cross *cross = [Cross object:self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext];
+    NSManagedObjectContext *context = self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext;
+//    if (!time.managedObjectContext) {
+//        [time addToContext:context];
+//    }
+    Cross *cross = [Cross object:context];
     cross.time = time;
     cross.cross_id = [self.cross.cross_id copy];
     cross.by_identity = [self.cross.exfee getMyInvitation].identity;
     [self.model editCross:cross];
+    // [self.model updateCrossTime:time withCrossId:self.cross.cross_id];
     
     [self fillTime:time];
     [self relayoutUI];
 }
 
 - (void)setPlace:(Place*)place {
-    Cross *cross = [Cross object:self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext];
+    NSManagedObjectContext *context = self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext;
+//    if (!place.managedObjectContext) {
+//        [place addToContext:context];
+//    }
+    Cross *cross = [Cross object:context];
     cross.place = place;
     cross.cross_id = [self.cross.cross_id copy];
     cross.by_identity = [self.cross.exfee getMyInvitation].identity;

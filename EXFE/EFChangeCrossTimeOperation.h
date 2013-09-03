@@ -13,8 +13,12 @@
 
 @interface EFChangeCrossTimeOperation : EFNetworkOperation
 
-@property (nonatomic, strong) CrossTime *crossTime;
-@property (nonatomic, strong) Cross     *cross;
+@property (nonatomic, strong) NSManagedObjectContext *moc;
+@property (nonatomic, strong) NSDate                 *timestamp;
+@property (nonatomic, strong) NSNumber               *entityId;
+@property (nonatomic, strong) NSEntityDescription    *entityType;
+
+@property (nonatomic, strong) CrossTime              *crossTime;
 
 
 @end

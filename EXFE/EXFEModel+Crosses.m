@@ -51,17 +51,22 @@
 
 - (Cross *)getCrossById:(NSUInteger)crossId
 {
-    __block Cross *x = nil;
     RKObjectManager *objectManager = self.objectManager;
+    return [self getCrossById:@(crossId) from:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+}
+
+- (Cross *)getCrossById:(NSNumber *)crossId from:(NSManagedObjectContext *)moc
+{
+    __block Cross *x = nil;
     
-    [objectManager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
+    [moc performBlockAndWait:^{
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Cross"];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"cross_id = %u", crossId];
         NSSortDescriptor* descUpdateAt = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
         NSSortDescriptor* descReadAt = [NSSortDescriptor sortDescriptorWithKey:@"read_at" ascending:NO];
         [request setSortDescriptors:@[descUpdateAt, descReadAt]];
         [request setPredicate:predicate];
-        NSArray *crosses = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+        NSArray *crosses = [moc executeFetchRequest:request error:nil];
         if (crosses.count > 0) {
             x = [crosses objectAtIndex:0];
         }
@@ -112,6 +117,17 @@
     EFEditCrossOperation *operation = [EFEditCrossOperation operationWithModel:self];
 //    cross.by_identity = [cross.exfee getMyInvitation].identity;
     operation.cross = cross;
+    
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+}
+
+- (void)updateCrossTime:(CrossTime*)crossTime withCrossId:(NSNumber *)crossId;
+{
+    EFChangeCrossTimeOperation *operation = [EFChangeCrossTimeOperation operationWithModel:self];
+    operation.entityId = [crossId copy];
+    operation.entityType = self.crossEntry;
+    operation.crossTime = crossTime;
     
     EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];

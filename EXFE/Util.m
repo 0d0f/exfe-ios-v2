@@ -38,8 +38,8 @@ static NSDictionary * _keywordDict = nil;
     if (!_keywordDict) {
         _keywordDict = @{
                          @"PRODUCT_NAME":[NSLocalizedString(@"EXFE", @"Name for Product") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],
-                         @"APP_NAME":[NSLocalizedString(@" EXFE", @"Name for App") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],
-                         @"PRODUCT_APP_NAME":[NSLocalizedString(@"EXFE ", @"Name for Both Product and App") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
+                         @"APP_NAME":[NSLocalizedString(@"EXFE ", @"Name for App") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],
+                         @"PRODUCT_APP_NAME":[NSLocalizedString(@"EXFE  ", @"Name for Product and App") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
                          };
     }
     return _keywordDict;
@@ -565,11 +565,17 @@ static NSDictionary * _keywordDict = nil;
         EFErrorMessage *errorMessage = [[EFErrorMessage alloc] initBannerMessageWithTitle:title
                                                                                   message:message
                                                                      bannerPressedHandler:^{
-                                                                         EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:op];
-                                                                         
-                                                                         [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+                                                                         if (retry) {
+                                                                             EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:op];
+                                                                             
+                                                                             [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+                                                                         } else {
+                                                                             [op operationDidRetryFail];
+                                                                         }
                                                                      }
-                                                                     buttonPressedHandler:nil
+                                                                     buttonPressedHandler:^{
+                                                                         [op operationDidRetryFail];
+                                                                     }
                                                                                 needRetry:retry];
         
         [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:errorMessage];
