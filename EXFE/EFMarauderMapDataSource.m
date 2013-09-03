@@ -982,6 +982,9 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     
     lastAddedLocation = lastLocation;
     
+    NSInteger recentHour = 1;
+    NSInteger recentMin = 30;
+    
     for (EFLocation *location in locations) {
         NSTimeInterval timeIntervalSinceLastAddedLocation = [lastAddedLocation.timestamp timeIntervalSinceDate:location.timestamp];
         NSTimeInterval timeIntervalSinceFirstLocation = [lastLocation.timestamp timeIntervalSinceDate:location.timestamp];
@@ -1002,9 +1005,27 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
             } else {
                 // longer than 1.5h
                 if (timeIntervalSinceLastAddedLocation >= 30.0f * 60.0f) {
-                    EFTimestampAnnotation *timestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:location.coordinate timestamp:location.timestamp];
-                    [annotations addObject:timestamp];
-                    lastAddedLocation = location;
+                    if (timeIntervalSinceFirstLocation > recentHour * 3600.0f + recentMin * 60.0f) {
+                        NSInteger h = (NSInteger)timeIntervalSinceFirstLocation / 60.0f;
+                        NSInteger min = ((NSInteger)timeIntervalSinceFirstLocation) % 60;
+                        if (min < 15) {
+                            min = 0;
+                        } else if (min < 45) {
+                            min = 30;
+                        } else {
+                            h += 1;
+                            min = 0;
+                        }
+                        
+                        if (h > recentHour || (h == recentHour && min > recentMin)) {
+                            recentHour = h;
+                            recentMin = min;
+                            
+                            EFTimestampAnnotation *timestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:location.coordinate timestamp:[NSDate dateWithTimeInterval:(NSTimeInterval)(recentHour * 3600.0f + recentMin * 60.0f) sinceDate:lastLocation.timestamp]];
+                            [annotations addObject:timestamp];
+                            lastAddedLocation = location;
+                        }
+                    }
                 }
             }
         }
