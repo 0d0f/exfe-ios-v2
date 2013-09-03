@@ -12,12 +12,14 @@
 @class Invitation;
 @class Exfee;
 @class IdentityId;
+@class CrossTime;
 
 @interface EXFEModel (Crosses)
 {}
 #pragma mark - From local storage
 - (NSArray *)getCrossList;
 - (Cross *)getCrossById:(NSUInteger)crossId;
+- (Cross *)getCrossById:(NSNumber *)crossId from:(NSManagedObjectContext *)moc;
 
 #pragma mark - From remote api
 #pragma mark Cross
@@ -25,6 +27,8 @@
 - (void)loadCrossList;
 - (void)loadCrossListAfter:(NSDate *)time;
 - (void)editCross:(Cross *)cross;
+
+- (void)updateCrossTime:(CrossTime*)crossTime withCrossId:(NSNumber *)crossId;
 
 #pragma mark Exfee
 - (void)editExfee:(Exfee *)exfee;

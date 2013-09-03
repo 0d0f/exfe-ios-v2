@@ -37,4 +37,5 @@ typedef enum {
 - (id)initWithModel:(EXFEModel *)model;
 - (id)initWithModel:(EXFEModel *)model dupelicateFrom:(EFNetworkOperation *)operation;
 
+- (void)operationDidRetryFail;
 @end

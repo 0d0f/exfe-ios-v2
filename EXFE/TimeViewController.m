@@ -50,19 +50,8 @@
     [btnBack addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchDragExit];
     [toolbar addSubview:btnBack];
 
-//    timeInput =[[UITextField alloc] initWithFrame:CGRectMake(54, 13.5, 195-18, 18.5)];
-    
-//    UIImageView *inputframeview=[[UIImageView alloc] initWithFrame:CGRectMake(28, 7, 229, 31)];
-//    inputframeview.image=[UIImage imageNamed:@"textfield.png"];
-//    inputframeview.contentMode    = UIViewContentModeScaleToFill;
-//    inputframeview.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
-//    [toolbar addSubview:inputframeview];
-//    [toolbar addSubview:timeInput];
-//    [inputframeview.contentStretch release]
-
     UIImageView *icon=[[UIImageView alloc] initWithFrame:CGRectMake(33, 13.5, 18, 18)];
     icon.image=[UIImage imageNamed:@"time_18.png"];
-//    [toolbar addSubview:icon];
 
     TTTAttributedLabel *viewtitle = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(60, (44-30)/2, self.view.frame.size.width-60-60, 30)];
     viewtitle.backgroundColor = [UIColor clearColor];
@@ -307,12 +296,10 @@
             [self dismissViewControllerAnimated:YES completion:nil];
   
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    NSEntityDescription *eftimeEntity = [NSEntityDescription entityForName:@"EFTime" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-    EFTime *eftime=[[EFTime alloc] initWithEntity:eftimeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+    NSManagedObjectContext *moc = objectManager.managedObjectStore.mainQueueManagedObjectContext;
 
-
-    NSEntityDescription *crosstimeEntity = [NSEntityDescription entityForName:@"CrossTime" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-    CrossTime *crosstime=[[CrossTime alloc] initWithEntity:crosstimeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+    EFTime *eftime = [EFTime object:moc];
+    CrossTime * crosstime = [CrossTime object:moc];
 
     NSDate *date=datepicker.date;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -361,7 +348,7 @@
     eftime.date_word=@"";
     eftime.timezone=eftimezone;
     crosstime.begin_at=eftime;
-//    [delegate setTime:crosstime];
+    
     [self.delegate setTime:crosstime];
 }
 

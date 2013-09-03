@@ -74,4 +74,9 @@
     }
 }
 
+- (void)operationDidRetryFail
+{
+    
+}
+
 @end
