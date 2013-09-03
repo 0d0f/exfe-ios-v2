@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="12E55" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3389" systemVersion="13A558" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Avatar" representedClassName="Avatar" syncable="YES">
         <attribute name="base" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="base_2x" optional="YES" attributeType="String" syncable="YES"/>
@@ -9,7 +9,7 @@
         <attribute name="conversation_count" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="cross_description" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="cross_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="cross_id" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="crossid_base62" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="read_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
@@ -50,7 +50,7 @@
     </entity>
     <entity name="Exfee" representedClassName="Exfee" syncable="YES">
         <attribute name="accepted" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="exfee_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="exfee_id" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="total" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="invitations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Invitation" syncable="YES"/>
@@ -79,7 +79,7 @@
     <entity name="Invitation" representedClassName="Invitation" syncable="YES">
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="host" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="invitation_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="invitation_id" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="mates" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="rsvp_status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
@@ -142,31 +142,27 @@
         <attribute name="password" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="timezone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="user_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="user_id" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="webcal" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="avatar" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Avatar" syncable="YES"/>
         <relationship name="devices" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Device" syncable="YES"/>
         <relationship name="identities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
     </entity>
-    <entity name="Widget" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-    </entity>
     <elements>
-        <element name="Avatar" positionX="160" positionY="192" width="128" height="90"/>
-        <element name="Cross" positionX="-326" positionY="54" width="128" height="285"/>
-        <element name="CrossTime" positionX="-200" positionY="513" width="128" height="90"/>
-        <element name="Device" positionX="160" positionY="192" width="128" height="210"/>
-        <element name="EFTime" positionX="-9" positionY="528" width="128" height="120"/>
-        <element name="Exfee" positionX="-153" positionY="60" width="128" height="120"/>
-        <element name="Identity" positionX="367" positionY="126" width="128" height="285"/>
-        <element name="IdentityId" positionX="478" positionY="508" width="128" height="58"/>
-        <element name="Invitation" positionX="90" positionY="-0" width="128" height="225"/>
-        <element name="LocalContact" positionX="520" positionY="-126" width="128" height="165"/>
-        <element name="Meta" positionX="342" positionY="-117" width="128" height="90"/>
-        <element name="Place" positionX="-47" positionY="300" width="128" height="195"/>
-        <element name="Post" positionX="574" positionY="273" width="128" height="150"/>
-        <element name="Rsvp" positionX="99" positionY="-132" width="128" height="105"/>
-        <element name="User" positionX="547" positionY="66" width="128" height="255"/>
-        <element name="Widget" positionX="-306" positionY="381" width="128" height="60"/>
+        <element name="Avatar" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Cross" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CrossTime" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Device" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="EFTime" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Exfee" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Identity" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="IdentityId" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Invitation" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="LocalContact" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Meta" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Place" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Post" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Rsvp" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="User" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>
