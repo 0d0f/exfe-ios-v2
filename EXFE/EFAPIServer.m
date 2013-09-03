@@ -1191,7 +1191,8 @@
 #pragma mark - Private
 
 - (void)_handleSuccessWithRequestOperation:(NSOperation *)operation andResponseObject:(id)object {
-    if ([[EFStatusBar defaultStatusBar].currentPresentedMessage isEqualToString:@" Network error "]) {
+    // FIXME should not use display string as key for it could be changed.
+    if ([[EFStatusBar defaultStatusBar].currentPresentedMessage isEqualToString:NSLocalizedString(@"Network error", nil)]) {
         [[EFStatusBar defaultStatusBar] dismiss];
     }
 }
@@ -1220,7 +1221,7 @@
             NSURLErrorServerCertificateNotYetValid == error.code ||
             NSURLErrorClientCertificateRejected == error.code) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[EFStatusBar defaultStatusBar] presentMessage:@" Network error "
+                [[EFStatusBar defaultStatusBar] presentMessage:NSLocalizedString(@"Network error", nil)
                                                  withTextColor:[UIColor whiteColor]
                                                backgroundColor:[UIColor COLOR_RED_MEXICAN]];
             });

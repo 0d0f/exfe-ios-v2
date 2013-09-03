@@ -23,7 +23,7 @@
         int y=0;
         if(showtitlebar==YES){
             UILabel *responselabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 4, 100, 16)];
-            responselabel.text=@"Response:";
+            responselabel.text= NSLocalizedString(@"Response:", nil);
             [responselabel setBackgroundColor:[UIColor clearColor]];
             [responselabel setTextColor:[UIColor colorWithRed:250/255.0 green:250/255.0 blue:250/255.0 alpha:1.0]];
             [responselabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:12]];
@@ -36,7 +36,7 @@
         
         if([self Itemscontain:itemlist string:@"Accepted"]){
             UIButton *btnaccepted=[UIButton buttonWithType:UIButtonTypeCustom];
-            NSString *str = @"Accepted";
+            NSString *str = NSLocalizedString(@"Accepted", nil);
             [btnaccepted setTitle:str forState:UIControlStateNormal];
             [btnaccepted.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:18]];
             [btnaccepted setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -57,7 +57,7 @@
         
         if([self Itemscontain:itemlist string:@"I'm in"]){
             UIButton *btnaccepted=[UIButton buttonWithType:UIButtonTypeCustom];
-            NSString *str = @"I'm in";
+            NSString *str = NSLocalizedString(@"I'm in", nil);
             [btnaccepted setTitle:str forState:UIControlStateNormal];
             [btnaccepted.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:18]];
             [btnaccepted setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

@@ -8,13 +8,14 @@
 
 #import "EFStatusBar.h"
 
+#import "UIBorderLabel.h"
 #import "Util.h"
 
 #define kRight
 
 @interface EFStatusBar ()
 @property (nonatomic, strong) UIWindow *window;
-@property (nonatomic, strong) UILabel *messageLabel;
+@property (nonatomic, strong) UIBorderLabel *messageLabel;
 @end
 
 @implementation EFStatusBar
@@ -36,11 +37,13 @@
     if (self) {
         self.backgroundColor = [UIColor clearColor];
         
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+        UIBorderLabel *label = [[UIBorderLabel alloc] initWithFrame:CGRectZero];
         label.backgroundColor = [UIColor blackColor];
         label.textColor = [UIColor whiteColor];
         label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:14];
         label.textAlignment = NSTextAlignmentRight;
+        label.leftInset = 4.0f;
+        label.rightInset = 4.0f;
         [self addSubview:label];
         self.messageLabel = label;
         
@@ -80,11 +83,12 @@
     self.messageLabel.backgroundColor = bgColor;
     
     [self.messageLabel sizeToFit];
+    CGFloat w = CGRectGetWidth(self.messageLabel.bounds) + self.messageLabel.leftInset + self.messageLabel.rightInset;
     CGRect labelFrame = self.messageLabel.frame;
     CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
-    labelFrame.origin = (CGPoint){floor(CGRectGetWidth(statusBarFrame) - CGRectGetWidth(labelFrame))};
+    labelFrame.origin = (CGPoint){floor(CGRectGetWidth(statusBarFrame) - w), 0};
     labelFrame.size.height = CGRectGetHeight(statusBarFrame);
-    
+    labelFrame.size.width = w;
     self.messageLabel.frame = labelFrame;
 }
 

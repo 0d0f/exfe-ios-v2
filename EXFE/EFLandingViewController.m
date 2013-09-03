@@ -8,7 +8,9 @@
 
 #import "EFLandingViewController.h"
 #import <BlocksKit/BlocksKit.h>
+#import "CCTemplate.h"
 #import "EFSignInViewController.h"
+#import "Util.h"
 
 
 typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
@@ -56,6 +58,10 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     self.view.backgroundColor = [UIColor colorWithPatternImage:image];
+    
+    self.labelEXFE.text = [NSLocalizedString(@"{{PRODUCT_APP_NAME}}", nil) templateFromDict:[Util keywordDict]];
+    self.labelDescription.text = NSLocalizedString(@"The group utility for gathering.", nil);
+    self.labelStart.text = NSLocalizedString(@"Start", nil);
     
     _labelStart.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bar.png"]];
     _imgHead.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bg.png"]];

@@ -24,6 +24,7 @@
     UIImage *closeButtonBackgroundImage = [UIImage imageNamed:@"btn_white_44"];
     closeButtonBackgroundImage = [closeButtonBackgroundImage resizableImageWithCapInsets:(UIEdgeInsets){0.0f, 10.0f, 0.0f, 10.0f}];
     [self.closeButton setBackgroundImage:closeButtonBackgroundImage forState:UIControlStateNormal];
+    [self.closeButton setTitle:NSLocalizedString(@"Close", nil) forState:UIControlStateNormal];
     
     // CAGradientLayer
     CAGradientLayer *gradientLayer = [CAGradientLayer layer];

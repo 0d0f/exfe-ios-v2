@@ -526,7 +526,7 @@ static NSDictionary * _keywordDict = nil;
     }
     NSString *errormsg = @"";
     if ([meta.code intValue] == 401) {
-        errormsg = @"Authentication failed due to security concerns, please sign in again.";
+        errormsg = NSLocalizedString(@"Authentication failed due to security concerns, please sign in again.", nil);
         
 #ifdef WWW
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil),nil];
@@ -545,11 +545,11 @@ static NSDictionary * _keywordDict = nil;
     NSString *errorTitle = @"";
     if (err.code == NSURLErrorBadServerResponse) {
         // http://stackoverflow.com/questions/16759630/afnetworking-returning-reponse-in-nserror-object
-        errorTitle = @"Server Error";
-        errormsg = @"Sorry, something is technically wrong in the \"cloud\", we’re fixing it up.";
+        errorTitle = NSLocalizedString(@"Server Error", nil);
+        errormsg = NSLocalizedString(@"Sorry, something is technically wrong in the \"cloud\", we’re fixing it up.", nil);
     } else { //NSURLError.h
-        errorTitle = @"Network Error";
-        errormsg = @"Failed to connect to server. Please retry or wait awhile.";
+        errorTitle = NSLocalizedString(@"Network Error", nil);
+        errormsg = NSLocalizedString(@"Failed to connect to server. Please retry or wait awhile.", nil);
     }
     if (![errormsg isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:errorTitle message:errormsg delegate:delegate cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
@@ -726,7 +726,5 @@ static NSDictionary * _keywordDict = nil;
     
     return Sqlite;
 }
-
-// NSLocalizedString(@"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", "Test for Pseudo chars")
 
 @end
