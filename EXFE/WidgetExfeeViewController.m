@@ -1223,39 +1223,6 @@ typedef enum {
     
     _invitation.rsvp_status = status;
     [self fillInvitationContent:_invitation];
-    
-//    [self.model.apiServer submitRsvp:status
-//                                          on:_invitation
-//                                  myIdentity:[myidentity.identity_id intValue]
-//                                     onExfee:[self.exfee.exfee_id intValue]
-//                                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//                                         
-//                                         if ([operation.response statusCode] == 200){
-//                                             if([responseObject isKindOfClass:[NSDictionary class]])
-//                                             {
-//                                                 NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
-//                                                 if([[meta objectForKey:@"code"] intValue]==403){
-//                                                     //                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//                                                     //                                 alert.tag=403;
-//                                                     //                                 [alert show];
-//                                                     //                                 [alert release];
-//                                                 } else if ([[meta objectForKey:@"code"] intValue] == 200) {
-//                                                     NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"CrossGroupViewController")];
-//                                                     NSAssert(viewControllers != nil && viewControllers.count, @"viewController 不应为空");
-//                                                     
-//                                                     CrossGroupViewController *crossGroupViewController = viewControllers[0];
-//                                                     
-//                                                     [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id unsignedIntegerValue] updatedTime:nil];
-//                                                     
-//                                                     [exfeeContainer reloadData];
-//                                                 }
-//                                                 
-//                                             }
-//                                         }
-//                                     }
-//                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                         [Util showConnectError:error delegate:self];
-//                                     }];
 }
 
 #pragma mark UIAlertViewDelegate

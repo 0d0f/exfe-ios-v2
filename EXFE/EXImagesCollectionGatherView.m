@@ -7,6 +7,7 @@
 //
 
 #import "EXImagesCollectionGatherView.h"
+#import "TTTAttributedLabel.h"
 
 @implementation EXImagesCollectionGatherView
 
@@ -195,22 +196,14 @@
                 UIImageView *addimg=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 52, 52)];
                 addimg.image=[UIImage imageNamed:@"gather_add.png"];
                 [addview addSubview:addimg];
-                invited_num=[[UILabel alloc] initWithFrame:CGRectMake(-1, 2, 18, 13)];
-                invited_num.font=[UIFont fontWithName:@"HelveticaNeue" size:13];
-                invited_num.textColor=FONT_COLOR_51;
-                invited_num.text=[NSString stringWithFormat:@"%i",allnum];
-                invited_num.backgroundColor=[UIColor clearColor];
-                invited_num.textAlignment=NSTextAlignmentRight;
-                [addview addSubview:invited_num];
                 
-                UILabel *invitedstr=[[UILabel alloc] initWithFrame:CGRectMake(19, 4, 52-18, 10)];
-                invitedstr.font=[UIFont fontWithName:@"HelveticaNeue" size:10];
-                invitedstr.textColor=FONT_COLOR_51;
-                invitedstr.text=@"invited";
-                invitedstr.backgroundColor=[UIColor clearColor];
-                invitedstr.textAlignment=NSTextAlignmentLeft;
-                [addview addSubview:invitedstr];
-                
+                invitedString = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 2, 52, 13)];
+                invitedString.font = [UIFont fontWithName:@"HelveticaNeue" size:13];
+                invitedString.textColor = FONT_COLOR_51;
+                invitedString.backgroundColor = [UIColor clearColor];
+                invitedString.textAlignment = NSTextAlignmentCenter;
+                [addview addSubview:invitedString];
+    
                 [self addSubview:addview];
             }
             else{
@@ -218,8 +211,19 @@
             }
         }
         
-        if(invited_num!=nil)
-            invited_num.text=[NSString stringWithFormat:@"%i",allnum];
+        if (invitedString) {
+            [invitedString setText:[NSString stringWithFormat:NSLocalizedString(@"%i invited", nil),allnum] afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+                NSString *highlight = NSLocalizedString(@"invited", nil);;
+                NSRange range = [[mutableAttributedString string] rangeOfString:highlight options:NSCaseInsensitiveSearch];
+                UIFont *hnFont = [UIFont fontWithName:@"HelveticaNeue" size:10];
+                CTFontRef font = CTFontCreateWithName((__bridge CFStringRef)hnFont.fontName, hnFont.pointSize, NULL);
+                if (font) {
+                    [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)font range:range];
+                    CFRelease(font);
+                }
+                return mutableAttributedString;
+            }];
+        }
 
         x_count++;
     }

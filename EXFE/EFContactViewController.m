@@ -232,6 +232,7 @@
     } else {
         addButtonImage = [addButtonImage stretchableImageWithLeftCapWidth:10 topCapHeight:15];
     }
+    [self.addButton setTitle:NSLocalizedString(@"Add", nil) forState:UIControlStateNormal];
     [self.addButton setBackgroundImage:addButtonImage forState:UIControlStateNormal];
     
     // search bar
@@ -240,6 +241,7 @@
     [[UISearchBar appearance] setPositionAdjustment:(UIOffset){-6, -1} forSearchBarIcon:UISearchBarIconSearch];
     self.contactSearchBar.tintColor = [UIColor COLOR_RGB(0xF4, 0xF4, 0xF4)];
     self.contactSearchBar.backgroundColor = [UIColor COLOR_RGB(0xF4, 0xF4, 0xF4)];
+//    self.contactSearchBar.placeholder = NSLocalizedString(@"Search", nil);
     
     self.tableView.scrollsToTop = YES;
     self.activityTableView = self.tableView;

@@ -17,6 +17,7 @@
 #define y_start_offset 12
 
 @class EXImagesCollectionGatherView;
+@class TTTAttributedLabel;
 @protocol EXImagesCollectionDataSource;
 
 @protocol EXImagesCollectionGatherDataSource<NSObject>
@@ -48,7 +49,7 @@
     BOOL editmode;
     NSMutableDictionary *itemsCache;
     EXCollectionMask *maskview;
-    UILabel *invited_num;
+    TTTAttributedLabel *invitedString;
 
     UIView *addview;
 }
