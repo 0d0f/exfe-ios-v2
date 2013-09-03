@@ -135,7 +135,7 @@
     
     __weak typeof(self) weakSelf = self;
     [self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext performBlock:^{
-        [weakSelf.model.objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
+        [weakSelf.model.objectManager.managedObjectStore.mainQueueManagedObjectContext saveToPersistentStore:nil];
     }];
 }
 
