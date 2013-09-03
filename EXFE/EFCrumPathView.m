@@ -54,7 +54,7 @@
         CGContextSetShadowWithColor(context, CGSizeZero, 1.0f, [UIColor whiteColor].CGColor);
         
         if (kEFMapLineStyleDashedLine == crumPath.lineStyle) {
-            CGFloat dashes[] = {0, 4 * lineWidth};
+            CGFloat dashes[] = {0, 3 * lineWidth};
             CGContextSetLineDash(context, 0, dashes, 2);
         } else if (kEFMapLineStyleLine == crumPath.lineStyle) {
         }
@@ -121,21 +121,22 @@ static BOOL lineIntersectsRect(MKMapPoint p0, MKMapPoint p1, MKMapRect r)
         double a2b2 = POW2(point.x - lastPoint.x) + POW2(point.y - lastPoint.y);
         
         if (a2b2 >= c2) {
-            if (lineIntersectsRect(point, lastPoint, mapRect)) {
+//            if (lineIntersectsRect(point, lastPoint, mapRect)) {
                 if (!path)
                     path = CGPathCreateMutable();
                 
                 if (needsMove) {
                     CGPoint lastCGPoint = [self pointForMapPoint:lastPoint];
                     CGPathMoveToPoint(path, NULL, lastCGPoint.x, lastCGPoint.y);
+                    needsMove = NO;
                 }
                 
                 CGPoint cgPoint = [self pointForMapPoint:point];
                 CGPathAddLineToPoint(path, NULL, cgPoint.x, cgPoint.y);
-            } else {
-                // discontinuity, lift the pen
-                needsMove = YES;
-            }
+//            } else {
+//                // discontinuity, lift the pen
+//                needsMove = YES;
+//            }
             
             lastPoint = point;
         }
