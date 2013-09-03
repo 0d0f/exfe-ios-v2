@@ -1910,6 +1910,10 @@
 		4FC4113E17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */; };
 		4FC4113F17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */; };
 		4FC4114017D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */; };
+		4FC4114917D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
+		4FC4114A17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
+		4FC4114B17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
+		4FC4114C17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
 		4FC6E94516AFB6D00023AD1C /* xlist_conv_badge_many.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC6E94316AFB6D00023AD1C /* xlist_conv_badge_many.png */; };
 		4FC6E94616AFB6D00023AD1C /* xlist_conv_badge_many@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC6E94416AFB6D00023AD1C /* xlist_conv_badge_many@2x.png */; };
 		4FC8FCE8168D7E5700409779 /* Place+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCE7168D7E5700409779 /* Place+Helper.m */; };
@@ -3364,6 +3368,7 @@
 		4FC4110D17D04A5700D64105 /* Shuady-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Shuady-Info.plist"; path = "/Users/stony/git/exfe_ios/Shuady-Info.plist"; sourceTree = "<absolute>"; };
 		4FC4113B17D490FF00D64105 /* EFChangeCrossTimeOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChangeCrossTimeOperation.h; sourceTree = "<group>"; };
 		4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChangeCrossTimeOperation.m; sourceTree = "<group>"; };
+		4FC4114817D5949B00D64105 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = Localizable.strings; sourceTree = "<group>"; };
 		4FC6E94316AFB6D00023AD1C /* xlist_conv_badge_many.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xlist_conv_badge_many.png; sourceTree = "<group>"; };
 		4FC6E94416AFB6D00023AD1C /* xlist_conv_badge_many@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xlist_conv_badge_many@2x.png"; sourceTree = "<group>"; };
 		4FC8FCE6168D7E5700409779 /* Place+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Place+Helper.h"; sourceTree = "<group>"; };
@@ -4472,6 +4477,14 @@
 				4F0C546117CC879900649C4F /* EFRemoveNotificationIdentityOperation.m */,
 			);
 			name = "Exfee API Operation";
+			sourceTree = "<group>";
+		};
+		4FC4114617D5949B00D64105 /* zh-Hant.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				4FC4114717D5949B00D64105 /* Localizable.strings */,
+			);
+			path = "zh-Hant.lproj";
 			sourceTree = "<group>";
 		};
 		4FC6E95416B0E6EC0023AD1C /* dock */ = {
@@ -5946,6 +5959,7 @@
 			children = (
 				4F8507DF17841BBF00BB86FA /* NBPhoneNumberMetadata.plist */,
 				4FE7762B177C1E4700B20A32 /* zh-Hans.lproj */,
+				4FC4114617D5949B00D64105 /* zh-Hant.lproj */,
 				4FE77625177C1C8800B20A32 /* en.lproj */,
 				78A98E931560F832009E0806 /* EXFE-Info.plist */,
 				4F63DE14171733C500136B7E /* 0d0f-Info.plist */,
@@ -6331,6 +6345,7 @@
 			knownRegions = (
 				en,
 				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = 78A98E7C1560F832009E0806;
 			productRefGroup = 78A98E881560F832009E0806 /* Products */;
@@ -6849,6 +6864,7 @@
 				763BE928179FD836003BF97C /* map_shadow_gap.png in Resources */,
 				4F2CF05117BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05417BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
+				4FC4114A17D5949B00D64105 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7309,6 +7325,7 @@
 				762D9FA017B36D07002A528B /* map_arrow_14red@2x.png in Resources */,
 				4F2CF05217BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05517BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
+				4FC4114B17D5949B00D64105 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7765,6 +7782,7 @@
 				4FC4110617D04A5700D64105 /* map_shadow_gap.png in Resources */,
 				4FC4110717D04A5700D64105 /* cautionbar_cancel_pressed.png in Resources */,
 				4FC4110817D04A5700D64105 /* cautionbar_cancel.png in Resources */,
+				4FC4114C17D5949B00D64105 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8221,6 +8239,7 @@
 				763BE927179FD836003BF97C /* map_shadow_gap.png in Resources */,
 				4F2CF05017BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05317BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
+				4FC4114917D5949B00D64105 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9377,6 +9396,14 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
+		4FC4114717D5949B00D64105 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4FC4114817D5949B00D64105 /* zh-Hant */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		4FE77626177C1CA200B20A32 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -9473,12 +9500,7 @@
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\\\"$(SRCROOT)/EXFE/Flurry\\\"",
-					"\\\"$(SRCROOT)/EXFE/SDKExport\\\"",
-					/Users/0day/Dev/exfeiosv2/Vendor/Build/BlocksKit,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = 0d0f;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -9505,12 +9527,7 @@
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\\\"$(SRCROOT)/EXFE/Flurry\\\"",
-					"\\\"$(SRCROOT)/EXFE/SDKExport\\\"",
-					/Users/0day/Dev/exfeiosv2/Vendor/Build/BlocksKit,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = 0d0f;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -9535,15 +9552,9 @@
 					PILOT,
 				);
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
-				"HEADER_SEARCH_PATHS[arch=*]" = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Pilot-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\\\"$(SRCROOT)/EXFE/Flurry\\\"",
-					"\\\"$(SRCROOT)/EXFE/SDKExport\\\"",
-					/Users/0day/Dev/exfeiosv2/Vendor/Build/BlocksKit,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Pilot;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -9570,12 +9581,7 @@
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Pilot-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\\\"$(SRCROOT)/EXFE/Flurry\\\"",
-					"\\\"$(SRCROOT)/EXFE/SDKExport\\\"",
-					/Users/0day/Dev/exfeiosv2/Vendor/Build/BlocksKit,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Pilot;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -9683,6 +9689,11 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/EXFE/Flurry",
+					"$(SRCROOT)/EXFE/SDKExport",
+					"$(SRCROOT)/Vendor/Build/BlocksKit\n\n//:completeSettings",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -9717,6 +9728,11 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/EXFE/Flurry",
+					"$(SRCROOT)/EXFE/SDKExport",
+					"$(SRCROOT)/Vendor/Build/BlocksKit\n\n//:completeSettings",
+				);
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -9752,12 +9768,7 @@
 				);
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/EXFE/Flurry",
-					"$(SRCROOT)/EXFE/SDKExport",
-					/Users/0day/Dev/exfeiosv2/Vendor/Build/BlocksKit,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-force_load",
@@ -9788,12 +9799,7 @@
 				);
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/EXFE/Flurry",
-					"$(SRCROOT)/EXFE/SDKExport",
-					/Users/0day/Dev/exfeiosv2/Vendor/Build/BlocksKit,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-force_load",
