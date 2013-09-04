@@ -183,7 +183,12 @@
         offsetX += kEdgeBlank + CGRectGetMinX(mapViewBounds) - CGRectGetMinX(viewFrame);
     }
     if (CGRectGetMinY(viewFrame) < kEdgeBlank) {
-        offsetY += kEdgeBlank - CGRectGetMinY(viewFrame);
+        CGFloat mapOffsetY = CGRectGetMinY(viewFrame) - kEdgeBlank;
+        CLLocationCoordinate2D mapCenterCoordinate = self.mapView.centerCoordinate;
+        CGPoint mapCenter = [self.mapView convertCoordinate:mapCenterCoordinate toPointToView:self.mapView];
+        mapCenter.y += mapOffsetY;
+        mapCenterCoordinate = [self.mapView convertPoint:mapCenter toCoordinateFromView:self.mapView];
+        [self.mapView setCenterCoordinate:mapCenterCoordinate animated:YES];
     }
     if (CGRectGetMaxX(viewFrame) > kEdgeBlank + CGRectGetMaxX(mapViewBounds)) {
         offsetX += CGRectGetMaxX(mapViewBounds) - (kEdgeBlank + CGRectGetMaxX(viewFrame));
