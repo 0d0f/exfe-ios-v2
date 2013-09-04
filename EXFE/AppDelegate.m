@@ -66,7 +66,7 @@
     RKLogConfigureByName("RestKit/CoreData", RKLogLevelOff);
     //    RKLogConfigureByName("RestKit/CoreData/Cache", RKLogLevelTrace);
 #else
-    RKLogConfigureByName("*", RKLogLevelOff);
+    RKLogConfigureByName("RestKit", RKLogLevelOff);
 #endif
     
     RKLogInfo(@"API ROOT: %@", API_ROOT);
