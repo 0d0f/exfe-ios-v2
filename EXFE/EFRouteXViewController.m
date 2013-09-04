@@ -667,11 +667,15 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     if (!locations || !locations.count) {
         if (!person.lastLocation) {
+            CGPoint location = cell.center;
+            location = [self.mapView convertPoint:location fromView:cell.superview];
+            location.x += 30.0f + 5.0f + 100.0f;
+            
             EFMapPersonViewController *personViewController = [[EFMapPersonViewController alloc] initWithDataSource:self.mapDataSource
                                                                                                              person:person];
             personViewController.delegate = self;
             [personViewController presentFromViewController:self
-                                                   location:self.view.center
+                                                   location:location
                                                    animated:YES];
             self.personViewController = personViewController;
         }
@@ -791,7 +795,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                                                                      person:person];
     personViewController.delegate = self;
     [personViewController presentFromViewController:self
-                                           location:self.view.center
+                                           location:controller.tapLocation
                                            animated:YES];
     self.personViewController = personViewController;
 }
@@ -1155,7 +1159,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                                                                                  person:person];
                 personViewController.delegate = self;
                 [personViewController presentFromViewController:self
-                                                       location:self.view.center
+                                                       location:tapLocation
                                                        animated:YES];
                 self.personViewController = personViewController;
             }
