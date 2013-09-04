@@ -11,6 +11,11 @@
 			</array>
 			<key>change date</key>
 			<date>2001-01-01T00:00:00Z</date>
+			<key>changed values</key>
+			<array>
+				<string>zh-Hans</string>
+				<string>file</string>
+			</array>
 			<key>class</key>
 			<string>BLBundleObject</string>
 			<key>errors</key>
@@ -33,6 +38,8 @@
 					</dict>
 					<key>change date</key>
 					<date>2013-03-12T04:22:02Z</date>
+					<key>changed values</key>
+					<array/>
 					<key>class</key>
 					<string>BLStringsFileObject</string>
 					<key>errors</key>
@@ -72,6 +79,11 @@
 					</dict>
 					<key>change date</key>
 					<date>2013-09-03T03:58:16Z</date>
+					<key>changed values</key>
+					<array>
+						<string>zh-Hans</string>
+						<string>file</string>
+					</array>
 					<key>class</key>
 					<string>BLStringsFileObject</string>
 					<key>errors</key>
@@ -88,6 +100,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -102,6 +118,8 @@
 							<dict>
 								<key>en</key>
 								<string>###Failed to remove Identity Avatar###</string>
+								<key>zh-Hans</key>
+								<string>###Failed to remove Identity Avatar###</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -109,6 +127,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -123,6 +145,8 @@
 							<dict>
 								<key>en</key>
 								<string>##Alert content content content content content content ##</string>
+								<key>zh-Hans</key>
+								<string>##Alert content content content content content content ##</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -130,6 +154,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -144,6 +172,8 @@
 							<dict>
 								<key>en</key>
 								<string>##Alert Title##</string>
+								<key>zh-Hans</key>
+								<string>##Alert Title##</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -151,6 +181,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -165,6 +199,8 @@
 							<dict>
 								<key>en</key>
 								<string>%1$@ %2$@ ago</string>
+								<key>zh-Hans</key>
+								<string>%1$@ %2$@前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -172,6 +208,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -186,6 +226,8 @@
 							<dict>
 								<key>en</key>
 								<string>%@ ago</string>
+								<key>zh-Hans</key>
+								<string>%@前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -193,6 +235,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -207,6 +253,8 @@
 							<dict>
 								<key>en</key>
 								<string>%1$@. in %2$i days</string>
+								<key>zh-Hans</key>
+								<string>%1$@ %2$i天后</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -214,6 +262,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -228,6 +280,8 @@
 							<dict>
 								<key>en</key>
 								<string>%@所处方位</string>
+								<key>zh-Hans</key>
+								<string>%@所处方位</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -235,6 +289,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -249,6 +307,8 @@
 							<dict>
 								<key>en</key>
 								<string>%d people limit on gathering this ·X·. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!</string>
+								<key>zh-Hans</key>
+								<string>限制人数%d人。不过，为了对早期用户表示感谢，在近期内您可以不受此限。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -256,6 +316,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -270,6 +334,8 @@
 							<dict>
 								<key>en</key>
 								<string>%1$d%2$@前 至目的地%3$@</string>
+								<key>zh-Hans</key>
+								<string>%1$d%2$@前 至目的地%3$@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -277,6 +343,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -291,6 +361,8 @@
 							<dict>
 								<key>en</key>
 								<string>%i days ago</string>
+								<key>zh-Hans</key>
+								<string>%i天前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -298,6 +370,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -312,6 +388,8 @@
 							<dict>
 								<key>en</key>
 								<string>%i hours ago</string>
+								<key>zh-Hans</key>
+								<string>%i小时前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -319,6 +397,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -333,6 +415,8 @@
 							<dict>
 								<key>en</key>
 								<string>%i minutes ago</string>
+								<key>zh-Hans</key>
+								<string>%i分钟前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -340,6 +424,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -354,6 +442,8 @@
 							<dict>
 								<key>en</key>
 								<string>%i month</string>
+								<key>zh-Hans</key>
+								<string>%i月</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -361,6 +451,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -375,6 +469,8 @@
 							<dict>
 								<key>en</key>
 								<string>%i months</string>
+								<key>zh-Hans</key>
+								<string>%i月</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -382,6 +478,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -396,6 +496,8 @@
 							<dict>
 								<key>en</key>
 								<string>%i year</string>
+								<key>zh-Hans</key>
+								<string>%i年</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -403,6 +505,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -417,6 +523,8 @@
 							<dict>
 								<key>en</key>
 								<string>%i years</string>
+								<key>zh-Hans</key>
+								<string>%i年</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -424,6 +532,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -438,6 +550,8 @@
 							<dict>
 								<key>en</key>
 								<string>%1$u %2$@ %3$u %4$@ ago</string>
+								<key>zh-Hans</key>
+								<string>%1$u %2$@ %3$u %4$@前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -445,6 +559,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -459,6 +577,8 @@
 							<dict>
 								<key>en</key>
 								<string>%1$u %2$@ ago</string>
+								<key>zh-Hans</key>
+								<string>%1$u %2$@前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -466,6 +586,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -480,6 +604,8 @@
 							<dict>
 								<key>en</key>
 								<string>%1$u / %2$u</string>
+								<key>zh-Hans</key>
+								<string>###%1$u / %2$u</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -487,6 +613,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -501,6 +631,8 @@
 							<dict>
 								<key>en</key>
 								<string>%u days ago</string>
+								<key>zh-Hans</key>
+								<string>%天前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -508,6 +640,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -522,6 +658,8 @@
 							<dict>
 								<key>en</key>
 								<string>%u hours ago</string>
+								<key>zh-Hans</key>
+								<string>%u小时前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -529,6 +667,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -543,6 +685,8 @@
 							<dict>
 								<key>en</key>
 								<string>%u minutes ago</string>
+								<key>zh-Hans</key>
+								<string>%u分钟前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -550,6 +694,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -564,6 +712,8 @@
 							<dict>
 								<key>en</key>
 								<string>+ mates...</string>
+								<key>zh-Hans</key>
+								<string>+同伴</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -571,6 +721,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -585,6 +739,8 @@
 							<dict>
 								<key>en</key>
 								<string>+公里</string>
+								<key>zh-Hans</key>
+								<string>+公里</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -592,6 +748,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -606,6 +766,8 @@
 							<dict>
 								<key>en</key>
 								<string>1.5 hours ago</string>
+								<key>zh-Hans</key>
+								<string>一个半小时前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -613,6 +775,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -627,6 +793,8 @@
 							<dict>
 								<key>en</key>
 								<string>"%@"</string>
+								<key>zh-Hans</key>
+								<string>“%@”</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -634,6 +802,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -648,6 +820,8 @@
 							<dict>
 								<key>en</key>
 								<string>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</string>
+								<key>zh-Hans</key>
+								<string>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -655,6 +829,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -669,6 +847,8 @@
 							<dict>
 								<key>en</key>
 								<string>Accepted</string>
+								<key>zh-Hans</key>
+								<string>确认参加</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -676,6 +856,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -690,6 +874,8 @@
 							<dict>
 								<key>en</key>
 								<string>Add and verify</string>
+								<key>zh-Hans</key>
+								<string>###Add and verify</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -697,6 +883,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -711,6 +901,8 @@
 							<dict>
 								<key>en</key>
 								<string>Add identity</string>
+								<key>zh-Hans</key>
+								<string>添加身份</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -718,6 +910,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -732,6 +928,8 @@
 							<dict>
 								<key>en</key>
 								<string>Add identity...</string>
+								<key>zh-Hans</key>
+								<string>###Add identity...</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -739,6 +937,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -753,6 +955,8 @@
 							<dict>
 								<key>en</key>
 								<string>Adding invitation failed.</string>
+								<key>zh-Hans</key>
+								<string>###Adding invitation failed.</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -760,6 +964,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -774,6 +982,8 @@
 							<dict>
 								<key>en</key>
 								<string>Afternoon</string>
+								<key>zh-Hans</key>
+								<string>下午</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -781,6 +991,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -795,6 +1009,8 @@
 							<dict>
 								<key>en</key>
 								<string>All-day</string>
+								<key>zh-Hans</key>
+								<string>全天</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -802,6 +1018,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -816,6 +1036,8 @@
 							<dict>
 								<key>en</key>
 								<string>an hour ago</string>
+								<key>zh-Hans</key>
+								<string>1小时前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -823,6 +1045,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -837,6 +1063,8 @@
 							<dict>
 								<key>en</key>
 								<string>Authenticate</string>
+								<key>zh-Hans</key>
+								<string>鉴权</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -844,6 +1072,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -858,6 +1090,8 @@
 							<dict>
 								<key>en</key>
 								<string>Authentication</string>
+								<key>zh-Hans</key>
+								<string>鉴权</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -865,6 +1099,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -879,6 +1117,8 @@
 							<dict>
 								<key>en</key>
 								<string>Authentication failed.</string>
+								<key>zh-Hans</key>
+								<string>鉴权失败</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -886,6 +1126,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -900,6 +1144,8 @@
 							<dict>
 								<key>en</key>
 								<string>Authorization failed.</string>
+								<key>zh-Hans</key>
+								<string>授权失败</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -907,6 +1153,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -921,6 +1171,8 @@
 							<dict>
 								<key>en</key>
 								<string>Bio</string>
+								<key>zh-Hans</key>
+								<string>简介</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -928,6 +1180,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -942,6 +1198,8 @@
 							<dict>
 								<key>en</key>
 								<string>Bio...</string>
+								<key>zh-Hans</key>
+								<string>简介…</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -949,6 +1207,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -963,6 +1225,8 @@
 							<dict>
 								<key>en</key>
 								<string>Breakfast</string>
+								<key>zh-Hans</key>
+								<string>早餐</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -970,6 +1234,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -984,6 +1252,8 @@
 							<dict>
 								<key>en</key>
 								<string>Brunch</string>
+								<key>zh-Hans</key>
+								<string>早午餐</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -991,6 +1261,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1005,6 +1279,8 @@
 							<dict>
 								<key>en</key>
 								<string>Cancel</string>
+								<key>zh-Hans</key>
+								<string>取消</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1012,6 +1288,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1026,6 +1306,8 @@
 							<dict>
 								<key>en</key>
 								<string>Change password</string>
+								<key>zh-Hans</key>
+								<string>修改密码</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1033,6 +1315,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1047,6 +1333,8 @@
 							<dict>
 								<key>en</key>
 								<string>Change password...</string>
+								<key>zh-Hans</key>
+								<string>###修改密码</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1054,6 +1342,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1068,6 +1360,8 @@
 							<dict>
 								<key>en</key>
 								<string>Choose a place</string>
+								<key>zh-Hans</key>
+								<string>选地点</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1075,6 +1369,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1089,6 +1387,8 @@
 							<dict>
 								<key>en</key>
 								<string>Choose an Account</string>
+								<key>zh-Hans</key>
+								<string>###Choose an Account</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1096,6 +1396,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1110,6 +1414,8 @@
 							<dict>
 								<key>en</key>
 								<string>Choose photo</string>
+								<key>zh-Hans</key>
+								<string>挑选照片</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1117,6 +1423,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1131,6 +1441,8 @@
 							<dict>
 								<key>en</key>
 								<string>Clear place</string>
+								<key>zh-Hans</key>
+								<string>清空地点</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1138,6 +1450,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1152,6 +1468,8 @@
 							<dict>
 								<key>en</key>
 								<string>Clear portrait</string>
+								<key>zh-Hans</key>
+								<string>清除头像</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1159,6 +1477,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1173,6 +1495,8 @@
 							<dict>
 								<key>en</key>
 								<string>Clear Time</string>
+								<key>zh-Hans</key>
+								<string>清空时间</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1180,6 +1504,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1194,6 +1522,8 @@
 							<dict>
 								<key>en</key>
 								<string>Confirm reverting portrait and everything back?</string>
+								<key>zh-Hans</key>
+								<string>确认恢复头像和所有信息？</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1201,6 +1531,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1215,6 +1549,8 @@
 							<dict>
 								<key>en</key>
 								<string>Contact unreachable</string>
+								<key>zh-Hans</key>
+								<string>无法联系对方</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1222,6 +1558,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1236,6 +1576,8 @@
 							<dict>
 								<key>en</key>
 								<string>Contacts</string>
+								<key>zh-Hans</key>
+								<string>联系人</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1243,6 +1585,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1257,6 +1603,8 @@
 							<dict>
 								<key>en</key>
 								<string>Cropped area displays as portrait. Shake to revert.</string>
+								<key>zh-Hans</key>
+								<string>未遮挡区域将用作头像。摇晃手机恢复修改。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1264,6 +1612,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1278,6 +1630,8 @@
 							<dict>
 								<key>en</key>
 								<string>Current password</string>
+								<key>zh-Hans</key>
+								<string>当前密码</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1285,6 +1639,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1299,6 +1657,8 @@
 							<dict>
 								<key>en</key>
 								<string>Daybreak</string>
+								<key>zh-Hans</key>
+								<string>破晓</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1306,6 +1666,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1320,6 +1684,8 @@
 							<dict>
 								<key>en</key>
 								<string>Delete</string>
+								<key>zh-Hans</key>
+								<string>删除</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1327,6 +1693,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1341,6 +1711,8 @@
 							<dict>
 								<key>en</key>
 								<string>Dinner</string>
+								<key>zh-Hans</key>
+								<string>晚餐</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1348,6 +1720,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1362,6 +1738,8 @@
 							<dict>
 								<key>en</key>
 								<string>Done</string>
+								<key>zh-Hans</key>
+								<string>完成</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1369,6 +1747,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1383,6 +1765,8 @@
 							<dict>
 								<key>en</key>
 								<string>Edit ·X· time</string>
+								<key>zh-Hans</key>
+								<string>编辑活动时间</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1390,6 +1774,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1404,6 +1792,8 @@
 							<dict>
 								<key>en</key>
 								<string>Enter contact name</string>
+								<key>zh-Hans</key>
+								<string>输入对方名字</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1411,6 +1801,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1425,6 +1819,8 @@
 							<dict>
 								<key>en</key>
 								<string>Enter email or phone</string>
+								<key>zh-Hans</key>
+								<string>输入手机或邮件</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1432,6 +1828,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1446,6 +1846,8 @@
 							<dict>
 								<key>en</key>
 								<string>Enter password</string>
+								<key>zh-Hans</key>
+								<string>输入密码</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1453,6 +1855,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1467,6 +1873,8 @@
 							<dict>
 								<key>en</key>
 								<string>Evening</string>
+								<key>zh-Hans</key>
+								<string>傍晚</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1474,6 +1882,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1488,6 +1900,8 @@
 							<dict>
 								<key>en</key>
 								<string>EXFE</string>
+								<key>zh-Hans</key>
+								<string>水滴</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1495,6 +1909,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1509,6 +1927,8 @@
 							<dict>
 								<key>en</key>
 								<string>EXFE </string>
+								<key>zh-Hans</key>
+								<string>·汇·</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1516,6 +1936,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1530,6 +1954,8 @@
 							<dict>
 								<key>en</key>
 								<string>EXFE  </string>
+								<key>zh-Hans</key>
+								<string>水滴·汇</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1537,6 +1963,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1551,6 +1981,8 @@
 							<dict>
 								<key>en</key>
 								<string>Exfees</string>
+								<key>zh-Hans</key>
+								<string>###exfees</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1558,6 +1990,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1572,6 +2008,8 @@
 							<dict>
 								<key>en</key>
 								<string>Facebook</string>
+								<key>zh-Hans</key>
+								<string>Facebook</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1579,6 +2017,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1593,6 +2035,8 @@
 							<dict>
 								<key>en</key>
 								<string>Facebook Authorization</string>
+								<key>zh-Hans</key>
+								<string>Facebook授权</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1600,6 +2044,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1614,6 +2062,8 @@
 							<dict>
 								<key>en</key>
 								<string>Failed to update cross time: %@.</string>
+								<key>zh-Hans</key>
+								<string>时间更新失败：%@。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1621,6 +2071,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1635,6 +2089,8 @@
 							<dict>
 								<key>en</key>
 								<string>Failed to update portrait.</string>
+								<key>zh-Hans</key>
+								<string>头像更新失败。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1642,6 +2098,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1656,6 +2116,8 @@
 							<dict>
 								<key>en</key>
 								<string>Failed to update profile.</string>
+								<key>zh-Hans</key>
+								<string>个人资料更新失败。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1663,6 +2125,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1677,6 +2143,8 @@
 							<dict>
 								<key>en</key>
 								<string>Forget Password?</string>
+								<key>zh-Hans</key>
+								<string>###Forget Password?</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1684,6 +2152,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1698,6 +2170,8 @@
 							<dict>
 								<key>en</key>
 								<string>Forgot password?</string>
+								<key>zh-Hans</key>
+								<string>忘记密码？</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1705,6 +2179,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1719,6 +2197,8 @@
 							<dict>
 								<key>en</key>
 								<string>Gather</string>
+								<key>zh-Hans</key>
+								<string>·汇·一下</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1726,6 +2206,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1740,6 +2224,8 @@
 							<dict>
 								<key>en</key>
 								<string>Gather a ·X·</string>
+								<key>zh-Hans</key>
+								<string>·汇·一下</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1747,6 +2233,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1761,6 +2251,8 @@
 							<dict>
 								<key>en</key>
 								<string>Go hang out with friends.</string>
+								<key>zh-Hans</key>
+								<string>约约朋友们吧</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1768,6 +2260,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1782,6 +2278,8 @@
 							<dict>
 								<key>en</key>
 								<string>go to verify</string>
+								<key>zh-Hans</key>
+								<string>先验证</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1789,6 +2287,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1803,6 +2305,8 @@
 							<dict>
 								<key>en</key>
 								<string>HOST</string>
+								<key>zh-Hans</key>
+								<string>主持</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1810,6 +2314,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1824,6 +2332,8 @@
 							<dict>
 								<key>en</key>
 								<string>Host as identity:</string>
+								<key>zh-Hans</key>
+								<string>主持身份：</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1831,6 +2341,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1845,6 +2359,8 @@
 							<dict>
 								<key>en</key>
 								<string>I'm in</string>
+								<key>zh-Hans</key>
+								<string>参加</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1852,6 +2368,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1866,6 +2386,8 @@
 							<dict>
 								<key>en</key>
 								<string>Identity authorization has been revoked, please re-authorize.</string>
+								<key>zh-Hans</key>
+								<string>身份授权已被撤销，请重新授权</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1873,6 +2395,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1887,6 +2413,8 @@
 							<dict>
 								<key>en</key>
 								<string>Identity Verification</string>
+								<key>zh-Hans</key>
+								<string>身份验证</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1894,6 +2422,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1908,6 +2440,8 @@
 							<dict>
 								<key>en</key>
 								<string>in %@</string>
+								<key>zh-Hans</key>
+								<string>###in %@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1915,6 +2449,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1929,6 +2467,8 @@
 							<dict>
 								<key>en</key>
 								<string>in %1$@ %2$@</string>
+								<key>zh-Hans</key>
+								<string>###in %1$@ %2$@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1936,6 +2476,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1950,6 +2494,8 @@
 							<dict>
 								<key>en</key>
 								<string>in %i hours</string>
+								<key>zh-Hans</key>
+								<string>%i小时</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1957,6 +2503,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1971,6 +2521,8 @@
 							<dict>
 								<key>en</key>
 								<string>in %i minutes</string>
+								<key>zh-Hans</key>
+								<string>%i分钟</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1978,6 +2530,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1992,6 +2548,8 @@
 							<dict>
 								<key>en</key>
 								<string>In %1$u %2$@</string>
+								<key>zh-Hans</key>
+								<string>###In %1$u %2$@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1999,6 +2557,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2013,6 +2575,8 @@
 							<dict>
 								<key>en</key>
 								<string>In %1$u %2$@ %3$u %4$@</string>
+								<key>zh-Hans</key>
+								<string>###In %1$u %2$@ %3$u %4$@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2020,6 +2584,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2034,6 +2602,8 @@
 							<dict>
 								<key>en</key>
 								<string>In %u days</string>
+								<key>zh-Hans</key>
+								<string>%u天</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2041,6 +2611,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2055,6 +2629,8 @@
 							<dict>
 								<key>en</key>
 								<string>In %u hours</string>
+								<key>zh-Hans</key>
+								<string>%u小时</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2062,6 +2638,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2076,6 +2656,8 @@
 							<dict>
 								<key>en</key>
 								<string>In %u minutes</string>
+								<key>zh-Hans</key>
+								<string>%u分钟</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2083,6 +2665,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2097,6 +2683,8 @@
 							<dict>
 								<key>en</key>
 								<string>in 1.5 hours</string>
+								<key>zh-Hans</key>
+								<string>一个半小时</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2104,6 +2692,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2118,6 +2710,8 @@
 							<dict>
 								<key>en</key>
 								<string>in one hour</string>
+								<key>zh-Hans</key>
+								<string>1小时</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2125,6 +2719,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2139,6 +2737,8 @@
 							<dict>
 								<key>en</key>
 								<string>in two days</string>
+								<key>zh-Hans</key>
+								<string>后天</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2146,6 +2746,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2160,6 +2764,8 @@
 							<dict>
 								<key>en</key>
 								<string>In two days</string>
+								<key>zh-Hans</key>
+								<string>后天</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2167,6 +2773,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2181,6 +2791,8 @@
 							<dict>
 								<key>en</key>
 								<string>Interested</string>
+								<key>zh-Hans</key>
+								<string>有兴趣</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2188,6 +2800,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2202,6 +2818,8 @@
 							<dict>
 								<key>en</key>
 								<string>Intersted</string>
+								<key>zh-Hans</key>
+								<string>###Intersted</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2209,6 +2827,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2223,6 +2845,8 @@
 							<dict>
 								<key>en</key>
 								<string>Invalid account.</string>
+								<key>zh-Hans</key>
+								<string>无效账号。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2230,6 +2854,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2244,6 +2872,8 @@
 							<dict>
 								<key>en</key>
 								<string>Invalid identity.</string>
+								<key>zh-Hans</key>
+								<string>无效身份。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2251,6 +2881,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2265,6 +2899,8 @@
 							<dict>
 								<key>en</key>
 								<string>Invalid name.</string>
+								<key>zh-Hans</key>
+								<string>无效名字。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2272,6 +2908,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2286,6 +2926,8 @@
 							<dict>
 								<key>en</key>
 								<string>Invalid password.</string>
+								<key>zh-Hans</key>
+								<string>密码无效。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2293,6 +2935,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2307,6 +2953,8 @@
 							<dict>
 								<key>en</key>
 								<string>Invalid token.</string>
+								<key>zh-Hans</key>
+								<string>密令无效。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2314,6 +2962,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2328,6 +2980,8 @@
 							<dict>
 								<key>en</key>
 								<string>just now</string>
+								<key>zh-Hans</key>
+								<string>刚才</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2335,6 +2989,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2349,6 +3007,8 @@
 							<dict>
 								<key>en</key>
 								<string>Just now</string>
+								<key>zh-Hans</key>
+								<string>刚才</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2356,6 +3016,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2370,6 +3034,8 @@
 							<dict>
 								<key>en</key>
 								<string>Leave from this ·X·</string>
+								<key>zh-Hans</key>
+								<string>离开这个活动</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2377,6 +3043,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2391,6 +3061,8 @@
 							<dict>
 								<key>en</key>
 								<string>Loading</string>
+								<key>zh-Hans</key>
+								<string>加载中</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2398,6 +3070,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2412,6 +3088,8 @@
 							<dict>
 								<key>en</key>
 								<string>Loading...</string>
+								<key>zh-Hans</key>
+								<string>加载中</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2419,6 +3097,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2433,6 +3115,8 @@
 							<dict>
 								<key>en</key>
 								<string>Location unavailable</string>
+								<key>zh-Hans</key>
+								<string>无法获取位置</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2440,6 +3124,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2454,6 +3142,8 @@
 							<dict>
 								<key>en</key>
 								<string>Lunch</string>
+								<key>zh-Hans</key>
+								<string>午餐</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2461,6 +3151,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2475,6 +3169,8 @@
 							<dict>
 								<key>en</key>
 								<string>Merge</string>
+								<key>zh-Hans</key>
+								<string>合并</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2482,6 +3178,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2496,6 +3196,8 @@
 							<dict>
 								<key>en</key>
 								<string>Merge account %@ into your current signed-in account?</string>
+								<key>zh-Hans</key>
+								<string>将账号%@合并到您当前登录的账号中？</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2503,6 +3205,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2517,6 +3223,8 @@
 							<dict>
 								<key>en</key>
 								<string>Merge accounts</string>
+								<key>zh-Hans</key>
+								<string>合并账号</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2524,6 +3232,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2538,6 +3250,8 @@
 							<dict>
 								<key>en</key>
 								<string>Midnight</string>
+								<key>zh-Hans</key>
+								<string>午夜</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2545,6 +3259,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2559,6 +3277,8 @@
 							<dict>
 								<key>en</key>
 								<string>month</string>
+								<key>zh-Hans</key>
+								<string>月</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2566,6 +3286,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2580,6 +3304,8 @@
 							<dict>
 								<key>en</key>
 								<string>months</string>
+								<key>zh-Hans</key>
+								<string>月</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2587,6 +3313,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2601,6 +3331,8 @@
 							<dict>
 								<key>en</key>
 								<string>Morning</string>
+								<key>zh-Hans</key>
+								<string>早晨</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2608,6 +3340,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2622,6 +3358,8 @@
 							<dict>
 								<key>en</key>
 								<string>New password</string>
+								<key>zh-Hans</key>
+								<string>新密码</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2629,6 +3367,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2643,6 +3385,8 @@
 							<dict>
 								<key>en</key>
 								<string>Next</string>
+								<key>zh-Hans</key>
+								<string>下一个</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2650,6 +3394,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2664,6 +3412,8 @@
 							<dict>
 								<key>en</key>
 								<string>Next %@</string>
+								<key>zh-Hans</key>
+								<string>???下%@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2671,6 +3421,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2685,6 +3439,8 @@
 							<dict>
 								<key>en</key>
 								<string>Night</string>
+								<key>zh-Hans</key>
+								<string>夜晚</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2692,6 +3448,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2706,6 +3466,8 @@
 							<dict>
 								<key>en</key>
 								<string>No place found. Tap arrow to edit.</string>
+								<key>zh-Hans</key>
+								<string>地点未找到。点按箭头编辑。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2713,6 +3475,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2729,6 +3495,8 @@
 								<key>en</key>
 								<string>No post in conversation,
  yet.</string>
+								<key>zh-Hans</key>
+								<string>还没有人发过对话</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2736,6 +3504,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2750,6 +3522,8 @@
 							<dict>
 								<key>en</key>
 								<string>Noon</string>
+								<key>zh-Hans</key>
+								<string>中午</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2757,6 +3531,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2771,6 +3549,8 @@
 							<dict>
 								<key>en</key>
 								<string>now</string>
+								<key>zh-Hans</key>
+								<string>现在</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2778,6 +3558,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2792,6 +3576,8 @@
 							<dict>
 								<key>en</key>
 								<string>Now</string>
+								<key>zh-Hans</key>
+								<string>现在</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2799,6 +3585,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2813,6 +3603,8 @@
 							<dict>
 								<key>en</key>
 								<string>OK</string>
+								<key>zh-Hans</key>
+								<string>好</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2820,6 +3612,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2834,6 +3630,8 @@
 							<dict>
 								<key>en</key>
 								<string>Password incorrect.</string>
+								<key>zh-Hans</key>
+								<string>错误密码。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2841,6 +3639,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2855,6 +3657,8 @@
 							<dict>
 								<key>en</key>
 								<string>Password reset request is sent, please check your email for instructions.</string>
+								<key>zh-Hans</key>
+								<string>已发送重置密码请求，请查看您的邮件阅读说明。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2862,6 +3666,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2876,6 +3684,8 @@
 							<dict>
 								<key>en</key>
 								<string>Password reset request is sent, please check your message for instructions.</string>
+								<key>zh-Hans</key>
+								<string>已发送重置密码请求，请查看您的消息阅读说明。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2883,6 +3693,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2897,6 +3711,8 @@
 							<dict>
 								<key>en</key>
 								<string>Pending</string>
+								<key>zh-Hans</key>
+								<string>待定</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2904,6 +3720,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2918,6 +3738,8 @@
 							<dict>
 								<key>en</key>
 								<string>People will no longer have access to any information in this ·X·. Please confirm to remove.</string>
+								<key>zh-Hans</key>
+								<string>对方将不再能看到这个活动的任何信息，确认移出？</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2925,6 +3747,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2939,6 +3765,8 @@
 							<dict>
 								<key>en</key>
 								<string>Pick a time</string>
+								<key>zh-Hans</key>
+								<string>挑时间</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2946,6 +3774,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2960,6 +3792,8 @@
 							<dict>
 								<key>en</key>
 								<string>Please allow {{PRODUCT_APP_NAME}} to use your Twitter account. Go to the Settings app, select Twitter to set up.</string>
+								<key>zh-Hans</key>
+								<string>请允许{{PRODUCT_NAME}}访问您的Twitter账号。 前往“设置”应用的Twitter项进行设置。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2967,6 +3801,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2981,6 +3819,8 @@
 							<dict>
 								<key>en</key>
 								<string>Please check and allow {{PRODUCT_APP_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.</string>
+								<key>zh-Hans</key>
+								<string>请前往“设置”应用的Facebook项允许{{PRODUCT_NAME}}访问您的账号。重试或换用其它身份。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2988,6 +3828,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3002,6 +3846,8 @@
 							<dict>
 								<key>en</key>
 								<string>Please check spell and retry.</string>
+								<key>zh-Hans</key>
+								<string>请检查拼写并重试。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3009,6 +3855,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3023,6 +3873,8 @@
 							<dict>
 								<key>en</key>
 								<string>Please check your input above.</string>
+								<key>zh-Hans</key>
+								<string>请检查您输入的内容。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3030,6 +3882,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3044,6 +3900,8 @@
 							<dict>
 								<key>en</key>
 								<string>Please check your network connection and account setting in Settings app.</string>
+								<key>zh-Hans</key>
+								<string>请检查网络链接，以及“设置”应用中对应账号的开关。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3051,6 +3909,10 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3067,6 +3929,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<key>en</key>
 								<string>Please proceed to “Settings” app » Privacy » Location Service,
 then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
+								<key>zh-Hans</key>
+								<string>请前往“设置”应用 » 隐私 » 定位服务，开启“{{PRODUCT_APP_NAME}}”的开关。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3074,6 +3938,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3088,6 +3956,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Please wait a while.</string>
+								<key>zh-Hans</key>
+								<string>请等一下。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3095,6 +3965,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3109,6 +3983,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Previous</string>
+								<key>zh-Hans</key>
+								<string>###前一个</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3116,6 +3992,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3130,6 +4010,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Privacy Control</string>
+								<key>zh-Hans</key>
+								<string>隐私控制</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3137,6 +4019,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3151,6 +4037,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Pull down to refresh...</string>
+								<key>zh-Hans</key>
+								<string>###下拉刷新</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3158,6 +4046,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3172,6 +4064,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Quota limit exceeded</string>
+								<key>zh-Hans</key>
+								<string>超出人数限制</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3179,6 +4073,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3193,6 +4091,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Re-authorize</string>
+								<key>zh-Hans</key>
+								<string>重新授权</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3200,6 +4100,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3214,6 +4118,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Release to refresh...</string>
+								<key>zh-Hans</key>
+								<string>###松手后刷新</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3221,6 +4127,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3235,6 +4145,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Remove from this ·X·</string>
+								<key>zh-Hans</key>
+								<string>从活动中移出</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3242,6 +4154,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3256,6 +4172,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Request should be responded usually in seconds, please wait for awhile.</string>
+								<key>zh-Hans</key>
+								<string>请求通常在几秒内就已响应，请稍等</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3263,6 +4181,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3277,6 +4199,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Request should be responded usually in seconds, please wait for awhile. Please also check your spam email folder, it might be mistakenly filtered by your mailbox.</string>
+								<key>zh-Hans</key>
+								<string>请求通常在几秒内就已响应，请稍等。请查看您的垃圾邮件，可能回复被您的邮箱误判了。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3284,6 +4208,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3298,6 +4226,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Request too frequently.</string>
+								<key>zh-Hans</key>
+								<string>请求太频繁。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3305,6 +4235,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3319,6 +4253,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Revert</string>
+								<key>zh-Hans</key>
+								<string>恢复</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3326,6 +4262,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3340,6 +4280,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Revert editing</string>
+								<key>zh-Hans</key>
+								<string>恢复修改</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3347,6 +4289,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3361,6 +4307,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Right there on map</string>
+								<key>zh-Hans</key>
+								<string>地图标记点</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3368,6 +4316,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3382,6 +4334,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Same password?</string>
+								<key>zh-Hans</key>
+								<string>密码没变？</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3389,6 +4343,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3403,6 +4361,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Save</string>
+								<key>zh-Hans</key>
+								<string>保存</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3410,6 +4370,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3424,6 +4388,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Search place</string>
+								<key>zh-Hans</key>
+								<string>搜索地点</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3431,6 +4397,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3445,6 +4415,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Seconds ago</string>
+								<key>zh-Hans</key>
+								<string>秒前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3452,6 +4424,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3466,6 +4442,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>seconds ago</string>
+								<key>zh-Hans</key>
+								<string>秒前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3473,6 +4451,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3487,6 +4469,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Send</string>
+								<key>zh-Hans</key>
+								<string>发送</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3494,6 +4478,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3508,6 +4496,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Set by %@</string>
+								<key>zh-Hans</key>
+								<string>由%@设置</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3515,6 +4505,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3529,6 +4523,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Set by %1$@ %2$@</string>
+								<key>zh-Hans</key>
+								<string>%1$@设置于%2$@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3536,6 +4532,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3550,6 +4550,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Set display name</string>
+								<key>zh-Hans</key>
+								<string>设置显示名字</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3557,6 +4559,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3571,6 +4577,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Set invitee name</string>
+								<key>zh-Hans</key>
+								<string>设置受邀者名字</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3578,6 +4586,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3592,6 +4604,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Set Password</string>
+								<key>zh-Hans</key>
+								<string>设置密码</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3599,6 +4613,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3613,6 +4631,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Set password failed.</string>
+								<key>zh-Hans</key>
+								<string>设置密码失败。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3620,6 +4640,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3634,6 +4658,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Set password...</string>
+								<key>zh-Hans</key>
+								<string>###Set password...</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3641,6 +4667,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3655,6 +4685,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Set response to:</string>
+								<key>zh-Hans</key>
+								<string>我的回复：</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3662,6 +4694,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3676,6 +4712,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Set up Twitter account</string>
+								<key>zh-Hans</key>
+								<string>设置Twitter账号</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3683,6 +4721,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3697,6 +4739,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Set {{PRODUCT_APP_NAME}} password</string>
+								<key>zh-Hans</key>
+								<string>设置{{PRODUCT_NAME}}密码</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3704,6 +4748,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3718,6 +4766,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Show all contacts</string>
+								<key>zh-Hans</key>
+								<string>全部联系人</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3725,6 +4775,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3739,6 +4793,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Sign In</string>
+								<key>zh-Hans</key>
+								<string>登入</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3746,6 +4802,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3760,6 +4820,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Sign out</string>
+								<key>zh-Hans</key>
+								<string>登出</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3767,6 +4829,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3781,6 +4847,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Sometime</string>
+								<key>zh-Hans</key>
+								<string>某时</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3788,6 +4856,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3802,6 +4874,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Somewhere</string>
+								<key>zh-Hans</key>
+								<string>某地</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3809,6 +4883,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3823,6 +4901,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Sorry for the inconvenience. Sometimes, we have to compromise on experience for your account security. Re-authentication is to avoid modification by others who can possibly use your phone.</string>
+								<key>zh-Hans</key>
+								<string>有时候我们为了您的账号安全只能牺牲用户体验。重新鉴权是为了避免别人冒充您作操作。抱歉给您带来不变。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3830,6 +4910,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3844,6 +4928,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Start</string>
+								<key>zh-Hans</key>
+								<string>开始</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3851,6 +4937,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3865,6 +4955,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Start over</string>
+								<key>zh-Hans</key>
+								<string>重新开始</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3872,6 +4964,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3886,6 +4982,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Start with new account</string>
+								<key>zh-Hans</key>
+								<string>开始新账号</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3893,6 +4991,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3907,6 +5009,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Suggest</string>
+								<key>zh-Hans</key>
+								<string>###Suggest</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3914,6 +5018,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3928,6 +5036,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Take photo</string>
+								<key>zh-Hans</key>
+								<string>拍照</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3935,6 +5045,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3949,6 +5063,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Take some notes</string>
+								<key>zh-Hans</key>
+								<string>写描述</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3956,6 +5072,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3970,6 +5090,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>TAP TO RETRY</string>
+								<key>zh-Hans</key>
+								<string>点按重试</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3977,6 +5099,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3991,6 +5117,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Tea-break</string>
+								<key>zh-Hans</key>
+								<string>下午茶</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3998,6 +5126,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4012,6 +5144,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>The group utility for gathering.</string>
+								<key>zh-Hans</key>
+								<string>聚会群组工具</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4019,6 +5153,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4033,6 +5171,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>The time is too long after the autentication. Please try authenticate identity above again.</string>
+								<key>zh-Hans</key>
+								<string>###The time is too long </string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4040,6 +5180,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4054,6 +5198,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>There is something wrong. Please try again later.</string>
+								<key>zh-Hans</key>
+								<string>###There is something wrong...</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4061,6 +5207,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4075,6 +5225,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>This email requires verification before proceeding. Verification request is sent, please check your email for instructions.</string>
+								<key>zh-Hans</key>
+								<string>需验证此邮件才能继续。验证已发送。请查看您的邮件阅读说明。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4082,6 +5234,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4096,6 +5252,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>This number requires verification before proceeding. Verification request is sent, please check your message for instructions.</string>
+								<key>zh-Hans</key>
+								<string>需验证此号码才能继续。验证已发送。请查看您的邮件阅读说明。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4103,6 +5261,10 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4117,6 +5279,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Title &amp; Description</string>
+								<key>zh-Hans</key>
+								<string>###Title &amp; Description</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4124,6 +5288,11 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>file</string>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4140,6 +5309,8 @@ until your account is verified. Please go to verify first.</string>
 								<key>en</key>
 								<string>To protect privacy, nothing to list here 
 until your account is verified. Please go to verify first.</string>
+								<key>zh-Hans</key>
+								<string>为了保护隐私，在验证您的账号之前这里将不会列出任何消息。请先验证。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4147,6 +5318,10 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4161,6 +5336,8 @@ until your account is verified. Please go to verify first.</string>
 							<dict>
 								<key>en</key>
 								<string>To reset {{PRODUCT_APP_NAME}} password, please authenticate with your identity.</string>
+								<key>zh-Hans</key>
+								<string>重置{{PRODUCT_NAME}}密码前，请先通过您的身份进行鉴权。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4168,6 +5345,10 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4182,6 +5363,8 @@ until your account is verified. Please go to verify first.</string>
 							<dict>
 								<key>en</key>
 								<string>Today</string>
+								<key>zh-Hans</key>
+								<string>今天</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4189,6 +5372,10 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4203,6 +5390,8 @@ until your account is verified. Please go to verify first.</string>
 							<dict>
 								<key>en</key>
 								<string>tomorrow</string>
+								<key>zh-Hans</key>
+								<string>明天</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4210,6 +5399,10 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4224,6 +5417,8 @@ until your account is verified. Please go to verify first.</string>
 							<dict>
 								<key>en</key>
 								<string>Tomorrow</string>
+								<key>zh-Hans</key>
+								<string>明天</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4231,6 +5426,10 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4245,6 +5444,8 @@ until your account is verified. Please go to verify first.</string>
 							<dict>
 								<key>en</key>
 								<string>Twitter</string>
+								<key>zh-Hans</key>
+								<string>Twitter</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4252,6 +5453,10 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4266,6 +5471,8 @@ until your account is verified. Please go to verify first.</string>
 							<dict>
 								<key>en</key>
 								<string>Twitter Authorization</string>
+								<key>zh-Hans</key>
+								<string>Twitter授权</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4273,6 +5480,10 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4287,6 +5498,8 @@ until your account is verified. Please go to verify first.</string>
 							<dict>
 								<key>en</key>
 								<string>Two days ago</string>
+								<key>zh-Hans</key>
+								<string>前天</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4294,6 +5507,10 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4308,6 +5525,8 @@ until your account is verified. Please go to verify first.</string>
 							<dict>
 								<key>en</key>
 								<string>two days ago</string>
+								<key>zh-Hans</key>
+								<string>前天</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4315,6 +5534,10 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4329,6 +5552,8 @@ until your account is verified. Please go to verify first.</string>
 							<dict>
 								<key>en</key>
 								<string>Unavailable</string>
+								<key>zh-Hans</key>
+								<string>不参加</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4336,6 +5561,10 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4350,6 +5579,8 @@ until your account is verified. Please go to verify first.</string>
 							<dict>
 								<key>en</key>
 								<string>Unreachable contact</string>
+								<key>zh-Hans</key>
+								<string>无法联系对方</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4357,6 +5588,10 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4371,6 +5606,8 @@ until your account is verified. Please go to verify first.</string>
 							<dict>
 								<key>en</key>
 								<string>Unverified account.</string>
+								<key>zh-Hans</key>
+								<string>账号未验证</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4378,6 +5615,10 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4394,6 +5635,9 @@ Re-send verification email?</string>
 								<key>en</key>
 								<string>Unverified identity, please check your email for instructions.
 Re-send verification email?</string>
+								<key>zh-Hans</key>
+								<string>未验证身份，请查看您的邮件阅读说明。
+请求重发验证邮件？</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4401,6 +5645,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4415,6 +5663,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>Update</string>
+								<key>zh-Hans</key>
+								<string>升级</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4422,6 +5672,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4436,6 +5690,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>Update available</string>
+								<key>zh-Hans</key>
+								<string>升级新版本</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4443,6 +5699,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4457,6 +5717,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>Verification</string>
+								<key>zh-Hans</key>
+								<string>验证</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4464,6 +5726,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4478,6 +5744,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>Verification is sent. Please check your email for instructions.</string>
+								<key>zh-Hans</key>
+								<string>验证已发送。请查看您的邮件阅读说明。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4485,6 +5753,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4499,6 +5771,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>Verification is sent. Please check your message for instructions.</string>
+								<key>zh-Hans</key>
+								<string>验证已发送。请查看您的消息阅读说明。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4506,6 +5780,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4520,6 +5798,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>Welcome to {{PRODUCT_APP_NAME}}</string>
+								<key>zh-Hans</key>
+								<string>欢迎使用 {{PRODUCT_APP_NAME}}</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4527,6 +5807,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4541,6 +5825,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>Why I have to do this?</string>
+								<key>zh-Hans</key>
+								<string>为什么要我做这个？</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4548,6 +5834,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4562,6 +5852,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>year</string>
+								<key>zh-Hans</key>
+								<string>年</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4569,6 +5861,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4583,6 +5879,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>years</string>
+								<key>zh-Hans</key>
+								<string>年</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4590,6 +5888,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4604,6 +5906,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>Yesterday</string>
+								<key>zh-Hans</key>
+								<string>昨天</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4611,6 +5915,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4625,6 +5933,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>yesterday</string>
+								<key>zh-Hans</key>
+								<string>昨天</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4632,6 +5942,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4646,6 +5960,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>You have no access to this private ·X·.</string>
+								<key>zh-Hans</key>
+								<string>您无权访问这个活动。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4653,6 +5969,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4667,6 +5987,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>You will no longer have access to any information in this ·X· once left. Please confirm to leave.</string>
+								<key>zh-Hans</key>
+								<string>您将无法访问这个活动的任何信息。确认离开？</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4674,6 +5996,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4688,6 +6014,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>Your profile here.</string>
+								<key>zh-Hans</key>
+								<string>您的个人资料</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4695,6 +6023,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4709,6 +6041,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>You’re about to change import information of your account. For security concerns, please authenticate first and set your {{PRODUCT_APP_NAME}} password.</string>
+								<key>zh-Hans</key>
+								<string>您正要修改账号的重要信息，为了安全考虑，请鉴权并设置您的{{PRODUCT_NAME}}密码。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4716,6 +6050,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4730,6 +6068,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>You’re about to change important information of your account. For security concerns, please authenticate your account.</string>
+								<key>zh-Hans</key>
+								<string>您正要修改账号的重要信息，为了安全考虑，请鉴权。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4737,6 +6077,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4751,6 +6095,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>{{PRODUCT_APP_NAME}}</string>
+								<key>zh-Hans</key>
+								<string>水滴·汇</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4758,6 +6104,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4772,6 +6122,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>{{PRODUCT_APP_NAME}} %1$@ is available. You’re using version %2$@. Update now?</string>
+								<key>zh-Hans</key>
+								<string>{{PRODUCT_APP_NAME}}版本已更新%1$@，您正在使用%2$@。现在升级？</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4779,6 +6131,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4793,6 +6149,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>·X·</string>
+								<key>zh-Hans</key>
+								<string>???·汇·</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4800,6 +6158,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4814,6 +6176,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>“Rome wasn't built in a day.”</string>
+								<key>zh-Hans</key>
+								<string>“不急跬步 无以至千里”</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4821,6 +6185,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4835,6 +6203,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>“活点地图”会显示您20分钟之内的方位，放心只有得到您同意的朋友们才能看到。</string>
+								<key>zh-Hans</key>
+								<string>“活点地图”会显示您20分钟之内的方位，放心只有得到您同意的朋友们才能看到。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4842,6 +6212,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4856,6 +6230,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>“活点地图”后台</string>
+								<key>zh-Hans</key>
+								<string>“活点地图”后台</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4863,6 +6239,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4879,6 +6259,9 @@ Re-send verification email?</string>
 								<key>en</key>
 								<string>你在哪？
 %@</string>
+								<key>zh-Hans</key>
+								<string>你在哪？
+%@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4886,6 +6269,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4900,6 +6287,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>像“活点地图”这样能获知您方位的工具，应以最高标准尊重个人隐私和数据安全。我们对此非常重视。</string>
+								<key>zh-Hans</key>
+								<string>像“活点地图”这样能获知您方位的工具，应以最高标准尊重个人隐私和数据安全。我们对此非常重视。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4907,6 +6296,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4921,6 +6314,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>公里</string>
+								<key>zh-Hans</key>
+								<string>公里</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4928,6 +6323,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4942,6 +6341,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>关闭此功能</string>
+								<key>zh-Hans</key>
+								<string>关闭此功能</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4949,6 +6350,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4963,6 +6368,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>分钟前</string>
+								<key>zh-Hans</key>
+								<string>分钟前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4970,6 +6377,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4984,6 +6395,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>取消</string>
+								<key>zh-Hans</key>
+								<string>取消</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4991,6 +6404,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5005,6 +6422,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>在线</string>
+								<key>zh-Hans</key>
+								<string>在线</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5012,6 +6431,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5026,6 +6449,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>小时前</string>
+								<key>zh-Hans</key>
+								<string>小时前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5033,6 +6458,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5047,6 +6476,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>开启活点地图</string>
+								<key>zh-Hans</key>
+								<string>开启活点地图</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5054,6 +6485,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5068,6 +6503,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>开启这张活点地图</string>
+								<key>zh-Hans</key>
+								<string>开启这张活点地图</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5075,6 +6512,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5089,6 +6530,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>当前所处方位</string>
+								<key>zh-Hans</key>
+								<string>当前所处方位</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5096,6 +6539,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5110,6 +6557,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>您刚刚拒绝开启这张“活点地图”：Threshold of the odyssey。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
+								<key>zh-Hans</key>
+								<string>您刚刚拒绝开启这张“活点地图”：Threshold of the odyssey。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5117,6 +6566,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5131,6 +6584,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>抵达</string>
+								<key>zh-Hans</key>
+								<string>抵达</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5138,6 +6593,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5152,6 +6611,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>方位未知</string>
+								<key>zh-Hans</key>
+								<string>方位未知</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5159,6 +6620,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5173,6 +6638,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>无需保持应用开启，也能在您已开启的地图中展示一段时间内的位置。</string>
+								<key>zh-Hans</key>
+								<string>无需保持应用开启，也能在您已开启的地图中展示一段时间内的位置。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5180,6 +6647,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5194,6 +6665,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>确定</string>
+								<key>zh-Hans</key>
+								<string>好</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5201,6 +6674,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5215,6 +6692,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>米</string>
+								<key>zh-Hans</key>
+								<string>米</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5222,6 +6701,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5236,6 +6719,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>至目的地</string>
+								<key>zh-Hans</key>
+								<string>至目的地</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5243,6 +6728,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5257,6 +6746,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>至目的地%1$@ 与您相距%2$@</string>
+								<key>zh-Hans</key>
+								<string>至目的地%1$@ 与您相距%2$@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5264,6 +6755,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5278,6 +6773,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>要改变主意与朋友们互相看到位置和轨迹？</string>
+								<key>zh-Hans</key>
+								<string>要改变主意与朋友们互相看到位置和轨迹？</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5285,6 +6782,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5299,6 +6800,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>请在地图上画出路径</string>
+								<key>zh-Hans</key>
+								<string>请在地图上画出路径</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5306,6 +6809,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5320,6 +6827,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>请对方更新方位</string>
+								<key>zh-Hans</key>
+								<string>请对方更新方位</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5327,6 +6836,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5341,6 +6854,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>距您的位置</string>
+								<key>zh-Hans</key>
+								<string>距您的位置</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5348,6 +6863,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5362,6 +6881,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>这张“活点地图”将会展现您未来1小时内的方位。</string>
+								<key>zh-Hans</key>
+								<string>这张“活点地图”将会展现您未来1小时内的方位。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5369,6 +6890,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5383,6 +6908,8 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>这里</string>
+								<key>zh-Hans</key>
+								<string>这里</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5390,6 +6917,10 @@ Re-send verification email?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5403,6 +6934,8 @@ Re-send verification email?</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
+								<string>隐私至关重要</string>
+								<key>zh-Hans</key>
 								<string>隐私至关重要</string>
 							</dict>
 							<key>snapshots</key>
@@ -5438,6 +6971,8 @@ Re-send verification email?</string>
 			</array>
 			<key>change date</key>
 			<date>2001-01-01T00:00:00Z</date>
+			<key>changed values</key>
+			<array/>
 			<key>class</key>
 			<string>BLBundleObject</string>
 			<key>errors</key>
@@ -5460,6 +6995,8 @@ Re-send verification email?</string>
 					</dict>
 					<key>change date</key>
 					<date>2013-03-12T04:22:02Z</date>
+					<key>changed values</key>
+					<array/>
 					<key>class</key>
 					<string>BLStringsFileObject</string>
 					<key>errors</key>
@@ -5502,7 +7039,14 @@ Re-send verification email?</string>
 		<string>zh-Hans</string>
 	</array>
 	<key>preferences</key>
-	<dict/>
+	<dict>
+		<key>leftLanguage</key>
+		<string>en</string>
+		<key>rightLanguage</key>
+		<string>zh-Hans</string>
+		<key>saveCompressed</key>
+		<false/>
+	</dict>
 	<key>reference language</key>
 	<string>en</string>
 	<key>supports preview</key>
