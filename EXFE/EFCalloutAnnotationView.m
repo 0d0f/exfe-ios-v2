@@ -27,6 +27,8 @@
 #define kDefaultWidth   (200.0f)
 #define kCornerRadius   (3.0f)
 
+#define kEdgeBlank      (5.0f)
+
 @interface EFCalloutAnnotationGradientView : UIView
 
 @end
@@ -161,8 +163,33 @@
 }
 
 - (void)_prepareOffset {
+    CLLocationCoordinate2D parentCoordinate = self.parentAnnotationView.annotation.coordinate;
+    CGPoint parentLocation = [self.mapView convertCoordinate:parentCoordinate toPointToView:self.mapView];
+    CGPoint center = parentLocation;
+    
+    CGFloat offsetX = 0.0f;
     CGFloat offsetY = -(CGRectGetHeight(self.parentAnnotationView.frame) + CGRectGetHeight(self.frame) * 0.5f) + 10.0f + self.parentAnnotationView.centerOffset.y;
-    self.centerOffset = (CGPoint){0.0f, offsetY};
+    
+    center.y += offsetY;
+    CGRect viewFrame = self.frame;
+    viewFrame.origin = (CGPoint){center.x - CGRectGetWidth(viewFrame) * 0.5f, center.y - CGRectGetHeight(viewFrame)};
+    
+    CGRect mapViewBounds = self.mapView.bounds;
+    
+    if (CGRectGetMinX(viewFrame) < kEdgeBlank) {
+        offsetX += kEdgeBlank - CGRectGetMinX(viewFrame);
+    }
+    if (CGRectGetMinY(viewFrame) < kEdgeBlank) {
+        offsetY += kEdgeBlank - CGRectGetMinY(viewFrame);
+    }
+    if (CGRectGetMaxX(viewFrame) > kEdgeBlank + CGRectGetWidth(mapViewBounds)) {
+        offsetX += CGRectGetWidth(mapViewBounds) - (kEdgeBlank + CGRectGetMaxX(viewFrame));
+    }
+    if (CGRectGetMaxY(viewFrame) > kEdgeBlank + CGRectGetHeight(mapViewBounds)) {
+        offsetY += CGRectGetHeight(mapViewBounds) - (kEdgeBlank + CGRectGetMaxY(viewFrame));
+    }
+    
+    self.centerOffset = (CGPoint){offsetX, offsetY};
 }
 
 - (void)reset {

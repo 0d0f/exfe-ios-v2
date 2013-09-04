@@ -17,7 +17,7 @@
 
 #define kDefaultShowPickerDuration  (0.144f)
 #define kDefaultHidePickerDuration  (0.144f)
-#define kDefaultHidePickerDelay     (1.0f)
+#define kDefaultHidePickerDelay     (1.5f)
 
 #define kViewHeight                 (25.0f)
 #define kBlankHeight                (12.0f)
@@ -123,11 +123,13 @@
 
 - (void)_init {
     self.charactorArray = [[NSMutableArray alloc] init];
+    
+    [self.charactorArray addObject:@" "];
+    
     for (int i = 0; i < 10; i++) {
         [self.charactorArray addObject:[NSString stringWithFormat:@"%d", i]];
     }
     
-    [self.charactorArray addObject:@" "];
     for (int i = 0; i < 26; i++) {
         NSString *string = [NSString stringWithFormat:@"%c", 'A' + i];
         [self.charactorArray addObject:string];

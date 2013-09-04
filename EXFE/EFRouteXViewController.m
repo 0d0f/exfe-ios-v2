@@ -1251,8 +1251,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     if ([view isKindOfClass:[EFAnnotationView class]]) {
-        [mapView setCenterCoordinate:view.annotation.coordinate animated:YES];
-        
         EFAnnotation *annotation = (EFAnnotation *)view.annotation;
         EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
         
