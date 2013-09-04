@@ -83,6 +83,6 @@
 - (void)postRouteXRequestIdentityId:(NSString *)identityId
                             inCross:(Cross *)cross
                             success:(void (^)(void))successHandler
-                            failure:(void (^)(NSError *error))failureHandler;
+                            failure:(void (^)(NSInteger responseStatusCode, NSError *error))failureHandler;
 
 @end

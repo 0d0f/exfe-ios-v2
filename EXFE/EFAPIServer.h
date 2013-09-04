@@ -10,12 +10,14 @@
 #import <RestKit/RestKit.h>
 #import "Identity+EXFE.h"
 
+// Error domain to generate custom api error
+extern NSString *kEFAPIErrorDomain;
+
 @class Exfee;
 @class EXFEModel;
 
-@interface EFAPIServer : NSObject {
+@interface EFAPIServer : NSObject
 
-}
 @property (nonatomic, unsafe_unretained) EXFEModel *     model;
 
 #pragma mark Initializtion

@@ -36,6 +36,7 @@
 @property (nonatomic, strong) UIButton          *requestButton;
 @property (nonatomic, strong) UIImageView       *destHeadingView;
 @property (nonatomic, strong) UIImageView       *meHeadingView;
+@property (nonatomic, strong) UIActivityIndicatorView   *activityView;
 
 @end
 
@@ -122,6 +123,7 @@
     UIButton *requestButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [requestButton setTitle:NSLocalizedString(@"请对方更新方位", nil) forState:UIControlStateNormal];
     [requestButton setTitleColor:[UIColor COLOR_RGB(0x00, 0x7C, 0xFF)] forState:UIControlStateNormal];
+    [requestButton setTitleColor:[UIColor COLOR_RGB(0xCC, 0xCC, 0xCC)] forState:UIControlStateDisabled];
     requestButton.frame = (CGRect){CGPointZero, {200.0f, 50.0f}};
     [requestButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.75f] forState:UIControlStateNormal];
     [requestButton addTarget:self
@@ -129,6 +131,13 @@
             forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:requestButton];
     self.requestButton = requestButton;
+    
+    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    activityView.center = (CGPoint){170.0f, 20.0f};
+    [activityView startAnimating];
+    activityView.hidden = YES;
+    [self.view addSubview:activityView];
+    self.activityView = activityView;
 }
 
 - (void)_personDidChange {
@@ -246,14 +255,21 @@
         self.meHeadingView.hidden = YES;
     }
     
+    
+    self.buttonEnabled = YES;
+    
     if (kEFMapPersonConnectStateOnline == self.person.connectState) {
         height += CGRectGetHeight(self.meDistanceLabel.frame) * 0.5f;
         self.requestButton.hidden = YES;
+        self.activityView.hidden = YES;
         self.lineView.hidden = YES;
     } else {
         height += CGRectGetHeight(self.requestButton.frame);
         self.requestButton.center = (CGPoint){kDefaultWidth * 0.5f, height - CGRectGetHeight(self.requestButton.frame) * 0.45f};
         self.requestButton.hidden = NO;
+        
+        self.activityView.center = (CGPoint){kDefaultWidth * 0.9f, height - CGRectGetHeight(self.requestButton.frame) * 0.45f};
+        self.activityView.hidden = YES;
         
         self.lineView.center = (CGPoint){kDefaultWidth * 0.5f, height - CGRectGetHeight(self.requestButton.frame) * 0.9f};
         self.lineView.hidden = NO;
@@ -331,6 +347,22 @@
     [self _personDidChange];
     
     [self didChangeValueForKey:@"person"];
+}
+
+- (void)setButtonEnabled:(BOOL)buttonEnabled {
+    [self willChangeValueForKey:@"buttonEnabled"];
+    
+    _buttonEnabled = buttonEnabled;
+    if (buttonEnabled) {
+        self.requestButton.enabled = YES;
+        [self.activityView stopAnimating];
+    } else {
+        self.requestButton.enabled = NO;
+        self.activityView.hidden = NO;
+        [self.activityView startAnimating];
+    }
+    
+    [self didChangeValueForKey:@"buttonEnabled"];
 }
 
 #pragma mark - Touch Event Handler

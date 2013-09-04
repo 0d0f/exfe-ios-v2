@@ -26,8 +26,9 @@
 @property (nonatomic, weak) EFMapPerson *person;
 @property (nonatomic, weak) EFMarauderMapDataSource *mapDataSource;
 
-@property (nonatomic, weak) UIViewController *fromController;
-@property (nonatomic, assign) CGPoint location;
+@property (nonatomic, weak) UIViewController    *fromController;
+@property (nonatomic, assign) CGPoint           location;
+@property (nonatomic, assign) BOOL              buttonEnabled;
 
 - (void)presentFromViewController:(UIViewController *)controller location:(CGPoint)location animated:(BOOL)animated;
 - (void)dismissAnimated:(BOOL)animated;

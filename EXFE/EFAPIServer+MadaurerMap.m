@@ -379,7 +379,7 @@
 - (void)postRouteXRequestIdentityId:(NSString *)identityId
                             inCross:(Cross *)cross
                             success:(void (^)(void))successHandler
-                            failure:(void (^)(NSError *error))failureHandler {
+                            failure:(void (^)(NSInteger responseStatusCode, NSError *error))failureHandler {
     NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/notification/crosses/%d?id=%@&token=%@", [cross.cross_id unsignedIntegerValue], identityId, self.model.userToken];
     
     RKObjectManager *manager = self.model.objectManager;
@@ -399,12 +399,15 @@
                             }
                         }
                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
-                            [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
-                                       withObject:operation
-                                       withObject:error];
+                            NSInteger statusCode = operation.response.statusCode;
+                            if (401 != statusCode && 403 != statusCode && 406 != statusCode) {
+                                [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                           withObject:operation
+                                           withObject:error];
+                            }
                             
                             if (failureHandler) {
-                                failureHandler(error);
+                                failureHandler(statusCode, error);
                             }
                         }];
 
