@@ -486,7 +486,7 @@
 - (void)breadcrumbTimerRunloop:(NSTimer *)timer {
     if (self.mapDataSource.selectedPerson) {
         // timestamp
-        [self.mapDataSource updateTimestampForPerson:self.mapDataSource.selectedPerson toMapView:self.mapView];
+        [self.mapDataSource updateBreadcrumTimestampForPerson:self.mapDataSource.selectedPerson toMapView:self.mapView];
     }
 }
 
@@ -683,7 +683,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     [self.mapDataSource updateBreadcrumPathForPerson:person toMapView:self.mapView];
     
     // timestamp
-    [self.mapDataSource updateTimestampForPerson:person toMapView:self.mapView];
+    [self.mapDataSource updateBreadcrumTimestampForPerson:person toMapView:self.mapView];
     
     [self _zoomToPerson:person];
     
@@ -1015,6 +1015,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         if (person == self.mapDataSource.selectedPerson) {
             [self.mapDataSource updateBreadcrumPathForPerson:person toMapView:self.mapView];
         }
+        
+        [self.mapDataSource updatePeopleTimestampInMapView:self.mapView];
     });
 }
 
@@ -1264,11 +1266,13 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
     if (self.mapDataSource.selectedPerson) {
-        [self.mapDataSource updateTimestampForPerson:self.mapDataSource.selectedPerson toMapView:mapView];
+        [self.mapDataSource updateBreadcrumTimestampForPerson:self.mapDataSource.selectedPerson toMapView:mapView];
     }
     
     [self.mapStrokeView reloadData];
     self.mapStrokeView.hidden = NO;
+    
+    [self.mapDataSource updatePeopleTimestampInMapView:self.mapView];
     
     [self _layoutAnnotationView];
 }
