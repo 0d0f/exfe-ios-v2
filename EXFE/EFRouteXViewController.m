@@ -83,7 +83,7 @@
 - (void)_zoomToPerson:(EFMapPerson *)person;
 - (void)_zoomToPersonLocation:(EFMapPerson *)person;
 
-- (void)_sendRequestWithURL:(NSString *)url hasRequestAPIComplete:(BOOL)hasComplete;
+- (void)_jumpToWeixinWithURL:(NSString *)url;
 
 - (void)_refreshTableViewFrame;
 
@@ -276,8 +276,8 @@
     [self.mapView setCenterCoordinate:coordinate zoomLevel:17 animated:YES];
 }
 
-- (void)_sendRequestWithURL:(NSString *)url hasRequestAPIComplete:(BOOL)hasComplete {
-    if (url && hasComplete) {
+- (void)_jumpToWeixinWithURL:(NSString *)url {
+    if (url) {
         SendMessageToWXReq *message = [[SendMessageToWXReq alloc] init];
         message.bText = YES;
         message.text = [NSString stringWithFormat:NSLocalizedString(@"你在哪？\n%@", nil), url];
@@ -820,6 +820,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                           {
                                                               BOOL isWechat = NO;
                                                               
+                                                              // check invitation identity
                                                               NSString *identityString = person.identityString;
                                                               NSArray *components = [identityString componentsSeparatedByString:@"@"];
                                                               NSString *providerString = [components lastObject];
@@ -829,6 +830,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                               }
                                                               
                                                               if (!isWechat) {
+                                                                  // check notification identities
                                                                   NSArray *identityIds = [weakSelf.mapDataSource notificationIdentityIdsForPerson:person];
                                                                   for (NSString *identityId in identityIds) {
                                                                       NSArray *components = [identityId componentsSeparatedByString:@"@"];
@@ -842,19 +844,39 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                               }
                                                               
                                                               if (isWechat) {
-                                                                  [delegate.model.apiServer getRouteXUrlInCross:self.cross
-                                                                                                        success:^(NSString *url){
-                                                                                                            if (weakPersonViewController && weakPersonViewController == weakSelf.personViewController) {
-                                                                                                                weakPersonViewController.buttonEnabled = YES;
-                                                                                                                [weakPersonViewController dismissAnimated:YES];
+                                                                  if ([WXApi isWXAppInstalled] &&
+                                                                      [WXApi isWXAppSupportApi] &&
+                                                                      [WXApi getApiVersion] <= [WXApi getWXAppSupportMaxApiVersion]) {
+                                                                      [delegate.model.apiServer getRouteXUrlInCross:self.cross
+                                                                                                            success:^(NSString *url){
+                                                                                                                if (weakPersonViewController && weakPersonViewController == weakSelf.personViewController) {
+                                                                                                                    weakPersonViewController.buttonEnabled = YES;
+                                                                                                                    [weakPersonViewController dismissAnimated:YES];
+                                                                                                                }
+                                                                                                                [self _jumpToWeixinWithURL:url];
                                                                                                             }
-                                                                                                            [self _sendRequestWithURL:url hasRequestAPIComplete:YES];
-                                                                                                        }
-                                                                                                        failure:^(NSError *error){
-                                                                                                            if (weakPersonViewController && weakPersonViewController == weakSelf.personViewController) {
-                                                                                                                weakPersonViewController.buttonEnabled = YES;
-                                                                                                            }
-                                                                                                        }];
+                                                                                                            failure:^(NSError *error){
+                                                                                                                if (weakPersonViewController && weakPersonViewController == weakSelf.personViewController) {
+                                                                                                                    [weakPersonViewController dismissAnimated:YES];
+                                                                                                                }
+                                                                                                                
+                                                                                                                [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"通知失败", nil)
+                                                                                                                                            message:NSLocalizedString(@"无法立刻通知对方更新方位。请尝试用其它方式联系对方。", nil)
+                                                                                                                                  cancelButtonTitle:NSLocalizedString(@"确定", nil)
+                                                                                                                                  otherButtonTitles:nil
+                                                                                                                                            handler:nil];
+                                                                                                            }];
+                                                                  }
+                                                              } else {
+                                                                  if (weakPersonViewController && weakPersonViewController == weakSelf.personViewController) {
+                                                                      [weakPersonViewController dismissAnimated:YES];
+                                                                  }
+                                                                  
+                                                                  [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"通知失败", nil)
+                                                                                              message:NSLocalizedString(@"无法立刻通知对方更新方位。请尝试用其它方式联系对方。", nil)
+                                                                                    cancelButtonTitle:NSLocalizedString(@"确定", nil)
+                                                                                    otherButtonTitles:nil
+                                                                                              handler:nil];
                                                               }
                                                           }
                                                               break;
