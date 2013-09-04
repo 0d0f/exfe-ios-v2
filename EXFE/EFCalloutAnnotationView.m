@@ -28,6 +28,7 @@
 #define kCornerRadius   (3.0f)
 
 #define kEdgeBlank      (5.0f)
+#define kMapLeftEdget   (50.0f)
 
 @interface EFCalloutAnnotationGradientView : UIView
 
@@ -175,15 +176,17 @@
     viewFrame.origin = (CGPoint){center.x - CGRectGetWidth(viewFrame) * 0.5f, center.y - CGRectGetHeight(viewFrame)};
     
     CGRect mapViewBounds = self.mapView.bounds;
+    mapViewBounds.origin.x = kMapLeftEdget;
+    mapViewBounds.size.width -= kMapLeftEdget;
     
-    if (CGRectGetMinX(viewFrame) < kEdgeBlank) {
-        offsetX += kEdgeBlank - CGRectGetMinX(viewFrame);
+    if (CGRectGetMinX(viewFrame) < kEdgeBlank + CGRectGetMinX(mapViewBounds)) {
+        offsetX += kEdgeBlank + CGRectGetMinX(mapViewBounds) - CGRectGetMinX(viewFrame);
     }
     if (CGRectGetMinY(viewFrame) < kEdgeBlank) {
         offsetY += kEdgeBlank - CGRectGetMinY(viewFrame);
     }
-    if (CGRectGetMaxX(viewFrame) > kEdgeBlank + CGRectGetWidth(mapViewBounds)) {
-        offsetX += CGRectGetWidth(mapViewBounds) - (kEdgeBlank + CGRectGetMaxX(viewFrame));
+    if (CGRectGetMaxX(viewFrame) > kEdgeBlank + CGRectGetMaxX(mapViewBounds)) {
+        offsetX += CGRectGetMaxX(mapViewBounds) - (kEdgeBlank + CGRectGetMaxX(viewFrame));
     }
     if (CGRectGetMaxY(viewFrame) > kEdgeBlank + CGRectGetHeight(mapViewBounds)) {
         offsetY += CGRectGetHeight(mapViewBounds) - (kEdgeBlank + CGRectGetMaxY(viewFrame));
