@@ -122,6 +122,8 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
         }
     } else if (eventType == kCFStreamEventErrorOccurred) {
         [self reconnect];
+    } else if (kCFStreamEventEndEncountered == eventType) {
+        [self reconnect];
     }
 }
 
@@ -157,6 +159,8 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
         CFRelease(_stream);
         _stream = NULL;
     }
+    
+    _strFromStream = @"";
 }
 
 - (void)reconnect {
