@@ -16,7 +16,8 @@ typedef NS_ENUM(NSUInteger, Provider){
     kProviderTwitter,
     kProviderInstagram,
     kProviderFlickr,
-    kProviderDropbox
+    kProviderDropbox,
+    kProviderWechat
 } ;
 
 typedef NS_ENUM(NSUInteger, ProviderType){
@@ -36,7 +37,8 @@ typedef NS_ENUM(NSUInteger, ProviderType){
 + (NSString*)getProviderString:(Provider)code;
 + (ProviderType)getProviderTypeByString:(NSString*)str;
 + (ProviderType)getProviderTypeByCode:(Provider)code;
-
++ (NSString *)getIdentityImageNameByProvider:(Provider)p;
++ (UIImage *)getIdentityImageByProvider:(Provider)p;
 
 // if there's no such identity, return nil.
 + (Identity *)identityFromLocalRoughIdentity:(RoughIdentity *)roughIdentity;

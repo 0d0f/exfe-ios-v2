@@ -381,31 +381,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 }
 
 - (void)fillIdentityHint:(Provider)provider;
-{
-    switch (provider) {
-        case kProviderEmail:{
-            _imageIdentity.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
-            _imageIdentity.contentMode = UIViewContentModeCenter;
-        }   break;
-        case kProviderPhone:
-            _imageIdentity.image = [UIImage imageNamed:@"identity_phone_18_grey.png"];
-            _imageIdentity.contentMode = UIViewContentModeCenter;
-            break;
-        case kProviderFacebook:
-            _imageIdentity.image = [UIImage imageNamed:@"identity_facebook_18_grey.png"];
-            _imageIdentity.contentMode = UIViewContentModeCenter;
-            break;
-        case kProviderTwitter:
-            _imageIdentity.image = [UIImage imageNamed:@"identity_twitter_18_grey.png"];
-            _imageIdentity.contentMode = UIViewContentModeCenter;
-            break;
-            
-        default:
-            // no identity info, fall back to default
-            _imageIdentity.image = nil;
-            _imageIdentity.contentMode = UIViewContentModeCenter;
-            break;
-    }
+{    
+    _imageIdentity.image = [Identity getIdentityImageByProvider:provider];
+    _imageIdentity.contentMode = UIViewContentModeCenter;
 }
 
 - (void)showErrorInfo:(NSString*)error dockOn:(UIView*)view

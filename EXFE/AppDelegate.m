@@ -66,7 +66,7 @@
     RKLogConfigureByName("RestKit/CoreData", RKLogLevelOff);
     //    RKLogConfigureByName("RestKit/CoreData/Cache", RKLogLevelTrace);
 #else
-    RKLogConfigureByName("*", RKLogLevelOff);
+    RKLogConfigureByName("RestKit", RKLogLevelDefault);
 #endif
     
     RKLogInfo(@"API ROOT: %@", API_ROOT);
@@ -393,7 +393,7 @@
     if (token.length > 0 && [user_id integerValue] > 0){
         EFAPIServer *server = self.model.apiServer;
         if (![server isLoggedIn]) {
-            // sign in
+            RKLogInfo(@"Sign In by url");
             
             [self switchContextByUserId:[user_id integerValue] withAbandon:NO];
             self.model.userToken = token;
@@ -402,33 +402,36 @@
             [self.model loadMe];
             
             [self signinDidFinish];
-            [self processUrlHandler:url];
+            [self jumpTo:url];
         } else {
-            if ([user_id integerValue] == self.model.userId) {
+            NSUInteger uid = [user_id integerValue];
+            if (uid == self.model.userId) {
+                RKLogInfo(@"Jump in by url");
                 // refresh token
                 self.model.userToken = token;
                 [self.model saveUserData];
-                [self processUrlHandler:url];
+                [self jumpTo:url];
             } else {
                 // merge identities
-                
+                RKLogInfo(@"Merge %u to %u by url", uid, self.model.userId);
                 [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Merge accounts", nil)
                                             message:[NSString stringWithFormat:NSLocalizedString(@"Merge account %@ into your current signed-in account?", nil), username]
                                   cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
                                   otherButtonTitles:@[NSLocalizedString(@"Merge", nil)]
                                             handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
                                                 if (buttonIndex == alertView.firstOtherButtonIndex ) {
-                                                    
+                                                    RKLogInfo(@"Start merge");
                                                     [server mergeAllByToken:token
                                                                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                                         if ([responseObject isKindOfClass:[NSDictionary class]]) {
                                                                             NSDictionary *body = responseObject;
-                                                                            NSNumber *code = [body valueForKey:@"meta.code"];
-                                                                            NSInteger c = [code integerValue];
+                                                                            Meta * meta = [body valueForKey:@"meta"]; 
+                                                                            NSInteger c = [[meta valueForKey:@"code"] integerValue];
                                                                             NSInteger t = c / 100;
                                                                             switch (t) {
                                                                                 case 2:
-                                                                                    [self processUrlHandler:url];
+                                                                                    RKLogInfo(@"finish merge. Jump!");
+                                                                                    [self jumpTo:url];
                                                                                     
                                                                                     if ([url.path hasPrefix:@"/!"]) {
                                                                                         [self performBlock:^(id sender) {
@@ -440,77 +443,42 @@
                                                                                     break;
                                                                                     
                                                                                 default:
+                                                                                    //[self jumpTo:url];
+                                                                                    #warning test only
+                                                                                    NSLog(@"Merge fail for %i %@. NO Jump!", c, [meta valueForKey:@"errorType"]);
+                                                                                    UIAlertView * alert = [UIAlertView alertViewWithTitle:@"Merge Fail" message:[NSString stringWithFormat:@"API: %@", meta]];
+                                                                                    [alert addButtonWithTitle:@"OK"];
+                                                                                    alert.delegate = nil;
+                                                                                    [alert show];
                                                                                     break;
                                                                             }
                                                                         }
                                                                     }
-                                                                    failure:nil];
+                                                                    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                                        #warning test only
+                                                                        NSLog(@"Merge fail for error %@. NO Jump!", error);
+                                                                        //[self jumpTo:url];
+                                                                        UIAlertView * alert = [UIAlertView alertViewWithTitle:@"Merge Fail" message:[NSString stringWithFormat:@"ERROR: %@", error]];
+                                                                        [alert addButtonWithTitle:@"OK"];
+                                                                        alert.delegate = nil;
+                                                                        [alert show];
+                                                                    }];
+                                                } else {
+                                                    RKLogInfo(@"Not merge. Jump!");
+                                                    [self jumpTo:url];
                                                 }
                                             }];
-                
-                // Load identities to merge from another user
-//                [server loadUserBy:[user_id unsignedIntegerValue]
-//                             withToken:token
-//                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//                                   NSDictionary *body = responseObject;
-//                                   if([body isKindOfClass:[NSDictionary class]]) {
-//                                       NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
-//                                       if(code){
-//                                           if([code integerValue] == 200) {
-//                                               NSString *name = [responseObject valueForKeyPath:@"response.user.name"];
-//                                               NSArray *ids = [responseObject valueForKeyPath:@"response.user.identities.@distinctUnionOfObjects.id"];
-//                                               
-//                                               [UIAlertView showAlertViewWithTitle:@"Merge accounts"
-//                                                                           message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?", name]
-//                                                                 cancelButtonTitle:@"Cancel"
-//                                                                 otherButtonTitles:@[@"Merge"]
-//                                                                           handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
-//                                                                               if (buttonIndex == alertView.firstOtherButtonIndex ) {
-//                                                                                   
-//                                                                                   [server mergeIdentities:ids byToken:token success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//                                                                                       if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-//                                                                                           NSDictionary *body=responseObject;
-//                                                                                           if ([body isKindOfClass:[NSDictionary class]]) {
-//                                                                                               id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
-//                                                                                               if (code && [code intValue] == 200) {
-//                                                                                                   [self processUrlHandler:url];
-//                                                                                                   
-//                                                                                                   if ([url.path hasPrefix:@"/!"]) {
-//                                                                                                       [self performBlock:^(id sender) {
-//                                                                                                           [self.model loadMe];
-//                                                                                                       } afterDelay:3];
-//                                                                                                   } else {
-//                                                                                                       [self.model loadMe];
-//                                                                                                   }
-//                                                                                                   
-//                                                                                                   
-//                                                                                               }
-//                                                                                           }
-//                                                                                       }
-//                                                                                   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                                                                       
-//                                                                                   }];
-//                                                                               }
-//                                                                           }];
-//                                           }
-//                                       }
-//                                   }
-//                                   
-//                               }
-//                               failure:nil];
             }
         }
-        
     }else{
-        [self processUrlHandler:url];
+        [self jumpTo:url];
     }
-    
-    
     return YES;
 }
 
 - (void)jumpTo:(NSURL *)url
 {
+    RKLogInfo(@"Jump to: %@", url.path);
     NSArray *pathComps = [url pathComponents];
     NSDictionary * params = [url queryComponents];
     NSArray *anim = [params objectForKey:@"animated"];
@@ -538,54 +506,6 @@
     return;
 }
 
-- (void)processUrlHandler:(NSURL*)url {
-    
-    NSString *host = [url host];
-    if (host.length == 0) {
-        [self jumpTo:url];
-        return;
-    } 
-    
-    NSArray *pathComps = [url pathComponents];
-    CrossesViewController *crossViewController = self.crossesViewController;
-    
-    if ([host isEqualToString:@"crosses"]) {
-        if (self.navigationController.viewControllers.count > 1) {
-            [self.navigationController popToRootViewControllerAnimated:NO];
-        }
-        
-        if (pathComps.count  == 2) {
-            int cross_id = [[pathComps objectAtIndex:1] intValue];
-            if ( cross_id > 0) {
-                if ([self.model isLoggedIn]) {
-                    if ([crossViewController pushToCross:cross_id] == NO) {
-                    }
-                }
-                return ;
-            }
-        }
-    } else if ([host isEqualToString:@"conversation"]) {
-        if (self.navigationController.viewControllers.count > 1) {
-            [self.navigationController popToRootViewControllerAnimated:NO];
-        }
-        if (pathComps.count  == 2) {
-            int cross_id = [[pathComps objectAtIndex:1] intValue];
-            if (cross_id > 0){
-                if ([self.model isLoggedIn]) {
-                    if ([crossViewController pushToConversation:cross_id] == NO) {
-                    }
-                }
-            }
-        }
-    } else if([host isEqualToString:@"profile"]) {
-        if (self.navigationController.viewControllers.count > 1) {
-            [self.navigationController popToRootViewControllerAnimated:NO];
-        }
-        if ([self.model isLoggedIn]) {
-            [crossViewController showProfileViewWithAnimated:NO];
-        }
-    }
-}
 
 - (void)signinDidFinish {
     if ([self.model isLoggedIn]) {

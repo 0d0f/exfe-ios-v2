@@ -75,7 +75,8 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
 
 @property (nonatomic, strong) NSMutableDictionary   *toAddPeopleUserIdMap;
 @property (nonatomic, strong) NSMutableDictionary   *breadcrumPathMap;
-@property (nonatomic, strong) NSMutableDictionary   *timestampMap;
+@property (nonatomic, strong) NSMutableDictionary   *breadcrumTimestampMap;
+@property (nonatomic, strong) NSMutableDictionary   *peopleTimestampMap;
 @property (nonatomic, strong) NSMutableDictionary   *personAnnotationMap;
 
 @property (nonatomic, strong) EFHTTPStreaming       *httpStreaming;
@@ -257,7 +258,8 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
         self.routeLocationAnnotationMap = [[NSMutableDictionary alloc] init];
         self.personAnnotationMap = [[NSMutableDictionary alloc] init];
         self.breadcrumPathMap = [[NSMutableDictionary alloc] init];
-        self.timestampMap = [[NSMutableDictionary alloc] init];
+        self.peopleTimestampMap = [[NSMutableDictionary alloc] init];
+        self.breadcrumTimestampMap = [[NSMutableDictionary alloc] init];
         self.toAddPeopleUserIdMap = [[NSMutableDictionary alloc] init];
         self.tempGeomarks = [[NSMutableArray alloc] init];
         
@@ -413,6 +415,26 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
 
 - (NSArray *)allPeople {
     return self.people;
+}
+
+- (NSArray *)notificationIdentityIdsForPerson:(EFMapPerson *)person {
+    NSString *userIdString = person.userIdString;
+    NSInteger userId = [userIdString integerValue];
+    
+    NSArray *invitations = [self.cross.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
+    NSArray *notificationIdentityIds = nil;
+    
+    for (NSArray *invitationValues in invitations) {
+        Invitation *invitation = invitationValues[0];
+        NSInteger connectedUserId = [invitation.identity.connected_user_id integerValue];
+        
+        if (connectedUserId == userId) {
+            notificationIdentityIds = invitation.notification_identity_array;
+            break;
+        }
+    }
+    
+    return notificationIdentityIds;
 }
 
 #pragma mark - RouteLocation
@@ -947,22 +969,22 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
 
 #pragma mark - Timestamp
 
-- (void)removeAllTimestampToMapView:(MKMapView *)mapView {
+- (void)removeAllBreadcrumTimestampToMapView:(MKMapView *)mapView {
     NSParameterAssert(mapView);
     
-    [self.timestampMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+    [self.breadcrumTimestampMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
         NSArray *timestamps = (NSArray *)obj;
         [mapView removeAnnotations:timestamps];
     }];
     
-    [self.timestampMap removeAllObjects];
+    [self.breadcrumTimestampMap removeAllObjects];
 }
 
-- (void)updateTimestampForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView {
+- (void)updateBreadcrumTimestampForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView {
     NSParameterAssert(person);
     NSParameterAssert(mapView);
     
-    [self removeAllTimestampToMapView:mapView];
+    [self removeAllBreadcrumTimestampToMapView:mapView];
     
     EFLocation *lastLocation = person.lastLocation;
     NSArray *locations = person.locations;
@@ -972,15 +994,13 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
         return;
     }
     
-    EFLocation *lastAddedLocation = nil;
+    EFLocation *lastAddedLocation = lastLocation;
     
-    if (kEFMapPersonConnectStateOnline != person.connectState) {
-        EFTimestampAnnotation *firstTimestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:lastLocation.coordinate
-                                                                                        timestamp:lastLocation.timestamp];
-        [annotations addObject:firstTimestamp];
-    }
-    
-    lastAddedLocation = lastLocation;
+//    if (kEFMapPersonConnectStateOnline != person.connectState) {
+//        EFTimestampAnnotation *firstTimestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:lastLocation.coordinate
+//                                                                                        timestamp:lastLocation.timestamp];
+//        [annotations addObject:firstTimestamp];
+//    }
     
     NSInteger recentHour = 1;
     NSInteger recentMin = 30;
@@ -1031,8 +1051,55 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
         }
     }
     
-    [self.timestampMap setObject:annotations forKey:[NSValue valueWithNonretainedObject:person]];
+    [self.breadcrumTimestampMap setObject:annotations forKey:[NSValue valueWithNonretainedObject:person]];
     [mapView addAnnotations:annotations];
+}
+
+- (void)removePeopleTimestampInMapView:(MKMapView *)mapView {
+    NSParameterAssert(mapView);
+    
+    [self.peopleTimestampMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+        EFTimestampAnnotation *annoation = obj;
+        [mapView removeAnnotation:annoation];
+    }];
+    
+    [self.peopleTimestampMap removeAllObjects];
+}
+
+- (void)updatePeopleTimestampInMapView:(MKMapView *)mapView {
+    NSParameterAssert(mapView);
+    
+    [self removePeopleTimestampInMapView:mapView];
+    
+    for (EFMapPerson *person in self.people) {
+        if (kEFMapPersonConnectStateOnline != person.connectState &&
+            person.lastLocation) {
+            CGPoint point = [mapView convertCoordinate:person.lastLocation.coordinate toPointToView:mapView];
+            
+            BOOL shouldShow = YES;
+            for (EFMapPerson *anotherPerson in self.people) {
+                if (person != anotherPerson &&
+                    kEFMapPersonConnectStateOnline != anotherPerson.connectState &&
+                    anotherPerson.lastLocation) {
+                    CGPoint anotherPoint = [mapView convertCoordinate:anotherPerson.lastLocation.coordinate toPointToView:mapView];
+                    
+                    CGFloat length = LengthBetweenPoints(point, anotherPoint);
+                    if (length < 40.0f) {
+                        shouldShow = NO;
+                        break;
+                    }
+                }
+            }
+            
+            if (shouldShow) {
+                EFLocation *lastLocation = person.lastLocation;
+                EFTimestampAnnotation *annotation = [[EFTimestampAnnotation alloc] initWithCoordinate:lastLocation.coordinate
+                                                                                            timestamp:lastLocation.timestamp];
+                [self.peopleTimestampMap setObject:annotation forKey:[NSValue valueWithNonretainedObject:person]];
+                [mapView addAnnotation:annotation];
+            }
+        }
+    }
 }
 
 #pragma mark - RoutePath

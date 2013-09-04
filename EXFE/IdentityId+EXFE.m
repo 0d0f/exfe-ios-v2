@@ -37,6 +37,8 @@
         case kProviderEmail:
         case kProviderPhone:
             return [self external_username];
+        case kProviderWechat:
+            return NSLocalizedString(@"WeChat", nil);
         case kProviderTwitter:
             return [NSString stringWithFormat:@"@%@", [self external_username]];
             break;

@@ -533,23 +533,7 @@ typedef enum {
             }
             
             identityName.text = diplayIdentity;
-            switch(p){
-                case kProviderEmail:
-                    identityProvider.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
-                    break;
-                case kProviderPhone:
-                    identityProvider.image = [UIImage imageNamed:@"identity_phone_18_grey.png"];
-                    break;
-                case kProviderTwitter:
-                    identityProvider.image = [UIImage imageNamed:@"identity_twitter_18_grey.png"];
-                    break;
-                case kProviderFacebook:
-                    identityProvider.image = [UIImage imageNamed:@"identity_facebook_18_grey.png"];
-                    break;
-                default:
-                    identityProvider.image = nil;
-                    break;
-            }
+            identityProvider.image = [Identity getIdentityImageByProvider:p];
             
                 //            [CATransaction begin];
                 //            [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];

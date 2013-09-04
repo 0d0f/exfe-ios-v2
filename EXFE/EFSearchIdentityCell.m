@@ -117,7 +117,8 @@
     self.avatarImageView.image = defaultImage;
     
     if (providerName.length != 0) {
-        UIImage *providerIcon = [UIImage imageNamed:[NSString stringWithFormat:@"identity_%@_18_grey.png", providerName]];
+        Provider p = [Identity getProviderCode:providerName];
+        UIImage *providerIcon = [Identity getIdentityImageByProvider:p];
         self.providerIcon = providerIcon;
         if (identity) {
             if (identity.name.length) {

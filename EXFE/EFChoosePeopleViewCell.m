@@ -400,7 +400,9 @@
         self.userNameLabel.frame = (CGRect){{56, 12}, {190, 26}};
         
         if (1 == contactObject.roughIdentities.count) {
-            NSString *iconName = [NSString stringWithFormat:@"identity_%@_18_grey.png", ((RoughIdentity *)contactObject.roughIdentities[0]).provider];
+            
+            Provider p = [Identity getProviderCode:((RoughIdentity *)contactObject.roughIdentities[0]).provider];
+            NSString *iconName = [Identity getIdentityImageNameByProvider:p];
             UIImage *icon = [UIImage imageNamed:iconName];
             
             self.providerIcon = icon;
@@ -410,23 +412,8 @@
             NSMutableDictionary *addDict = [[NSMutableDictionary alloc] initWithCapacity:contactObject.roughIdentities.count];
             
             for (RoughIdentity *roughtIdentity in contactObject.roughIdentities) {
-                NSString *imageName = nil;
-                switch ([Identity getProviderCode:roughtIdentity.provider]) {
-                    case kProviderTwitter:
-                        imageName = @"identity_twitter_18_grey.png";
-                        break;
-                    case kProviderFacebook:
-                        imageName = @"identity_facebook_18_grey.png";
-                        break;
-                    case kProviderEmail:
-                        imageName = @"identity_email_18_grey.png";
-                        break;
-                    case kProviderPhone:
-                        imageName = @"identity_phone_18_grey.png";
-                        break;
-                    default:
-                        break;
-                }
+                Provider p = [Identity getProviderCode:roughtIdentity.provider];
+                NSString *imageName = [Identity getIdentityImageNameByProvider:p];
                 
                 if (imageName) {
                     if ([addDict valueForKey:imageName]) {

@@ -1387,7 +1387,6 @@
 		4FC40EFA17D04A5700D64105 /* EFMapEditingPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1235B1796470C00A73E59 /* EFMapEditingPathView.m */; };
 		4FC40EFB17D04A5700D64105 /* EFAccessInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 7688C79517B0DE7E00CBB6E8 /* EFAccessInfo.m */; };
 		4FC40EFC17D04A5700D64105 /* EFMapEditingReadyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1235D1796470C00A73E59 /* EFMapEditingReadyView.m */; };
-		4FC40EFD17D04A5700D64105 /* EFMapPeopleDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123631796470C00A73E59 /* EFMapPeopleDataSource.m */; };
 		4FC40EFE17D04A5700D64105 /* EFMapPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123651796470C00A73E59 /* EFMapPerson.m */; };
 		4FC40EFF17D04A5700D64105 /* EFMapPersonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123671796470C00A73E59 /* EFMapPersonCell.m */; };
 		4FC40F0017D04A5700D64105 /* EFMapPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123691796470C00A73E59 /* EFMapPoint.m */; };
@@ -1914,6 +1913,14 @@
 		4FC4114A17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
 		4FC4114B17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
 		4FC4114C17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
+		4FC4115D17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */; };
+		4FC4115E17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */; };
+		4FC4115F17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */; };
+		4FC4116017D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */; };
+		4FC4116117D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115C17D6E0CD00D64105 /* identity_weixin_18_grey@2x.png */; };
+		4FC4116217D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115C17D6E0CD00D64105 /* identity_weixin_18_grey@2x.png */; };
+		4FC4116317D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115C17D6E0CD00D64105 /* identity_weixin_18_grey@2x.png */; };
+		4FC4116417D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115C17D6E0CD00D64105 /* identity_weixin_18_grey@2x.png */; };
 		4FC6E94516AFB6D00023AD1C /* xlist_conv_badge_many.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC6E94316AFB6D00023AD1C /* xlist_conv_badge_many.png */; };
 		4FC6E94616AFB6D00023AD1C /* xlist_conv_badge_many@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC6E94416AFB6D00023AD1C /* xlist_conv_badge_many@2x.png */; };
 		4FC8FCE8168D7E5700409779 /* Place+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCE7168D7E5700409779 /* Place+Helper.m */; };
@@ -2513,9 +2520,6 @@
 		76B123941796470C00A73E59 /* EFMapEditingReadyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1235D1796470C00A73E59 /* EFMapEditingReadyView.m */; };
 		76B123951796470C00A73E59 /* EFMapEditingReadyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1235D1796470C00A73E59 /* EFMapEditingReadyView.m */; };
 		76B123961796470C00A73E59 /* EFMapEditingReadyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1235D1796470C00A73E59 /* EFMapEditingReadyView.m */; };
-		76B1239A1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123631796470C00A73E59 /* EFMapPeopleDataSource.m */; };
-		76B1239B1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123631796470C00A73E59 /* EFMapPeopleDataSource.m */; };
-		76B1239C1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123631796470C00A73E59 /* EFMapPeopleDataSource.m */; };
 		76B1239D1796470C00A73E59 /* EFMapPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123651796470C00A73E59 /* EFMapPerson.m */; };
 		76B1239E1796470C00A73E59 /* EFMapPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123651796470C00A73E59 /* EFMapPerson.m */; };
 		76B1239F1796470C00A73E59 /* EFMapPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123651796470C00A73E59 /* EFMapPerson.m */; };
@@ -3369,6 +3373,8 @@
 		4FC4113B17D490FF00D64105 /* EFChangeCrossTimeOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChangeCrossTimeOperation.h; sourceTree = "<group>"; };
 		4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChangeCrossTimeOperation.m; sourceTree = "<group>"; };
 		4FC4114817D5949B00D64105 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = Localizable.strings; sourceTree = "<group>"; };
+		4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = identity_weixin_18_grey.png; sourceTree = "<group>"; };
+		4FC4115C17D6E0CD00D64105 /* identity_weixin_18_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "identity_weixin_18_grey@2x.png"; sourceTree = "<group>"; };
 		4FC6E94316AFB6D00023AD1C /* xlist_conv_badge_many.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xlist_conv_badge_many.png; sourceTree = "<group>"; };
 		4FC6E94416AFB6D00023AD1C /* xlist_conv_badge_many@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xlist_conv_badge_many@2x.png"; sourceTree = "<group>"; };
 		4FC8FCE6168D7E5700409779 /* Place+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Place+Helper.h"; sourceTree = "<group>"; };
@@ -3671,8 +3677,6 @@
 		76B1235F1796470C00A73E59 /* EFMapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapKit.h; sourceTree = "<group>"; };
 		76B123601796470C00A73E59 /* EFMapOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapOverlay.h; sourceTree = "<group>"; };
 		76B123611796470C00A73E59 /* EFMapOverlayDataDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapOverlayDataDefines.h; sourceTree = "<group>"; };
-		76B123621796470C00A73E59 /* EFMapPeopleDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapPeopleDataSource.h; sourceTree = "<group>"; };
-		76B123631796470C00A73E59 /* EFMapPeopleDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapPeopleDataSource.m; sourceTree = "<group>"; };
 		76B123641796470C00A73E59 /* EFMapPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapPerson.h; sourceTree = "<group>"; };
 		76B123651796470C00A73E59 /* EFMapPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapPerson.m; sourceTree = "<group>"; };
 		76B123661796470C00A73E59 /* EFMapPersonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapPersonCell.h; sourceTree = "<group>"; };
@@ -5084,8 +5088,6 @@
 		76B123C5179648A700A73E59 /* Data Source */ = {
 			isa = PBXGroup;
 			children = (
-				76B123621796470C00A73E59 /* EFMapPeopleDataSource.h */,
-				76B123631796470C00A73E59 /* EFMapPeopleDataSource.m */,
 				76B1236C1796470C00A73E59 /* EFMarauderMapDataSource.h */,
 				76B1236D1796470C00A73E59 /* EFMarauderMapDataSource.m */,
 				768DD35017A91F4A00E080C6 /* EFLocationManager.h */,
@@ -5333,6 +5335,8 @@
 		7811787815DA81CE00A4BBCF /* identity */ = {
 			isa = PBXGroup;
 			children = (
+				4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */,
+				4FC4115C17D6E0CD00D64105 /* identity_weixin_18_grey@2x.png */,
 				7848CDFF16D7682700F9488E /* identity_phone_18_grey.png */,
 				7848CE0016D7682700F9488E /* identity_phone_18_grey@2x.png */,
 				7848CE0116D7682700F9488E /* identity_phone_18.png */,
@@ -6865,6 +6869,8 @@
 				4F2CF05117BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05417BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
 				4FC4114A17D5949B00D64105 /* Localizable.strings in Resources */,
+				4FC4115E17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
+				4FC4116217D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7326,6 +7332,8 @@
 				4F2CF05217BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05517BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
 				4FC4114B17D5949B00D64105 /* Localizable.strings in Resources */,
+				4FC4115F17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
+				4FC4116317D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7783,6 +7791,8 @@
 				4FC4110717D04A5700D64105 /* cautionbar_cancel_pressed.png in Resources */,
 				4FC4110817D04A5700D64105 /* cautionbar_cancel.png in Resources */,
 				4FC4114C17D5949B00D64105 /* Localizable.strings in Resources */,
+				4FC4116017D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
+				4FC4116417D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8240,6 +8250,8 @@
 				4F2CF05017BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05317BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
 				4FC4114917D5949B00D64105 /* Localizable.strings in Resources */,
+				4FC4115D17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
+				4FC4116117D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8495,7 +8507,6 @@
 				76B123921796470C00A73E59 /* EFMapEditingPathView.m in Sources */,
 				76B123951796470C00A73E59 /* EFMapEditingReadyView.m in Sources */,
 				7688C79717B0DE7E00CBB6E8 /* EFAccessInfo.m in Sources */,
-				76B1239B1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */,
 				76B1239E1796470C00A73E59 /* EFMapPerson.m in Sources */,
 				76B123A11796470C00A73E59 /* EFMapPersonCell.m in Sources */,
 				76B123A41796470C00A73E59 /* EFMapPoint.m in Sources */,
@@ -8768,7 +8779,6 @@
 				76B123931796470C00A73E59 /* EFMapEditingPathView.m in Sources */,
 				7688C79817B0DE7E00CBB6E8 /* EFAccessInfo.m in Sources */,
 				76B123961796470C00A73E59 /* EFMapEditingReadyView.m in Sources */,
-				76B1239C1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */,
 				76B1239F1796470C00A73E59 /* EFMapPerson.m in Sources */,
 				76B123A21796470C00A73E59 /* EFMapPersonCell.m in Sources */,
 				76B123A51796470C00A73E59 /* EFMapPoint.m in Sources */,
@@ -9039,7 +9049,6 @@
 				4FC40EFA17D04A5700D64105 /* EFMapEditingPathView.m in Sources */,
 				4FC40EFB17D04A5700D64105 /* EFAccessInfo.m in Sources */,
 				4FC40EFC17D04A5700D64105 /* EFMapEditingReadyView.m in Sources */,
-				4FC40EFD17D04A5700D64105 /* EFMapPeopleDataSource.m in Sources */,
 				4FC40EFE17D04A5700D64105 /* EFMapPerson.m in Sources */,
 				4FC40EFF17D04A5700D64105 /* EFMapPersonCell.m in Sources */,
 				4FC40F0017D04A5700D64105 /* EFMapPoint.m in Sources */,
@@ -9311,7 +9320,6 @@
 				76B123911796470C00A73E59 /* EFMapEditingPathView.m in Sources */,
 				7688C79617B0DE7E00CBB6E8 /* EFAccessInfo.m in Sources */,
 				76B123941796470C00A73E59 /* EFMapEditingReadyView.m in Sources */,
-				76B1239A1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */,
 				76B1239D1796470C00A73E59 /* EFMapPerson.m in Sources */,
 				76B123A01796470C00A73E59 /* EFMapPersonCell.m in Sources */,
 				76B123A31796470C00A73E59 /* EFMapPoint.m in Sources */,

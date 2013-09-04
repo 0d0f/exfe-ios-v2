@@ -56,6 +56,7 @@ EFHTTPStreamingDelegate
 - (EFMapPerson *)me;
 - (EFMapPerson *)personAtIndex:(NSUInteger)index;
 - (NSArray *)allPeople;
+- (NSArray *)notificationIdentityIdsForPerson:(EFMapPerson *)person;
 
 /**
  * Route Location
@@ -91,8 +92,11 @@ EFHTTPStreamingDelegate
 /**
  * Timestamp
  */
-- (void)removeAllTimestampToMapView:(MKMapView *)mapView;
-- (void)updateTimestampForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView;
+- (void)removeAllBreadcrumTimestampToMapView:(MKMapView *)mapView;
+- (void)updateBreadcrumTimestampForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView;
+
+- (void)removePeopleTimestampInMapView:(MKMapView *)mapView;
+- (void)updatePeopleTimestampInMapView:(MKMapView *)mapView;
 
 /**
  * Route Path

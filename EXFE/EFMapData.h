@@ -14,7 +14,6 @@
 #import "EFMapPoint.h"
 #import "EFMapPerson.h"
 #import "EFMarauderMapDataSource.h"
-#import "EFMapPeopleDataSource.h"
 #import "EFLocation.h"
 #import "EFRouteLocation.h"
 #import "EFRoutePath.h"

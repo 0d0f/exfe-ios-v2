@@ -32,6 +32,10 @@
     [manager.HTTPClient postPath:endpoint
                       parameters:param
                          success:^(AFHTTPRequestOperation *operation, id responseObject){
+                             [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                                        withObject:operation
+                                        withObject:responseObject];
+                             
                              if (200 == operation.response.statusCode) {
                                  if (successHandler) {
                                      successHandler();
@@ -39,6 +43,10 @@
                              }
                          }
                          failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                             [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                        withObject:operation
+                                        withObject:error];
+                             
                              if (failureHandler) {
                                  failureHandler(error);
                              }
@@ -70,6 +78,10 @@
     [manager.HTTPClient postPath:endpoint
                       parameters:(id)param
                          success:^(AFHTTPRequestOperation *operation, id responseObject){
+                             [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                                        withObject:operation
+                                        withObject:responseObject];
+                             
                             if (200 == operation.response.statusCode) {
                                 if (responseObject) {
                                     NSAssert([responseObject isKindOfClass:[NSDictionary class]], @"responseObject SHOULD be a dictionary.");
@@ -85,6 +97,10 @@
                             }
                         }
                          failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                             [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                        withObject:operation
+                                        withObject:error];
+                             
                              if (failureHandler) {
                                  failureHandler(error);
                              }
@@ -105,6 +121,10 @@
                      parameters:nil
                         success:^(AFHTTPRequestOperation *operation, id responseObject){
                              if (200 == operation.response.statusCode) {
+                                 [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                                            withObject:operation
+                                            withObject:responseObject];
+                                 
                                  if (responseObject) {
                                      NSAssert([responseObject isKindOfClass:[NSArray class]], @"responseObject SHOULD be a array.");
                                      
@@ -123,6 +143,10 @@
                              }
                          }
                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                            [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                       withObject:operation
+                                       withObject:error];
+                            
                              if (failureHandler) {
                                  failureHandler(error);
                              }
@@ -144,6 +168,10 @@
     [manager.HTTPClient getPath:endpoint
                      parameters:nil
                         success:^(AFHTTPRequestOperation *operation, id responseObject){
+                            [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                                       withObject:operation
+                                       withObject:responseObject];
+                            
                              if (200 == operation.response.statusCode) {
                                  NSAssert([responseObject isKindOfClass:[NSDictionary class]], @"responseObject SHOULD be a dictionary.");
                                  
@@ -159,6 +187,10 @@
                              }
                          }
                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                            [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                       withObject:operation
+                                       withObject:error];
+                            
                              if (failureHandler) {
                                  failureHandler(error);
                              }
@@ -187,6 +219,10 @@
     [manager.HTTPClient putPath:endpoint
                       parameters:param
                          success:^(AFHTTPRequestOperation *operation, id responseObject){
+                             [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                                        withObject:operation
+                                        withObject:responseObject];
+                             
                              if (200 == operation.response.statusCode) {
                                  if (successHandler) {
                                      successHandler();
@@ -194,6 +230,10 @@
                              }
                          }
                          failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                             [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                        withObject:operation
+                                        withObject:error];
+                             
                              if (failureHandler) {
                                  failureHandler(error);
                              }
@@ -217,6 +257,10 @@
     [manager.HTTPClient deletePath:endpoint
                         parameters:nil
                            success:^(AFHTTPRequestOperation *operation, id responseObject){
+                               [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                                          withObject:operation
+                                          withObject:responseObject];
+                               
                                if (200 == operation.response.statusCode) {
                                    if (successHandler) {
                                        successHandler();
@@ -224,6 +268,10 @@
                                }
                            }
                            failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                               [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                          withObject:operation
+                                          withObject:error];
+                               
                                if (failureHandler) {
                                    failureHandler(error);
                                }
@@ -243,6 +291,10 @@
     [manager.HTTPClient getPath:endpoint
                      parameters:nil
                         success:^(AFHTTPRequestOperation *operation, id responseObject){
+                            [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                                       withObject:operation
+                                       withObject:responseObject];
+                            
                             if (200 == operation.response.statusCode) {
                                 NSAssert([responseObject isKindOfClass:[NSArray class]], @"responseObject SHOULD be a array.");
                                 
@@ -268,6 +320,10 @@
                             }
                         }
                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                            [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                       withObject:operation
+                                       withObject:error];
+                            
                             if (failureHandler) {
                                 failureHandler(error);
                             }
@@ -289,6 +345,10 @@
     [manager.HTTPClient getPath:endpoint
                      parameters:param
                         success:^(AFHTTPRequestOperation *operation, id responseObject){
+                            [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                                       withObject:operation
+                                       withObject:responseObject];
+                            
                             if (200 == operation.response.statusCode) {
                                 NSDictionary *metaInfo = [responseObject valueForKey:@"meta"];
                                 
@@ -303,6 +363,10 @@
                             }
                         }
                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                            [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                       withObject:operation
+                                       withObject:error];
+                            
                             if (failureHandler) {
                                 failureHandler(error);
                             }
@@ -315,7 +379,7 @@
 - (void)postRouteXRequestIdentityId:(NSString *)identityId
                             inCross:(Cross *)cross
                             success:(void (^)(void))successHandler
-                            failure:(void (^)(NSError *error))failureHandler {
+                            failure:(void (^)(NSInteger responseStatusCode, NSError *error))failureHandler {
     NSString *endpoint = [NSString stringWithFormat:@"/v3/routex/notification/crosses/%d?id=%@&token=%@", [cross.cross_id unsignedIntegerValue], identityId, self.model.userToken];
     
     RKObjectManager *manager = self.model.objectManager;
@@ -324,6 +388,10 @@
     [manager.HTTPClient postPath:endpoint
                      parameters:nil
                         success:^(AFHTTPRequestOperation *operation, id responseObject){
+                            [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                                       withObject:operation
+                                       withObject:responseObject];
+                            
                             if (200 == operation.response.statusCode) {
                                 if (successHandler) {
                                     successHandler();
@@ -331,8 +399,15 @@
                             }
                         }
                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                            NSInteger statusCode = operation.response.statusCode;
+                            if (401 != statusCode && 403 != statusCode && 406 != statusCode) {
+                                [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                           withObject:operation
+                                           withObject:error];
+                            }
+                            
                             if (failureHandler) {
-                                failureHandler(error);
+                                failureHandler(statusCode, error);
                             }
                         }];
 

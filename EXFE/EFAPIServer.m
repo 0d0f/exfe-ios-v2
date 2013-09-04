@@ -15,6 +15,8 @@
 #import "EXFEModel.h"
 #import "DateTimeUtil.h"
 
+NSString *kEFAPIErrorDomain = @"errorDomain.efapi";
+
 @interface EFAPIServer (Private)
 - (void)_handleSuccessWithRequestOperation:(NSOperation *)operation andResponseObject:(id)object;
 - (void)_handleFailureWithRequestOperation:(NSOperation *)operation andError:(NSError *)error;

@@ -97,24 +97,10 @@
                 break;
         }
         
-        UIImage *providerImage = nil;
-        switch (provider) {
-            case kProviderEmail:{
-                providerImage = [UIImage imageNamed:@"identity_email_18_grey.png"];
-            }   break;
-            case kProviderPhone:
-                providerImage = [UIImage imageNamed:@"identity_phone_18_grey.png"];
-                break;
-            case kProviderFacebook:
-                providerImage = [UIImage imageNamed:@"identity_facebook_18_grey.png"];
-                break;
-            case kProviderTwitter:
-                providerImage = [UIImage imageNamed:@"identity_twitter_18_grey.png"];
-                break;
-            default:
-                // no identity info, fall back to default
-                providerImage = [UIImage imageNamed:@"identity_email_18_grey.png"];
-                break;
+        
+        UIImage *providerImage = [Identity getIdentityImageByProvider:provider];
+        if (!providerImage) {
+            providerImage = [UIImage imageNamed:@"identity_email_18_grey.png"];
         }
         
         self.providerImageView.image = providerImage;
