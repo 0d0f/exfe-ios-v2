@@ -393,7 +393,7 @@
     if (token.length > 0 && [user_id integerValue] > 0){
         EFAPIServer *server = self.model.apiServer;
         if (![server isLoggedIn]) {
-            // sign in
+            RKLogInfo(@"Sign In by url");
             
             [self switchContextByUserId:[user_id integerValue] withAbandon:NO];
             self.model.userToken = token;
@@ -404,21 +404,23 @@
             [self signinDidFinish];
             [self processUrlHandler:url];
         } else {
-            if ([user_id integerValue] == self.model.userId) {
+            NSUInteger uid = [user_id integerValue];
+            if (uid == self.model.userId) {
+                RKLogInfo(@"Jump in by url");
                 // refresh token
                 self.model.userToken = token;
                 [self.model saveUserData];
                 [self processUrlHandler:url];
             } else {
                 // merge identities
-                
+                RKLogInfo(@"Merge %u to %u by url ", uid, self.model.userId);
                 [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Merge accounts", nil)
                                             message:[NSString stringWithFormat:NSLocalizedString(@"Merge account %@ into your current signed-in account?", nil), username]
                                   cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
                                   otherButtonTitles:@[NSLocalizedString(@"Merge", nil)]
                                             handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
                                                 if (buttonIndex == alertView.firstOtherButtonIndex ) {
-                                                    
+                                                    RKLogInfo(@"Start merge");
                                                     [server mergeAllByToken:token
                                                                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                                         if ([responseObject isKindOfClass:[NSDictionary class]]) {
@@ -428,6 +430,7 @@
                                                                             NSInteger t = c / 100;
                                                                             switch (t) {
                                                                                 case 2:
+                                                                                    RKLogInfo(@"finish merge. Jump!");
                                                                                     [self processUrlHandler:url];
                                                                                     
                                                                                     if ([url.path hasPrefix:@"/!"]) {
@@ -440,11 +443,17 @@
                                                                                     break;
                                                                                     
                                                                                 default:
+                                                                                    RKLogInfo(@"Merge fail for %i %@", c, [body valueForKey:@"meeta.errorType"]);
                                                                                     break;
                                                                             }
                                                                         }
                                                                     }
-                                                                    failure:nil];
+                                                                    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                                        RKLogInfo(@"Merge fail for errpr: %@", error);
+                                                                    }];
+                                                } else {
+                                                    RKLogInfo(@"Not merge. Jump!");
+                                                    [self processUrlHandler:url];
                                                 }
                                             }];
                 
@@ -511,6 +520,7 @@
 
 - (void)jumpTo:(NSURL *)url
 {
+    RKLogInfo(@"Jump to: %@", url.path);
     NSArray *pathComps = [url pathComponents];
     NSDictionary * params = [url queryComponents];
     NSArray *anim = [params objectForKey:@"animated"];
@@ -545,7 +555,7 @@
         [self jumpTo:url];
         return;
     } 
-    
+    RKLogInfo(@"processUrlHandler %@ in old way", url.path);
     NSArray *pathComps = [url pathComponents];
     CrossesViewController *crossViewController = self.crossesViewController;
     
