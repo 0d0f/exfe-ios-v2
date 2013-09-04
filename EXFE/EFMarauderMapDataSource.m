@@ -417,6 +417,26 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     return self.people;
 }
 
+- (NSArray *)notificationIdentityIdsForPerson:(EFMapPerson *)person {
+    NSString *userIdString = person.userIdString;
+    NSInteger userId = [userIdString integerValue];
+    
+    NSArray *invitations = [self.cross.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
+    NSArray *notificationIdentityIds = nil;
+    
+    for (NSArray *invitationValues in invitations) {
+        Invitation *invitation = invitationValues[0];
+        NSInteger connectedUserId = [invitation.identity.connected_user_id integerValue];
+        
+        if (connectedUserId == userId) {
+            notificationIdentityIds = invitation.notification_identity_array;
+            break;
+        }
+    }
+    
+    return notificationIdentityIds;
+}
+
 #pragma mark - RouteLocation
 
 - (void)addRouteLocation:(EFRouteLocation *)routeLocation toMapView:(MKMapView *)mapView canChangeType:(BOOL)canChangeType {
