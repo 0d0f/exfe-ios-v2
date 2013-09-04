@@ -393,7 +393,7 @@
     if (token.length > 0 && [user_id integerValue] > 0){
         EFAPIServer *server = self.model.apiServer;
         if (![server isLoggedIn]) {
-            NSLog(@"Sign In by url");
+            RKLogInfo(@"Sign In by url");
             
             [self switchContextByUserId:[user_id integerValue] withAbandon:NO];
             self.model.userToken = token;
@@ -406,21 +406,21 @@
         } else {
             NSUInteger uid = [user_id integerValue];
             if (uid == self.model.userId) {
-                NSLog(@"Jump in by url");
+                RKLogInfo(@"Jump in by url");
                 // refresh token
                 self.model.userToken = token;
                 [self.model saveUserData];
                 [self jumpTo:url];
             } else {
                 // merge identities
-                NSLog(@"Merge %u to %u by url", uid, self.model.userId);
+                RKLogInfo(@"Merge %u to %u by url", uid, self.model.userId);
                 [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Merge accounts", nil)
                                             message:[NSString stringWithFormat:NSLocalizedString(@"Merge account %@ into your current signed-in account?", nil), username]
                                   cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
                                   otherButtonTitles:@[NSLocalizedString(@"Merge", nil)]
                                             handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
                                                 if (buttonIndex == alertView.firstOtherButtonIndex ) {
-                                                    NSLog(@"Start merge");
+                                                    RKLogInfo(@"Start merge");
                                                     [server mergeAllByToken:token
                                                                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                                         if ([responseObject isKindOfClass:[NSDictionary class]]) {
@@ -430,7 +430,7 @@
                                                                             NSInteger t = c / 100;
                                                                             switch (t) {
                                                                                 case 2:
-                                                                                    NSLog(@"finish merge. Jump!");
+                                                                                    RKLogInfo(@"finish merge. Jump!");
                                                                                     [self jumpTo:url];
                                                                                     
                                                                                     if ([url.path hasPrefix:@"/!"]) {
@@ -446,7 +446,7 @@
                                                                                     //[self jumpTo:url];
                                                                                     #warning test only
                                                                                     NSLog(@"Merge fail for %i %@. NO Jump!", c, [meta valueForKey:@"errorType"]);
-                                                                                    UIAlertView * alert = [UIAlertView alertViewWithTitle:@"Merge Fail" message:[NSString stringWithFormat:@"%@", meta]];
+                                                                                    UIAlertView * alert = [UIAlertView alertViewWithTitle:@"Merge Fail" message:[NSString stringWithFormat:@"API: %@", meta]];
                                                                                     [alert addButtonWithTitle:@"OK"];
                                                                                     alert.delegate = nil;
                                                                                     [alert show];
@@ -458,24 +458,21 @@
                                                                         #warning test only
                                                                         NSLog(@"Merge fail for error %@. NO Jump!", error);
                                                                         //[self jumpTo:url];
-                                                                        UIAlertView * alert = [UIAlertView alertViewWithTitle:@"Merge Fail" message:[NSString stringWithFormat:@"%@", error]];
+                                                                        UIAlertView * alert = [UIAlertView alertViewWithTitle:@"Merge Fail" message:[NSString stringWithFormat:@"ERROR: %@", error]];
                                                                         [alert addButtonWithTitle:@"OK"];
                                                                         alert.delegate = nil;
                                                                         [alert show];
                                                                     }];
                                                 } else {
-                                                    NSLog(@"Not merge. Jump!");
+                                                    RKLogInfo(@"Not merge. Jump!");
                                                     [self jumpTo:url];
                                                 }
                                             }];
             }
         }
-        
     }else{
         [self jumpTo:url];
     }
-    
-    
     return YES;
 }
 
