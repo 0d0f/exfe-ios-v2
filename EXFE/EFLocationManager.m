@@ -237,11 +237,12 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
     
     if ([name isEqualToString:UIApplicationDidEnterBackgroundNotification]) {
         self.isInBackground = YES;
-        if (!self.isUpdating) {
-            return;
-        }
         
         if (![self isFirstTimeToPostUserLocation]) {
+            if (!self.isUpdating) {
+                return;
+            }
+            
             if (![self canPostUserLocationInBackground]) {
                 [self stopUpdatingLocation];
                 [self stopUpdatingHeading];

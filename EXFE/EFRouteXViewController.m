@@ -524,7 +524,6 @@
         self.backgroundAlertView = nil;
     } else if (alertView == self.noGPSAlertView) {
         if (buttonIndex == alertView.cancelButtonIndex) {
-#warning - DIFF action base on target
             [self.tabBarViewController.navigationController popViewControllerAnimated:YES];
             self.noGPSAlertView = nil;
         }
