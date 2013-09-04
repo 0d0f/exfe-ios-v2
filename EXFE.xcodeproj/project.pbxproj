@@ -1914,6 +1914,14 @@
 		4FC4114A17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
 		4FC4114B17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
 		4FC4114C17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
+		4FC4115D17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */; };
+		4FC4115E17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */; };
+		4FC4115F17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */; };
+		4FC4116017D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */; };
+		4FC4116117D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115C17D6E0CD00D64105 /* identity_weixin_18_grey@2x.png */; };
+		4FC4116217D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115C17D6E0CD00D64105 /* identity_weixin_18_grey@2x.png */; };
+		4FC4116317D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115C17D6E0CD00D64105 /* identity_weixin_18_grey@2x.png */; };
+		4FC4116417D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115C17D6E0CD00D64105 /* identity_weixin_18_grey@2x.png */; };
 		4FC6E94516AFB6D00023AD1C /* xlist_conv_badge_many.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC6E94316AFB6D00023AD1C /* xlist_conv_badge_many.png */; };
 		4FC6E94616AFB6D00023AD1C /* xlist_conv_badge_many@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC6E94416AFB6D00023AD1C /* xlist_conv_badge_many@2x.png */; };
 		4FC8FCE8168D7E5700409779 /* Place+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCE7168D7E5700409779 /* Place+Helper.m */; };
@@ -3369,6 +3377,8 @@
 		4FC4113B17D490FF00D64105 /* EFChangeCrossTimeOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChangeCrossTimeOperation.h; sourceTree = "<group>"; };
 		4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChangeCrossTimeOperation.m; sourceTree = "<group>"; };
 		4FC4114817D5949B00D64105 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = Localizable.strings; sourceTree = "<group>"; };
+		4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = identity_weixin_18_grey.png; sourceTree = "<group>"; };
+		4FC4115C17D6E0CD00D64105 /* identity_weixin_18_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "identity_weixin_18_grey@2x.png"; sourceTree = "<group>"; };
 		4FC6E94316AFB6D00023AD1C /* xlist_conv_badge_many.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xlist_conv_badge_many.png; sourceTree = "<group>"; };
 		4FC6E94416AFB6D00023AD1C /* xlist_conv_badge_many@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xlist_conv_badge_many@2x.png"; sourceTree = "<group>"; };
 		4FC8FCE6168D7E5700409779 /* Place+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Place+Helper.h"; sourceTree = "<group>"; };
@@ -5333,6 +5343,8 @@
 		7811787815DA81CE00A4BBCF /* identity */ = {
 			isa = PBXGroup;
 			children = (
+				4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */,
+				4FC4115C17D6E0CD00D64105 /* identity_weixin_18_grey@2x.png */,
 				7848CDFF16D7682700F9488E /* identity_phone_18_grey.png */,
 				7848CE0016D7682700F9488E /* identity_phone_18_grey@2x.png */,
 				7848CE0116D7682700F9488E /* identity_phone_18.png */,
@@ -6865,6 +6877,8 @@
 				4F2CF05117BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05417BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
 				4FC4114A17D5949B00D64105 /* Localizable.strings in Resources */,
+				4FC4115E17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
+				4FC4116217D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7326,6 +7340,8 @@
 				4F2CF05217BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05517BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
 				4FC4114B17D5949B00D64105 /* Localizable.strings in Resources */,
+				4FC4115F17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
+				4FC4116317D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7783,6 +7799,8 @@
 				4FC4110717D04A5700D64105 /* cautionbar_cancel_pressed.png in Resources */,
 				4FC4110817D04A5700D64105 /* cautionbar_cancel.png in Resources */,
 				4FC4114C17D5949B00D64105 /* Localizable.strings in Resources */,
+				4FC4116017D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
+				4FC4116417D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8240,6 +8258,8 @@
 				4F2CF05017BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05317BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
 				4FC4114917D5949B00D64105 /* Localizable.strings in Resources */,
+				4FC4115D17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
+				4FC4116117D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

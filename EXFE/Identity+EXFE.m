@@ -34,6 +34,8 @@
         return kProviderFlickr;
     } else if ([@"dropbox" isEqualToString:str]) {
         return kProviderDropbox;
+    } else if ([@"wechat" isEqualToString:str]) {
+        return kProviderWechat;
     } else {
         return kProviderUnknown;
     }
@@ -61,6 +63,9 @@
             //break;
         case kProviderDropbox:
             return @"dropbox";
+            //break;
+        case kProviderWechat:
+            return @"wechat";
             //break;
         default:
             return @"";
@@ -97,6 +102,10 @@
         case kProviderDropbox:
             return kProviderTypeAuthorization;
             //break;
+//        case kProviderWechat:
+//            // wechat doesn't support login
+//            return kProviderTypeAuthorization;
+//            //break;
         default:
             return kProviderTypeUnknown;
             break;
@@ -146,11 +155,49 @@
         case kProviderTwitter:
             return [NSString stringWithFormat:@"@%@", self.external_username];
             break;
+        case kProviderWechat:
+            return NSLocalizedString(@"WeChat", nil);
+            break;
         default:
             return [NSString stringWithFormat:@"%@@%@", self.external_username, self.provider];
             break;
     }
     
+}
+
++ (NSString *)getIdentityImageNameByProvider:(Provider)p
+{
+    switch (p) {
+        case kProviderEmail:{
+            return @"identity_email_18_grey.png";
+        }   //break;
+        case kProviderPhone:
+            return @"identity_phone_18_grey.png";
+            //break;
+        case kProviderFacebook:
+            return @"identity_facebook_18_grey.png";
+            //break;
+        case kProviderTwitter:
+            return @"identity_twitter_18_grey.png";
+            //break;
+        case kProviderWechat:
+            return @"identity_weixin_18_grey.png";
+            //break;
+        default:
+            // no identity info, fall back to default
+            return nil;
+            //break;
+    }
+}
+
++ (UIImage *)getIdentityImageByProvider:(Provider)p
+{
+    NSString * imageName = [Identity getIdentityImageNameByProvider:p];
+    if (imageName) {
+        return [UIImage imageNamed:imageName];
+    } else {
+        return nil;
+    }
 }
 
 + (Identity *)identityFromLocalRoughIdentity:(RoughIdentity *)roughIdentity {

@@ -375,8 +375,8 @@
         [cell setLabelIdentity:[identity getDisplayIdentity]];
         
         if(identity.provider!=nil && ![identity.provider isEqualToString:@""]){
-            
-            NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",identity.provider];
+            Provider p = [Identity getProviderCode:identity.provider];
+            NSString *iconname= [Identity getIdentityImageNameByProvider:p];
             UIImage *icon=[UIImage imageNamed:iconname];
             [cell setProvider:icon];
         }

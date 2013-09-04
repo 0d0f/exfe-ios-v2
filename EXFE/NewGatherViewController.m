@@ -1293,7 +1293,8 @@
     rowview.backgroundColor=[UIColor clearColor];
     [rowview addSubview:label];
     
-    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
+    Provider p = [Identity getProviderCode:provider];
+    NSString *iconname= [Identity getIdentityImageNameByProvider:p];
     UIImage *icon=[UIImage imageNamed:iconname];
     
     UIImageView *imgprovider=[[UIImageView alloc] initWithFrame:CGRectMake(6, (40-18)/2, icon.size.width, icon.size.height)];
