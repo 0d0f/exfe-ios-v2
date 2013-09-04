@@ -56,6 +56,7 @@ EFHTTPStreamingDelegate
 - (EFMapPerson *)me;
 - (EFMapPerson *)personAtIndex:(NSUInteger)index;
 - (NSArray *)allPeople;
+- (NSArray *)notificationIdentityIdsForPerson:(EFMapPerson *)person;
 
 /**
  * Route Location

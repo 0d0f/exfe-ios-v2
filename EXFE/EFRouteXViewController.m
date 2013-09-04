@@ -818,11 +818,30 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                       switch (responseStatusCode) {
                                                           case 406:
                                                           {
+                                                              BOOL isWechat = NO;
+                                                              
                                                               NSString *identityString = person.identityString;
                                                               NSArray *components = [identityString componentsSeparatedByString:@"@"];
                                                               NSString *providerString = [components lastObject];
                                                               
                                                               if (providerString && [providerString isEqualToString:@"wechat"]) {
+                                                                  isWechat = YES;
+                                                              }
+                                                              
+                                                              if (!isWechat) {
+                                                                  NSArray *identityIds = [weakSelf.mapDataSource notificationIdentityIdsForPerson:person];
+                                                                  for (NSString *identityId in identityIds) {
+                                                                      NSArray *components = [identityId componentsSeparatedByString:@"@"];
+                                                                      NSString *providerString = [components lastObject];
+                                                                      
+                                                                      if (providerString && [providerString isEqualToString:@"wechat"]) {
+                                                                          isWechat = YES;
+                                                                          break;
+                                                                      }
+                                                                  }
+                                                              }
+                                                              
+                                                              if (isWechat) {
                                                                   [delegate.model.apiServer getRouteXUrlInCross:self.cross
                                                                                                         success:^(NSString *url){
                                                                                                             if (weakPersonViewController && weakPersonViewController == weakSelf.personViewController) {
