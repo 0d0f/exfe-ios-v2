@@ -58,7 +58,7 @@
     viewtitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
     viewtitle.textAlignment = NSTextAlignmentCenter;
     viewtitle.textColor = FONT_COLOR_51;
-    viewtitle.text =[NSLocalizedString(@"Edit {{}} Info", nil) templateFromDict:[Util keywordDict]];
+    viewtitle.text =[NSLocalizedString(@"Edit {{APP_NAME}} Info", nil) templateFromDict:[Util keywordDict]];
     [self.view addSubview:viewtitle];
     
     UIButton *btncancel=[UIButton buttonWithType:UIButtonTypeCustom];

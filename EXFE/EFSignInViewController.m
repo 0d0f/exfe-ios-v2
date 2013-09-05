@@ -1449,7 +1449,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                 msg = NSLocalizedString(@"Password reset request is sent, please check your email for instructions.", nil);
                                 break;
                         }
-                        [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Forget Password?", @"EFSignInViewController") message:msg cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil handler:nil];
+                        [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Forgot password?", @"EFSignInViewController") message:msg cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil handler:nil];
                     } break;
                     case 400:{
                         NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];

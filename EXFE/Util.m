@@ -548,7 +548,7 @@ static NSDictionary * _keywordDict = nil;
         errorTitle = NSLocalizedString(@"Server Error", nil);
         errormsg = NSLocalizedString(@"Sorry, something is technically wrong in the \"cloud\", we’re fixing it up.", nil);
     } else { //NSURLError.h
-        errorTitle = NSLocalizedString(@"Network Error", nil);
+        errorTitle = NSLocalizedString(@"Network error", nil);
         errormsg = NSLocalizedString(@"Failed to connect to server. Please retry or wait awhile.", nil);
     }
     if (![errormsg isEqualToString:@""]) {

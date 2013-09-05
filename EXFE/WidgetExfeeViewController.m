@@ -852,7 +852,7 @@ typedef enum {
         {
             if (row == self.sortedInvitations.count) {
                 ExfeeAddCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Add Cell" forIndexPath:indexPath];
-                cell.description.text = [NSString stringWithFormat:NSLocalizedString(@"%u / %u", nil), [self.exfee.accepted integerValue], self.sortedInvitations.count];
+                cell.description.text = [NSString stringWithFormat:NSLocalizedString(@"%u / %u", "WidgetExfee Exfee static"), [self.exfee.accepted integerValue], self.sortedInvitations.count];
                 return cell;
             } else {
                 ExfeeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Exfee Cell" forIndexPath:indexPath];

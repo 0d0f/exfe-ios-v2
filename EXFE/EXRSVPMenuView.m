@@ -120,7 +120,7 @@
         }
         if([self Itemscontain:itemlist string:@"Delete"]){
             UIButton *btnDelete=[UIButton buttonWithType:UIButtonTypeCustom];
-            [btnDelete setTitle:NSLocalizedString(@"Delete", nil) forState:UIControlStateNormal];
+            [btnDelete setTitle:NSLocalizedString(@"Remove", nil) forState:UIControlStateNormal];
             [btnDelete.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
             [btnDelete setTitleColor:[UIColor colorWithRed:229/255.0 green:46/255.0 blue:83/255.0 alpha:1] forState:UIControlStateNormal];
             [btnDelete setFrame:CGRectMake(0, y, 125, 44)];
