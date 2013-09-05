@@ -170,11 +170,11 @@
             [self _startUpdating];
         } else {
             if (!self.backgroundAlertView) {
-                self.backgroundAlertView  = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"开启活点地图", nil)
-                                                                       message:NSLocalizedString(@"这张“活点地图”将会展现您未来1小时内的方位。", nil)
+                self.backgroundAlertView  = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Open this RouteX page", nil)
+                                                                       message:NSLocalizedString(@"This RouteX page will show your location in 1 hour.", nil)
                                                                       delegate:self
-                                                             cancelButtonTitle:NSLocalizedString(@"取消", nil)
-                                                             otherButtonTitles:NSLocalizedString(@"确定", nil), nil];
+                                                             cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                                             otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
                 [self.backgroundAlertView show];
             }
         }
@@ -280,7 +280,7 @@
     if (url) {
         SendMessageToWXReq *message = [[SendMessageToWXReq alloc] init];
         message.bText = YES;
-        message.text = [NSString stringWithFormat:NSLocalizedString(@"你在哪？\n%@", nil), url];
+        message.text = [NSString stringWithFormat:NSLocalizedString(@"Where r u?\n%@", nil), url];
         message.scene = WXSceneSession;
         
         [WXApi sendReq:message];
@@ -594,7 +594,7 @@
                         
                         if (!title || !title.length) {
                             if (!subtitle || !subtitle.length) {
-                                title = NSLocalizedString(@"这里", nil);
+                                title = NSLocalizedString(@"Here", nil);
                             } else {
                                 title = subtitle;
                                 subtitle = nil;
@@ -862,7 +862,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                                                                                 
                                                                                                                 [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"通知失败", nil)
                                                                                                                                             message:NSLocalizedString(@"无法立刻通知对方更新方位。请尝试用其它方式联系对方。", nil)
-                                                                                                                                  cancelButtonTitle:NSLocalizedString(@"确定", nil)
+                                                                                                                                  cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                                                                                                                   otherButtonTitles:nil
                                                                                                                                             handler:nil];
                                                                                                             }];
@@ -874,7 +874,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                                   
                                                                   [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"通知失败", nil)
                                                                                               message:NSLocalizedString(@"无法立刻通知对方更新方位。请尝试用其它方式联系对方。", nil)
-                                                                                    cancelButtonTitle:NSLocalizedString(@"确定", nil)
+                                                                                    cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                                                                     otherButtonTitles:nil
                                                                                               handler:nil];
                                                               }

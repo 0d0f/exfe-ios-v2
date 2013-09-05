@@ -19,7 +19,7 @@
     noteLabel.backgroundColor = [UIColor clearColor];
     noteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:14];
     noteLabel.textAlignment = NSTextAlignmentCenter;
-    noteLabel.text = NSLocalizedString(@"请在地图上画出路径", nil);
+    noteLabel.text = NSLocalizedString(@"Please draw route on map", nil);
     [self addSubview:noteLabel];
     self.noteLabel = noteLabel;
     

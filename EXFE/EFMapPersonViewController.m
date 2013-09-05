@@ -77,7 +77,7 @@
     destDistanceLabel.shadowOffset = (CGSize){0.0f, 0.5f};
     destDistanceLabel.backgroundColor = [UIColor clearColor];
     destDistanceLabel.textAlignment = NSTextAlignmentRight;
-    destDistanceLabel.text = NSLocalizedString(@"至目的地", nil);
+    destDistanceLabel.text = NSLocalizedString(@"To destination", nil);
     [self.view addSubview:destDistanceLabel];
     self.destDistanceLabel = destDistanceLabel;
     
@@ -102,7 +102,7 @@
     meDistanceLabel.shadowOffset = (CGSize){0.0f, 0.5f};
     meDistanceLabel.backgroundColor = [UIColor clearColor];
     meDistanceLabel.textAlignment = NSTextAlignmentRight;
-    meDistanceLabel.text = NSLocalizedString(@"距您的位置", nil);
+    meDistanceLabel.text = NSLocalizedString(@"Apart from you", nil);
     [self.view addSubview:meDistanceLabel];
     self.meDistanceLabel = meDistanceLabel;
     
@@ -121,7 +121,7 @@
     self.meHeadingView = meHeadingView;
     
     UIButton *requestButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [requestButton setTitle:NSLocalizedString(@"请对方更新方位", nil) forState:UIControlStateNormal];
+    [requestButton setTitle:NSLocalizedString(@"Request location", nil) forState:UIControlStateNormal];
     [requestButton setTitleColor:[UIColor COLOR_RGB(0x00, 0x7C, 0xFF)] forState:UIControlStateNormal];
     [requestButton setTitleColor:[UIColor COLOR_RGB(0xCC, 0xCC, 0xCC)] forState:UIControlStateDisabled];
     requestButton.frame = (CGRect){CGPointZero, {200.0f, 50.0f}};
@@ -162,23 +162,23 @@
     if (self.person.lastLocation) {
         // update person info
         if (kEFMapPersonConnectStateOnline == self.person.connectState) {
-            personInfo = NSLocalizedString(@"当前所处方位", nil);
+            personInfo = NSLocalizedString(@"Current location", nil);
         } else {
             NSString *timeInterval = [self.person.lastLocation.timestamp formatedTimeIntervalFromNow];
-            personInfo = [NSString stringWithFormat:NSLocalizedString(@"%@所处方位", nil), timeInterval];
+            personInfo = [NSString stringWithFormat:NSLocalizedString(@"%@ location", nil), timeInterval];
         }
         
         // update destination distance info
         if (destination) {
             CLLocationDistance distanceFromDest = ceil([[self.mapDataSource me].lastLocation distanceFromRouteLocation:destination]);
-            NSString *unit = NSLocalizedString(@"米", nil);
+            NSString *unit = NSLocalizedString(@"m", nil);
             
             if (distanceFromDest > 1000) {
-                unit = NSLocalizedString(@"公里", nil);
+                unit = NSLocalizedString(@"km", nil);
                 distanceFromDest = distanceFromDest / 1000;
                 if (distanceFromDest >= 99) {
                     distanceFromDest = 99;
-                    unit = NSLocalizedString(@"+公里", nil);
+                    unit = NSLocalizedString(@"+km", nil);
                 }
             } else {
                 if (distanceFromDest > 10) {
@@ -194,11 +194,11 @@
         // update me distance info
         if ([self.mapDataSource me].lastLocation) {
             CLLocationDistance distanceFromMe = ceil([self.person.lastLocation distanceFromLocation:[self.mapDataSource me].lastLocation]);
-            NSString *unit = NSLocalizedString(@"米", nil);
+            NSString *unit = NSLocalizedString(@"m", nil);
             
             if (distanceFromMe > 1000.0f) {
                 distanceFromMe = ceil(distanceFromMe / 1000.0f);
-                unit = NSLocalizedString(@"公里", nil);
+                unit = NSLocalizedString(@"km", nil);
             }
             meDistanceInfo = [NSString stringWithFormat:@"%ld%@", (long)distanceFromMe, unit];
             

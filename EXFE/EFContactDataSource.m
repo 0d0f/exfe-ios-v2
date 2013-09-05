@@ -55,8 +55,8 @@
         
         self.sectionTitles = [NSMutableArray arrayWithCapacity:3];
         [self.sectionTitles addObject:@""];
-        [self.sectionTitles addObject:NSLocalizedString(@"Exfees", nil)];
-        [self.sectionTitles addObject:NSLocalizedString(@"Contacts", nil)];
+        [self.sectionTitles addObject:NSLocalizedString(@"Exfees", @"EFContactDataSouce section Title")];
+        [self.sectionTitles addObject:NSLocalizedString(@"Contacts", @"EFContactDataSouce section Title")];
         
         self.loaded = NO;
     }

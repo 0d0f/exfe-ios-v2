@@ -50,7 +50,7 @@
             self.stateLabel.textAlignment = NSTextAlignmentCenter;
             self.stateLabel.frame = kStateLabelNormalFrame;
         } else {
-            infoText = NSLocalizedString(@"方位未知", nil);
+            infoText = NSLocalizedString(@"Unknown", nil);
             self.stateImageView.hidden = YES;
             self.stateView.hidden = YES;
             self.meterLabel.hidden = YES;
@@ -59,7 +59,7 @@
         }
     } else {
         if (self.person.locationState == kEFMapPersonLocationStateArrival) {
-            infoText = NSLocalizedString(@"抵达", nil);
+            infoText = NSLocalizedString(@"Arrived", nil);
             self.stateImageView.hidden = YES;
             
             self.stateLabel.frame = kStateLabelMeterFrame;
@@ -80,13 +80,13 @@
             }
             
             NSUInteger distance = (NSUInteger)self.person.distance;
-            NSString *m = NSLocalizedString(@"米", nil);
+            NSString *m = NSLocalizedString(@"m", nil);
             if (distance > 1000) {
-                m = NSLocalizedString(@"公里", nil);
+                m = NSLocalizedString(@"km", nil);
                 distance = distance / 1000;
                 if (distance >= 99) {
                     distance = 99;
-                    m = NSLocalizedString(@"+公里", nil);
+                    m = NSLocalizedString(@"+km", nil);
                 }
             } else {
                 if (distance > 10) {
@@ -114,7 +114,7 @@
         } else {
             if (self.person.lastLocation) {
                 if (self.person.connectState == kEFMapPersonConnectStateOnline) {
-                    infoText = NSLocalizedString(@"在线", nil);
+                    infoText = NSLocalizedString(@"Online", nil);
                     
                     EFGradientView *gradientView = (EFGradientView *)[self.stateView viewWithTag:kGradientViewTag];
                     gradientView.colors = @[[UIColor COLOR_RGB(0xFF, 0x7E, 0x98)],
@@ -148,7 +148,7 @@
                     self.stateLabel.textAlignment = NSTextAlignmentRight;
                 }
             } else {
-                infoText = NSLocalizedString(@"方位未知", nil);
+                infoText = NSLocalizedString(@"Unknown", nil);
                 self.stateImageView.hidden = YES;
                 self.stateView.hidden = YES;
                 self.meterLabel.hidden = YES;

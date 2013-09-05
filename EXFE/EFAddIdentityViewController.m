@@ -179,7 +179,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     {// Start button
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(0, 0, 290, 48);
-        [btn setTitle:NSLocalizedString(@"Add and verify", nil) forState:UIControlStateNormal];
+        [btn setTitle:NSLocalizedString(@"Add Identity", nil) forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [btn setTitleShadowColor:[UIColor COLOR_WA(0x00, 0x7F)] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
@@ -640,7 +640,13 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         }
                     }   break;
                     case 4:{
-                        // [code integerValue] == 403
+                        // 401: no_signin
+                        // 400: no_external_username // RKLogError
+                        // 400: unknow_provider // RKLogError
+                        // 400: invalid_oauth_token  // reverse
+                        // 400: duplicate // TODO
+                        
+                        // [code integerValue] == 403 // refresh token -> popup to sign out
                         NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
                         if ([@"failed" isEqualToString:errorType]) {
                             [self showInlineError:NSLocalizedString(@"Adding invitation failed.", nil) with:NSLocalizedString(@"Please check spell and retry.", nil)];
@@ -758,8 +764,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                                                                                       case 4:{
                                                                                                           NSString *errorType = [body valueForKeyPath:@"meta.errorType"];
                                                                                                           if ([@"invalid_token" isEqualToString:errorType] ) { // 403
-                                                                                                              [self showInlineError:NSLocalizedString(@"Invalid token.", nil) with:NSLocalizedString(@"There is something wrong. Please try again later.", nil)];
-                                                                                                              
+//                                                                                                              [self showInlineError:NSLocalizedString(@"Invalid token.", nil) with:NSLocalizedString(@"There is something wrong. Please try again later.", nil)];
+                                                                                                              [self showInlineError:NSLocalizedString(@"Authorization failed.", nil) with:NSLocalizedString(@"Please check your network connection and account setting in Settings app.", nil)];
                                                                                                               [self syncFBAccount];
                                                                                                               
                                                                                                           } if ([@"invalid_oauth_token" isEqualToString:errorType]) { // 400
@@ -831,7 +837,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 if ([TWAPIManager isLocalTwitterAccountAvailable] && _accounts.count > 0) {
                     if ([TWAPIManager isLocalTwitterAccountAvailable]) {
                         if (_accounts.count > 1) {
-                            UIActionSheet *sheet = [UIActionSheet actionSheetWithTitle:NSLocalizedString(@"Choose an Account", nil)];
+                            UIActionSheet *sheet = [UIActionSheet actionSheetWithTitle:NSLocalizedString(@"Choose an account", nil)];
                             for (ACAccount *acct in _accounts) {
                                 [sheet addButtonWithTitle:acct.username handler:^{
                                     [self performReverseAuthForAccount:acct];
@@ -878,12 +884,12 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                     } else {
                         return;
                     }
-                    //                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Accounts" message:@"Please configure a Twitter account in Settings.app" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    //                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Accounts" message:@"Please configure a Twitter account in Settings.app" delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                     //                    [alert show];
                 }
             } else {
                 
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:[NSLocalizedString(@"Please allow {{PRODUCT_APP_NAME}} to use your Twitter account. Go to the Settings app, select Twitter to set up.", nil)  templateFromDict:[Util keywordDict]] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:[NSLocalizedString(@"Please check and allow Shuady \naccount in Twitter \nmenu of ‘Settings’ app.", nil)  templateFromDict:[Util keywordDict]] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                 [alert show];
                 
             }

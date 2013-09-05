@@ -239,8 +239,8 @@
     forgotDetail.numberOfLines = 0;
     forgotDetail.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
     forgotDetail.textColor = [UIColor COLOR_BLACK_19];
-    NSString *full = [NSLocalizedString(@"To reset {{PRODUCT_APP_NAME}} password, please authenticate with your identity.", nil) templateFromDict:[Util keywordDict]];
-    NSString *part = [NSLocalizedString(@"{{PRODUCT_APP_NAME}}", nil) templateFromDict:[Util keywordDict]];
+    NSString *full = [NSLocalizedString(@"To reset {{PRODUCT_NAME}} password, please authenticate with your identity.", nil) templateFromDict:[Util keywordDict]];
+    NSString *part = [NSLocalizedString(@"{{PRODUCT_NAME}}", nil) templateFromDict:[Util keywordDict]];
     [forgotDetail setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
         NSRange titleRange = [[mutableAttributedString string] rangeOfString:part options:NSCaseInsensitiveSearch];
         [mutableAttributedString addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[[UIColor COLOR_BLUE_EXFE] CGColor] range:titleRange];
@@ -950,7 +950,7 @@
                  customizationBlock:^(WCAlertView *alertView) {
                      alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
                      UITextField *textField = [alertView textFieldAtIndex:0];
-                     textField.placeholder = [NSLocalizedString(@"Set {{PRODUCT_APP_NAME}} password", nil) templateFromDict:[Util keywordDict]];
+                     textField.placeholder = [NSLocalizedString(@"Set {{PRODUCT_NAME}} password", nil) templateFromDict:[Util keywordDict]];
                      textField.textAlignment = NSTextAlignmentCenter;
 //                     textField.delegate = self;
                      if (msg) {
@@ -1019,7 +1019,7 @@
                                                                                          // error: "Not sign in"
                                                                                      } else if ([@"authenticate_timeout" isEqualToString:errorType]) {
                                                                                          // error: "Authenticate timeout."
-                                                                                         [self showInlineError:NSLocalizedString(@"Set password failed.", nil) with:NSLocalizedString(@"The time is too long after the autentication. Please try authenticate identity above again.", nil)];
+                                                                                         [self showInlineError:NSLocalizedString(@"Set password failed.", nil) with:NSLocalizedString(@"The time is too long after the authentication. Please try authenticate identity above again.", nil)];
                                                                                      }
                                                                                  }
                                                                                  

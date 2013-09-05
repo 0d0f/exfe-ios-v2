@@ -403,7 +403,7 @@ typedef enum {
                     {
                         invRsvpImage.image = [UIImage imageNamed:@"rsvp_pending_stroke_26g5"];
                         invRsvpLabel.textColor = [UIColor COLOR_ALUMINUM];
-                        invRsvpLabel.text = NSLocalizedString(@"Intersted", nil);
+                        invRsvpLabel.text = NSLocalizedString(@"Interested", nil);
                     }
                         break;
                         // no use
@@ -741,7 +741,7 @@ typedef enum {
                 
                 bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(36, 16, 40, 33)];
                 bioTitle.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
-                bioTitle.text = NSLocalizedString(@"Bio", nil);
+                bioTitle.text = NSLocalizedString(@"Bio", @"WidgetExfee field name");
                 [bioTitle sizeToFit];
                 bioTitle.textColor = [UIColor COLOR_BLACK];
                 bioTitle.backgroundColor = [UIColor clearColor];

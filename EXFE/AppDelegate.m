@@ -447,7 +447,7 @@
                                                                                     #warning test only
                                                                                     NSLog(@"Merge fail for %i %@. NO Jump!", c, [meta valueForKey:@"errorType"]);
                                                                                     UIAlertView * alert = [UIAlertView alertViewWithTitle:@"Merge Fail" message:[NSString stringWithFormat:@"API: %@", meta]];
-                                                                                    [alert addButtonWithTitle:@"OK"];
+                                                                                    [alert addButtonWithTitle:NSLocalizedString(@"OK", nil)];
                                                                                     alert.delegate = nil;
                                                                                     [alert show];
                                                                                     break;
@@ -459,7 +459,7 @@
                                                                         NSLog(@"Merge fail for error %@. NO Jump!", error);
                                                                         //[self jumpTo:url];
                                                                         UIAlertView * alert = [UIAlertView alertViewWithTitle:@"Merge Fail" message:[NSString stringWithFormat:@"ERROR: %@", error]];
-                                                                        [alert addButtonWithTitle:@"OK"];
+                                                                        [alert addButtonWithTitle:NSLocalizedString(@"OK", nil)];
                                                                         alert.delegate = nil;
                                                                         [alert show];
                                                                     }];

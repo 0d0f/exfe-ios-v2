@@ -179,7 +179,7 @@
 //        //                errormsg=@"A connection failure has occurred.";
 //        //            else
 //        //                errormsg=@"Could not connect to the server.";
-//        //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//        //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
 //        //            [alert show];
 //        //            [alert release];
 //            };

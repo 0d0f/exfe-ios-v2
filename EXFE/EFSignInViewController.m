@@ -559,7 +559,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _line2.hidden = NO;
             _textFieldFrame.frame = CGRectMake(15, 20, 290, 150);
             _inputIdentity.returnKeyType = UIReturnKeyNext;
-            _inputPassword.placeholder = [NSLocalizedString(@"Set {{PRODUCT_APP_NAME}} password", nil) templateFromDict:[Util keywordDict]];
+            _inputPassword.placeholder = [NSLocalizedString(@"Set {{PRODUCT_NAME}} password", nil) templateFromDict:[Util keywordDict]];
             _inputPassword.returnKeyType = UIReturnKeyNext;
             _inputPassword.btnForgot.hidden = YES;
             [_inputPassword becomeFirstResponder];
@@ -1267,8 +1267,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                                               break;
                                                           case 400:{
                                                               if ([@"invalid_token" isEqualToString:[responseObject valueForKeyPath:@"meta.errorType"]] ) {
-                                                                  [self showInlineError:NSLocalizedString(@"Invalid token.", nil) with:NSLocalizedString(@"There is something wrong. Please try again later.", nil)];
-                                                                  
+//                                                                  [self showInlineError:NSLocalizedString(@"Invalid token.", nil) with:NSLocalizedString(@"There is something wrong. Please try again later.", nil)];
+                                                                  [self showInlineError:NSLocalizedString(@"Authorization failed.", nil) with:NSLocalizedString(@"Please check your network connection and account setting in Settings app.", nil)];
                                                                   [self syncFBAccount];
                                                                   
                                                               }
@@ -1333,7 +1333,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 if ([TWAPIManager isLocalTwitterAccountAvailable] && _accounts.count > 0) {
                     if ([TWAPIManager isLocalTwitterAccountAvailable]) {
                         if (_accounts.count > 1) {
-                            UIActionSheet *sheet = [UIActionSheet actionSheetWithTitle:NSLocalizedString(@"Choose an Account", nil)];
+                            UIActionSheet *sheet = [UIActionSheet actionSheetWithTitle:NSLocalizedString(@"Choose an account", nil)];
                             for (ACAccount *acct in _accounts) {
                                 [sheet addButtonWithTitle:acct.username handler:^{
                                     [self performReverseAuthForAccount:acct];
@@ -1380,12 +1380,12 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                     } else {
                         return;
                     }
-//                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Accounts" message:@"Please configure a Twitter account in Settings.app" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Accounts" message:@"Please configure a Twitter account in Settings.app" delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
 //                    [alert show];
                 }
             } else {
                 
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:[NSLocalizedString(@"Please allow {{PRODUCT_APP_NAME}} to use your Twitter account. Go to the Settings app, select Twitter to set up.", nil) templateFromDict:[Util keywordDict]] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:[NSLocalizedString(@"Please check and allow Shuady \naccount in Twitter \nmenu of ‘Settings’ app.", nil) templateFromDict:[Util keywordDict]] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                 [alert show];
                 
             }
@@ -1449,7 +1449,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                 msg = NSLocalizedString(@"Password reset request is sent, please check your email for instructions.", nil);
                                 break;
                         }
-                        [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Forget Password?", nil) message:msg cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil handler:nil];
+                        [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Forget Password?", @"EFSignInViewController") message:msg cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil handler:nil];
                     } break;
                     case 400:{
                         NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];

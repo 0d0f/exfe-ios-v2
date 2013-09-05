@@ -97,7 +97,7 @@
     
     if([_invitation.identity.unreachable boolValue]==YES){
         rsvpicon=[UIImage imageNamed:@"portrait_exclaim.png"];
-        rsvpstatustext=NSLocalizedString(@"Contact unreachable", nil);
+        rsvpstatustext=NSLocalizedString(@"Contact unreachable", @"EXRsvpStatusView");
         rsvplabel.textColor=[UIColor colorWithRed:229/255.0 green:46/255.0 blue:83/255.0 alpha:1];
     }
     

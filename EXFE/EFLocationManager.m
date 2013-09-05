@@ -208,11 +208,11 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 #pragma mark - Local Notification Handler
 
 - (void)handleNotificaiton:(UILocalNotification *)localNotification {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"“活点地图”后台", nil)
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"RouteX in background", nil)
                                                         message:NSLocalizedString(@"无需保持应用开启，也能在您已开启的地图中展示一段时间内的位置。", nil)
                                                        delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"关闭此功能", nil)
-                                              otherButtonTitles:NSLocalizedString(@"确定", nil), nil];
+                                              cancelButtonTitle:NSLocalizedString(@"Disable this feature", nil)
+                                              otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
     [alertView show];
 }
 
@@ -248,7 +248,7 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
             }
         } else {
             UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-            localNotification.alertBody = NSLocalizedString(@"“活点地图”会显示您20分钟之内的方位，放心只有得到您同意的朋友们才能看到。", nil);
+            localNotification.alertBody = NSLocalizedString(@"RouteX will show your location for 20 minutes, only to those who're agreed.", nil);
             localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:2.33f];
             localNotification.userInfo = @{@"key": @"backgroudLocationUpdate"};
             [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];

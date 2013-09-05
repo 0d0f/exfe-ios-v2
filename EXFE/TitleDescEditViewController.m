@@ -9,6 +9,7 @@
 #import "TitleDescEditViewController.h"
 #import "EFKit.h"
 #import "TTTAttributedLabel.h"
+#import "CCTemplate.h"
 
 #define LARGE_SLOT                       (16)
 #define SMALL_SLOT                      (5)
@@ -57,7 +58,7 @@
     viewtitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
     viewtitle.textAlignment = NSTextAlignmentCenter;
     viewtitle.textColor = FONT_COLOR_51;
-    viewtitle.text = NSLocalizedString(@"Title & Description", nil);
+    viewtitle.text =[NSLocalizedString(@"Edit {{}} Info", nil) templateFromDict:[Util keywordDict]];
     [self.view addSubview:viewtitle];
     
     UIButton *btncancel=[UIButton buttonWithType:UIButtonTypeCustom];
