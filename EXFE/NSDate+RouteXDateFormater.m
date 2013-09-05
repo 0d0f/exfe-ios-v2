@@ -19,12 +19,14 @@
 - (NSString *)formatedTimeIntervalValueFromNow {
     CGFloat timeInterval = ([[NSDate date] timeIntervalSinceDate:self] / 60.0f);
     
-    if (timeInterval / 60.0f) {
+    BOOL isMinitues = YES;
+    if ((NSInteger)(timeInterval / 60.0f)) {
+        isMinitues = NO;
         timeInterval /= 60;
     }
     
     NSString *string = nil;
-    if (((NSInteger)(timeInterval * 10)) % 10) {
+    if (((NSInteger)(timeInterval * 10)) % 10 && !isMinitues) {
         string = [NSString stringWithFormat:@"%.1f", timeInterval];
     } else {
         string = [NSString stringWithFormat:@"%.0f", timeInterval];
