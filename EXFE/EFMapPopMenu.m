@@ -62,7 +62,7 @@
         
         self.requestButtonPressedHandler = handler;
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setTitle:@"请对方更新方位" forState:UIControlStateNormal];
+        [button setTitle:@"Request location" forState:UIControlStateNormal];
         [button setTitleColor:[UIColor COLOR_RGB(0, 0x7C, 0xFF)] forState:UIControlStateNormal];
         button.frame = (CGRect){{0.0f, 80.0f}, {200.0f, 45.0f}};
         [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];

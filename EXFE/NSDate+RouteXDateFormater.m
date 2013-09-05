@@ -37,10 +37,10 @@
 
 - (NSString *)formatedTimeIntervalUnitFromNow {
     NSUInteger timeInterval = (NSUInteger)([[NSDate date] timeIntervalSinceDate:self] / 60.0f);
-    NSString *time = NSLocalizedString(@"分钟前", nil);
+    NSString *time = NSLocalizedString(@"m ago", nil);
     
     if (timeInterval / 60) {
-        time = NSLocalizedString(@"小时前", nil);
+        time = NSLocalizedString(@"h ago", nil);
     }
     
     return time;

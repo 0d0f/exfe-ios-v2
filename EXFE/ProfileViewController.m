@@ -275,9 +275,9 @@
 {
     NSString *title = nil;
     if ([self.user.password boolValue]) {
-        title = NSLocalizedString(@"Change password...", nil);
+        title = NSLocalizedString(@"Change password", nil);
     } else {
-        title = NSLocalizedString(@"Set password...", nil);
+        title = NSLocalizedString(@"Set password", nil);
     }
     NSMutableAttributedString *str3 = [[NSMutableAttributedString alloc] initWithString:title];
     NSUInteger length = str3.length;
@@ -350,7 +350,7 @@
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"addidentitybutton"];
         }
-        cell.textLabel.text = NSLocalizedString(@"Add identity...", nil);
+        cell.textLabel.text = NSLocalizedString(@"Add identity", @"Profile");
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
         return cell;
     }
@@ -660,14 +660,18 @@
     int identity_id=button.tag;
     Identity *identity=[self getIdentityById:identity_id];
     if(identity_id>0 && identity!=nil) {
+        Provider p = [Identity getProviderCode:identity.provider];
         
-        if([identity.provider isEqualToString:@"twitter"] || [identity.provider isEqualToString:@"facebook"]){
+        if(p == kProviderTwitter || p == kProviderFacebook){
             NSString *msg=NSLocalizedString(@"Identity authorization has been revoked, please re-authorize.", nil);
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Identity Verification", nil) message:msg delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Re-authorize", nil), nil];
             alert.tag=identity_id;
             [alert show];
         }else{
-            NSString *msg=NSLocalizedString(@"Unverified identity, please check your email for instructions.\nRe-send verification email?", nil);
+            NSString *msg = NSLocalizedString(@"Unverified identity. Please check your email for instructions.\nRequest verification again?", @"Profile Table cell");
+            if (p == kProviderPhone) {
+                msg = NSLocalizedString(@"Unverified identity. Please check your message for instructions.\nRequest verification again?", @"Profile Table cell");
+            }
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Identity Verification", nil) message:msg delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Send", nil), nil];
             alert.tag=identity_id;
             [alert show];
@@ -784,7 +788,7 @@
                  customizationBlock:^(WCAlertView *alertView) {
                      alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
                      UITextField *textField = [alertView textFieldAtIndex:0];
-                     textField.placeholder = [NSLocalizedString(@"Set {{PRODUCT_APP_NAME}} password", nil) templateFromDict:[Util keywordDict]];
+                     textField.placeholder = [NSLocalizedString(@"Set {{PRODUCT_NAME}} password", nil) templateFromDict:[Util keywordDict]];
                      textField.textAlignment = NSTextAlignmentCenter;
                      //                     textField.delegate = self;
                      if (msg) {
@@ -852,7 +856,7 @@
                                                                                          // login
                                                                                      } else if ([@"authenticate_timeout" isEqualToString:errorType]) {
                                                                                          // error: "Authenticate timeout."
-//                                                                                         [self showInlineError:NSLocalizedString(@"Set password failed.", nil) with:NSLocalizedString(@"The time is too long after the autentication. Please try authenticate identity above again.", nil)];
+//                                                                                         [self showInlineError:NSLocalizedString(@"Set password failed.", nil) with:NSLocalizedString(@"The time is too long after the authentication. Please try authenticate identity above again.", nil)];
                                                                                      } else if ([@"token_staled" isEqualToString:errorType]) {
                                                                                          EFAuthenticationViewController *vc = [[EFAuthenticationViewController alloc] initWithModel:self.model];
                                                                                          vc.user = self.user;

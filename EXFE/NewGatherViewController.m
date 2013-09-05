@@ -1087,7 +1087,7 @@
                 [pickertoolbar setHidden:NO];
             }
         } else {
-            [self showMenu:invitation items:[NSArray arrayWithObjects:NSLocalizedString(@"Delete", nil), nil]];
+            [self showMenu:invitation items:[NSArray arrayWithObjects:@"Delete", nil]];
         }
     }
 }
@@ -1234,7 +1234,7 @@
 //                errormsg=@"A connection failure has occurred.";
 //            else
 //                errormsg=@"Could not connect to the server.";
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
 //            [alert show];
 //            [alert release];
 //        };

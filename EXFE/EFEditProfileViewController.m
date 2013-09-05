@@ -312,7 +312,7 @@
     
     SSTextView *bio = [[SSTextView alloc] initWithFrame:CGRectMake(20 - 8, 10 - 8, CGRectGetWidth(footer.bounds) - (20 - 8) * 2, CGRectGetHeight(footer.bounds) - 2 - hintHeight - marginBottom)];
     bio.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
-    bio.placeholder = NSLocalizedString(@"Bio...", nil);
+    bio.placeholder = NSLocalizedString(@"Bio...", @"Edit Profile, placeholder");
     bio.placeholderTextColor = [UIColor COLOR_ALUMINUM];
     bio.textColor = [UIColor whiteColor];
     bio.backgroundColor = [UIColor clearColor];

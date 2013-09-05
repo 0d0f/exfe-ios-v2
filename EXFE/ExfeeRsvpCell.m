@@ -191,7 +191,7 @@
         {
             invRsvpImage.image = [UIImage imageNamed:@"rsvp_pending_stroke_26g5"];
             invRsvpLabel.textColor = [UIColor COLOR_ALUMINUM];
-            invRsvpLabel.text = NSLocalizedString(@"Intersted", nil);
+            invRsvpLabel.text = NSLocalizedString(@"Interested", nil);
         }
             break;
             // no use

@@ -75,13 +75,13 @@
         NSString *locationInfo = nil;
         
         CLLocationDistance distanceFromDest = self.person.distance;
-        NSString *destUnit = NSLocalizedString(@"米", nil);
+        NSString *destUnit = NSLocalizedString(@"m", nil);
         if (distanceFromDest > 1000) {
-            destUnit = NSLocalizedString(@"公里", nil);
+            destUnit = NSLocalizedString(@"km", nil);
             distanceFromDest = distanceFromDest / 1000;
             if (distanceFromDest >= 99) {
                 distanceFromDest = 99;
-                destUnit = NSLocalizedString(@"+公里", nil);
+                destUnit = NSLocalizedString(@"+km", nil);
             }
         } else {
             if (distanceFromDest > 10) {
@@ -93,14 +93,14 @@
         
         if (kEFMapPersonConnectStateOnline == self.person.connectState) {
             CLLocationDistance distanceFromMe = ceil([self.person.lastLocation distanceFromLocation:[self.mapDataSource me].lastLocation]);
-            NSString *unit = NSLocalizedString(@"米", nil);
+            NSString *unit = NSLocalizedString(@"m", nil);
             
             if (distanceFromMe > 1000) {
-                unit = NSLocalizedString(@"公里", nil);
+                unit = NSLocalizedString(@"km", nil);
                 distanceFromMe = distanceFromMe / 1000;
                 if (distanceFromMe >= 99) {
                     distanceFromMe = 99;
-                    unit = NSLocalizedString(@"+公里", nil);
+                    unit = NSLocalizedString(@"+km", nil);
                 }
             } else {
                 if (distanceFromMe > 10) {
@@ -110,7 +110,7 @@
             
             NSString *distanceString = [NSString stringWithFormat:@"%ld%@", (long)distanceFromMe, unit];
             
-            locationInfo = [NSString stringWithFormat:NSLocalizedString(@"至目的地%@ 与您相距%@", nil), distanceDestString, distanceString];
+            locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%1$@ to arrive, %2$@ apart", nil), distanceDestString, distanceString];
         } else {
             NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:self.person.lastLocation.timestamp];
             NSInteger time = timeInterval / 60;

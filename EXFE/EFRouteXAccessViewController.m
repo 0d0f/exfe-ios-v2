@@ -31,7 +31,7 @@
     titleLabel.shadowOffset = (CGSize){0.0f, 1.0f};
     titleLabel.backgroundColor = [UIColor clearColor];
     titleLabel.textColor = [UIColor whiteColor];
-    titleLabel.text = NSLocalizedString(@"隐私至关重要", nil);
+    titleLabel.text = NSLocalizedString(@"Privacy is important", nil);
     [self.view addSubview:titleLabel];
     self.titleLabel = titleLabel;
     
@@ -55,7 +55,7 @@
     para2Label.backgroundColor = [UIColor clearColor];
     para2Label.textColor = [UIColor whiteColor];
     para2Label.numberOfLines = 3;
-    para2Label.text = NSLocalizedString(@"像“活点地图”这样能获知您方位的工具，应以最高标准尊重个人隐私和数据安全。我们对此非常重视。", nil);
+    para2Label.text = NSLocalizedString(@"Utility like RouteX should respect the highest standard of privacy and data security, because it can acquire your location. We care and pay attention to it.", nil);
     [self.view addSubview:para2Label];
     self.para2Label = para2Label;
     
@@ -66,7 +66,7 @@
     buttonTipLabel.shadowOffset = (CGSize){0.0f, 1.0f};
     buttonTipLabel.backgroundColor = [UIColor clearColor];
     buttonTipLabel.textColor = [UIColor whiteColor];
-    buttonTipLabel.text = NSLocalizedString(@"要改变主意与朋友们互相看到位置和轨迹？", nil);
+    buttonTipLabel.text = NSLocalizedString(@"Want to see location with friends?", nil);
     [self.view addSubview:buttonTipLabel];
     self.buttonTipLabel = buttonTipLabel;
     
@@ -74,7 +74,7 @@
     button.frame = (CGRect){{20.0f, 400.0f}, {CGRectGetWidth(viewBounds) - 40.0f, 48.0f}};
     UIImage *backgroundImage = [UIImage imageNamed:@"btn_white_44.png"];
     backgroundImage = [backgroundImage resizableImageWithCapInsets:(UIEdgeInsets){0.0f, 10.0f, 0.0f, 10.0f}];
-    [button setTitle:NSLocalizedString(@"开启这张活点地图", nil) forState:UIControlStateNormal];
+    [button setTitle:NSLocalizedString(@"Open this RouteX page", nil) forState:UIControlStateNormal];
     [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [button setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.66f] forState:UIControlStateNormal];
     [button setBackgroundImage:backgroundImage forState:UIControlStateNormal];
