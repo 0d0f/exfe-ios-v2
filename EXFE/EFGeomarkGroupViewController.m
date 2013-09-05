@@ -117,7 +117,6 @@
 
 - (void)presentFromViewController:(UIViewController *)controller tapLocation:(CGPoint)locatoin animated:(BOOL)animated {
     self.fromViewController = controller;
-    self.tapLocation = locatoin;
     
     // base view
     CGRect frame = [controller.view.window convertRect:controller.view.frame fromView:controller.view.superview];
@@ -132,6 +131,8 @@
     self.baseView = baseView;
     
     CGPoint fixedLocation = [self _fixTapLocation:locatoin];
+    
+    self.tapLocation = fixedLocation;
     
     self.shadowLayer.position = fixedLocation;
     self.shadowLayer.bounds = self.view.bounds;

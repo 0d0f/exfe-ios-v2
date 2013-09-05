@@ -210,6 +210,7 @@
                                     [alert addButtonWithTitle:NSLocalizedString(@"OK", nil) handler:^{
                                         [self removeCrossAndExit];
                                     }];
+                                    [alert show];
                                 }
                             } break;
                                 

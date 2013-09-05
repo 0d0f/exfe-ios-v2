@@ -62,8 +62,12 @@
     CTFontRef fontRef= CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 21.0, NULL);
     [string addAttribute:(NSString*)kCTFontAttributeName  value:(__bridge id)fontRef range:NSMakeRange(0,[string length])];
     CFRelease(fontRef);
-    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_CARBON].CGColor range:NSMakeRange(0,9)];
-    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:NSMakeRange(9,3)];
+    
+    NSString *xString = NSLocalizedString(@"·X·", nil);
+    NSRange range = [gather rangeOfString:xString];
+    
+    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_CARBON].CGColor range:NSMakeRange(0, [string length])];
+    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:range];
     
     CTTextAlignment alignment = kCTRightTextAlignment;
     CTParagraphStyleSetting setting[1] = {

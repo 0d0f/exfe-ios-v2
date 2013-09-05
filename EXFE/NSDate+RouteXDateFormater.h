@@ -10,11 +10,11 @@
 
 @interface NSDate (RouteXDateFormater)
 
-// eg: 1 min
+// eg: 1.5 min
 - (NSString *)formatedTimeIntervalFromNow;
 
-// eg: 1
-- (NSUInteger)formatedTimeIntervalValueFromNow;
+// eg: 1.5
+- (NSString *)formatedTimeIntervalValueFromNow;
 
 // eg: min
 - (NSString *)formatedTimeIntervalUnitFromNow;

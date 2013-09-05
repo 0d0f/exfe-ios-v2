@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface EFDataCache : NSCache
+@interface EFDataCache : NSObject
+
+@property (nonatomic, assign) NSUInteger    maxSize;    // Default as 200
 
 - (NSData *)dataForKey:(NSString *)aKey;
 - (void)setData:(NSData *)data forKey:(NSString *)aKey;

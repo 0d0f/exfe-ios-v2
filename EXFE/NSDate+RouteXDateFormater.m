@@ -11,19 +11,26 @@
 @implementation NSDate (RouteXDateFormater)
 
 - (NSString *)formatedTimeIntervalFromNow {
-    NSString *timeIntervalString = [NSString stringWithFormat:@"%u%@", [self formatedTimeIntervalValueFromNow], [self formatedTimeIntervalUnitFromNow]];
+    NSString *timeIntervalString = [NSString stringWithFormat:@"%@%@", [self formatedTimeIntervalValueFromNow], [self formatedTimeIntervalUnitFromNow]];
     
     return timeIntervalString;
 }
 
-- (NSUInteger)formatedTimeIntervalValueFromNow {
-    NSUInteger timeInterval = (NSUInteger)([[NSDate date] timeIntervalSinceDate:self] / 60.0f);
+- (NSString *)formatedTimeIntervalValueFromNow {
+    CGFloat timeInterval = ([[NSDate date] timeIntervalSinceDate:self] / 60.0f);
     
-    if (timeInterval / 60) {
+    if (timeInterval / 60.0f) {
         timeInterval /= 60;
     }
     
-    return timeInterval;
+    NSString *string = nil;
+    if (((NSInteger)(timeInterval * 10)) % 10) {
+        string = [NSString stringWithFormat:@"%.1f", timeInterval];
+    } else {
+        string = [NSString stringWithFormat:@"%.0f", timeInterval];
+    }
+    
+    return string;
 }
 
 - (NSString *)formatedTimeIntervalUnitFromNow {

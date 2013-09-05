@@ -9771,7 +9771,7 @@
 					WWW,
 				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
+					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
 					"${SRCROOT}/Vendor/Build/BlocksKit/Headers/**",
 				);
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
@@ -9802,7 +9802,7 @@
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = RESTKIT_GENERATE_SEED_DB;
 				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
+					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
 					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
 				);
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";

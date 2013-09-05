@@ -528,6 +528,9 @@
 - (void)signoutDidFinish {
     [Flurry logEvent:@"ACTION_DID_SIGN_OUT"];
     
+    [[EFLocationManager defaultManager] stopUpdatingHeading];
+    [[EFLocationManager defaultManager] stopUpdatingLocation];
+    
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     [ud removeObjectForKey:@"devicetoken"];
     [ud removeObjectForKey:@"exfee_updated_at"];
@@ -535,6 +538,7 @@
     [ud removeObjectForKey:@"localaddressbook_read_at"];
     [ud removeObjectForKey:@"udid"];
     [ud removeObjectForKey:@"push_token"];
+    [ud removeObjectForKey:EFKeyBackgroundUpdatingLocationEnabled];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [self switchContextByUserId:0 withAbandon:YES];

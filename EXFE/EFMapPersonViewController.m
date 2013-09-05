@@ -44,10 +44,35 @@
 
 - (void)_initLabels;
 - (void)_personDidChange;
+- (CGPoint)_fixTapLocation:(CGPoint)location;
 
 @end
 
 @implementation EFMapPersonViewController (Private)
+
+- (CGPoint)_fixTapLocation:(CGPoint)location {
+    CGRect baseViewBounds = self.baseView.bounds;
+    CGRect viewFrame = self.view.frame;
+    CGFloat viewHalfWidth = CGRectGetWidth(viewFrame) * 0.5f;
+    CGFloat viewHalfHeight = CGRectGetHeight(viewFrame) * 0.5f;
+    
+    CGFloat blank = 5.0f;
+    
+    if (location.x - viewHalfWidth < blank) {
+        location.x = viewHalfWidth + blank;
+    } else if (location.x + viewHalfWidth > CGRectGetWidth(baseViewBounds)) {
+        location.x = CGRectGetWidth(baseViewBounds) - (viewHalfWidth + blank);
+    }
+    
+    if (location .y - viewHalfHeight < blank) {
+        location.y = viewHalfHeight + blank;
+    } else if (location.y + viewHalfHeight > CGRectGetHeight(baseViewBounds)) {
+        location.y = CGRectGetHeight(baseViewBounds) - (viewHalfHeight + blank);
+    }
+    
+    return location;
+}
+
 
 - (void)_initLabels {
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {200.0f, 25.0f}}];
@@ -381,7 +406,6 @@
 
 - (void)presentFromViewController:(UIViewController *)controller location:(CGPoint)location animated:(BOOL)animated {
     self.fromController = controller;
-    self.location = location;
     
     // base view
     CGRect frame = [controller.view.window convertRect:controller.view.frame fromView:controller.view.superview];
@@ -395,11 +419,15 @@
     
     self.baseView = baseView;
     
-    self.shadowLayer.position = location;
+    CGPoint fixedLocation = [self _fixTapLocation:location];
+    
+    self.location = fixedLocation;
+    
+    self.shadowLayer.position = fixedLocation;
     self.shadowLayer.bounds = self.view.bounds;
     [self.baseView.layer addSublayer:self.shadowLayer];
     
-    self.view.center = location;
+    self.view.center = fixedLocation;
     [self.baseView addSubview:self.view];
 
 }
