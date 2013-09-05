@@ -61,7 +61,7 @@
     
     [moc performBlockAndWait:^{
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Cross"];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"cross_id = %u", crossId];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"cross_id = %u", [crossId unsignedIntegerValue]];
         NSSortDescriptor* descUpdateAt = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
         NSSortDescriptor* descReadAt = [NSSortDescriptor sortDescriptorWithKey:@"read_at" ascending:NO];
         [request setSortDescriptors:@[descUpdateAt, descReadAt]];
