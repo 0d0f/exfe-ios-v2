@@ -127,10 +127,10 @@
                     self.stateLabel.frame = kStateLabelNormalFrame;
                 } else {
                     NSDate *timestamp = self.person.lastLocation.timestamp;
-                    NSUInteger value = [timestamp formatedTimeIntervalValueFromNow];
+                    NSString *value = [timestamp formatedTimeIntervalValueFromNow];
                     NSString *unit = [timestamp formatedTimeIntervalUnitFromNow];
                     
-                    infoText = [NSString stringWithFormat:@"%d", value];
+                    infoText = value;
                     
                     self.stateLabel.frame = kStateLabelTimestampFrame;
                     self.stateLabel.text = infoText;

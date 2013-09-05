@@ -31,7 +31,7 @@
 - (void)_reloadData {
     EFTimestampAnnotation *annotation = (EFTimestampAnnotation *)self.annotation;
     
-    self.timestampLabel.text = [NSString stringWithFormat:@"%u", [annotation.timestamp formatedTimeIntervalValueFromNow]];
+    self.timestampLabel.text = [annotation.timestamp formatedTimeIntervalValueFromNow];
     [self.timestampLabel sizeToFit];
     
     self.meterLabel.text = [annotation.timestamp formatedTimeIntervalUnitFromNow];

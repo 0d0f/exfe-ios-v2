@@ -369,28 +369,37 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
                                                           NSString *userIdString = [self _userIdFromDirtyUserId:path.pathId];
                                                           
                                                           EFMapPerson *person = [self.peopleMap valueForKey:userIdString];
-                                                          NSAssert(person, ([NSString stringWithFormat:@"map should contain a person for userId: %@", userIdString]));
                                                           
-                                                          [person.locations removeAllObjects];
-                                                          
-                                                          if (person.lastLocation) {
-                                                              [person.locations addObjectsFromArray:path.positions];
-                                                          } else {
-                                                              if (path.positions.count >= 1) {
-                                                                  NSArray *positions = [path.positions subarrayWithRange:(NSRange){0, path.positions.count - 1}];
-                                                                  [person.locations addObjectsFromArray:positions];
-                                                                  person.lastLocation = path.positions[0];
-                                                              } else {
+                                                          if (person) {
+                                                              [person.locations removeAllObjects];
+                                                              
+                                                              if (person.lastLocation) {
                                                                   [person.locations addObjectsFromArray:path.positions];
+                                                              } else {
+                                                                  if (path.positions.count >= 1) {
+                                                                      NSArray *positions = [path.positions subarrayWithRange:(NSRange){0, path.positions.count - 1}];
+                                                                      [person.locations addObjectsFromArray:positions];
+                                                                      person.lastLocation = path.positions[0];
+                                                                  } else {
+                                                                      [person.locations addObjectsFromArray:path.positions];
+                                                                  }
                                                               }
-                                                          }
-                                                          
-                                                          [self _updatePersonState:person];
-                                                          
-                                                          if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
-                                                              [self.delegate mapDataSource:self
-                                                                        didUpdateLocations:person.locations
-                                                                                   forUser:person];
+                                                              
+                                                              [self _updatePersonState:person];
+                                                              
+                                                              if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
+                                                                  [self.delegate mapDataSource:self
+                                                                            didUpdateLocations:person.locations
+                                                                                       forUser:person];
+                                                              }
+                                                          } else {
+                                                              NSDate *timestamp = [self.toAddPeopleUserIdMap valueForKey:userIdString];
+                                                              if (!timestamp) {
+                                                                  [self.toAddPeopleUserIdMap setValue:[NSDate date] forKey:userIdString];
+                                                                  
+                                                                  AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                                                                  [appDelegate.model loadCrossWithCrossId:[self.cross.cross_id intValue] updatedTime:nil];
+                                                              }
                                                           }
                                                       }
                                                   }
@@ -994,28 +1003,29 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
         return;
     }
     
+    EFLocation *firstLocation = lastLocation;
     EFLocation *lastAddedLocation = lastLocation;
-    
-//    if (kEFMapPersonConnectStateOnline != person.connectState) {
-//        EFTimestampAnnotation *firstTimestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:lastLocation.coordinate
-//                                                                                        timestamp:lastLocation.timestamp];
-//        [annotations addObject:firstTimestamp];
-//    }
     
     NSInteger recentHour = 1;
     NSInteger recentMin = 30;
+    NSDate *now = [NSDate date];
     
     for (EFLocation *location in locations) {
         NSTimeInterval timeIntervalSinceLastAddedLocation = [lastAddedLocation.timestamp timeIntervalSinceDate:location.timestamp];
-        NSTimeInterval timeIntervalSinceFirstLocation = [lastLocation.timestamp timeIntervalSinceDate:location.timestamp];
+        NSTimeInterval timeIntervalSinceNow = [now timeIntervalSinceDate:location.timestamp];
         
         CGPoint preViewPoint = [mapView convertCoordinate:lastAddedLocation.coordinate toPointToView:mapView];
         CGPoint viewPoint = [mapView convertCoordinate:location.coordinate toPointToView:mapView];
         
         CGFloat length = LengthBetweenPoints(preViewPoint, viewPoint);
         
-        if (length >= kTimestampMinLength) {
-            if (timeIntervalSinceFirstLocation >= 60.0f && timeIntervalSinceFirstLocation <= 90.0f * 60.0f) {
+        CGFloat minLength = kTimestampMinLength;
+        if (lastAddedLocation == firstLocation) {
+            minLength = 40.0f;
+        }
+        
+        if (length >= minLength) {
+            if (timeIntervalSinceNow >= 60.0f && timeIntervalSinceNow <= 90.0f * 60.0f) {
                 // less than 1.5h
                 if (timeIntervalSinceLastAddedLocation >= 60.0f) {
                     EFTimestampAnnotation *timestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:location.coordinate timestamp:location.timestamp];
@@ -1024,27 +1034,25 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
                 }
             } else {
                 // longer than 1.5h
-                if (timeIntervalSinceLastAddedLocation >= 30.0f * 60.0f) {
-                    if (timeIntervalSinceFirstLocation > recentHour * 3600.0f + recentMin * 60.0f) {
-                        NSInteger h = (NSInteger)timeIntervalSinceFirstLocation / 60.0f;
-                        NSInteger min = ((NSInteger)timeIntervalSinceFirstLocation) % 60;
-                        if (min < 15) {
-                            min = 0;
-                        } else if (min < 45) {
-                            min = 30;
-                        } else {
-                            h += 1;
-                            min = 0;
-                        }
+                if (timeIntervalSinceNow > recentHour * 3600.0f + recentMin * 60.0f) {
+                    NSInteger h = (NSInteger)timeIntervalSinceNow / 3600.0f;
+                    NSInteger min = ((NSInteger)timeIntervalSinceNow) % 60;
+                    if (min < 15) {
+                        min = 0;
+                    } else if (min < 45) {
+                        min = 30;
+                    } else {
+                        h += 1;
+                        min = 0;
+                    }
+                    
+                    if (h > recentHour || (h == recentHour && min > recentMin)) {
+                        recentHour = h;
+                        recentMin = min;
                         
-                        if (h > recentHour || (h == recentHour && min > recentMin)) {
-                            recentHour = h;
-                            recentMin = min;
-                            
-                            EFTimestampAnnotation *timestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:location.coordinate timestamp:[NSDate dateWithTimeInterval:(NSTimeInterval)(recentHour * 3600.0f + recentMin * 60.0f) sinceDate:lastLocation.timestamp]];
-                            [annotations addObject:timestamp];
-                            lastAddedLocation = location;
-                        }
+                        EFTimestampAnnotation *timestamp = [[EFTimestampAnnotation alloc] initWithCoordinate:location.coordinate timestamp:[NSDate dateWithTimeInterval:-(NSTimeInterval)(recentHour * 3600.0f + recentMin * 60.0f) sinceDate:now]];
+                        [annotations addObject:timestamp];
+                        lastAddedLocation = location;
                     }
                 }
             }
