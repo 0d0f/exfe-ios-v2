@@ -250,9 +250,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     self = [super init];
     if (self) {
         self.cross = cross;
-        
         [self _initLocationIdCharactors];
-        [self _initPeople];
         
         self.routeLocations = [[NSMutableArray alloc] init];
         self.routeLocationAnnotationMap = [[NSMutableDictionary alloc] init];
@@ -274,6 +272,19 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
 }
 
 #pragma mark - Property Accessor
+
+- (void)setCross:(Cross *)cross {
+    [self willChangeValueForKey:@"cross"];
+    
+    _cross = cross;
+    
+    [self.peopleMap removeAllObjects];
+    [self.people removeAllObjects];
+    [self _initPeople];
+    
+    
+    [self didChangeValueForKey:@"cross"];
+}
 
 - (EFRouteLocation *)destinationLocation {
     EFRouteLocation *destination = nil;
@@ -411,6 +422,10 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
 #pragma mark - People
 
 - (NSUInteger)numberOfPeople {
+    if (!self.cross) {
+        return 0;
+    }
+    
     return self.people.count;
 }
 
@@ -419,6 +434,10 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
 }
 
 - (EFMapPerson *)personAtIndex:(NSUInteger)index {
+    if (!self.cross) {
+        return nil;
+    }
+    
     return self.people[index];
 }
 

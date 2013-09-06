@@ -359,40 +359,22 @@
     
     [self _refreshTableViewFrame];
     
-    [self.mapStrokeView reloadData];
+    if (self.cross) {
+        [self.mapStrokeView reloadData];
+    }
     
-    [[EFLocationManager defaultManager] addObserver:self
-                                         forKeyPath:@"userHeading"
-                                            options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                                            context:NULL];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(enterBackground)
-                                                 name:UIApplicationDidEnterBackgroundNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(enterForeground)
-                                                 name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(userLocationDidChange)
-                                                 name:EFNotificationUserLocationDidChange
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(userLocationOffsetDidGet)
-                                                 name:EFNotificationUserLocationOffsetDidGet
-                                               object:nil];
+    [self regObserver];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self _checkRouteXStatus];
+    if (self.cross) {
+        [self _checkRouteXStatus];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    [[EFLocationManager defaultManager] removeObserver:self
-                                            forKeyPath:@"userHeading"];
     [[EFLocationManager defaultManager] stopUpdatingHeading];
     [self.mapDataSource closeStreaming];
     
@@ -414,7 +396,7 @@
         [self.accessViewController.view removeFromSuperview];
     }
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self unregObserver];
     
     [super viewWillDisappear:animated];
 }
@@ -423,6 +405,45 @@
 
 - (Cross *)cross {
     return self.tabBarViewController.cross;
+}
+
+#pragma mark - Observer
+
+- (void)regObserver
+{
+    [[EFLocationManager defaultManager] addObserver:self
+                                         forKeyPath:@"userHeading"
+                                            options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                                            context:NULL];
+    [self.tabBarViewController addObserver:self
+                                forKeyPath:@"cross"
+                                   options:NSKeyValueObservingOptionNew
+                                   context:NULL];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(enterBackground)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(enterForeground)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(userLocationDidChange)
+                                                 name:EFNotificationUserLocationDidChange
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(userLocationOffsetDidGet)
+                                                 name:EFNotificationUserLocationOffsetDidGet
+                                               object:nil];
+}
+
+- (void)unregObserver
+{
+    [[EFLocationManager defaultManager] removeObserver:self
+                                            forKeyPath:@"userHeading"];
+    [self.tabBarViewController removeObserver:self
+                                   forKeyPath:@"cross"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Notification Handler
@@ -438,7 +459,9 @@
 }
 
 - (void)enterForeground {
-    [self _checkRouteXStatus];
+    if (self.cross) {
+        [self _checkRouteXStatus];
+    }
 }
 
 - (void)userLocationDidChange {
@@ -502,6 +525,16 @@
                         userLocationView.userHeading = [EFLocationManager defaultManager].userHeading;
                     });
                 }
+            }
+        }
+    } else if (object == self.tabBarViewController) {
+        if ([@"cross" isEqualToString:keyPath]) {
+            if (self.tabBarViewController.cross) {
+                self.mapDataSource.cross = self.tabBarViewController.cross;
+                
+                [self _refreshTableViewFrame];
+                [self.mapStrokeView reloadData];
+                [self _checkRouteXStatus];
             }
         }
     }
@@ -726,8 +759,11 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     NSInteger numberOfRows = 0;
     if (tableView == self.tableView) {
         numberOfRows = [self.mapDataSource numberOfPeople] - 1;
+        numberOfRows = numberOfRows < 0 ? 0 : numberOfRows;
     } else if (tableView == self.selfTableView) {
-        numberOfRows = 1;
+        if ([self.mapDataSource numberOfPeople]) {
+            numberOfRows = 1;
+        }
     }
     
     return numberOfRows;
