@@ -10,6 +10,7 @@
 
 @interface EFRouteXAccessViewController ()
 
+@property (nonatomic, strong) UIScrollView  *scrollView;
 @property (nonatomic, assign) CGRect    viewFrame;
 @property (nonatomic, strong) UILabel   *titleLabel;
 @property (nonatomic, strong) UILabel   *para1Label;
@@ -24,6 +25,14 @@
 - (void)_initSubviews {
     CGRect viewBounds = self.viewFrame;
     
+    CGRect scrollViewFrame = (CGRect){CGPointZero, viewBounds.size};
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:scrollViewFrame];
+    scrollView.contentSize = (CGSize){CGRectGetWidth(scrollViewFrame), 488.0f};
+    scrollView.showsHorizontalScrollIndicator = NO;
+    scrollView.showsVerticalScrollIndicator = NO;
+    [self.view addSubview:scrollView];
+    self.scrollView = scrollView;
+    
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:(CGRect){{0.0f, 35.0f}, {CGRectGetWidth(viewBounds), 27.0f}}];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
@@ -32,7 +41,7 @@
     titleLabel.backgroundColor = [UIColor clearColor];
     titleLabel.textColor = [UIColor whiteColor];
     titleLabel.text = NSLocalizedString(@"Privacy is important", nil);
-    [self.view addSubview:titleLabel];
+    [scrollView addSubview:titleLabel];
     self.titleLabel = titleLabel;
     
     UILabel *para1Label = [[UILabel alloc] initWithFrame:(CGRect){{20.0f, 80.0f}, {CGRectGetWidth(viewBounds) - 40.0f, 160.0f}}];
@@ -44,7 +53,7 @@
     para1Label.textColor = [UIColor whiteColor];
     para1Label.numberOfLines = 7;
     para1Label.text = [NSString stringWithFormat:NSLocalizedString(@"您刚刚拒绝开启这张“活点地图”：%@。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。", nil), self.crossTitle];
-    [self.view addSubview:para1Label];
+    [scrollView addSubview:para1Label];
     self.para1Label = para1Label;
     
     UILabel *para2Label = [[UILabel alloc] initWithFrame:(CGRect){{20.0f, 240.0f}, {CGRectGetWidth(viewBounds) - 40.0f, 100.0f}}];
@@ -56,7 +65,7 @@
     para2Label.textColor = [UIColor whiteColor];
     para2Label.numberOfLines = 3;
     para2Label.text = NSLocalizedString(@"Utility like RouteX should respect the highest standard of privacy and data security, because it can acquire your location. We care and pay attention to it.", nil);
-    [self.view addSubview:para2Label];
+    [scrollView addSubview:para2Label];
     self.para2Label = para2Label;
     
     UILabel *buttonTipLabel = [[UILabel alloc] initWithFrame:(CGRect){{0.0f, 374.0f}, {CGRectGetWidth(viewBounds), 27.0f}}];
@@ -67,7 +76,7 @@
     buttonTipLabel.backgroundColor = [UIColor clearColor];
     buttonTipLabel.textColor = [UIColor whiteColor];
     buttonTipLabel.text = NSLocalizedString(@"Want to see location with friends?", nil);
-    [self.view addSubview:buttonTipLabel];
+    [scrollView addSubview:buttonTipLabel];
     self.buttonTipLabel = buttonTipLabel;
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -81,7 +90,7 @@
     [button addTarget:self
                action:@selector(buttonPressed:)
      forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button];
+    [scrollView addSubview:button];
     self.button = button;
 }
 
@@ -101,6 +110,18 @@
     
     self.view.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.85f];
     [self _initSubviews];
+}
+
+#pragma mark -
+#pragma mark Property Accessor
+
+- (void)setCrossTitle:(NSString *)crossTitle {
+    [self willChangeValueForKey:@"crossTitle"];
+    
+    _crossTitle = crossTitle;
+    self.para1Label.text = [NSString stringWithFormat:NSLocalizedString(@"您刚刚拒绝开启这张“活点地图”：%@。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。", nil), crossTitle];
+    
+    [self didChangeValueForKey:@"crossTitle"];
 }
 
 #pragma mark -
