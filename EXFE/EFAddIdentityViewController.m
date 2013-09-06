@@ -179,7 +179,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     {// Start button
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(0, 0, 290, 48);
-        [btn setTitle:NSLocalizedString(@"Add Identity", nil) forState:UIControlStateNormal];
+        [btn setTitle:NSLocalizedString(@"Add identity", nil) forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [btn setTitleShadowColor:[UIColor COLOR_WA(0x00, 0x7F)] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];

@@ -20,3 +20,5 @@ builds/*
 .DS_Store
 profile
 
+# localizer
+*.locuser
