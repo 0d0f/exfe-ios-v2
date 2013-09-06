@@ -549,6 +549,7 @@
             [self _addRouteXStatuesWithStatus:YES];
         } else {
             EFRouteXAccessViewController *routeXAccessViewController = [[EFRouteXAccessViewController alloc] initWithViewFrame:self.view.bounds];
+            routeXAccessViewController.crossTitle = self.cross.title;
             routeXAccessViewController.delegate = self;
             [self.view addSubview:routeXAccessViewController.view];
             self.accessViewController = routeXAccessViewController;
