@@ -8,6 +8,7 @@
 
 #import "TimeViewController.h"
 #import "TTTAttributedLabel.h"
+#import "CCTemplate.h"
 
 @interface TimeViewController ()
 
@@ -58,8 +59,8 @@
     viewtitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
     viewtitle.textAlignment = NSTextAlignmentCenter;
     viewtitle.textColor = FONT_COLOR_51;
-    [viewtitle setText:NSLocalizedString(@"Edit ·X· time", nil) afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
-        NSRange range = [[mutableAttributedString string] rangeOfString:NSLocalizedString(@"·X·", nil) options:NSCaseInsensitiveSearch];
+    [viewtitle setText:[NSLocalizedString(@"Edit {{X_NOUN}} time", nil) templateFromDict:[Util keywordDict]] afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+        NSRange range = [[mutableAttributedString string] rangeOfString:[NSLocalizedString(@"{{X_NOUN}}", @"Use as search pattern") templateFromDict:[Util keywordDict]] options:NSCaseInsensitiveSearch];
         
         [mutableAttributedString addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:range];
         return mutableAttributedString;

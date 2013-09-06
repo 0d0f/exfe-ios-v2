@@ -12,7 +12,9 @@
 			<key>change date</key>
 			<date>2001-01-01T00:00:00Z</date>
 			<key>changed values</key>
-			<array/>
+			<array>
+				<string>zh-Hant</string>
+			</array>
 			<key>class</key>
 			<string>BLBundleObject</string>
 			<key>errors</key>
@@ -77,17 +79,19 @@
 						</dict>
 					</dict>
 					<key>change date</key>
-					<date>2013-09-06T04:20:50Z</date>
+					<date>2013-09-06T11:07:02Z</date>
 					<key>changed values</key>
-					<array/>
+					<array>
+						<string>zh-Hant</string>
+					</array>
 					<key>class</key>
 					<string>BLStringsFileObject</string>
 					<key>errors</key>
 					<array/>
 					<key>flags</key>
-					<integer>0</integer>
+					<integer>1</integer>
 					<key>hash</key>
-					<string>917725251400d66e46916cf21622a82e
+					<string>f7c6c4a8e6a9eb2584b95bfc575cf3f6
 </string>
 					<key>name</key>
 					<string>Localizable.strings</string>
@@ -188,13 +192,15 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>%1$@ to arrive, %2$@ apart</string>
+							<string>%@ %@ ago</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>%1$@ to arrive, %2$@ apart</string>
+								<string>%1$@ %2$@ ago</string>
 								<key>zh-Hans</key>
-								<string>至目的地%1$@ 与您相距%2$@</string>
+								<string>%1$@ %2$@前</string>
+								<key>zh-Hant</key>
+								<string>%1$@ %2$@ ȧɠǿ</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -213,15 +219,13 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>%@ %@ ago</string>
+							<string>%@ %@ to arrive</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>%1$@ %2$@ ago</string>
+								<string>%1$@ %2$@ to arrive</string>
 								<key>zh-Hans</key>
-								<string>%1$@ %2$@前</string>
-								<key>zh-Hant</key>
-								<string>%1$@ %2$@ ȧɠǿ</string>
+								<string>%@ 距目的地%@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -267,6 +271,31 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
+							<string>%@ apart</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%@ apart</string>
+								<key>zh-Hans</key>
+								<string>与您相距%1$@</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
 							<string>%@ location</string>
 							<key>localizations</key>
 							<dict>
@@ -274,6 +303,56 @@
 								<string>%@ location</string>
 								<key>zh-Hans</key>
 								<string>%@所处方位</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%@ to arrive</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%@ to arrive</string>
+								<key>zh-Hans</key>
+								<string>至目的地  %@</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%@ to arrive, %@ apart</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%1$@ to arrive, %2$@ apart</string>
+								<key>zh-Hans</key>
+								<string>至目的地%1$@ 与您相距%2$@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -346,13 +425,38 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>%d%@前 至目的地%@</string>
+							<string>%dh ago</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>%1$d%2$@前 至目的地%3$@</string>
+								<string>%dh ago</string>
 								<key>zh-Hans</key>
-								<string>%1$d%2$@前 至目的地%3$@</string>
+								<string>%d小时前</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%dm ago</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%dm ago</string>
+								<key>zh-Hans</key>
+								<string>%d分钟前</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -430,6 +534,8 @@
 							<dict>
 								<key>en</key>
 								<string>%i invited</string>
+								<key>zh-Hans</key>
+								<string>??%d已邀请</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -841,7 +947,7 @@
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
-							<string>Accepted in Add Exfee</string>
+							<string>No comment provided by engineer.</string>
 							<key>errors</key>
 							<array/>
 							<key>flags</key>
@@ -879,6 +985,8 @@
 							<dict>
 								<key>en</key>
 								<string>Add</string>
+								<key>zh-Hans</key>
+								<string>??添加人</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1407,6 +1515,8 @@
 							<dict>
 								<key>en</key>
 								<string>Choose an account</string>
+								<key>zh-Hans</key>
+								<string>选择帐号</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1538,6 +1648,8 @@
 							<dict>
 								<key>en</key>
 								<string>Close</string>
+								<key>zh-Hans</key>
+								<string>关闭</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1822,11 +1934,13 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Edit {{APP_NAME}} Info</string>
+							<string>Edit {{X_NOUN}} Info</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Edit {{APP_NAME}} Info</string>
+								<string>Edit {{X_NOUN}} Info</string>
+								<key>zh-Hans</key>
+								<string>??修改{{X_NOUN}}信息</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1845,15 +1959,13 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Edit ·X· time</string>
+							<string>Edit {{X_NOUN}} time</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Edit ·X· time</string>
+								<string>Edit {{X_NOUN}} time</string>
 								<key>zh-Hans</key>
-								<string>编辑活动时间</string>
-								<key>zh-Hant</key>
-								<string>Ḗḓīŧ ·Ẋ· ŧīḿḗ</string>
+								<string>??修改{{X_NOUN}}时间</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2061,15 +2173,13 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Exfees</string>
+							<string>Exfee</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Exfees</string>
+								<string>Exfee</string>
 								<key>zh-Hans</key>
-								<string>###exfees</string>
-								<key>zh-Hant</key>
-								<string>Ḗẋƒḗḗş</string>
+								<string>水滴联系人</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2300,15 +2410,13 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Gather a ·X·</string>
+							<string>Gather a {{X_FOR_GATHER}}</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Gather a ·X·</string>
+								<string>Gather a {{X_FOR_GATHER}}</string>
 								<key>zh-Hans</key>
-								<string>·汇·一下</string>
-								<key>zh-Hant</key>
-								<string>Ɠȧŧħḗř ȧ ·Ẋ·</string>
+								<string>·汇· 一下</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2572,7 +2680,7 @@
 								<key>en</key>
 								<string>in %@</string>
 								<key>zh-Hans</key>
-								<string>###in %@</string>
+								<string>%@后</string>
 								<key>zh-Hant</key>
 								<string>īƞ %@</string>
 							</dict>
@@ -2599,7 +2707,7 @@
 								<key>en</key>
 								<string>in %1$@ %2$@</string>
 								<key>zh-Hans</key>
-								<string>###in %1$@ %2$@</string>
+								<string>%1$@%2$@后</string>
 								<key>zh-Hant</key>
 								<string>īƞ %1$@ %2$@</string>
 							</dict>
@@ -2680,7 +2788,7 @@
 								<key>en</key>
 								<string>In %1$u %2$@</string>
 								<key>zh-Hans</key>
-								<string>###In %1$u %2$@</string>
+								<string>%1$u%2$@后</string>
 								<key>zh-Hant</key>
 								<string>Īƞ %1$u %2$@</string>
 							</dict>
@@ -2707,7 +2815,7 @@
 								<key>en</key>
 								<string>In %1$u %2$@ %3$u %4$@</string>
 								<key>zh-Hans</key>
-								<string>###In %1$u %2$@ %3$u %4$@</string>
+								<string>%1$u%2$@%3$u%4$@后</string>
 								<key>zh-Hant</key>
 								<string>Īƞ %1$u %2$@ %3$u %4$@</string>
 							</dict>
@@ -3073,7 +3181,7 @@
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
-							<string>No comment provided by engineer.</string>
+							<string>Use as search pattern</string>
 							<key>errors</key>
 							<array/>
 							<key>flags</key>
@@ -3084,6 +3192,8 @@
 							<dict>
 								<key>en</key>
 								<string>invited</string>
+								<key>zh-Hans</key>
+								<string>??已邀请</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3560,6 +3670,8 @@
 							<dict>
 								<key>en</key>
 								<string>Network error</string>
+								<key>zh-Hans</key>
+								<string>网络错误</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3638,7 +3750,7 @@
 								<key>en</key>
 								<string>Next %@</string>
 								<key>zh-Hans</key>
-								<string>???下%@</string>
+								<string>下%@</string>
 								<key>zh-Hant</key>
 								<string>Ƞḗẋŧ %@</string>
 							</dict>
@@ -4630,6 +4742,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Response:</string>
+								<key>zh-Hans</key>
+								<string>回复：</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4838,6 +4952,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Search</string>
+								<key>zh-Hans</key>
+								<string>??搜索结果</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4969,6 +5085,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Server Error</string>
+								<key>zh-Hans</key>
+								<string>服务器错误</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5100,6 +5218,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Set password</string>
+								<key>zh-Hans</key>
+								<string>??设置密码</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5231,6 +5351,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Set {{PRODUCT_NAME}} password</string>
+								<key>zh-Hans</key>
+								<string>??设置{{PRODUCT_NAME}}密码</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -6757,7 +6879,7 @@ Request verification again?</string>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
-							<string>No comment provided by engineer.</string>
+							<string>Use as search pattern</string>
 							<key>errors</key>
 							<array/>
 							<key>flags</key>
@@ -6811,7 +6933,7 @@ Request verification again?</string>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
-							<string>No comment provided by engineer.</string>
+							<string>Use as search pattern</string>
 							<key>errors</key>
 							<array/>
 							<key>flags</key>
@@ -6834,21 +6956,113 @@ Request verification again?</string>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
-							<string>No comment provided by engineer.</string>
+							<string>Use as search pattern</string>
 							<key>errors</key>
 							<array/>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>·X·</string>
+							<string>{{X_FOR_GATHER}}</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>·X·</string>
+								<string>{{X_FOR_GATHER}}</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>Use as search pattern</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>{{X_NOUN}}</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>{{X_NOUN}}</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>·X· as noun</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>·X· </string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>·X· </string>
 								<key>zh-Hans</key>
-								<string>???·汇·</string>
-								<key>zh-Hant</key>
-								<string>·Ẋ·</string>
+								<string>活动</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>·X· as verb</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>·X·  </string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>·X·  </string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>·X· for Gahter</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>·X·   </string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>·X·   </string>
+								<key>zh-Hans</key>
+								<string>·汇· </string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -8162,6 +8376,187 @@ Re-send verification email?</string>
 							<dict>
 								<key>en</key>
 								<string>Add Identity</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%d%@前 至目的地%@</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%1$d%2$@前 至目的地%3$@</string>
+								<key>zh-Hans</key>
+								<string>%1$d%2$@前 至目的地%3$@</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%1$@ to arrive, %2$@ apart</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%1$@ to arrive, %2$@ apart</string>
+								<key>zh-Hans</key>
+								<string>至目的地%1$@ 与您相距%2$@</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Edit {{APP_NAME}} Info</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Edit {{APP_NAME}} Info</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Edit ·X· time</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Edit ·X· time</string>
+								<key>zh-Hans</key>
+								<string>编辑活动时间</string>
+								<key>zh-Hant</key>
+								<string>Ḗḓīŧ ·Ẋ· ŧīḿḗ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Gather a ·X·</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Gather a ·X·</string>
+								<key>zh-Hans</key>
+								<string>·汇·一下</string>
+								<key>zh-Hant</key>
+								<string>Ɠȧŧħḗř ȧ ·Ẋ·</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>·X·</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>·X·</string>
+								<key>zh-Hans</key>
+								<string>???·汇·</string>
+								<key>zh-Hant</key>
+								<string>·Ẋ·</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>EFContactDataSouce section Title</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Exfees</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Exfees</string>
+								<key>zh-Hans</key>
+								<string>###exfees</string>
+								<key>zh-Hant</key>
+								<string>Ḗẋƒḗḗş</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>

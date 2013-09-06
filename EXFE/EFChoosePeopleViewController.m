@@ -541,14 +541,14 @@
     if (tableView == self.tableView) {
         if (section == 0 && ([self.exfeePeople count] || [self.searchAddPeople count])) {
             // exfees
-            title = NSLocalizedString(@"Exfees", nil);
+            title = NSLocalizedString(@"Exfee", nil);
         } else {
             // contact
             title = NSLocalizedString(@"Contacts", nil);
         }
     } else if (tableView == self.searchDisplayController.searchResultsTableView) {
         if (([self.searchResultAddPeople count] || [self.searchResultExfeePeople count] || self.searchBar.text.length) && section == 0) {
-            title = NSLocalizedString(@"Exfees", nil);
+            title = NSLocalizedString(@"Exfee", nil);
         } else {
             title = NSLocalizedString(@"Contacts", nil);
         }

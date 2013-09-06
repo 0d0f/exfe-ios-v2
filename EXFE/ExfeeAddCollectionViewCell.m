@@ -32,7 +32,7 @@
         _rsvp.textAlignment = NSTextAlignmentCenter;
         _rsvp.backgroundColor = [UIColor clearColor];
         _rsvp.textColor = [UIColor whiteColor];
-        _rsvp.text = NSLocalizedString(@"Accepted", @"Accepted in Add Exfee");
+        _rsvp.text = NSLocalizedString(@"Accepted", nil);
         _rsvp.font = [UIFont fontWithName:@"Helvetica Neue" size:13];
         [self.contentView addSubview:_rsvp];
         

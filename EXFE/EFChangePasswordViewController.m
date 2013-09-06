@@ -240,7 +240,7 @@
     forgotDetail.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
     forgotDetail.textColor = [UIColor COLOR_BLACK_19];
     NSString *full = [NSLocalizedString(@"To reset {{PRODUCT_NAME}} password, please authenticate with your identity.", nil) templateFromDict:[Util keywordDict]];
-    NSString *part = [NSLocalizedString(@"{{PRODUCT_NAME}}", nil) templateFromDict:[Util keywordDict]];
+    NSString *part = [NSLocalizedString(@"{{PRODUCT_NAME}}", @"Use as search pattern") templateFromDict:[Util keywordDict]];
     [forgotDetail setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
         NSRange titleRange = [[mutableAttributedString string] rangeOfString:part options:NSCaseInsensitiveSearch];
         [mutableAttributedString addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[[UIColor COLOR_BLUE_EXFE] CGColor] range:titleRange];

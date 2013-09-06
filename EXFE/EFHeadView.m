@@ -11,6 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CoreText/CoreText.h>
 #import "Util.h"
+#import "CCTemplate.h"
 
 #define kDefaultHeight      (56.0f)
 #define kAvatarLayerFrame   ((CGRect){{0.0f, 0.0f}, {50.0f, 50.0f}})
@@ -31,39 +32,21 @@
 @implementation EFHeadViewTopLayer
 
 
-- (void)drawInContext:(CGContextRef)ctx {
-//    UIColor *color = nil;
-//    
-//    UIGraphicsPushContext(ctx);
-//    
-//    color = [UIColor COLOR_CARBON];
-//    [color set];
-//    [@"Gather a" drawAtPoint:CGPointMake(179.0f, 10.0f)
-//                    forWidth:200.0f
-//                    withFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:21]
-//              lineBreakMode:UILineBreakModeClip];
-//    
-//    color = [UIColor COLOR_BLUE_EXFE];
-//    [color set];
-//    [@"·X·" drawAtPoint:CGPointMake(262.0f, 10.0f)
-//               forWidth:40.0f
-//               withFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:21]
-//          lineBreakMode:UILineBreakModeClip];
-    
+- (void)drawInContext:(CGContextRef)ctx {    
     CGRect titleRect = CGRectMake(140, -5, 150, self.bounds.size.height);
     CGFloat titlePaddingV = 5;
     
     CGContextSaveGState(ctx);
     CGContextTranslateCTM(ctx, 0, self.bounds.size.height);
     CGContextScaleCTM(ctx, 1.0, -1.0);
-    NSString * gather = NSLocalizedString(@"Gather a ·X·", nil);
+    NSString * gather = [NSLocalizedString(@"Gather a {{X_FOR_GATHER}}", nil) templateFromDict:[Util keywordDict]];
     
     NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:gather];
     CTFontRef fontRef= CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 21.0, NULL);
     [string addAttribute:(NSString*)kCTFontAttributeName  value:(__bridge id)fontRef range:NSMakeRange(0,[string length])];
     CFRelease(fontRef);
     
-    NSString *xString = NSLocalizedString(@"·X·", nil);
+    NSString *xString = [NSLocalizedString(@"{{X_FOR_GATHER}}", @"Use as search pattern") templateFromDict:[Util keywordDict]];
     NSRange range = [gather rangeOfString:xString];
     
     [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_CARBON].CGColor range:NSMakeRange(0, [string length])];

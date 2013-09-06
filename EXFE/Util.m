@@ -39,7 +39,10 @@ static NSDictionary * _keywordDict = nil;
         _keywordDict = @{
                          @"PRODUCT_NAME":[NSLocalizedString(@"EXFE", @"Name for Product, eg: Shuady") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],
                          @"APP_NAME":[NSLocalizedString(@"EXFE ", @"Name for App, eg: ·X·") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],
-                         @"PRODUCT_APP_NAME":[NSLocalizedString(@"EXFE  ", @"Name for Product and App, eg: Shuady ·X·") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
+                         @"PRODUCT_APP_NAME":[NSLocalizedString(@"EXFE  ", @"Name for Product and App, eg: Shuady ·X·") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],
+                         @"X_NOUN":[NSLocalizedString(@"·X· ", @"·X· as noun") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],
+                         @"X_VERB":[NSLocalizedString(@"·X·  ", @"·X· as verb") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],
+                         @"X_FOR_GATHER":[NSLocalizedString(@"·X·   ", @"·X· for Gahter") stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],
                          };
     }
     return _keywordDict;

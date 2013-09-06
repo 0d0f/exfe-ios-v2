@@ -458,6 +458,11 @@
                     [dateformat setDateFormat:@"HH:mm:ss"];
                     NSString *timestr=[dateformat stringFromDate:post.created_at];
                     NSString *timestring=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
+//                    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+//                    [gregorian setTimeZone:localTimeZone];
+//                    NSDateComponents *comps = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit |NSTimeZoneCalendarUnit) fromDate:post.created_at];
+//                    NSString *timestring= [DateTimeUtil GetRelativeTime:comps format:1];
+                    
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:timestring];
                     [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)timefontref range:NSMakeRange(0,[timestring length])];
                     [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[timestring length])];

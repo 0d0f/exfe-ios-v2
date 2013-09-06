@@ -276,7 +276,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
         forgotDetail.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
         forgotDetail.textColor = [UIColor COLOR_BLACK_19];
         NSString *full = [NSLocalizedString(@"To reset {{PRODUCT_NAME}} password, please authenticate with your identity.", nil) templateFromDict:[Util keywordDict]];
-        NSString *part = [NSLocalizedString(@"{{PRODUCT_NAME}}", nil) templateFromDict:[Util keywordDict]];
+        NSString *part = [NSLocalizedString(@"{{PRODUCT_NAME}}", @"Use as search pattern") templateFromDict:[Util keywordDict]];
         [forgotDetail setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
             NSRange titleRange = [[mutableAttributedString string] rangeOfString:part options:NSCaseInsensitiveSearch];
             [mutableAttributedString addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[[UIColor COLOR_BLUE_EXFE] CGColor] range:titleRange];
@@ -339,7 +339,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
         labelHead.numberOfLines = 0;
         NSString *text = [NSLocalizedString(@"You’re about to change import information of your account. For security concerns, please authenticate first and set your {{PRODUCT_APP_NAME}} password.", nil) templateFromDict:[Util keywordDict]];
         [labelHead setText:text afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
-            NSString *highlight = [NSLocalizedString(@"{{PRODUCT_APP_NAME}}", nil) templateFromDict:[Util keywordDict]];
+            NSString *highlight = [NSLocalizedString(@"{{PRODUCT_APP_NAME}}", @"Use as search pattern") templateFromDict:[Util keywordDict]];
             NSRange range = [[mutableAttributedString string] rangeOfString:highlight options:NSCaseInsensitiveSearch];
             
             [mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:range];

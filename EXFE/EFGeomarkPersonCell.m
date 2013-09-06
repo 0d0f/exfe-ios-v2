@@ -122,7 +122,7 @@
             }
             
             if (distanceDestString && distanceMeString) {
-                locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%1$@ to arrive, %2$@ apart", nil), distanceDestString, distanceMeString];
+                locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%@ to arrive, %@ apart", nil), distanceDestString, distanceMeString];
             } else if (distanceDestString) {
                 locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%@ to arrive", nil), distanceDestString];
             } else if (distanceMeString) {

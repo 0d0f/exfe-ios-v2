@@ -213,7 +213,7 @@
         
         if (invitedString) {
             [invitedString setText:[NSString stringWithFormat:NSLocalizedString(@"%i invited", nil),allnum] afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
-                NSString *highlight = NSLocalizedString(@"invited", nil);;
+                NSString *highlight = NSLocalizedString(@"invited", @"Use as search pattern");;
                 NSRange range = [[mutableAttributedString string] rangeOfString:highlight options:NSCaseInsensitiveSearch];
                 UIFont *hnFont = [UIFont fontWithName:@"HelveticaNeue" size:10];
                 CTFontRef font = CTFontCreateWithName((__bridge CFStringRef)hnFont.fontName, hnFont.pointSize, NULL);

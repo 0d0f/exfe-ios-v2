@@ -231,7 +231,7 @@
     NSString *full = [NSLocalizedString(@"Welcome to {{PRODUCT_APP_NAME}}", nil) templateFromDict:[Util keywordDict]];
     
     [welcome_exfe setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
-        NSString *highlight = [NSLocalizedString(@"{{PRODUCT_APP_NAME}}", nil) templateFromDict:[Util keywordDict]];
+        NSString *highlight = [NSLocalizedString(@"{{PRODUCT_APP_NAME}}", @"Use as search pattern") templateFromDict:[Util keywordDict]];
         NSRange range = [[mutableAttributedString string] rangeOfString:highlight options:NSCaseInsensitiveSearch];
         
         [mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:range];
