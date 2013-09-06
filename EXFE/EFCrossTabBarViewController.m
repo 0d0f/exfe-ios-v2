@@ -43,9 +43,13 @@
     [super viewWillAppear:animated];
     [self regObserver];
     if (!self.cross) {
+        self.cross = [self.model getCrossById:self.crossId];
         [self.model loadCrossWithCrossId:self.crossId updatedTime:nil];
+    } else {
+        [self.model loadCrossWithCrossId:[self.cross.cross_id unsignedIntegerValue] updatedTime:self.cross.updated_at];
     }
     [self refreshUI];
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -231,7 +235,10 @@
                     }
                     
                 } else if ([kEFNotificationNameEditCrossFailure isEqualToString:name]) {
-                    [self.model loadCrossWithCrossId:self.crossId updatedTime:self.cross.updated_at];
+                    [self willChangeValueForKey:@"cross"];
+                    [self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext refreshObject:self.cross mergeChanges:NO];
+                    [self didChangeValueForKey:@"cross"];
+//                    [self.model loadCrossWithCrossId:self.crossId updatedTime:self.cross.updated_at];
                 }
                 
             }  else {
@@ -334,7 +341,8 @@
     if (c) {
 //        c.time.begin_at = nil;
 //        c.time = nil;
-        [[c managedObjectContext] deleteObject:c];
+        [self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:c];
+//        [[c managedObjectContext] deleteObject:c];
     }
     
     // exit current page
