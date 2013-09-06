@@ -74,43 +74,60 @@
         self.nameLabel.text = self.person.name;
         NSString *locationInfo = nil;
         
-        CLLocationDistance distanceFromDest = self.person.distance;
-        NSString *destUnit = NSLocalizedString(@"m", nil);
-        if (distanceFromDest > 1000) {
-            destUnit = NSLocalizedString(@"km", nil);
-            distanceFromDest = distanceFromDest / 1000;
-            if (distanceFromDest >= 99) {
-                distanceFromDest = 99;
-                destUnit = NSLocalizedString(@"+km", nil);
-            }
-        } else {
-            if (distanceFromDest > 10) {
-                distanceFromDest = (distanceFromDest / 10) * 10;
-            }
-        }
+        BOOL gpsEnabled = [EFLocationManager defaultManager].userLocation ? YES : NO;
+        BOOL hasDestination = self.mapDataSource.destinationLocation ? YES : NO;
+        BOOL isPersonOnline = kEFMapPersonConnectStateOnline == self.person.connectState ? YES : NO;
         
-        NSString *distanceDestString = [NSString stringWithFormat:@"%ld%@", (long)distanceFromDest, destUnit];
+        NSString *distanceDestString = nil;
+        NSString *distanceMeString = nil;
         
-        if (kEFMapPersonConnectStateOnline == self.person.connectState) {
-            CLLocationDistance distanceFromMe = ceil([self.person.lastLocation distanceFromLocation:[self.mapDataSource me].lastLocation]);
-            NSString *unit = NSLocalizedString(@"m", nil);
-            
-            if (distanceFromMe > 1000) {
-                unit = NSLocalizedString(@"km", nil);
-                distanceFromMe = distanceFromMe / 1000;
-                if (distanceFromMe >= 99) {
-                    distanceFromMe = 99;
-                    unit = NSLocalizedString(@"+km", nil);
+        if (hasDestination) {
+            CLLocationDistance distanceFromDest = self.person.distance;
+            NSString *destUnit = NSLocalizedString(@"m", nil);
+            if (distanceFromDest > 1000) {
+                destUnit = NSLocalizedString(@"km", nil);
+                distanceFromDest = distanceFromDest / 1000;
+                if (distanceFromDest >= 99) {
+                    distanceFromDest = 99;
+                    destUnit = NSLocalizedString(@"+km", nil);
                 }
             } else {
-                if (distanceFromMe > 10) {
-                    distanceFromMe = (distanceFromMe / 10) * 10;
+                if (distanceFromDest > 10) {
+                    distanceFromDest = (distanceFromDest / 10) * 10;
                 }
             }
             
-            NSString *distanceString = [NSString stringWithFormat:@"%ld%@", (long)distanceFromMe, unit];
+            distanceDestString = [NSString stringWithFormat:@"%ld%@", (long)distanceFromDest, destUnit];
+        }
+        
+        if (isPersonOnline) {
+            if (gpsEnabled) {
+                CLLocationDistance distanceFromMe = ceil([self.person.lastLocation distanceFromLocation:[self.mapDataSource me].lastLocation]);
+                NSString *unit = NSLocalizedString(@"m", nil);
+                
+                if (distanceFromMe > 1000) {
+                    unit = NSLocalizedString(@"km", nil);
+                    distanceFromMe = distanceFromMe / 1000;
+                    if (distanceFromMe >= 99) {
+                        distanceFromMe = 99;
+                        unit = NSLocalizedString(@"+km", nil);
+                    }
+                } else {
+                    if (distanceFromMe > 10) {
+                        distanceFromMe = (distanceFromMe / 10) * 10;
+                    }
+                }
+                
+                distanceMeString = [NSString stringWithFormat:@"%ld%@", (long)distanceFromMe, unit];
+            }
             
-            locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%1$@ to arrive, %2$@ apart", nil), distanceDestString, distanceString];
+            if (distanceDestString && distanceMeString) {
+                locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%1$@ to arrive, %2$@ apart", nil), distanceDestString, distanceMeString];
+            } else if (distanceDestString) {
+                locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%@ to arrive", nil), distanceDestString];
+            } else if (distanceMeString) {
+                locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%@ apart", nil), distanceMeString];
+            }
         } else {
             NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:self.person.lastLocation.timestamp];
             NSInteger time = timeInterval / 60;
@@ -119,7 +136,13 @@
                 time = time / 60;
                 isMinutes = NO;
             }
-            locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%d%@前 至目的地%@", nil), time, isMinutes ? @"分钟" : @"小时", distanceDestString];
+            
+            NSString *timeString = [NSString stringWithFormat:(isMinutes ? NSLocalizedString(@"%dm ago", nil) : NSLocalizedString(@"%dh ago", nil)), time];
+            if (distanceDestString) {
+                locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%@ %@ to arrive", nil), timeString, distanceDestString];
+            } else {
+                locationInfo = timeString;
+            }
         }
         
         self.locationInfoLabel.text = locationInfo;
