@@ -1923,7 +1923,9 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1939,7 +1941,7 @@
 								<key>en</key>
 								<string>Exfees</string>
 								<key>zh-Hans</key>
-								<string>###exfees</string>
+								<string>Exfees</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2398,7 +2400,9 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2414,7 +2418,7 @@
 								<key>en</key>
 								<string>in %@</string>
 								<key>zh-Hans</key>
-								<string>###in %@</string>
+								<string>%@内</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2423,7 +2427,9 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2439,7 +2445,7 @@
 								<key>en</key>
 								<string>in %1$@ %2$@</string>
 								<key>zh-Hans</key>
-								<string>###in %1$@ %2$@</string>
+								<string>%1$@%2$@后</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2498,7 +2504,9 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2514,7 +2522,7 @@
 								<key>en</key>
 								<string>In %1$u %2$@</string>
 								<key>zh-Hans</key>
-								<string>###In %1$u %2$@</string>
+								<string>%1$u%2$@后</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2523,7 +2531,9 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2539,7 +2549,7 @@
 								<key>en</key>
 								<string>In %1$u %2$@ %3$u %4$@</string>
 								<key>zh-Hans</key>
-								<string>###In %1$u %2$@ %3$u %4$@</string>
+								<string>%1$u%2$@%3$u%4$@后</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3321,7 +3331,9 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3336,6 +3348,8 @@
 							<dict>
 								<key>en</key>
 								<string>Network error</string>
+								<key>zh-Hans</key>
+								<string>网络错误</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4646,7 +4660,9 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4661,6 +4677,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Server Error</string>
+								<key>zh-Hans</key>
+								<string>服务器错误</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
