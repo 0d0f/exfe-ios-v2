@@ -19,6 +19,7 @@
 @interface EFRouteXAccessViewController : UIViewController
 
 @property (nonatomic, weak) id<EFRouteXAccessViewControllerDelegate> delegate;
+@property (nonatomic, strong) NSString *crossTitle;
 
 - (id)initWithViewFrame:(CGRect)frame;
 

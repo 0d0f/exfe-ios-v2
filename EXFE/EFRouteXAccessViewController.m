@@ -43,7 +43,7 @@
     para1Label.backgroundColor = [UIColor clearColor];
     para1Label.textColor = [UIColor whiteColor];
     para1Label.numberOfLines = 7;
-    para1Label.text = NSLocalizedString(@"您刚刚拒绝开启这张“活点地图”：Threshold of the odyssey。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。", nil);
+    para1Label.text = [NSString stringWithFormat:NSLocalizedString(@"您刚刚拒绝开启这张“活点地图”：%@。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。", nil), self.crossTitle];
     [self.view addSubview:para1Label];
     self.para1Label = para1Label;
     
