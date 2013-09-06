@@ -42,6 +42,9 @@
 {
     [super viewWillAppear:animated];
     [self regObserver];
+    if (!self.cross) {
+        [self.model loadCrossWithCrossId:self.crossId updatedTime:nil];
+    }
     [self refreshUI];
 }
 
@@ -142,13 +145,14 @@
         NSNumber *num = userInfo[@"id"];
         
         if ([@"cross" isEqualToString:cat]) {
-            if (num && [self.cross.cross_id isEqualToNumber:num] ) {
+            if (num && self.crossId == [num unsignedIntegerValue] ) {
                 // kEFNotificationNameEditCrossSuccess
                 // kEFNotificationNameLoadCrossSuccess
                 Cross *c = [userInfo objectForKey:@"response.cross"];
-                if ([self.cross.cross_id unsignedIntegerValue] == [c.cross_id unsignedIntegerValue]) {
+                if (self.crossId == [c.cross_id unsignedIntegerValue]) {
                     [self setValue:c forKeyPath:@"cross"];
                     [self refreshUI];
+                    // notification to refresh cross
                 }
             } else {
                 // for cross list
@@ -166,9 +170,10 @@
                         // exit cross and remove from local
                         [self removeCrossAndExit];
                 } else {
-                    Cross *c = [self.model getCrossById:[self.cross.cross_id unsignedIntegerValue]];
+                    Cross *c = [self.model getCrossById:self.crossId];
                     [self setValue:c forKeyPath:@"cross"];
                     [self refreshUI];
+                    // notification to refresh exfee
                 }
             } else {
                 // for exfee list
@@ -176,7 +181,7 @@
         } else if ([@"rsvp" isEqualToString:cat]) {
             if (num && [self.cross.exfee.exfee_id isEqualToNumber:num] ) {
                 // kEFNotificationNameRsvpSuccess
-                [self.model loadCrossWithCrossId:[self.cross.cross_id unsignedIntegerValue] updatedTime:nil];
+                [self.model loadCrossWithCrossId:self.crossId updatedTime:nil];
             } else {
                 
             }
@@ -190,7 +195,7 @@
         NSNumber *num = userInfo[@"id"];
         
         if ([@"cross" isEqualToString:cat]) {
-            if (num && [self.cross.cross_id isEqualToNumber:num] ) {
+            if (num && self.crossId == [num unsignedIntegerValue] ) {
                 if ([kEFNotificationNameLoadCrossFailure isEqualToString:name]) {
                     Meta *meta = userInfo[@"meta"];
                     if (meta) {
@@ -220,11 +225,13 @@
                         }
                     } else {
                         NSError *error __attribute__((unused)) = userInfo[@"error"];
-                        
+//                        if ([@"NSCocoaErrorDomain" isEqualToString:error.domain]) {
+//                            [self.model loadCrossListAfter:self.model.latestModify];
+//                        }
                     }
                     
                 } else if ([kEFNotificationNameEditCrossFailure isEqualToString:name]) {
-                    [self.model loadCrossWithCrossId:[self.cross.cross_id unsignedIntegerValue] updatedTime:self.cross.updated_at];
+                    [self.model loadCrossWithCrossId:self.crossId updatedTime:self.cross.updated_at];
                 }
                 
             }  else {
@@ -261,7 +268,7 @@
             } else if ([@"rsvp" isEqualToString:cat]) {
                 if (num && [self.cross.exfee.exfee_id isEqualToNumber:num] ) {
                     // kEFNotificationNameRsvpFailure
-                    [self.model loadCrossWithCrossId:[self.cross.cross_id unsignedIntegerValue] updatedTime:nil];
+                    [self.model loadCrossWithCrossId:self.crossId updatedTime:nil];
                 } else {
                     
                 }
@@ -323,8 +330,10 @@
 - (void)removeCrossAndExit
 {
     // remove self from local storage
-    Cross * c = [self.model getCrossById:[self.cross.cross_id unsignedIntegerValue]];
+    Cross * c = [self.model getCrossById:self.crossId];
     if (c) {
+//        c.time.begin_at = nil;
+//        c.time = nil;
         [[c managedObjectContext] deleteObject:c];
     }
     

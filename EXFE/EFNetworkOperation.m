@@ -62,7 +62,7 @@
             if (self.failureNotificationName && self.failureNotificationName.length) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (self.error) {
-                        if (self.failureUserInfo) {
+                        if (!self.failureUserInfo) {
                             self.failureUserInfo = [NSMutableDictionary dictionaryWithCapacity:1];
                         }
                         [self.failureUserInfo setValue:self.error forKey:@"error"];

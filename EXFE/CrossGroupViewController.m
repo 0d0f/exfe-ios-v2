@@ -303,7 +303,9 @@
 {
     [super viewDidAppear:animated];
     
-    [self.model loadCrossWithCrossId:[self.cross.cross_id unsignedIntegerValue] updatedTime:self.cross.updated_at];
+    if (self.cross) {
+        [self.model loadCrossWithCrossId:[self.cross.cross_id unsignedIntegerValue] updatedTime:self.cross.updated_at];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated

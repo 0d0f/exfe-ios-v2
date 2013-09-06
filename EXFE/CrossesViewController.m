@@ -46,7 +46,7 @@
 @end
 
 @interface CrossesViewController (Private)
-- (EFTabBarViewController *)_detailViewControllerWithCross:(Cross *)cross withModel:(EXFEModel*)model;
+- (EFTabBarViewController *)_detailViewControllerWithCross:(Cross *)cross andId:(NSUInteger)crossId withModel:(EXFEModel*)model;
 @end
 
 @implementation CrossesViewController
@@ -694,25 +694,23 @@
 {
     Cross *cross = [self crossWithId:crossId];
     
-    if (cross != nil) {
-        [self.navigationController popToRootViewControllerAnimated:NO];
-        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:self.model];
-        __weak EFTabBarViewController *weakTab = tabBarViewController;
-        tabBarViewController.viewInitHandler = ^{
-            EFTabBarViewController * strongTab = weakTab;
-            if (!strongTab) {
-                return;
-            }
-            NSUInteger toJumpIndex = [strongTab indexOfViewControllerForClass:class];
-            NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
-            
-            [strongTab.tabBar setSelectedIndex:toJumpIndex];
-        };
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross andId:crossId withModel:self.model];
+    __weak EFTabBarViewController *weakTab = tabBarViewController;
+    tabBarViewController.viewInitHandler = ^{
+        EFTabBarViewController * strongTab = weakTab;
+        if (!strongTab) {
+            return;
+        }
+        NSUInteger toJumpIndex = [strongTab indexOfViewControllerForClass:class];
+        NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
         
-        [self.navigationController pushViewController:tabBarViewController animated:animated];
-        
-        return YES;
-    }
+        [strongTab.tabBar setSelectedIndex:toJumpIndex];
+    };
+    
+    [self.navigationController pushViewController:tabBarViewController animated:animated];
+    
+    return YES;
     
     return NO;
 }
@@ -742,7 +740,8 @@
 
 #pragma mark - Private
 
-- (EFTabBarViewController *)_detailViewControllerWithCross:(Cross *)cross withModel:(EXFEModel *)model {
+- (EFTabBarViewController *)_detailViewControllerWithCross:(Cross *)cross andId:(NSUInteger)crossId withModel:(EXFEModel *)model
+{
     // CrossGroupViewController
     CrossGroupViewController *crossGroupViewController = [[CrossGroupViewController alloc] initWithModel:model];
     
@@ -755,12 +754,7 @@
     
     // ConvViewController
     WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithModel:model] ;
-//    // prepare data for conversation
-//    conversationViewController.exfee_id = [cross.exfee.exfee_id intValue];
-//    Invitation* myInvitation = [cross.exfee getMyInvitation];
-//    if (myInvitation != nil) {
-//        conversationViewController.myIdentity = myInvitation.identity;
-//    }
+
     
     NSUInteger conversationCount = [cross.conversation_count unsignedIntegerValue];
     
@@ -804,7 +798,11 @@
     // Init TabBarViewController
     EFCrossTabBarViewController *tabBarViewController = [[EFCrossTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController, routeXViewController]];
     tabBarViewController.model = self.model;
-    tabBarViewController.cross = cross;
+    tabBarViewController.crossId = crossId;
+    if (cross) {
+        tabBarViewController.cross = cross;
+    }
+    tabBarViewController.crossId = crossId;
     
     __weak EFTabBarViewController *weakTab = tabBarViewController;
     tabBarViewController.titlePressedHandler = ^{

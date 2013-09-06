@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3389" systemVersion="13A558" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="12E55" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Avatar" representedClassName="Avatar" syncable="YES">
         <attribute name="base" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="base_2x" optional="YES" attributeType="String" syncable="YES"/>
@@ -17,16 +17,16 @@
         <attribute name="updated" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="widget" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <relationship name="by_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
-        <relationship name="exfee" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Exfee" syncable="YES"/>
-        <relationship name="host_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
-        <relationship name="place" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Place" syncable="YES"/>
-        <relationship name="time" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="CrossTime" syncable="YES"/>
+        <relationship name="by_identity" optional="YES" minCount="1" maxCount="1" deletionRule="No Action" destinationEntity="Identity" syncable="YES"/>
+        <relationship name="exfee" optional="YES" minCount="1" maxCount="1" deletionRule="No Action" destinationEntity="Exfee" syncable="YES"/>
+        <relationship name="host_identity" optional="YES" minCount="1" maxCount="1" deletionRule="No Action" destinationEntity="Identity" syncable="YES"/>
+        <relationship name="place" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="Place" syncable="YES"/>
+        <relationship name="time" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="CrossTime" syncable="YES"/>
     </entity>
     <entity name="CrossTime" representedClassName="CrossTime" syncable="YES">
         <attribute name="origin" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="outputformat" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="begin_at" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="EFTime" syncable="YES"/>
+        <relationship name="begin_at" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="EFTime" syncable="YES"/>
     </entity>
     <entity name="Device" representedClassName="Device" syncable="YES">
         <attribute name="brand" optional="YES" attributeType="String" syncable="YES"/>
@@ -53,7 +53,7 @@
         <attribute name="exfee_id" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="total" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="invitations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Invitation" syncable="YES"/>
+        <relationship name="invitations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Invitation" syncable="YES"/>
     </entity>
     <entity name="Identity" representedClassName="Identity" syncable="YES">
         <attribute name="a_order" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -71,7 +71,7 @@
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="unreachable" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
-        <relationship name="avatar" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Avatar" syncable="YES"/>
+        <relationship name="avatar" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="Avatar" syncable="YES"/>
     </entity>
     <entity name="IdentityId" representedClassName="IdentityId" syncable="YES">
         <attribute name="identity_id" optional="YES" attributeType="String" syncable="YES"/>
@@ -85,10 +85,10 @@
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="via" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
-        <relationship name="invited_by" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
-        <relationship name="notification_identities" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="IdentityId" syncable="YES"/>
-        <relationship name="updated_by" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
+        <relationship name="identity" optional="YES" minCount="1" maxCount="1" deletionRule="No Action" destinationEntity="Identity" syncable="YES"/>
+        <relationship name="invited_by" optional="YES" minCount="1" maxCount="1" deletionRule="No Action" destinationEntity="Identity" syncable="YES"/>
+        <relationship name="notification_identities" optional="YES" toMany="YES" deletionRule="No Action" ordered="YES" destinationEntity="IdentityId" syncable="YES"/>
+        <relationship name="updated_by" optional="YES" minCount="1" maxCount="1" deletionRule="No Action" destinationEntity="Identity" syncable="YES"/>
     </entity>
     <entity name="LocalContact" representedClassName="LocalContact" syncable="YES">
         <attribute name="avatar" optional="YES" attributeType="Binary" syncable="YES"/>
@@ -124,7 +124,7 @@
         <attribute name="postable_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="postable_type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
-        <relationship name="by_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
+        <relationship name="by_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="Identity" syncable="YES"/>
     </entity>
     <entity name="Rsvp" representedClassName="Rsvp" syncable="YES">
         <attribute name="by_identity_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -144,25 +144,25 @@
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="user_id" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="webcal" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="avatar" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Avatar" syncable="YES"/>
-        <relationship name="devices" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Device" syncable="YES"/>
-        <relationship name="identities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
+        <relationship name="avatar" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="Avatar" syncable="YES"/>
+        <relationship name="devices" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="Device" syncable="YES"/>
+        <relationship name="identities" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="Identity" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Avatar" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Cross" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="CrossTime" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Device" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="EFTime" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Exfee" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Identity" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="IdentityId" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Invitation" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="LocalContact" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Meta" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Place" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Post" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Rsvp" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="User" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Avatar" positionX="0" positionY="0" width="128" height="90"/>
+        <element name="Cross" positionX="0" positionY="0" width="128" height="285"/>
+        <element name="CrossTime" positionX="0" positionY="0" width="128" height="90"/>
+        <element name="Device" positionX="0" positionY="0" width="128" height="210"/>
+        <element name="EFTime" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="Exfee" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="Identity" positionX="0" positionY="0" width="128" height="285"/>
+        <element name="IdentityId" positionX="0" positionY="0" width="128" height="60"/>
+        <element name="Invitation" positionX="0" positionY="0" width="128" height="225"/>
+        <element name="LocalContact" positionX="0" positionY="0" width="128" height="165"/>
+        <element name="Meta" positionX="0" positionY="0" width="128" height="90"/>
+        <element name="Place" positionX="0" positionY="0" width="128" height="195"/>
+        <element name="Post" positionX="0" positionY="0" width="128" height="150"/>
+        <element name="Rsvp" positionX="0" positionY="0" width="128" height="105"/>
+        <element name="User" positionX="0" positionY="0" width="128" height="255"/>
     </elements>
 </model>
