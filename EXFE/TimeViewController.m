@@ -280,10 +280,8 @@
     
 }
 - (IBAction) Done:(id) sender{
-//    if(datechanged==YES)
-    [self saveDate:nil];
     [self dismissViewControllerAnimated:YES completion:nil];
-//    
+    [self saveDate:nil];
 }
 
 - (void) Close{

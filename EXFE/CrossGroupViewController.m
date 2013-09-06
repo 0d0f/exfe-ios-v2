@@ -302,10 +302,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    if (self.cross) {
-        [self.model loadCrossWithCrossId:[self.cross.cross_id unsignedIntegerValue] updatedTime:self.cross.updated_at];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -1302,9 +1298,6 @@
 
 - (void)setTime:(CrossTime *)time {
     NSManagedObjectContext *context = self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext;
-//    if (!time.managedObjectContext) {
-//        [time addToContext:context];
-//    }
     Cross *cross = [Cross object:context];
     cross.time = time;
     cross.cross_id = [self.cross.cross_id copy];
@@ -1318,9 +1311,6 @@
 
 - (void)setPlace:(Place*)place {
     NSManagedObjectContext *context = self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext;
-//    if (!place.managedObjectContext) {
-//        [place addToContext:context];
-//    }
     Cross *cross = [Cross object:context];
     cross.place = place;
     cross.cross_id = [self.cross.cross_id copy];
