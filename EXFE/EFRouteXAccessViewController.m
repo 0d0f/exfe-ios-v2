@@ -119,7 +119,7 @@
     [self willChangeValueForKey:@"crossTitle"];
     
     _crossTitle = crossTitle;
-    self.para1Label.text = [NSString stringWithFormat:NSLocalizedString(@"您刚刚拒绝开启这张“活点地图”：%@。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。", nil), crossTitle];
+    self.para1Label.text = [NSString stringWithFormat:NSLocalizedString(@"You just rejected the RouteX page: %@. It will NOT reveal your location, nor you could see others’. While those pages you have open and agreed still do. Every RouteX page follows your location privacy setting individually.", nil), crossTitle];
     
     [self didChangeValueForKey:@"crossTitle"];
 }
