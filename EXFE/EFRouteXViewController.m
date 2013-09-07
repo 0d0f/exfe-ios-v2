@@ -357,6 +357,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    self.mapView.delegate = self;
+    
     [self _refreshTableViewFrame];
     
     if (self.cross) {
@@ -399,6 +401,11 @@
     [self unregObserver];
     
     [super viewWillDisappear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    self.mapView.delegate = nil;
+    [super viewDidDisappear:animated];
 }
 
 #pragma mark -
@@ -449,6 +456,8 @@
 #pragma mark - Notification Handler
 
 - (void)enterBackground {
+    self.mapView.delegate = nil;
+    
     [self _invalidBreadcrumbUpdateTimer];
     [self.mapDataSource closeStreaming];
     [self.mapDataSource applicationDidEnterBackground];
@@ -459,6 +468,8 @@
 }
 
 - (void)enterForeground {
+    self.mapView.delegate = self;
+    
     if (self.cross) {
         [self _checkRouteXStatus];
     }
