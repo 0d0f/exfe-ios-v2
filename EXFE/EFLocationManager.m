@@ -9,6 +9,8 @@
 #import "EFLocationManager.h"
 
 #import "EFAPI.h"
+#import "CCTemplate.h"
+#import "Util.h"
 
 #define kDefaultTimerTimeInterval   (5.0f)
 #define kDefaultPostBackgroundTimeInterval  (5.0f)
@@ -209,7 +211,7 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 
 - (void)handleNotificaiton:(UILocalNotification *)localNotification {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"RouteX in background", nil)
-                                                        message:NSLocalizedString(@"无需保持应用开启，也能在您已开启的地图中展示一段时间内的位置。", nil)
+                                                        message:[NSLocalizedString(@"RouteX can show your location for minutes even after quitting {{PRODUCT_APP_NAME}}.", nil) templateFromDict:[Util keywordDict]]
                                                        delegate:self
                                               cancelButtonTitle:NSLocalizedString(@"Disable this feature", nil)
                                               otherButtonTitles:NSLocalizedString(@"OK", nil), nil];

@@ -911,8 +911,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                                                                                     [weakPersonViewController dismissAnimated:YES];
                                                                                                                 }
                                                                                                                 
-                                                                                                                [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"通知失败", nil)
-                                                                                                                                            message:NSLocalizedString(@"无法立刻通知对方更新方位。请尝试用其它方式联系对方。", nil)
+                                                                                                                [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Contact unreachable", nil)
+                                                                                                                                            message:NSLocalizedString(@"Can not reach this contact at the moment, please try other ways.", nil)
                                                                                                                                   cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                                                                                                                   otherButtonTitles:nil
                                                                                                                                             handler:nil];
@@ -923,8 +923,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                                       [weakPersonViewController dismissAnimated:YES];
                                                                   }
                                                                   
-                                                                  [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"通知失败", nil)
-                                                                                              message:NSLocalizedString(@"无法立刻通知对方更新方位。请尝试用其它方式联系对方。", nil)
+                                                                  [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Contact unreachable", nil)
+                                                                                              message:NSLocalizedString(@"Can not reach this contact at the moment, please try other ways.", nil)
                                                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                                                                     otherButtonTitles:nil
                                                                                               handler:nil];
