@@ -88,6 +88,7 @@ extern NSString *const EXCrossListDidChangeNotification;
 
 + (void) showErrorWithMetaObject:(Meta *)meta delegate:(id)delegate __attribute__ ((deprecated));
 + (void) showConnectError:(NSError *)err delegate:(id)delegate;
++ (void) handleDefaultBannerTitle:(NSString *)title andMessage:(NSString *)message;
 + (void) handleRetryBannerFor:(EFNetworkOperation *)operation withTitle:(NSString *)title andMessage:(NSString *)message andRetry:(BOOL)retry;
 + (void) handleDefaultRetryBannerFor:(EFNetworkOperation *)operation withError:(NSError *)error;
 

@@ -1385,7 +1385,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 }
             } else {
                 
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:[NSLocalizedString(@"Please check and allow Shuady \naccount in Twitter \nmenu of ‘Settings’ app.", nil) templateFromDict:[Util keywordDict]] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:[NSLocalizedString(@"Please check and allow {{PRODUCT_NAME}}  \naccount in Twitter \nmenu of ‘Settings’ app.", nil) templateFromDict:[Util keywordDict]] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                 [alert show];
                 
             }
@@ -1437,8 +1437,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
             if (code) {
                 NSInteger c = [code integerValue];
+                NSInteger t = c / 100;
                 switch (c) {
-                    case 200:{
+                    case 2:{
                         NSString *msg = nil;
                         switch (provider) {
                             case kProviderPhone:
@@ -1451,26 +1452,27 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         }
                         [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Forgot password?", @"EFSignInViewController") message:msg cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil handler:nil];
                     } break;
-                    case 400:{
-                        NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
-                        if ([@"identity_does_not_exist" isEqualToString:errorType]
-                                  || [@"identity_is_being_verified" isEqualToString:errorType]){
-                            [self showInlineError:NSLocalizedString(@"Invalid account.", nil) with:NSLocalizedString(@"Please check your input above.", nil)];
+                    case 4:{
+                        if (c == 400 ){
+                            NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
+                            if ([@"identity_does_not_exist" isEqualToString:errorType]
+                                || [@"identity_is_being_verified" isEqualToString:errorType]){
+                                [self showInlineError:NSLocalizedString(@"Invalid account.", nil) with:NSLocalizedString(@"Please check your input above.", nil)];
+                            }
+                        } else if (c == 429) {
+                            NSString *msg = nil;
+                            switch (provider) {
+                                case kProviderPhone:
+                                    msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile.", nil);
+                                    break;
+                                    
+                                default:
+                                    msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile. Please also check your spam email folder, it might be mistakenly filtered by your mailbox.", nil);
+                                    break;
+                            }
+                            [self showInlineError:NSLocalizedString(@"Request too frequently.", nil) with:msg];
                         }
-                    }  break;
-                    case 429:{
-                        NSString *msg = nil;
-                        switch (provider) {
-                            case kProviderPhone:
-                                msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile.", nil);
-                                break;
-                                
-                            default:
-                                msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile. Please also check your spam email folder, it might be mistakenly filtered by your mailbox.", nil);
-                                break;
-                        }
-                        [self showInlineError:NSLocalizedString(@"Request too frequently.", nil) with:msg];
-                    }  break;
+                    }break;
                     case 500:{
                         // 500 - failed
                     }  break;

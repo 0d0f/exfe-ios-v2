@@ -856,7 +856,7 @@
                                                                                          // login
                                                                                      } else if ([@"authenticate_timeout" isEqualToString:errorType]) {
                                                                                          // error: "Authenticate timeout."
-//                                                                                         [self showInlineError:NSLocalizedString(@"Set password failed.", nil) with:NSLocalizedString(@"The time is too long after the authentication. Please try authenticate identity above again.", nil)];
+                                                                                         // [self showInlineError:NSLocalizedString(@"Set password failed.", nil) with:NSLocalizedString(@"Authentication token expired, please retry.", nil)];
                                                                                      } else if ([@"token_staled" isEqualToString:errorType]) {
                                                                                          EFAuthenticationViewController *vc = [[EFAuthenticationViewController alloc] initWithModel:self.model];
                                                                                          vc.user = self.user;

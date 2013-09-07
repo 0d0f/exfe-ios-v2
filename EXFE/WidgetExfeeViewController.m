@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 #import <BlocksKit/BlocksKit.h>
+#import "CCTemplate.h"
 
 #import "Util.h"
 #import "EFEntity.h"
@@ -238,13 +239,13 @@ typedef enum {
 - (void)removeInvitation
 {
     
-    NSString *title = NSLocalizedString(@"People will no longer have access to any information in this ·X·. Please confirm to remove.", nil);
-    NSString *destTitle = NSLocalizedString(@"Remove from this ·X·", nil);
+    NSString *title = [NSLocalizedString(@"People will no longer have access to any information in this {{X_NOUN}}. Please confirm to remove.", nil) templateFromDict:[Util keywordDict]];
+    NSString *destTitle = [NSLocalizedString(@"Remove from this {{X_NOUN}}", nil) templateFromDict:[Util keywordDict]];
     
     BOOL isMe = [[User getDefaultUser] isMe:self.selected_invitation.identity];
     if (isMe) {
-        title = NSLocalizedString(@"You will no longer have access to any information in this ·X· once left. Please confirm to leave.", nil);
-        destTitle = NSLocalizedString(@"Leave from this ·X·", nil);
+        title = [NSLocalizedString(@"You will no longer have access to any information in this {{X_NOUN}} once left. Please confirm to leave.", nil) templateFromDict:[Util keywordDict]];
+        destTitle = [NSLocalizedString(@"Leave from this {{X_NOUN}}", nil) templateFromDict:[Util keywordDict]];
     }
     
     UIActionSheet *actionSheet = [UIActionSheet actionSheetWithTitle:title];

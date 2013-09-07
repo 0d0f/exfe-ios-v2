@@ -12,7 +12,9 @@
 			<key>change date</key>
 			<date>2001-01-01T00:00:00Z</date>
 			<key>changed values</key>
-			<array/>
+			<array>
+				<string>zh-Hans</string>
+			</array>
 			<key>class</key>
 			<string>BLBundleObject</string>
 			<key>errors</key>
@@ -34,9 +36,11 @@
 						</dict>
 					</dict>
 					<key>change date</key>
-					<date>2013-09-06T11:46:14Z</date>
+					<date>2013-09-07T10:07:10Z</date>
 					<key>changed values</key>
-					<array/>
+					<array>
+						<string>zh-Hans</string>
+					</array>
 					<key>class</key>
 					<string>BLStringsFileObject</string>
 					<key>errors</key>
@@ -44,7 +48,7 @@
 					<key>flags</key>
 					<integer>1</integer>
 					<key>hash</key>
-					<string>89211963338717b2b238f0b00955b302
+					<string>20c3801cecbaf31ba4e08b4489b135af
 </string>
 					<key>name</key>
 					<string>Localizable.strings</string>
@@ -329,7 +333,9 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -339,11 +345,11 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>%d people limit on gathering this ·X·. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!</string>
+							<string>%d people limit on gathering this {{X_NOUN}}. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>%d people limit on gathering this ·X·. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!</string>
+								<string>%d people limit on gathering this {{X_NOUN}}. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!</string>
 								<key>zh-Hans</key>
 								<string>限制人数%d人。不过，为了对早期用户表示感谢，在近期内您可以不受此限。</string>
 							</dict>
@@ -1019,6 +1025,8 @@
 							<dict>
 								<key>en</key>
 								<string>Authentication failed due to security concerns, please sign in again.</string>
+								<key>zh-Hans</key>
+								<string>???</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1044,6 +1052,56 @@
 								<string>Authentication failed.</string>
 								<key>zh-Hans</key>
 								<string>鉴权失败</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Authentication token expired, please retry.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Authentication token expired, please retry.</string>
+								<key>zh-Hans</key>
+								<string>???</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Authentication token expired.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Authentication token expired.</string>
+								<key>zh-Hans</key>
+								<string>???</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1169,6 +1227,33 @@
 								<string>Brunch</string>
 								<key>zh-Hans</key>
 								<string>早午餐</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Can not reach this contact at the moment, please try other ways.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Can not reach this contact at the moment, please try other ways.</string>
+								<key>zh-Hans</key>
+								<string>无法立刻通知对方更新方位。\n请尝试用其它方式联系对方。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1962,11 +2047,63 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
+							<string>Failed to connect to server.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Failed to connect to server.</string>
+								<key>zh-Hans</key>
+								<string>???无法连接服务器</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
 							<string>Failed to connect to server. Please retry or wait awhile.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
 								<string>Failed to connect to server. Please retry or wait awhile.</string>
+								<key>zh-Hans</key>
+								<string>???无法连接服务器，请重试或者稍后再尝试</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Failed to merge accounts.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Failed to merge accounts.</string>
+								<key>zh-Hans</key>
+								<string>???合并帐号失败</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2700,6 +2837,33 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>It’s all about privacy</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>It’s all about privacy</string>
+								<key>zh-Hans</key>
+								<string>隐私至关重要</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
 							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
@@ -2750,7 +2914,9 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2760,13 +2926,13 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Leave from this ·X·</string>
+							<string>Leave from this {{X_NOUN}}</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Leave from this ·X·</string>
+								<string>Leave from this {{X_NOUN}}</string>
 								<key>zh-Hans</key>
-								<string>离开这个活动</string>
+								<string>离开这个{{X_NOUN}}</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3427,7 +3593,9 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3437,13 +3605,13 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>People will no longer have access to any information in this ·X·. Please confirm to remove.</string>
+							<string>People will no longer have access to any information in this {{X_NOUN}}. Please confirm to remove.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>People will no longer have access to any information in this ·X·. Please confirm to remove.</string>
+								<string>People will no longer have access to any information in this {{X_NOUN}}. Please confirm to remove.</string>
 								<key>zh-Hans</key>
-								<string>对方将不再能看到这个活动的任何信息，确认移出？</string>
+								<string>对方将不再能看到这个{{X_NOUN}}的任何信息，确认移出？</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3487,15 +3655,13 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Please check and allow Shuady 
-account in Twitter 
-menu of ‘Settings’ app.</string>
+							<string>Please allow {{PRODUCT_NAME}} to use your Twitter account. Go to the Settings app, select Twitter to set up.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Please check and allow Shuady 
-account in Twitter 
-menu of ‘Settings’ app.</string>
+								<string>Please allow {{PRODUCT_NAME}} to use your Twitter account. Go to the Settings app, select Twitter to set up.</string>
+								<key>zh-Hans</key>
+								<string>???</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3514,13 +3680,42 @@ menu of ‘Settings’ app.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Please check and allow {{PRODUCT_APP_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.</string>
+							<string>Please check and allow {{PRODUCT_NAME}}  
+account in Twitter 
+menu of ‘Settings’ app.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Please check and allow {{PRODUCT_APP_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.</string>
+								<string>Please check and allow {{PRODUCT_NAME}}  
+account in Twitter 
+menu of ‘Settings’ app.</string>
 								<key>zh-Hans</key>
-								<string>请前往“设置”应用的Facebook项允许{{PRODUCT_NAME}}访问您的账号。重试或换用其它身份。</string>
+								<string>???</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Please check and allow {{PRODUCT_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Please check and allow {{PRODUCT_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.</string>
+								<key>zh-Hans</key>
+								<string>???</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3666,31 +3861,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Please wait a while.</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Please wait a while.</string>
-								<key>zh-Hans</key>
-								<string>请等一下。</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>Previous</string>
 							<key>localizations</key>
 							<dict>
@@ -3723,31 +3893,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<string>Privacy Control</string>
 								<key>zh-Hans</key>
 								<string>隐私控制</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Privacy is important</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Privacy is important</string>
-								<key>zh-Hans</key>
-								<string>隐私至关重要</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3881,7 +4026,9 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3891,13 +4038,13 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Remove from this ·X·</string>
+							<string>Remove from this {{X_NOUN}}</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Remove from this ·X·</string>
+								<string>Remove from this {{X_NOUN}}</string>
 								<key>zh-Hans</key>
-								<string>从活动中移出</string>
+								<string>从{{X_NOUN}}中移出</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4098,6 +4245,33 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<string>Right there on map</string>
 								<key>zh-Hans</key>
 								<string>地图标记点</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>RouteX can show your location for minutes even after quitting {{PRODUCT_APP_NAME}}.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>RouteX can show your location for minutes even after quitting {{PRODUCT_APP_NAME}}.</string>
+								<key>zh-Hans</key>
+								<string>无需保持应用开启，也能在您已开启的地图中展示一段时间内的位置。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4746,6 +4920,8 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<dict>
 								<key>en</key>
 								<string>Sorry, something is technically wrong in the "cloud", we’re fixing it up.</string>
+								<key>zh-Hans</key>
+								<string>???</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4989,29 +5165,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>The time is too long after the authentication. Please try authenticate identity above again.</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>The time is too long after the authentication. Please try authenticate identity above again.</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>There is something wrong. Please try again later.</string>
 							<key>localizations</key>
 							<dict>
@@ -5169,6 +5322,8 @@ until your account is verified. Please go to verify first.</string>
 							<dict>
 								<key>en</key>
 								<string>To reset {{PRODUCT_NAME}} password, please authenticate with your identity.</string>
+								<key>zh-Hans</key>
+								<string>???</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5394,6 +5549,8 @@ Request verification again?</string>
 								<key>en</key>
 								<string>Unverified identity. Please check your email for instructions.
 Request verification again?</string>
+								<key>zh-Hans</key>
+								<string>???</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5419,6 +5576,8 @@ Request verification again?</string>
 								<key>en</key>
 								<string>Unverified identity. Please check your message for instructions.
 Request verification again?</string>
+								<key>zh-Hans</key>
+								<string>???</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5477,7 +5636,9 @@ Request verification again?</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5487,11 +5648,11 @@ Request verification again?</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Utility like RouteX should respect the highest standard of privacy and data security, because it can acquire your location. We care and pay attention to it.</string>
+							<string>Utilities know your location like RouteX should respect the strictest standard of privacy and security. We care and pay much attention to it.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Utility like RouteX should respect the highest standard of privacy and data security, because it can acquire your location. We care and pay attention to it.</string>
+								<string>Utilities know your location like RouteX should respect the strictest standard of privacy and security. We care and pay much attention to it.</string>
 								<key>zh-Hans</key>
 								<string>像“活点地图”这样能获知您方位的工具，应以最高标准尊重个人隐私和数据安全。我们对此非常重视。</string>
 							</dict>
@@ -5729,7 +5890,9 @@ Request verification again?</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5739,13 +5902,13 @@ Request verification again?</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>You have no access to this private ·X·.</string>
+							<string>You have no access to this private {{X_NOUN}}.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>You have no access to this private ·X·.</string>
+								<string>You have no access to this private {{X_NOUN}}.</string>
 								<key>zh-Hans</key>
-								<string>您无权访问这个活动。</string>
+								<string>您无权访问这个{{X_NOUN}}。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5754,7 +5917,9 @@ Request verification again?</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5764,13 +5929,40 @@ Request verification again?</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>You will no longer have access to any information in this ·X· once left. Please confirm to leave.</string>
+							<string>You just rejected the RouteX page: %@. It will NOT reveal your location, nor you could see others’. While those pages you have open and agreed still do. Every RouteX page follows your location privacy setting individually.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>You will no longer have access to any information in this ·X· once left. Please confirm to leave.</string>
+								<string>You just rejected the RouteX page: %@. It will NOT reveal your location, nor you could see others’. While those pages you have open and agreed still do. Every RouteX page follows your location privacy setting individually.</string>
 								<key>zh-Hans</key>
-								<string>您将无法访问这个活动的任何信息。确认离开？</string>
+								<string>您刚刚拒绝开启这张“活点地图”：%@。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>You will no longer have access to any information in this {{X_NOUN}} once left. Please confirm to leave.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>You will no longer have access to any information in this {{X_NOUN}} once left. Please confirm to leave.</string>
+								<key>zh-Hans</key>
+								<string>您将无法访问这个{{X_NOUN}} 的任何信息。确认离开？</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -6063,100 +6255,6 @@ Request verification again?</string>
 								<string>“Rome wasn't built in a day.”</string>
 								<key>zh-Hans</key>
 								<string>“不积跬步 无以至千里”</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>您刚刚拒绝开启这张“活点地图”：%@。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>您刚刚拒绝开启这张“活点地图”：%@。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>无法立刻通知对方更新方位。请尝试用其它方式联系对方。</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>无法立刻通知对方更新方位。请尝试用其它方式联系对方。</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>无需保持应用开启，也能在您已开启的地图中展示一段时间内的位置。</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>无需保持应用开启，也能在您已开启的地图中展示一段时间内的位置。</string>
-								<key>zh-Hans</key>
-								<string>无需保持应用开启，也能在您已开启的地图中展示一段时间内的位置。</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>通知失败</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>通知失败</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>

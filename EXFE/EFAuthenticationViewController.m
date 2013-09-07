@@ -1043,7 +1043,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                                                                          // error: "Not sign in"
                                                                                      } else if ([@"authenticate_timeout" isEqualToString:errorType]) {
                                                                                          // error: "Authenticate timeout."
-                                                                                         [self showInlineError:NSLocalizedString(@"Set password failed.", nil) with:NSLocalizedString(@"The time is too long after the authentication. Please try authenticate identity above again.", nil)];
+                                                                                         [self showInlineError:NSLocalizedString(@"Set password failed.", nil) with:NSLocalizedString(@"Authentication token expired, please retry.", nil)];
                                                                                      }
                                                                                  }
                                                                                  
@@ -1148,11 +1148,11 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                                              if (c == 401) {
                                                                  if ([@"no_signin" isEqualToString:errorType]) {
                                                                      // error: "Not sign in"
-                                                                     [self showInlineError:NSLocalizedString(@"Authentication failed.", nil) with:[NSLocalizedString(@"Please check and allow {{PRODUCT_APP_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.", nil) templateFromDict:[Util keywordDict]]];
+                                                                     [self showInlineError:NSLocalizedString(@"Authentication failed.", nil) with:[NSLocalizedString(@"Please check and allow {{PRODUCT_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.", nil) templateFromDict:[Util keywordDict]]];
                                                                  } else if ([@"token_staled" isEqualToString:errorType]) {
                                                                      // error: "Token expired"
                                                                      // retry verication/authentication again
-                                                                     [self showInlineError:NSLocalizedString(@"Authentication failed.", nil) with:[NSLocalizedString(@"Please check and allow {{PRODUCT_APP_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.", nil) templateFromDict:[Util keywordDict]]];
+                                                                     [self showInlineError:NSLocalizedString(@"Authentication failed.", nil) with:[NSLocalizedString(@"Please check and allow {{PRODUCT_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.", nil) templateFromDict:[Util keywordDict]]];
                                                                  }
                                                              } else if (c == 429){
                                                                  

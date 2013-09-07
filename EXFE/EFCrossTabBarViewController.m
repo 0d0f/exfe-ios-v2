@@ -13,6 +13,7 @@
 #import "EFKit.h"
 #import "EFEntity.h"
 #import "EFModel.h"
+#import "CCTemplate.h"
 
 @interface EFCrossTabBarViewController ()
 
@@ -215,7 +216,8 @@
                             } break;
                             case 4:{
                                 if (c == 403) {
-                                    UIAlertView *alert = [UIAlertView alertViewWithTitle:NSLocalizedString(@"Privacy Control", nil) message:NSLocalizedString(@"You have no access to this private ·X·.", nil)];
+                                    UIAlertView *alert = [UIAlertView alertViewWithTitle:NSLocalizedString(@"Privacy Control", nil)
+                                                                                 message:[NSLocalizedString(@"You have no access to this private {{X_NOUN}}.", nil) templateFromDict:[Util keywordDict]]];
                                     [alert addButtonWithTitle:NSLocalizedString(@"OK", nil) handler:^{
                                         [self removeCrossAndExit];
                                     }];

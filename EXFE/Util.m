@@ -393,6 +393,12 @@ static NSDictionary * _keywordDict = nil;
     }
 }
 
++ (void) handleDefaultBannerTitle:(NSString *)title andMessage:(NSString *)message
+{
+    EFErrorMessage *errorMessage = [[EFErrorMessage alloc] initBannerMessageWithTitle:title message:message bannerPressedHandler:nil buttonPressedHandler:nil needRetry:NO];
+    [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:errorMessage];
+}
+
 + (void) handleRetryBannerFor:(EFNetworkOperation *)operation withTitle:(NSString *)title andMessage:(NSString *)message andRetry:(BOOL)retry
 {
     EFNetworkOperation *op = [[operation class] operationWithModel:((EFNetworkOperation * )operation).model dupelicatedFrom:operation];

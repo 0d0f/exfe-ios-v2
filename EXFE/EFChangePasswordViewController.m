@@ -696,7 +696,7 @@
                                                              [self showErrorInfo:NSLocalizedString(@"Password incorrect.", nil) dockOn:self.oldPwdTextField];
                                                          }
                                                      } else if (c == 429) {
-//                                                         [self showInlineError:NSLocalizedString(@"Request too frequently.", nil) with:NSLocalizedString(@"Please wait a while.", nil)];
+                                                         // error: Request too frequently
                                                      }
                                                  }
                                                      break;
@@ -1019,7 +1019,7 @@
                                                                                          // error: "Not sign in"
                                                                                      } else if ([@"authenticate_timeout" isEqualToString:errorType]) {
                                                                                          // error: "Authenticate timeout."
-                                                                                         [self showInlineError:NSLocalizedString(@"Set password failed.", nil) with:NSLocalizedString(@"The time is too long after the authentication. Please try authenticate identity above again.", nil)];
+                                                                                         [self showInlineError:NSLocalizedString(@"Set password failed.", nil) with:NSLocalizedString(@"Authentication token expired, please retry.", nil)];
                                                                                      }
                                                                                  }
                                                                                  

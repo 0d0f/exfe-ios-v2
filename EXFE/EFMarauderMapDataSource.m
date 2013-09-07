@@ -9,6 +9,7 @@
 #import "EFMarauderMapDataSource.h"
 
 #import <AddressBookUI/AddressBookUI.h>
+#import "CCTemplate.h"
 #import "EFAnnotation.h"
 #import "EFAnnotationView.h"
 #import "Util.h"
@@ -347,7 +348,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
     if ([meta.code intValue] == 403) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Privacy Control", nil)
-                                                        message:NSLocalizedString(@"You have no access to this private ·X·.", nil)
+                                                        message:[NSLocalizedString(@"You have no access to this private {{X_NOUN}}.", nil) templateFromDict:[Util keywordDict]]
                                                        delegate:self
                                               cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                               otherButtonTitles:nil];

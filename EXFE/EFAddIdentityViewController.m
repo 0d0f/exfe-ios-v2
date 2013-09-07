@@ -889,7 +889,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 }
             } else {
                 
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:[NSLocalizedString(@"Please check and allow Shuady \naccount in Twitter \nmenu of ‘Settings’ app.", nil)  templateFromDict:[Util keywordDict]] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:[NSLocalizedString(@"Please allow {{PRODUCT_NAME}} to use your Twitter account. Go to the Settings app, select Twitter to set up.", nil)  templateFromDict:[Util keywordDict]] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                 [alert show];
                 
             }

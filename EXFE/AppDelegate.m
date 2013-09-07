@@ -391,10 +391,12 @@
     self.url = url;
     
     if (token.length > 0 && [user_id integerValue] > 0){
+        
         EFAPIServer *server = self.model.apiServer;
         if (![server isLoggedIn]) {
             RKLogInfo(@"Sign In by url");
             
+            // TODO check token is valid: query for profile with the time in future; HTTP 200 with API 304 is valid.
             [self switchContextByUserId:[user_id integerValue] withAbandon:NO];
             self.model.userToken = token;
             [self.model saveUserData];
@@ -408,8 +410,8 @@
             if (uid == self.model.userId) {
                 RKLogInfo(@"Jump in by url");
                 // refresh token
-                self.model.userToken = token;
-                [self.model saveUserData];
+                // self.model.userToken = token; // We want the token maps to a single client.
+                // [self.model saveUserData];
                 [self jumpTo:url];
             } else {
                 // merge identities
@@ -443,25 +445,27 @@
                                                                                     break;
                                                                                     
                                                                                 default:
-                                                                                    //[self jumpTo:url];
-                                                                                    #warning test only
-                                                                                    NSLog(@"Merge fail for %i %@. NO Jump!", c, [meta valueForKey:@"errorType"]);
-                                                                                    UIAlertView * alert = [UIAlertView alertViewWithTitle:@"Merge Fail" message:[NSString stringWithFormat:@"API: %@", meta]];
-                                                                                    [alert addButtonWithTitle:NSLocalizedString(@"OK", nil)];
-                                                                                    alert.delegate = nil;
-                                                                                    [alert show];
+                                                                                    // 400: error_browsing_identity_token
+                                                                                    // 400: error_invitation_token
+                                                                                    // 400: no_identity_ids
+                                                                                    // 400: error_user_status
+                                                                                    // 401: no_signin
+                                                                                    // 500: server_error
+                                                                                    
+                                                                                    // [self jumpTo:url];
+                                                                                    RKLogError(@"Merge fail for %i %@. NO Jump!", c, [meta valueForKey:@"errorType"]);
+                                                                                    [Util handleDefaultBannerTitle:NSLocalizedString(@"Failed to merge accounts.", nil) andMessage:NSLocalizedString(@"Authentication token expired.", nil)];
                                                                                     break;
                                                                             }
                                                                         }
                                                                     }
                                                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                                         #warning test only
-                                                                        NSLog(@"Merge fail for error %@. NO Jump!", error);
-                                                                        //[self jumpTo:url];
-                                                                        UIAlertView * alert = [UIAlertView alertViewWithTitle:@"Merge Fail" message:[NSString stringWithFormat:@"ERROR: %@", error]];
-                                                                        [alert addButtonWithTitle:NSLocalizedString(@"OK", nil)];
-                                                                        alert.delegate = nil;
-                                                                        [alert show];
+                                                                        RKLogError(@"Merge fail for error %@. NO Jump!", error);
+                                                                        // [self jumpTo:url];
+                                                                        // HTTP 500 NSURLErrorBadServerResponse AFNetworkingErrorDomain  
+                                                                        // HTTP 4xx
+                                                                        [Util handleDefaultBannerTitle:NSLocalizedString(@"Failed to merge accounts.", nil) andMessage:NSLocalizedString(@"Failed to connect to server.", nil)];
                                                                     }];
                                                 } else {
                                                     RKLogInfo(@"Not merge. Jump!");
