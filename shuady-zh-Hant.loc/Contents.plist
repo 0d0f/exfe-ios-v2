@@ -32,7 +32,7 @@
 						</dict>
 					</dict>
 					<key>change date</key>
-					<date>2013-09-05T11:27:19Z</date>
+					<date>2013-09-07T11:11:43Z</date>
 					<key>class</key>
 					<string>BLStringsFileObject</string>
 					<key>errors</key>
@@ -40,7 +40,7 @@
 					<key>flags</key>
 					<integer>1</integer>
 					<key>hash</key>
-					<string>f38e2aa3ef05f57d3f55b1417fbee38d
+					<string>205a4fd944e48d8eef54e7e346860a27
 </string>
 					<key>name</key>
 					<string>Localizable.strings</string>
@@ -127,11 +127,13 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>%1$@ to arrive, %2$@ apart</string>
+							<string>%@ %@ ago</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>%1$@ to arrive, %2$@ apart</string>
+								<string>%1$@ %2$@ ago</string>
+								<key>zh-Hant</key>
+								<string>%1$@ %2$@ ȧɠǿ</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -148,13 +150,11 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>%@ %@ ago</string>
+							<string>%@ %@ to arrive</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>%1$@ %2$@ ago</string>
-								<key>zh-Hant</key>
-								<string>%1$@ %2$@ ȧɠǿ</string>
+								<string>%1$@ %2$@ to arrive</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -194,11 +194,74 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
+							<string>%@ apart</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%@ apart</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
 							<string>%@ location</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
 								<string>%@ location</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%@ to arrive</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%@ to arrive</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%@ to arrive, %@ apart</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%1$@ to arrive, %2$@ apart</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -238,13 +301,11 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>%d people limit on gathering this ·X·. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!</string>
+							<string>%d people limit on gathering this {{X_NOUN}}. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>%d people limit on gathering this ·X·. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!</string>
-								<key>zh-Hant</key>
-								<string>%d ƥḗǿƥŀḗ ŀīḿīŧ ǿƞ ɠȧŧħḗřīƞɠ ŧħīş ·Ẋ·. Ħǿẇḗṽḗř, ẇḗ’řḗ ɠŀȧḓ ŧǿ ḗŀīḿīƞȧŧḗ ŧħīş ŀīḿīŧ ḓŭřīƞɠ ƥīŀǿŧ ƥḗřīǿḓ īƞ ȧƥƥřḗƈīȧŧīǿƞ ǿƒ ẏǿŭř ḗȧřŀẏ ȧḓȧƥŧīǿƞ. Ŧħȧƞķ ẏǿŭ!</string>
+								<string>%d people limit on gathering this {{X_NOUN}}. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -261,11 +322,32 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>%d%@前 至目的地%@</string>
+							<string>%dh ago</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>%1$d%2$@前 至目的地%3$@</string>
+								<string>%dh ago</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%dm ago</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%dm ago</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -458,52 +540,6 @@
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>%u %@ %u %@ ago</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>%1$u %2$@ %3$u %4$@ ago</string>
-								<key>zh-Hant</key>
-								<string>%1$u %2$@ %3$u %4$@ ȧɠǿ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>%u %@ ago</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>%1$u %2$@ ago</string>
-								<key>zh-Hant</key>
-								<string>%1$u %2$@ ȧɠǿ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
 							<string>WidgetExfee Exfee static</string>
 							<key>errors</key>
 							<array/>
@@ -515,75 +551,6 @@
 							<dict>
 								<key>en</key>
 								<string>%1$u / %2$u</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>%u days ago</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>%u days ago</string>
-								<key>zh-Hant</key>
-								<string>%u ḓȧẏş ȧɠǿ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>%u hours ago</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>%u hours ago</string>
-								<key>zh-Hant</key>
-								<string>%u ħǿŭřş ȧɠǿ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>%u minutes ago</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>%u minutes ago</string>
-								<key>zh-Hant</key>
-								<string>%u ḿīƞŭŧḗş ȧɠǿ</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -682,7 +649,7 @@
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
-							<string>Accepted in Add Exfee</string>
+							<string>No comment provided by engineer.</string>
 							<key>errors</key>
 							<array/>
 							<key>flags</key>
@@ -739,27 +706,6 @@
 								<string>Add identity</string>
 								<key>zh-Hant</key>
 								<string>Ȧḓḓ īḓḗƞŧīŧẏ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Add Identity</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Add Identity</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1000,6 +946,48 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
+							<string>Authentication token expired, please retry.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Authentication token expired, please retry.</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Authentication token expired.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Authentication token expired.</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
 							<string>Authorization failed.</string>
 							<key>localizations</key>
 							<dict>
@@ -1099,6 +1087,27 @@
 								<string>Brunch</string>
 								<key>zh-Hant</key>
 								<string>Ɓřŭƞƈħ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Can not reach this contact at the moment, please try other ways.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Can not reach this contact at the moment, please try other ways.</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1544,11 +1553,11 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Edit {{APP_NAME}} Info</string>
+							<string>Edit {{X_NOUN}} Info</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Edit {{APP_NAME}} Info</string>
+								<string>Edit {{X_NOUN}} Info</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1565,13 +1574,11 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Edit ·X· time</string>
+							<string>Edit {{X_NOUN}} time</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Edit ·X· time</string>
-								<key>zh-Hant</key>
-								<string>Ḗḓīŧ ·Ẋ· ŧīḿḗ</string>
+								<string>Edit {{X_NOUN}} time</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1749,13 +1756,11 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Exfees</string>
+							<string>Exfee</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Exfees</string>
-								<key>zh-Hant</key>
-								<string>Ḗẋƒḗḗş</string>
+								<string>Exfee</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1818,11 +1823,55 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Failed to connect to server. Please retry or wait awhile.</string>
+							<string>Failed to connect to server.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Failed to connect to server. Please retry or wait awhile.</string>
+								<string>Failed to connect to server.</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Failed to connect to server.
+Please retry or wait awhile.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Failed to connect to server.
+Please retry or wait awhile.</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Failed to merge accounts.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Failed to merge accounts.</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1954,13 +2003,11 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Gather a ·X·</string>
+							<string>Gather a {{X_FOR_GATHER}}</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Gather a ·X·</string>
-								<key>zh-Hant</key>
-								<string>Ɠȧŧħḗř ȧ ·Ẋ·</string>
+								<string>Gather a {{X_FOR_GATHER}}</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2272,121 +2319,6 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>In %u %@</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>In %1$u %2$@</string>
-								<key>zh-Hant</key>
-								<string>Īƞ %1$u %2$@</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>In %u %@ %u %@</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>In %1$u %2$@ %3$u %4$@</string>
-								<key>zh-Hant</key>
-								<string>Īƞ %1$u %2$@ %3$u %4$@</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>In %u days</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>In %u days</string>
-								<key>zh-Hant</key>
-								<string>Īƞ %u ḓȧẏş</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>In %u hours</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>In %u hours</string>
-								<key>zh-Hant</key>
-								<string>Īƞ %u ħǿŭřş</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>In %u minutes</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>In %u minutes</string>
-								<key>zh-Hant</key>
-								<string>Īƞ %u ḿīƞŭŧḗş</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>in 1.5 hours</string>
 							<key>localizations</key>
 							<dict>
@@ -2440,29 +2372,6 @@
 								<string>in two days</string>
 								<key>zh-Hant</key>
 								<string>īƞ ŧẇǿ ḓȧẏş</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>In two days</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>In two days</string>
-								<key>zh-Hant</key>
-								<string>Īƞ ŧẇǿ ḓȧẏş</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2611,7 +2520,7 @@
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
-							<string>No comment provided by engineer.</string>
+							<string>Use as search pattern</string>
 							<key>errors</key>
 							<array/>
 							<key>flags</key>
@@ -2622,6 +2531,27 @@
 							<dict>
 								<key>en</key>
 								<string>invited</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>It’s all about privacy</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>It’s all about privacy</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2661,29 +2591,6 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Just now</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Just now</string>
-								<key>zh-Hant</key>
-								<string>Ĵŭşŧ ƞǿẇ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>km</string>
 							<key>localizations</key>
 							<dict>
@@ -2705,13 +2612,11 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Leave from this ·X·</string>
+							<string>Leave from this {{X_NOUN}}</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Leave from this ·X·</string>
-								<key>zh-Hant</key>
-								<string>Ŀḗȧṽḗ ƒřǿḿ ŧħīş ·Ẋ·</string>
+								<string>Leave from this {{X_NOUN}}</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2954,52 +2859,6 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>month</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>month</string>
-								<key>zh-Hant</key>
-								<string>ḿǿƞŧħ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>months</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>months</string>
-								<key>zh-Hant</key>
-								<string>ḿǿƞŧħş</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>Morning</string>
 							<key>localizations</key>
 							<dict>
@@ -3074,29 +2933,6 @@
 								<string>Next</string>
 								<key>zh-Hant</key>
 								<string>Ƞḗẋŧ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Next %@</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Next %@</string>
-								<key>zh-Hant</key>
-								<string>Ƞḗẋŧ %@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3215,29 +3051,6 @@
 								<string>now</string>
 								<key>zh-Hant</key>
 								<string>ƞǿẇ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Now</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Now</string>
-								<key>zh-Hant</key>
-								<string>Ƞǿẇ</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3411,13 +3224,11 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>People will no longer have access to any information in this ·X·. Please confirm to remove.</string>
+							<string>People will no longer have access to any information in this {{X_NOUN}}. Please confirm to remove.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>People will no longer have access to any information in this ·X·. Please confirm to remove.</string>
-								<key>zh-Hant</key>
-								<string>Ƥḗǿƥŀḗ ẇīŀŀ ƞǿ ŀǿƞɠḗř ħȧṽḗ ȧƈƈḗşş ŧǿ ȧƞẏ īƞƒǿřḿȧŧīǿƞ īƞ ŧħīş ·Ẋ·. Ƥŀḗȧşḗ ƈǿƞƒīřḿ ŧǿ řḗḿǿṽḗ.</string>
+								<string>People will no longer have access to any information in this {{X_NOUN}}. Please confirm to remove.</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3457,13 +3268,34 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Please check and allow Shuady 
+							<string>Please allow {{PRODUCT_NAME}} to use your Twitter account. Go to the Settings app, select Twitter to set up.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Please allow {{PRODUCT_NAME}} to use your Twitter account. Go to the Settings app, select Twitter to set up.</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Please check and allow {{PRODUCT_NAME}}  
 account in Twitter 
 menu of ‘Settings’ app.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Please check and allow Shuady 
+								<string>Please check and allow {{PRODUCT_NAME}}  
 account in Twitter 
 menu of ‘Settings’ app.</string>
 							</dict>
@@ -3482,13 +3314,11 @@ menu of ‘Settings’ app.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Please check and allow {{PRODUCT_APP_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.</string>
+							<string>Please check and allow {{PRODUCT_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Please check and allow {{PRODUCT_APP_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.</string>
-								<key>zh-Hant</key>
-								<string>Ƥŀḗȧşḗ ƈħḗƈķ ȧƞḓ ȧŀŀǿẇ {{ƤŘǾḒŬƇŦ_ȦƤƤ_ȠȦḾḖ}} ŧǿ ŭşḗ ẏǿŭř ȧƈƈǿŭƞŧ īƞ Ƒȧƈḗƀǿǿķ ḿḗƞŭ ǿƒ ‘Şḗŧŧīƞɠş’ ȧƥƥ. Řḗŧřẏ ǿř ŭşḗ ǿŧħḗř īḓḗƞŧīŧẏ.</string>
+								<string>Please check and allow {{PRODUCT_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3621,29 +3451,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Please wait a while.</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Please wait a while.</string>
-								<key>zh-Hant</key>
-								<string>Ƥŀḗȧşḗ ẇȧīŧ ȧ ẇħīŀḗ.</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>Previous</string>
 							<key>localizations</key>
 							<dict>
@@ -3674,27 +3481,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<string>Privacy Control</string>
 								<key>zh-Hant</key>
 								<string>Ƥřīṽȧƈẏ Ƈǿƞŧřǿŀ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Privacy is important</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Privacy is important</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3824,13 +3610,11 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Remove from this ·X·</string>
+							<string>Remove from this {{X_NOUN}}</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Remove from this ·X·</string>
-								<key>zh-Hant</key>
-								<string>Řḗḿǿṽḗ ƒřǿḿ ŧħīş ·Ẋ·</string>
+								<string>Remove from this {{X_NOUN}}</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4027,6 +3811,27 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
+							<string>RouteX can show your location for minutes even after quitting {{PRODUCT_APP_NAME}}.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>RouteX can show your location for minutes even after quitting {{PRODUCT_APP_NAME}}.</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
 							<string>RouteX in background</string>
 							<key>localizations</key>
 							<dict>
@@ -4143,29 +3948,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<string>Search place</string>
 								<key>zh-Hant</key>
 								<string>Şḗȧřƈħ ƥŀȧƈḗ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Seconds ago</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Seconds ago</string>
-								<key>zh-Hant</key>
-								<string>Şḗƈǿƞḓş ȧɠǿ</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4841,27 +4623,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>The time is too long after the authentication. Please try authenticate identity above again.</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>The time is too long after the authentication. Please try authenticate identity above again.</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>There is something wrong. Please try again later.</string>
 							<key>localizations</key>
 							<dict>
@@ -5020,29 +4781,6 @@ until your account is verified. Please go to verify first.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Today</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Today</string>
-								<key>zh-Hant</key>
-								<string>Ŧǿḓȧẏ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>tomorrow</string>
 							<key>localizations</key>
 							<dict>
@@ -5050,29 +4788,6 @@ until your account is verified. Please go to verify first.</string>
 								<string>tomorrow</string>
 								<key>zh-Hant</key>
 								<string>ŧǿḿǿřřǿẇ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Tomorrow</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Tomorrow</string>
-								<key>zh-Hant</key>
-								<string>Ŧǿḿǿřřǿẇ</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5119,29 +4834,6 @@ until your account is verified. Please go to verify first.</string>
 								<string>Twitter Authorization</string>
 								<key>zh-Hant</key>
 								<string>Ŧẇīŧŧḗř Ȧŭŧħǿřīzȧŧīǿƞ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Two days ago</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Two days ago</string>
-								<key>zh-Hant</key>
-								<string>Ŧẇǿ ḓȧẏş ȧɠǿ</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5363,11 +5055,11 @@ Request verification again?</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Utility like RouteX should respect the highest standard of privacy and data security, because it can acquire your location. We care and pay attention to it.</string>
+							<string>Utilities know your location like RouteX should respect the strictest standard of privacy and security. We care and pay much attention to it.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Utility like RouteX should respect the highest standard of privacy and data security, because it can acquire your location. We care and pay attention to it.</string>
+								<string>Utilities know your location like RouteX should respect the strictest standard of privacy and security. We care and pay much attention to it.</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5564,75 +5256,6 @@ Request verification again?</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>year</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>year</string>
-								<key>zh-Hant</key>
-								<string>ẏḗȧř</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>years</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>years</string>
-								<key>zh-Hant</key>
-								<string>ẏḗȧřş</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Yesterday</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Yesterday</string>
-								<key>zh-Hant</key>
-								<string>Ẏḗşŧḗřḓȧẏ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>yesterday</string>
 							<key>localizations</key>
 							<dict>
@@ -5656,13 +5279,11 @@ Request verification again?</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>You have no access to this private ·X·.</string>
+							<string>You have no access to this private {{X_NOUN}}.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>You have no access to this private ·X·.</string>
-								<key>zh-Hant</key>
-								<string>Ẏǿŭ ħȧṽḗ ƞǿ ȧƈƈḗşş ŧǿ ŧħīş ƥřīṽȧŧḗ ·Ẋ·.</string>
+								<string>You have no access to this private {{X_NOUN}}.</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5679,13 +5300,32 @@ Request verification again?</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>You will no longer have access to any information in this ·X· once left. Please confirm to leave.</string>
+							<string>You just rejected the RouteX page: %@. It will NOT reveal your location, nor you could see others’. While those pages you have open and agreed still do. Every RouteX page follows your location privacy setting individually.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>You will no longer have access to any information in this ·X· once left. Please confirm to leave.</string>
-								<key>zh-Hant</key>
-								<string>Ẏǿŭ ẇīŀŀ ƞǿ ŀǿƞɠḗř ħȧṽḗ ȧƈƈḗşş ŧǿ ȧƞẏ īƞƒǿřḿȧŧīǿƞ īƞ ŧħīş ·Ẋ· ǿƞƈḗ ŀḗƒŧ. Ƥŀḗȧşḗ ƈǿƞƒīřḿ ŧǿ ŀḗȧṽḗ.</string>
+								<string>You just rejected the RouteX page: %@. It will NOT reveal your location, nor you could see others’. While those pages you have open and agreed still do. Every RouteX page follows your location privacy setting individually.</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>You will no longer have access to any information in this {{X_NOUN}} once left. Please confirm to leave.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>You will no longer have access to any information in this {{X_NOUN}} once left. Please confirm to leave.</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5765,7 +5405,7 @@ Request verification again?</string>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
-							<string>No comment provided by engineer.</string>
+							<string>Use as search pattern</string>
 							<key>errors</key>
 							<array/>
 							<key>flags</key>
@@ -5811,7 +5451,7 @@ Request verification again?</string>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
-							<string>No comment provided by engineer.</string>
+							<string>Use as search pattern</string>
 							<key>errors</key>
 							<array/>
 							<key>flags</key>
@@ -5832,19 +5472,101 @@ Request verification again?</string>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
-							<string>No comment provided by engineer.</string>
+							<string>Use as search pattern</string>
 							<key>errors</key>
 							<array/>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>·X·</string>
+							<string>{{X_FOR_GATHER}}</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>·X·</string>
-								<key>zh-Hant</key>
-								<string>·Ẋ·</string>
+								<string>{{X_FOR_GATHER}}</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>Use as search pattern</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>{{X_NOUN}}</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>{{X_NOUN}}</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>·X· as noun</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>·X· </string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>·X· </string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>·X· as verb</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>·X·  </string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>·X·  </string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>·X· for Gahter</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>·X·   </string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>·X·   </string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5868,92 +5590,6 @@ Request verification again?</string>
 								<string>“Rome wasn't built in a day.”</string>
 								<key>zh-Hant</key>
 								<string>“Řǿḿḗ ẇȧşƞ'ŧ ƀŭīŀŧ īƞ ȧ ḓȧẏ.”</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>您刚刚拒绝开启这张“活点地图”：Threshold of the odyssey。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>您刚刚拒绝开启这张“活点地图”：Threshold of the odyssey。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
-								<key>zh-Hant</key>
-								<string>您刚刚拒绝开启这张“活点地图”：Ŧħřḗşħǿŀḓ ǿƒ ŧħḗ ǿḓẏşşḗẏ。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>无法立刻通知对方更新方位。请尝试用其它方式联系对方。</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>无法立刻通知对方更新方位。请尝试用其它方式联系对方。</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>无需保持应用开启，也能在您已开启的地图中展示一段时间内的位置。</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>无需保持应用开启，也能在您已开启的地图中展示一段时间内的位置。</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>通知失败</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>通知失败</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>

@@ -36,7 +36,7 @@
 						</dict>
 					</dict>
 					<key>change date</key>
-					<date>2013-09-07T10:07:10Z</date>
+					<date>2013-09-07T11:11:43Z</date>
 					<key>changed values</key>
 					<array>
 						<string>zh-Hans</string>
@@ -48,7 +48,7 @@
 					<key>flags</key>
 					<integer>1</integer>
 					<key>hash</key>
-					<string>20c3801cecbaf31ba4e08b4489b135af
+					<string>205a4fd944e48d8eef54e7e346860a27
 </string>
 					<key>name</key>
 					<string>Localizable.strings</string>
@@ -333,9 +333,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -460,9 +458,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -962,9 +958,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -989,9 +983,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1016,9 +1008,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1043,9 +1033,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1070,9 +1058,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1097,9 +1083,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1249,9 +1233,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2051,9 +2033,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2090,11 +2070,13 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Failed to connect to server. Please retry or wait awhile.</string>
+							<string>Failed to connect to server.
+Please retry or wait awhile.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Failed to connect to server. Please retry or wait awhile.</string>
+								<string>Failed to connect to server.
+Please retry or wait awhile.</string>
 								<key>zh-Hans</key>
 								<string>无法连接服务器，请稍后重试。</string>
 							</dict>
@@ -2105,9 +2087,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2857,9 +2837,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2934,9 +2912,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3613,9 +3589,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3665,9 +3639,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3692,9 +3664,7 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3723,9 +3693,7 @@ menu of ‘Settings’ app.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4052,9 +4020,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4279,9 +4245,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4906,9 +4870,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4933,9 +4895,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5035,9 +4995,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5339,9 +5297,7 @@ until your account is verified. Please go to verify first.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5566,9 +5522,7 @@ until your account is verified. Please go to verify first.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5595,9 +5549,7 @@ Request verification again?</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5674,9 +5626,7 @@ Request verification again?</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5928,9 +5878,7 @@ Request verification again?</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5955,9 +5903,7 @@ Request verification again?</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5982,9 +5928,7 @@ Request verification again?</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6034,9 +5978,7 @@ Request verification again?</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6061,9 +6003,7 @@ Request verification again?</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
+							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6406,8 +6346,6 @@ Request verification again?</string>
 		<string>zh-Hans</string>
 		<key>saveCompressed</key>
 		<false/>
-		<key>search</key>
-		<string>??</string>
 	</dict>
 	<key>reference language</key>
 	<string>en</string>

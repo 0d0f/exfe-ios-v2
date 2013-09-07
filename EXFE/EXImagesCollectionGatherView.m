@@ -198,7 +198,7 @@
                 [addview addSubview:addimg];
                 
                 invitedString = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 2, 52, 13)];
-                invitedString.font = [UIFont fontWithName:@"HelveticaNeue" size:13];
+                invitedString.font = [UIFont fontWithName:@"HelveticaNeue" size:10]; // number size 13 the resest is size 10
                 invitedString.textColor = FONT_COLOR_51;
                 invitedString.backgroundColor = [UIColor clearColor];
                 invitedString.textAlignment = NSTextAlignmentCenter;
@@ -212,6 +212,7 @@
         }
         
         if (invitedString) {
+            // TODO: rewrite the higlight hit logic
             [invitedString setText:[NSString stringWithFormat:NSLocalizedString(@"%i invited", nil),allnum] afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
                 NSString *highlight = NSLocalizedString(@"invited", @"Use as search pattern");;
                 NSRange range = [[mutableAttributedString string] rangeOfString:highlight options:NSCaseInsensitiveSearch];

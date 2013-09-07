@@ -79,7 +79,7 @@
 						</dict>
 					</dict>
 					<key>change date</key>
-					<date>2013-09-07T10:07:10Z</date>
+					<date>2013-09-07T11:11:43Z</date>
 					<key>changed values</key>
 					<array>
 						<string>zh-Hant</string>
@@ -91,7 +91,7 @@
 					<key>flags</key>
 					<integer>1</integer>
 					<key>hash</key>
-					<string>20c3801cecbaf31ba4e08b4489b135af
+					<string>205a4fd944e48d8eef54e7e346860a27
 </string>
 					<key>name</key>
 					<string>Localizable.strings</string>
@@ -533,7 +533,7 @@
 								<key>en</key>
 								<string>%i invited</string>
 								<key>zh-Hans</key>
-								<string>??%d已邀请</string>
+								<string>已邀%i人</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1059,7 +1059,7 @@
 								<key>en</key>
 								<string>Authenticate</string>
 								<key>zh-Hans</key>
-								<string>鉴权</string>
+								<string>验证</string>
 								<key>zh-Hant</key>
 								<string>Ȧŭŧħḗƞŧīƈȧŧḗ</string>
 							</dict>
@@ -1086,7 +1086,7 @@
 								<key>en</key>
 								<string>Authentication</string>
 								<key>zh-Hans</key>
-								<string>鉴权</string>
+								<string>验证</string>
 								<key>zh-Hant</key>
 								<string>Ȧŭŧħḗƞŧīƈȧŧīǿƞ</string>
 							</dict>
@@ -1113,7 +1113,7 @@
 								<key>en</key>
 								<string>Authentication failed due to security concerns, please sign in again.</string>
 								<key>zh-Hans</key>
-								<string>???</string>
+								<string>账号有安全隐患，请重新登录解决。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1138,7 +1138,7 @@
 								<key>en</key>
 								<string>Authentication failed.</string>
 								<key>zh-Hans</key>
-								<string>鉴权失败</string>
+								<string>验证失败</string>
 								<key>zh-Hant</key>
 								<string>Ȧŭŧħḗƞŧīƈȧŧīǿƞ ƒȧīŀḗḓ.</string>
 							</dict>
@@ -1165,7 +1165,7 @@
 								<key>en</key>
 								<string>Authentication token expired, please retry.</string>
 								<key>zh-Hans</key>
-								<string>???</string>
+								<string>密令过期，请重试。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1190,7 +1190,7 @@
 								<key>en</key>
 								<string>Authentication token expired.</string>
 								<key>zh-Hans</key>
-								<string>???</string>
+								<string>密令过期。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2198,7 +2198,7 @@
 								<key>en</key>
 								<string>Failed to connect to server.</string>
 								<key>zh-Hans</key>
-								<string>???无法连接服务器</string>
+								<string>无法连接服务器。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2217,13 +2217,15 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Failed to connect to server. Please retry or wait awhile.</string>
+							<string>Failed to connect to server.
+Please retry or wait awhile.</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Failed to connect to server. Please retry or wait awhile.</string>
+								<string>Failed to connect to server.
+Please retry or wait awhile.</string>
 								<key>zh-Hans</key>
-								<string>???无法连接服务器，请重试或者稍后再尝试</string>
+								<string>无法连接服务器，请稍后重试。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2248,7 +2250,7 @@
 								<key>en</key>
 								<string>Failed to merge accounts.</string>
 								<key>zh-Hans</key>
-								<string>???合并帐号失败</string>
+								<string>合并帐号失败。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3897,7 +3899,7 @@
 								<key>en</key>
 								<string>Please allow {{PRODUCT_NAME}} to use your Twitter account. Go to the Settings app, select Twitter to set up.</string>
 								<key>zh-Hans</key>
-								<string>???</string>
+								<string>请允许{{PRODUCT_NAME}}访问您的Twitter账号，前往“设置”应用的Twitter菜单打开{{PRODUCT_NAME}}开关。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3926,7 +3928,7 @@ menu of ‘Settings’ app.</string>
 account in Twitter 
 menu of ‘Settings’ app.</string>
 								<key>zh-Hans</key>
-								<string>???</string>
+								<string>请允许{{PRODUCT_NAME}}访问您的Twitter账号，前往“设置”应用的Twitter菜单打开{{PRODUCT_NAME}}开关。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3951,7 +3953,7 @@ menu of ‘Settings’ app.</string>
 								<key>en</key>
 								<string>Please check and allow {{PRODUCT_NAME}} to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.</string>
 								<key>zh-Hans</key>
-								<string>???</string>
+								<string>请允许{{PRODUCT_NAME}}访问您的Facebook账号，前往“设置”应用的Facebook菜单打开{{PRODUCT_APP_NAME}}开关。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5197,7 +5199,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<key>en</key>
 								<string>Sorry for the inconvenience. Sometimes, we have to compromise on experience for your account security. Re-authentication is to avoid modification by others who can possibly use your phone.</string>
 								<key>zh-Hans</key>
-								<string>有时候我们为了您的账号安全只能牺牲用户体验。重新鉴权是为了避免别人冒充您作操作。抱歉给您带来不变。</string>
+								<string>有时候我们为了您的账号安全只能牺牲用户体验。要求验证是为了避免别人冒充您作操作。抱歉给您带来不变。</string>
 								<key>zh-Hant</key>
 								<string>Şǿřřẏ ƒǿř ŧħḗ īƞƈǿƞṽḗƞīḗƞƈḗ. Şǿḿḗŧīḿḗş, ẇḗ ħȧṽḗ ŧǿ ƈǿḿƥřǿḿīşḗ ǿƞ ḗẋƥḗřīḗƞƈḗ ƒǿř ẏǿŭř ȧƈƈǿŭƞŧ şḗƈŭřīŧẏ. Řḗ-ȧŭŧħḗƞŧīƈȧŧīǿƞ īş ŧǿ ȧṽǿīḓ ḿǿḓīƒīƈȧŧīǿƞ ƀẏ ǿŧħḗřş ẇħǿ ƈȧƞ ƥǿşşīƀŀẏ ŭşḗ ẏǿŭř ƥħǿƞḗ.</string>
 							</dict>
@@ -5224,7 +5226,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<key>en</key>
 								<string>Sorry, something is technically wrong in the "cloud", we’re fixing it up.</string>
 								<key>zh-Hans</key>
-								<string>???</string>
+								<string>服务器出了点技术问题，我们正在抢修。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5330,7 +5332,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<key>en</key>
 								<string>Suggest</string>
 								<key>zh-Hans</key>
-								<string>###Suggest</string>
+								<string>网友</string>
 								<key>zh-Hant</key>
 								<string>Şŭɠɠḗşŧ</string>
 							</dict>
@@ -5653,7 +5655,7 @@ until your account is verified. Please go to verify first.</string>
 								<key>en</key>
 								<string>To reset {{PRODUCT_NAME}} password, please authenticate with your identity.</string>
 								<key>zh-Hans</key>
-								<string>???</string>
+								<string>重置{{PRODUCT_NAME}}密码前需要您先验证身份。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5894,7 +5896,7 @@ Request verification again?</string>
 								<string>Unverified identity. Please check your email for instructions.
 Request verification again?</string>
 								<key>zh-Hans</key>
-								<string>???</string>
+								<string>身份未验证，请</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5921,7 +5923,7 @@ Request verification again?</string>
 								<string>Unverified identity. Please check your message for instructions.
 Request verification again?</string>
 								<key>zh-Hans</key>
-								<string>???</string>
+								<string>身份未验证，请查看您的消息阅读说明。重发验证？</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -6366,7 +6368,7 @@ Request verification again?</string>
 								<key>en</key>
 								<string>You’re about to change import information of your account. For security concerns, please authenticate first and set your {{PRODUCT_APP_NAME}} password.</string>
 								<key>zh-Hans</key>
-								<string>您正要修改账号的重要信息，为了安全考虑，请鉴权并设置您的{{PRODUCT_NAME}}密码。</string>
+								<string>您正要修改账号的重要信息，为了安全考虑请先通过验证并设置您的{{PRODUCT_NAME}}密码。</string>
 								<key>zh-Hant</key>
 								<string>Ẏǿŭ’řḗ ȧƀǿŭŧ ŧǿ ƈħȧƞɠḗ īḿƥǿřŧ īƞƒǿřḿȧŧīǿƞ ǿƒ ẏǿŭř ȧƈƈǿŭƞŧ. Ƒǿř şḗƈŭřīŧẏ ƈǿƞƈḗřƞş, ƥŀḗȧşḗ ȧŭŧħḗƞŧīƈȧŧḗ ƒīřşŧ ȧƞḓ şḗŧ ẏǿŭř {{ƤŘǾḒŬƇŦ_ȦƤƤ_ȠȦḾḖ}} ƥȧşşẇǿřḓ.</string>
 							</dict>
@@ -6393,7 +6395,7 @@ Request verification again?</string>
 								<key>en</key>
 								<string>You’re about to change important information of your account. For security concerns, please authenticate your account.</string>
 								<key>zh-Hans</key>
-								<string>您正要修改账号的重要信息，为了安全考虑，请鉴权。</string>
+								<string>您正要修改账号的重要信息，为了安全考虑请先通过验证。</string>
 								<key>zh-Hant</key>
 								<string>Ẏǿŭ’řḗ ȧƀǿŭŧ ŧǿ ƈħȧƞɠḗ īḿƥǿřŧȧƞŧ īƞƒǿřḿȧŧīǿƞ ǿƒ ẏǿŭř ȧƈƈǿŭƞŧ. Ƒǿř şḗƈŭřīŧẏ ƈǿƞƈḗřƞş, ƥŀḗȧşḗ ȧŭŧħḗƞŧīƈȧŧḗ ẏǿŭř ȧƈƈǿŭƞŧ.</string>
 							</dict>
@@ -9056,6 +9058,31 @@ menu of ‘Settings’ app.</string>
 								<string>通知失败</string>
 								<key>zh-Hans</key>
 								<string>???</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Failed to connect to server. Please retry or wait awhile.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Failed to connect to server. Please retry or wait awhile.</string>
+								<key>zh-Hans</key>
+								<string>无法连接服务器，请稍后重试。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>

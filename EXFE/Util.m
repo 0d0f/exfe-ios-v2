@@ -385,7 +385,7 @@ static NSDictionary * _keywordDict = nil;
         errormsg = NSLocalizedString(@"Sorry, something is technically wrong in the \"cloud\", we’re fixing it up.", nil);
     } else { //NSURLError.h
         errorTitle = NSLocalizedString(@"Network error", nil);
-        errormsg = NSLocalizedString(@"Failed to connect to server. Please retry or wait awhile.", nil);
+        errormsg = NSLocalizedString(@"Failed to connect to server.\nPlease retry or wait awhile.", nil);
     }
     if (![errormsg isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:errorTitle message:errormsg delegate:delegate cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
