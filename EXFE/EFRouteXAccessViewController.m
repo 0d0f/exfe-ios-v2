@@ -40,7 +40,7 @@
     titleLabel.shadowOffset = (CGSize){0.0f, 1.0f};
     titleLabel.backgroundColor = [UIColor clearColor];
     titleLabel.textColor = [UIColor whiteColor];
-    titleLabel.text = NSLocalizedString(@"Privacy is important", nil);
+    titleLabel.text = NSLocalizedString(@"It’s all about privacy", nil);
     [scrollView addSubview:titleLabel];
     self.titleLabel = titleLabel;
     
@@ -52,7 +52,7 @@
     para1Label.backgroundColor = [UIColor clearColor];
     para1Label.textColor = [UIColor whiteColor];
     para1Label.numberOfLines = 7;
-    para1Label.text = [NSString stringWithFormat:NSLocalizedString(@"您刚刚拒绝开启这张“活点地图”：%@。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。", nil), self.crossTitle];
+    para1Label.text = [NSString stringWithFormat:NSLocalizedString(@"You just rejected the RouteX page: %@. It will NOT reveal your location, nor you could see others’. While those pages you have open and agreed still do. Every RouteX page follows your location privacy setting individually.", nil), self.crossTitle];
     [scrollView addSubview:para1Label];
     self.para1Label = para1Label;
     
@@ -64,7 +64,7 @@
     para2Label.backgroundColor = [UIColor clearColor];
     para2Label.textColor = [UIColor whiteColor];
     para2Label.numberOfLines = 3;
-    para2Label.text = NSLocalizedString(@"Utility like RouteX should respect the highest standard of privacy and data security, because it can acquire your location. We care and pay attention to it.", nil);
+    para2Label.text = NSLocalizedString(@"Utilities know your location like RouteX should respect the strictest standard of privacy and security. We care and pay much attention to it.", nil);
     [scrollView addSubview:para2Label];
     self.para2Label = para2Label;
     
