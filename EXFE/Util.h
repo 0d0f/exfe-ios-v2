@@ -86,11 +86,6 @@ extern NSString *const EXCrossListDidChangeNotification;
 + (BOOL) isValidPhoneNumber:(NSString*)phonenumber;
 + (NSString *) formatPhoneNumber:(NSString*)phonenumber;
 
-// Deprecated Time tool in Conversation
-+ (NSString *) EXRelativeFromDateStr:(NSString *)datestr TimeStr:(NSString *)timestr type:(NSString *)type localTime:(BOOL)localtime __attribute__ ((deprecated));
-+ (NSDate *) beginningOfWeek:(NSDate*)date __attribute__ ((deprecated));
-
-
 + (void) showErrorWithMetaObject:(Meta *)meta delegate:(id)delegate __attribute__ ((deprecated));
 + (void) showConnectError:(NSError *)err delegate:(id)delegate;
 + (void) handleRetryBannerFor:(EFNetworkOperation *)operation withTitle:(NSString *)title andMessage:(NSString *)message andRetry:(BOOL)retry;
