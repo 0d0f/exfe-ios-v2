@@ -451,17 +451,11 @@
 
                 if(showTimeMode==0)
                 {
-                    NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
-                    [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-                    [dateformat setDateFormat:@"yyyy-MM-dd"];
-                    NSString *datestr=[dateformat stringFromDate:post.created_at];
-                    [dateformat setDateFormat:@"HH:mm:ss"];
-                    NSString *timestr=[dateformat stringFromDate:post.created_at];
-                    NSString *timestring=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
-//                    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-//                    [gregorian setTimeZone:localTimeZone];
-//                    NSDateComponents *comps = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit |NSTimeZoneCalendarUnit) fromDate:post.created_at];
-//                    NSString *timestring= [DateTimeUtil GetRelativeTime:comps format:1];
+                    
+                    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+                    [gregorian setTimeZone:[NSTimeZone localTimeZone]];
+                    NSDateComponents *comps = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit |NSTimeZoneCalendarUnit) fromDate:post.created_at];
+                    NSString *timestring= [[DateTimeUtil GetRelativeTime:comps format:1] capitalizedString];
                     
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:timestring];
                     [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)timefontref range:NSMakeRange(0,[timestring length])];
@@ -569,13 +563,10 @@
             Post *post = [self.posts objectAtIndex:path.row];
             NSDate *post_created_at = post.created_at;
 
-            NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
-            [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-            [dateformat setDateFormat:@"yyyy-MM-dd"];
-            NSString *datestr=[dateformat stringFromDate:post_created_at];
-            [dateformat setDateFormat:@"HH:mm:ss"];
-            NSString *timestr=[dateformat stringFromDate:post_created_at];
-            NSString *relative=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
+            NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+            [gregorian setTimeZone:[NSTimeZone localTimeZone]];
+            NSDateComponents *comps = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit |NSTimeZoneCalendarUnit) fromDate:post_created_at];
+            NSString *relative= [[DateTimeUtil GetRelativeTime:comps format:1] capitalizedString];
 
             NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
             [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
@@ -603,7 +594,9 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     if (decelerate) {
-        [self loadConversation];
+        if (scrollView.contentOffset.y <= -5 || scrollView.contentOffset.y >= scrollView.contentSize.height + 5) {
+            [self loadConversation];
+        }
     }
 }
 

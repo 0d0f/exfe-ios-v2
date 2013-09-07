@@ -79,7 +79,7 @@
 						</dict>
 					</dict>
 					<key>change date</key>
-					<date>2013-09-06T11:07:02Z</date>
+					<date>2013-09-06T11:46:14Z</date>
 					<key>changed values</key>
 					<array>
 						<string>zh-Hant</string>
@@ -91,7 +91,7 @@
 					<key>flags</key>
 					<integer>1</integer>
 					<key>hash</key>
-					<string>f7c6c4a8e6a9eb2584b95bfc575cf3f6
+					<string>89211963338717b2b238f0b00955b302
 </string>
 					<key>name</key>
 					<string>Localizable.strings</string>
@@ -683,60 +683,6 @@
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>%u %@ %u %@ ago</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>%1$u %2$@ %3$u %4$@ ago</string>
-								<key>zh-Hans</key>
-								<string>%1$u %2$@ %3$u %4$@前</string>
-								<key>zh-Hant</key>
-								<string>%1$u %2$@ %3$u %4$@ ȧɠǿ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>%u %@ ago</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>%1$u %2$@ ago</string>
-								<key>zh-Hans</key>
-								<string>%1$u %2$@前</string>
-								<key>zh-Hant</key>
-								<string>%1$u %2$@ ȧɠǿ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
 							<string>WidgetExfee Exfee static</string>
 							<key>errors</key>
 							<array/>
@@ -750,87 +696,6 @@
 								<string>%1$u / %2$u</string>
 								<key>zh-Hans</key>
 								<string>%1$u / %2$u</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>%u days ago</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>%u days ago</string>
-								<key>zh-Hans</key>
-								<string>%u天前</string>
-								<key>zh-Hant</key>
-								<string>%u ḓȧẏş ȧɠǿ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>%u hours ago</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>%u hours ago</string>
-								<key>zh-Hans</key>
-								<string>%u小时前</string>
-								<key>zh-Hant</key>
-								<string>%u ħǿŭřş ȧɠǿ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>%u minutes ago</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>%u minutes ago</string>
-								<key>zh-Hans</key>
-								<string>%u分钟前</string>
-								<key>zh-Hant</key>
-								<string>%u ḿīƞŭŧḗş ȧɠǿ</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -2782,141 +2647,6 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>In %u %@</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>In %1$u %2$@</string>
-								<key>zh-Hans</key>
-								<string>%1$u%2$@后</string>
-								<key>zh-Hant</key>
-								<string>Īƞ %1$u %2$@</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>In %u %@ %u %@</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>In %1$u %2$@ %3$u %4$@</string>
-								<key>zh-Hans</key>
-								<string>%1$u%2$@%3$u%4$@后</string>
-								<key>zh-Hant</key>
-								<string>Īƞ %1$u %2$@ %3$u %4$@</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>In %u days</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>In %u days</string>
-								<key>zh-Hans</key>
-								<string>%u天</string>
-								<key>zh-Hant</key>
-								<string>Īƞ %u ḓȧẏş</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>In %u hours</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>In %u hours</string>
-								<key>zh-Hans</key>
-								<string>%u小时</string>
-								<key>zh-Hant</key>
-								<string>Īƞ %u ħǿŭřş</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>In %u minutes</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>In %u minutes</string>
-								<key>zh-Hans</key>
-								<string>%u分钟</string>
-								<key>zh-Hant</key>
-								<string>Īƞ %u ḿīƞŭŧḗş</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>in 1.5 hours</string>
 							<key>localizations</key>
 							<dict>
@@ -2980,33 +2710,6 @@
 								<string>后天</string>
 								<key>zh-Hant</key>
 								<string>īƞ ŧẇǿ ḓȧẏş</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>In two days</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>In two days</string>
-								<key>zh-Hans</key>
-								<string>后天</string>
-								<key>zh-Hant</key>
-								<string>Īƞ ŧẇǿ ḓȧẏş</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3221,33 +2924,6 @@
 								<string>刚才</string>
 								<key>zh-Hant</key>
 								<string>ĵŭşŧ ƞǿẇ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Just now</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Just now</string>
-								<key>zh-Hans</key>
-								<string>刚才</string>
-								<key>zh-Hant</key>
-								<string>Ĵŭşŧ ƞǿẇ</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3584,60 +3260,6 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>month</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>month</string>
-								<key>zh-Hans</key>
-								<string>月</string>
-								<key>zh-Hant</key>
-								<string>ḿǿƞŧħ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>months</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>months</string>
-								<key>zh-Hans</key>
-								<string>月</string>
-								<key>zh-Hant</key>
-								<string>ḿǿƞŧħş</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>Morning</string>
 							<key>localizations</key>
 							<dict>
@@ -3726,33 +3348,6 @@
 								<string>下一个</string>
 								<key>zh-Hant</key>
 								<string>Ƞḗẋŧ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Next %@</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Next %@</string>
-								<key>zh-Hans</key>
-								<string>下%@</string>
-								<key>zh-Hant</key>
-								<string>Ƞḗẋŧ %@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3891,33 +3486,6 @@
 								<string>现在</string>
 								<key>zh-Hant</key>
 								<string>ƞǿẇ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Now</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Now</string>
-								<key>zh-Hans</key>
-								<string>现在</string>
-								<key>zh-Hant</key>
-								<string>Ƞǿẇ</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4999,33 +4567,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Seconds ago</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Seconds ago</string>
-								<key>zh-Hans</key>
-								<string>秒前</string>
-								<key>zh-Hant</key>
-								<string>Şḗƈǿƞḓş ȧɠǿ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>seconds ago</string>
 							<key>localizations</key>
 							<dict>
@@ -6006,33 +5547,6 @@ until your account is verified. Please go to verify first.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Today</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Today</string>
-								<key>zh-Hans</key>
-								<string>今天</string>
-								<key>zh-Hant</key>
-								<string>Ŧǿḓȧẏ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>tomorrow</string>
 							<key>localizations</key>
 							<dict>
@@ -6042,33 +5556,6 @@ until your account is verified. Please go to verify first.</string>
 								<string>明天</string>
 								<key>zh-Hant</key>
 								<string>ŧǿḿǿřřǿẇ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Tomorrow</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Tomorrow</string>
-								<key>zh-Hans</key>
-								<string>明天</string>
-								<key>zh-Hant</key>
-								<string>Ŧǿḿǿřřǿẇ</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -6123,33 +5610,6 @@ until your account is verified. Please go to verify first.</string>
 								<string>Twitter授权</string>
 								<key>zh-Hant</key>
 								<string>Ŧẇīŧŧḗř Ȧŭŧħǿřīzȧŧīǿƞ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Two days ago</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Two days ago</string>
-								<key>zh-Hans</key>
-								<string>前天</string>
-								<key>zh-Hant</key>
-								<string>Ŧẇǿ ḓȧẏş ȧɠǿ</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -6642,87 +6102,6 @@ Request verification again?</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>year</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>year</string>
-								<key>zh-Hans</key>
-								<string>年</string>
-								<key>zh-Hant</key>
-								<string>ẏḗȧř</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>years</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>years</string>
-								<key>zh-Hans</key>
-								<string>年</string>
-								<key>zh-Hant</key>
-								<string>ẏḗȧřş</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>Yesterday</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>Yesterday</string>
-								<key>zh-Hans</key>
-								<string>昨天</string>
-								<key>zh-Hant</key>
-								<string>Ẏḗşŧḗřḓȧẏ</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>yesterday</string>
 							<key>localizations</key>
 							<dict>
@@ -7108,15 +6487,11 @@ Request verification again?</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>您刚刚拒绝开启这张“活点地图”：Threshold of the odyssey。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
+							<string>您刚刚拒绝开启这张“活点地图”：%@。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>您刚刚拒绝开启这张“活点地图”：Threshold of the odyssey。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
-								<key>zh-Hans</key>
-								<string>您刚刚拒绝开启这张“活点地图”：Threshold of the odyssey。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
-								<key>zh-Hant</key>
-								<string>您刚刚拒绝开启这张“活点地图”：Ŧħřḗşħǿŀḓ ǿƒ ŧħḗ ǿḓẏşşḗẏ。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
+								<string>您刚刚拒绝开启这张“活点地图”：%@。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -8557,6 +7932,654 @@ Re-send verification email?</string>
 								<string>###exfees</string>
 								<key>zh-Hant</key>
 								<string>Ḗẋƒḗḗş</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%u %@ %u %@ ago</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%1$u %2$@ %3$u %4$@ ago</string>
+								<key>zh-Hans</key>
+								<string>%1$u %2$@ %3$u %4$@前</string>
+								<key>zh-Hant</key>
+								<string>%1$u %2$@ %3$u %4$@ ȧɠǿ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%u %@ ago</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%1$u %2$@ ago</string>
+								<key>zh-Hans</key>
+								<string>%1$u %2$@前</string>
+								<key>zh-Hant</key>
+								<string>%1$u %2$@ ȧɠǿ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%u days ago</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%u days ago</string>
+								<key>zh-Hans</key>
+								<string>%u天前</string>
+								<key>zh-Hant</key>
+								<string>%u ḓȧẏş ȧɠǿ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%u hours ago</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%u hours ago</string>
+								<key>zh-Hans</key>
+								<string>%u小时前</string>
+								<key>zh-Hant</key>
+								<string>%u ħǿŭřş ȧɠǿ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%u minutes ago</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%u minutes ago</string>
+								<key>zh-Hans</key>
+								<string>%u分钟前</string>
+								<key>zh-Hant</key>
+								<string>%u ḿīƞŭŧḗş ȧɠǿ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>In %u %@</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>In %1$u %2$@</string>
+								<key>zh-Hans</key>
+								<string>%1$u%2$@后</string>
+								<key>zh-Hant</key>
+								<string>Īƞ %1$u %2$@</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>In %u %@ %u %@</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>In %1$u %2$@ %3$u %4$@</string>
+								<key>zh-Hans</key>
+								<string>%1$u%2$@%3$u%4$@后</string>
+								<key>zh-Hant</key>
+								<string>Īƞ %1$u %2$@ %3$u %4$@</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>In %u days</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>In %u days</string>
+								<key>zh-Hans</key>
+								<string>%u天</string>
+								<key>zh-Hant</key>
+								<string>Īƞ %u ḓȧẏş</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>In %u hours</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>In %u hours</string>
+								<key>zh-Hans</key>
+								<string>%u小时</string>
+								<key>zh-Hant</key>
+								<string>Īƞ %u ħǿŭřş</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>In %u minutes</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>In %u minutes</string>
+								<key>zh-Hans</key>
+								<string>%u分钟</string>
+								<key>zh-Hant</key>
+								<string>Īƞ %u ḿīƞŭŧḗş</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>In two days</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>In two days</string>
+								<key>zh-Hans</key>
+								<string>后天</string>
+								<key>zh-Hant</key>
+								<string>Īƞ ŧẇǿ ḓȧẏş</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Just now</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Just now</string>
+								<key>zh-Hans</key>
+								<string>刚才</string>
+								<key>zh-Hant</key>
+								<string>Ĵŭşŧ ƞǿẇ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>month</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>month</string>
+								<key>zh-Hans</key>
+								<string>月</string>
+								<key>zh-Hant</key>
+								<string>ḿǿƞŧħ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>months</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>months</string>
+								<key>zh-Hans</key>
+								<string>月</string>
+								<key>zh-Hant</key>
+								<string>ḿǿƞŧħş</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Next %@</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Next %@</string>
+								<key>zh-Hans</key>
+								<string>下%@</string>
+								<key>zh-Hant</key>
+								<string>Ƞḗẋŧ %@</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Now</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Now</string>
+								<key>zh-Hans</key>
+								<string>现在</string>
+								<key>zh-Hant</key>
+								<string>Ƞǿẇ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Seconds ago</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Seconds ago</string>
+								<key>zh-Hans</key>
+								<string>秒前</string>
+								<key>zh-Hant</key>
+								<string>Şḗƈǿƞḓş ȧɠǿ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Today</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Today</string>
+								<key>zh-Hans</key>
+								<string>今天</string>
+								<key>zh-Hant</key>
+								<string>Ŧǿḓȧẏ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Tomorrow</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Tomorrow</string>
+								<key>zh-Hans</key>
+								<string>明天</string>
+								<key>zh-Hant</key>
+								<string>Ŧǿḿǿřřǿẇ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Two days ago</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Two days ago</string>
+								<key>zh-Hans</key>
+								<string>前天</string>
+								<key>zh-Hant</key>
+								<string>Ŧẇǿ ḓȧẏş ȧɠǿ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>year</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>year</string>
+								<key>zh-Hans</key>
+								<string>年</string>
+								<key>zh-Hant</key>
+								<string>ẏḗȧř</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>years</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>years</string>
+								<key>zh-Hans</key>
+								<string>年</string>
+								<key>zh-Hant</key>
+								<string>ẏḗȧřş</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Yesterday</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Yesterday</string>
+								<key>zh-Hans</key>
+								<string>昨天</string>
+								<key>zh-Hant</key>
+								<string>Ẏḗşŧḗřḓȧẏ</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>您刚刚拒绝开启这张“活点地图”：Threshold of the odyssey。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>您刚刚拒绝开启这张“活点地图”：Threshold of the odyssey。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
+								<key>zh-Hans</key>
+								<string>您刚刚拒绝开启这张“活点地图”：Threshold of the odyssey。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
+								<key>zh-Hant</key>
+								<string>您刚刚拒绝开启这张“活点地图”：Ŧħřḗşħǿŀḓ ǿƒ ŧħḗ ǿḓẏşşḗẏ。它将不会展现您的位置，您也无法用它看到别人的位置。但这不会影响您已开启的其它“活点地图”页面，每张地图中是否展现您的位置是各自独立的设置。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
