@@ -68,7 +68,7 @@
     
     NSString *endpoint = [NSString stringWithFormat:@"conversation/%u/add?token=%@", [exfee.exfee_id unsignedIntegerValue], self.model.userToken];
     RKObjectManager *manager = self.model.objectManager;
-    manager.requestSerializationMIMEType = RKMIMETypeFormURLEncoded;
+    manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
     [manager postObject2:exfee
                     path:endpoint
