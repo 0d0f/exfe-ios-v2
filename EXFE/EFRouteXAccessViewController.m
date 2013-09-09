@@ -68,8 +68,7 @@
     [scrollView addSubview:para2Label];
     self.para2Label = para2Label;
     
-    UILabel *buttonTipLabel = [[UILabel alloc] initWithFrame:(CGRect){{0.0f, 374.0f}, {CGRectGetWidth(viewBounds), 27.0f}}];
-    buttonTipLabel.textAlignment = NSTextAlignmentCenter;
+    UILabel *buttonTipLabel = [[UILabel alloc] initWithFrame:(CGRect){{20.0f, 374.0f}, {CGRectGetWidth(viewBounds) - 40.0f, 27.0f}}];
     buttonTipLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
     buttonTipLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.33f];
     buttonTipLabel.shadowOffset = (CGSize){0.0f, 1.0f};

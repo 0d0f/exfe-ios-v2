@@ -2185,6 +2185,10 @@
 		7601F5721727B94800032044 /* EFSearchIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7601F5711727B94700032044 /* EFSearchIdentityCell.m */; };
 		7601F5731727B94800032044 /* EFSearchIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7601F5711727B94700032044 /* EFSearchIdentityCell.m */; };
 		7601F5741727B94800032044 /* EFSearchIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7601F5711727B94700032044 /* EFSearchIdentityCell.m */; };
+		7604808F17DB92CF00F7A939 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7604808E17DB92CF00F7A939 /* libBlocksKit.a */; };
+		7604809017DB92CF00F7A939 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7604808E17DB92CF00F7A939 /* libBlocksKit.a */; };
+		7604809117DB92CF00F7A939 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7604808E17DB92CF00F7A939 /* libBlocksKit.a */; };
+		7604809217DB92CF00F7A939 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7604808E17DB92CF00F7A939 /* libBlocksKit.a */; };
 		76073CE1174F3178007CBFC3 /* widget_exfee_30shine.png in Resources */ = {isa = PBXBuildFile; fileRef = 76073CDD174F3178007CBFC3 /* widget_exfee_30shine.png */; };
 		76073CE2174F3178007CBFC3 /* widget_exfee_30shine.png in Resources */ = {isa = PBXBuildFile; fileRef = 76073CDD174F3178007CBFC3 /* widget_exfee_30shine.png */; };
 		76073CE3174F3178007CBFC3 /* widget_exfee_30shine.png in Resources */ = {isa = PBXBuildFile; fileRef = 76073CDD174F3178007CBFC3 /* widget_exfee_30shine.png */; };
@@ -2728,10 +2732,6 @@
 		76F3EEE617C2318E00D353FA /* NSDate+RouteXDateFormater.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F3EEE517C2318E00D353FA /* NSDate+RouteXDateFormater.m */; };
 		76F3EEE717C2318E00D353FA /* NSDate+RouteXDateFormater.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F3EEE517C2318E00D353FA /* NSDate+RouteXDateFormater.m */; };
 		76F3EEE817C2318E00D353FA /* NSDate+RouteXDateFormater.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F3EEE517C2318E00D353FA /* NSDate+RouteXDateFormater.m */; };
-		76F510E717D4ED9300B62D77 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76F510E617D4ED9300B62D77 /* libBlocksKit.a */; };
-		76F510E817D4ED9300B62D77 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76F510E617D4ED9300B62D77 /* libBlocksKit.a */; };
-		76F510E917D4ED9300B62D77 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76F510E617D4ED9300B62D77 /* libBlocksKit.a */; };
-		76F510EA17D4ED9300B62D77 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76F510E617D4ED9300B62D77 /* libBlocksKit.a */; };
 		76F6B30C1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
 		76F6B30D1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
 		76F6B30E1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
@@ -3491,6 +3491,7 @@
 		4FFD701A17638546009836F5 /* IdentityId+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IdentityId+EXFE.m"; sourceTree = "<group>"; };
 		7601F5701727B94700032044 /* EFSearchIdentityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchIdentityCell.h; sourceTree = "<group>"; };
 		7601F5711727B94700032044 /* EFSearchIdentityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchIdentityCell.m; sourceTree = "<group>"; };
+		7604808E17DB92CF00F7A939 /* libBlocksKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBlocksKit.a; sourceTree = "<group>"; };
 		76073CDD174F3178007CBFC3 /* widget_exfee_30shine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_exfee_30shine.png; sourceTree = "<group>"; };
 		76073CDE174F3178007CBFC3 /* widget_exfee_30shine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_exfee_30shine@2x.png"; sourceTree = "<group>"; };
 		76073CDF174F3178007CBFC3 /* widget_x_30shine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_x_30shine.png; sourceTree = "<group>"; };
@@ -3794,7 +3795,6 @@
 		76E96BCB177AFA0D00C06ECD /* EFLoadCrossOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLoadCrossOperation.m; sourceTree = "<group>"; };
 		76F3EEE417C2318E00D353FA /* NSDate+RouteXDateFormater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+RouteXDateFormater.h"; sourceTree = "<group>"; };
 		76F3EEE517C2318E00D353FA /* NSDate+RouteXDateFormater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+RouteXDateFormater.m"; sourceTree = "<group>"; };
-		76F510E617D4ED9300B62D77 /* libBlocksKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBlocksKit.a; sourceTree = "<group>"; };
 		76F510EC17D4F43100B62D77 /* A2BlockDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = A2BlockDelegate.h; sourceTree = "<group>"; };
 		76F510ED17D4F43100B62D77 /* A2BlockInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = A2BlockInvocation.h; sourceTree = "<group>"; };
 		76F510EE17D4F43100B62D77 /* A2DynamicDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = A2DynamicDelegate.h; sourceTree = "<group>"; };
@@ -4209,10 +4209,10 @@
 				4F63DB0D17172AA600136B7E /* Security.framework in Frameworks */,
 				4F63DB0F17172AA600136B7E /* CoreData.framework in Frameworks */,
 				4F63DB1017172AA600136B7E /* CFNetwork.framework in Frameworks */,
-				76F510E817D4ED9300B62D77 /* libBlocksKit.a in Frameworks */,
 				4F63DB1117172AA600136B7E /* UIKit.framework in Frameworks */,
 				4F63DB1217172AA600136B7E /* Foundation.framework in Frameworks */,
 				4F63DB1317172AA600136B7E /* CoreGraphics.framework in Frameworks */,
+				7604809017DB92CF00F7A939 /* libBlocksKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4245,10 +4245,10 @@
 				4F63DCDC17172B0700136B7E /* Security.framework in Frameworks */,
 				4F63DCDE17172B0700136B7E /* CoreData.framework in Frameworks */,
 				4F63DCDF17172B0700136B7E /* CFNetwork.framework in Frameworks */,
-				76F510E917D4ED9300B62D77 /* libBlocksKit.a in Frameworks */,
 				4F63DCE017172B0700136B7E /* UIKit.framework in Frameworks */,
 				4F63DCE117172B0700136B7E /* Foundation.framework in Frameworks */,
 				4F63DCE217172B0700136B7E /* CoreGraphics.framework in Frameworks */,
+				7604809117DB92CF00F7A939 /* libBlocksKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4281,10 +4281,10 @@
 				4FC40F3F17D04A5700D64105 /* Security.framework in Frameworks */,
 				4FC40F4017D04A5700D64105 /* CoreData.framework in Frameworks */,
 				4FC40F4117D04A5700D64105 /* CFNetwork.framework in Frameworks */,
-				76F510EA17D4ED9300B62D77 /* libBlocksKit.a in Frameworks */,
 				4FC40F4217D04A5700D64105 /* UIKit.framework in Frameworks */,
 				4FC40F4317D04A5700D64105 /* Foundation.framework in Frameworks */,
 				4FC40F4417D04A5700D64105 /* CoreGraphics.framework in Frameworks */,
+				7604809217DB92CF00F7A939 /* libBlocksKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4317,10 +4317,10 @@
 				78A98EF515611101009E0806 /* Security.framework in Frameworks */,
 				78A98EF1156110F5009E0806 /* CoreData.framework in Frameworks */,
 				78A98EEF156110F0009E0806 /* CFNetwork.framework in Frameworks */,
-				76F510E717D4ED9300B62D77 /* libBlocksKit.a in Frameworks */,
 				78A98E8C1560F832009E0806 /* UIKit.framework in Frameworks */,
 				78A98E8E1560F832009E0806 /* Foundation.framework in Frameworks */,
 				78A98E901560F832009E0806 /* CoreGraphics.framework in Frameworks */,
+				7604808F17DB92CF00F7A939 /* libBlocksKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5260,8 +5260,8 @@
 		76F510B917D4ED9200B62D77 /* BlocksKit */ = {
 			isa = PBXGroup;
 			children = (
+				7604808E17DB92CF00F7A939 /* libBlocksKit.a */,
 				76F510BA17D4ED9200B62D77 /* Headers */,
-				76F510E617D4ED9300B62D77 /* libBlocksKit.a */,
 			);
 			name = BlocksKit;
 			path = Vendor/Build/BlocksKit;
@@ -9508,7 +9508,10 @@
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = 0d0f;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -9535,7 +9538,10 @@
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = 0d0f;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -9562,7 +9568,10 @@
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Pilot-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Pilot;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -9589,7 +9598,10 @@
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Pilot-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Pilot;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -9695,12 +9707,14 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
+				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)/../../Headers",
+					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/EXFE/Flurry",
 					"$(SRCROOT)/EXFE/SDKExport",
-					"$(SRCROOT)/Vendor/Build/BlocksKit\n\n//:completeSettings",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -9734,12 +9748,14 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
+				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)/../../Headers",
+					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/EXFE/Flurry",
 					"$(SRCROOT)/EXFE/SDKExport",
-					"$(SRCROOT)/Vendor/Build/BlocksKit\n\n//:completeSettings",
 				);
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = (
@@ -9772,11 +9788,14 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
-					"${SRCROOT}/Vendor/Build/BlocksKit/Headers/**",
+					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
 				);
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-force_load",
@@ -9807,7 +9826,10 @@
 				);
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-force_load",
