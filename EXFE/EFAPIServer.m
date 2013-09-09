@@ -137,7 +137,6 @@ NSString *kEFAPIErrorDomain = @"errorDomain.efapi";
 - (void)getIdentitiesWithParams:(NSArray *)params success:(void (^)(NSArray *))success failure:(void (^)(NSError *))failure {
     RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
-    manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
     NSDictionary *param = @{@"identities": params};
     NSString *path = [NSString stringWithFormat:@"identities/get"];

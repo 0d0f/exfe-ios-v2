@@ -61,7 +61,6 @@
             success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
             failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
     RKObjectManager* manager = self.model.objectManager;
-    manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
     NSString *endpoint = [NSString stringWithFormat:@"crosses/gather?token=%@", self.model.userToken];
