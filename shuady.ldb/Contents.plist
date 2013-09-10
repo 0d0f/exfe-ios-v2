@@ -12,9 +12,7 @@
 			<key>change date</key>
 			<date>2001-01-01T00:00:00Z</date>
 			<key>changed values</key>
-			<array>
-				<string>zh-Hant</string>
-			</array>
+			<array/>
 			<key>class</key>
 			<string>BLBundleObject</string>
 			<key>errors</key>
@@ -81,15 +79,13 @@
 					<key>change date</key>
 					<date>2013-09-07T11:11:43Z</date>
 					<key>changed values</key>
-					<array>
-						<string>zh-Hant</string>
-					</array>
+					<array/>
 					<key>class</key>
 					<string>BLStringsFileObject</string>
 					<key>errors</key>
 					<array/>
 					<key>flags</key>
-					<integer>1</integer>
+					<integer>0</integer>
 					<key>hash</key>
 					<string>205a4fd944e48d8eef54e7e346860a27
 </string>
@@ -849,7 +845,7 @@
 								<key>en</key>
 								<string>Add</string>
 								<key>zh-Hans</key>
-								<string>??添加人</string>
+								<string>添加</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1880,7 +1876,7 @@
 								<key>en</key>
 								<string>Edit {{X_NOUN}} Info</string>
 								<key>zh-Hans</key>
-								<string>??修改{{X_NOUN}}信息</string>
+								<string>修改{{X_NOUN}}信息</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1905,7 +1901,7 @@
 								<key>en</key>
 								<string>Edit {{X_NOUN}} time</string>
 								<key>zh-Hans</key>
-								<string>??修改{{X_NOUN}}时间</string>
+								<string>修改{{X_NOUN}}时间</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3524,7 +3520,7 @@ Please retry or wait awhile.</string>
 								<key>en</key>
 								<string>Night</string>
 								<key>zh-Hans</key>
-								<string>夜晚</string>
+								<string>深夜</string>
 								<key>zh-Hant</key>
 								<string>Ƞīɠħŧ</string>
 							</dict>
@@ -4667,7 +4663,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<key>en</key>
 								<string>Search</string>
 								<key>zh-Hans</key>
-								<string>??搜索结果</string>
+								<string>搜索</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4906,7 +4902,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<key>en</key>
 								<string>Set password</string>
 								<key>zh-Hans</key>
-								<string>??设置密码</string>
+								<string>设置密码</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5039,7 +5035,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<key>en</key>
 								<string>Set {{PRODUCT_NAME}} password</string>
 								<key>zh-Hans</key>
-								<string>??设置{{PRODUCT_NAME}}密码</string>
+								<string>设置{{PRODUCT_NAME}}密码</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>

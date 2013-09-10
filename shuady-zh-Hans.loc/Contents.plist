@@ -758,7 +758,9 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -774,7 +776,7 @@
 								<key>en</key>
 								<string>Add</string>
 								<key>zh-Hans</key>
-								<string>??添加人</string>
+								<string>添加</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1733,7 +1735,9 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1749,7 +1753,7 @@
 								<key>en</key>
 								<string>Edit {{X_NOUN}} Info</string>
 								<key>zh-Hans</key>
-								<string>??修改{{X_NOUN}}信息</string>
+								<string>修改{{X_NOUN}}信息</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1758,7 +1762,9 @@
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1774,7 +1780,7 @@
 								<key>en</key>
 								<string>Edit {{X_NOUN}} time</string>
 								<key>zh-Hans</key>
-								<string>??修改{{X_NOUN}}时间</string>
+								<string>修改{{X_NOUN}}时间</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3287,7 +3293,9 @@ Please retry or wait awhile.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3303,7 +3311,7 @@ Please retry or wait awhile.</string>
 								<key>en</key>
 								<string>Night</string>
 								<key>zh-Hans</key>
-								<string>夜晚</string>
+								<string>深夜</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4370,7 +4378,9 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4386,7 +4396,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<key>en</key>
 								<string>Search</string>
 								<key>zh-Hans</key>
-								<string>??搜索结果</string>
+								<string>搜索</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4595,7 +4605,9 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4611,7 +4623,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<key>en</key>
 								<string>Set password</string>
 								<key>zh-Hans</key>
-								<string>??设置密码</string>
+								<string>设置密码</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4720,7 +4732,9 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
-							<array/>
+							<array>
+								<string>zh-Hans</string>
+							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4736,7 +4750,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<key>en</key>
 								<string>Set {{PRODUCT_NAME}} password</string>
 								<key>zh-Hans</key>
-								<string>??设置{{PRODUCT_NAME}}密码</string>
+								<string>设置{{PRODUCT_NAME}}密码</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -6346,6 +6360,8 @@ Request verification again?</string>
 		<string>zh-Hans</string>
 		<key>saveCompressed</key>
 		<false/>
+		<key>search</key>
+		<string>??</string>
 	</dict>
 	<key>reference language</key>
 	<string>en</string>
