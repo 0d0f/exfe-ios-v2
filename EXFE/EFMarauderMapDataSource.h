@@ -26,7 +26,7 @@ extern CGFloat HeadingInRadian(CLLocationCoordinate2D location1, CLLocationCoord
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(EFMapPerson *)person;
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations;   // action: update, type: location
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRoutePaths:(NSArray *)paths;
-- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource needDeleteRouteLocation:(NSString *)routeLocationId;    // action: delete, type: location
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource needDeleteRouteLocation:(NSString *)routeLocationId shouldPostToServer:(BOOL)shouldPost;    // action: delete, type: location
 
 // other
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource routeLocationDidGetGeomarkInfo:(EFRouteLocation *)routeLocation;
@@ -71,6 +71,7 @@ EFHTTPStreamingDelegate
 - (EFRouteLocation *)routeLocationForRouteLocationId:(NSString *)routeLocationId;
 
 - (EFAnnotation *)annotationForRouteLocation:(EFRouteLocation *)routeLocation;
+- (void)removeRouteLocation:(EFRouteLocation *)routeLocation fromMapView:(MKMapView *)mapView shouldPostToServer:(BOOL)shouldPost;
 - (void)removeRouteLocation:(EFRouteLocation *)routeLocation fromMapView:(MKMapView *)mapView;
 - (NSArray *)allRouteLocations;
 
