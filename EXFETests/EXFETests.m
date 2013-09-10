@@ -8,16 +8,17 @@
 
 #import "EXFETests.h"
 #import <RestKit/CoreData.h>
-#import "CrossTime.h"
-#import "CrossTime+Helper.h"
-#import "EFTime.h"
-#import "EFTime+Helper.h"
+#import "EFEntity.h"
 #import "DateTimeUtil.h"
 
 
 @interface EXFETests (){
     
+    
 }
+
+@property (nonatomic, strong) EXFEModel *model;
+@property (nonatomic, strong) NSManagedObjectContext *moc;
 
 @end
 
@@ -31,6 +32,9 @@
     
     //[DateTimeUtil setAppDefaultTimeZone:<#(NSTimeZone *)#>]
     //[DateTimeUtil setNow:<#(NSDate *)#>]
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    self.model = delegate.model;
+    self.moc = self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext;
 }
 
 - (void)tearDown
@@ -77,7 +81,7 @@
 {
     [self setNow:@"2013-01-12 14:23:05"];
     
-    EFTime* eftime = nil; //[EFTime object];
+    EFTime* eftime = [EFTime object:self.moc];
     eftime.date = @"2013-01-12";
     eftime.time = @"06:20:04";
     eftime.timezone = @"+08:00 CST";
@@ -89,7 +93,7 @@
 {
     [self setNow:@"2013-01-12 14:23:05"];
     
-    EFTime* eftime = nil; //[EFTime object];
+    EFTime* eftime = [EFTime object:self.moc];
     eftime.date = @"2012-01-12";
     eftime.time = @"06:20:04";
     eftime.timezone = @"+08:00 CST";
@@ -99,14 +103,14 @@
 
 - (void)testCrossTimeBasicSecondsAgo
 {
-    CrossTime *xt = nil; //[CrossTime object];
+    CrossTime *xt = [CrossTime  object:self.moc];
     xt.origin = @"";
     xt.outputformat = [NSNumber numberWithInt:0];
     
     NSDate* today = [NSDate date];
     NSDate* target = [NSDate dateWithTimeInterval:-1 sinceDate:today];
     NSDateFormatter* fmt = [[NSDateFormatter alloc] init];
-    EFTime* eftime = nil; //[EFTime object];
+    EFTime* eftime = [EFTime object:self.moc];
     [fmt setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     [fmt setDateFormat:@"yyyy-MM-dd"];
     eftime.date = [fmt stringFromDate:target];
@@ -118,21 +122,21 @@
     [fmt setTimeZone:[NSTimeZone localTimeZone]];
     [fmt setDateFormat:@"h:mma EEE, MMM d"];
     NSString* expected = [fmt stringFromDate:[NSDate date]];
-    STAssertEqualObjects([xt getTimeTitle], @"Seconds ago", @"Title");
+    STAssertEqualObjects([xt getTimeTitle], @"now", @"Title");
     STAssertEqualObjects([xt getTimeDescription], expected, @"Description");
     STAssertEqualObjects([xt getTimeSingleLine], expected, @"One Line");
 }
 
 - (void)testCrossTimeBasicToday
 {
-    CrossTime *xt = nil; //[CrossTime object];
+    CrossTime *xt = [CrossTime  object:self.moc];
     xt.origin = @"";
     xt.outputformat = [NSNumber numberWithInt:0];
     
     NSDate* today = [NSDate date];
     NSDate* target = [NSDate dateWithTimeInterval:-1 sinceDate:today];
     NSDateFormatter* fmt = [[NSDateFormatter alloc] init];
-    EFTime* eftime = nil; //[EFTime object];
+    EFTime* eftime = [EFTime  object:self.moc];
     [fmt setDateFormat:@"yyyy-MM-dd"];
     eftime.date = [fmt stringFromDate:target];
     eftime.time = @"";
@@ -141,7 +145,7 @@
     
     [fmt setDateFormat:@"EEE, MMM d"];
     NSString* expected = [fmt stringFromDate:[NSDate date]];
-    STAssertEqualObjects([xt getTimeTitle], @"Today", @"Title");
+    STAssertEqualObjects([xt getTimeTitle], @"today", @"Title");
     STAssertEqualObjects([xt getTimeDescription], expected, @"Description");
     STAssertEqualObjects([xt getTimeSingleLine], expected, @"One Line");
 }
@@ -150,7 +154,7 @@
 {
     [self setNow:@"2013-01-12 14:23:05"];
     
-    EFTime *eftime = nil; //[EFTime object];
+    EFTime *eftime = [EFTime  object:self.moc];
     eftime.timezone = @"+08:00 CST";
     
     // Valid Date & Time
@@ -393,7 +397,7 @@
 {
     [self setNow:@"2013-01-12 14:23:05"];
     
-    EFTime *eftime = nil; //[EFTime object];
+    EFTime *eftime = [EFTime object:self.moc];
     eftime.timezone = @"+08:00 CST";
     
     // Valid Date & Time
@@ -417,7 +421,7 @@
 {
     [self setNow:@"2013-01-12 14:23:05"];
     
-    EFTime *eftime = nil; //[EFTime object];
+    EFTime *eftime = [EFTime  object:self.moc];
     eftime.timezone = @"+08:00 CST";
     
     // Same timezone, full date and time
@@ -426,20 +430,20 @@
     eftime.date_word = @"";
     eftime.time = @"06:23:00";
     eftime.time_word = @"";
-    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"Seconds ago", @"Title");
-    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"Now", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"seconds ago", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"now", @"Title");
     // Now
     eftime.time = @"06:21:00";
     STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"2 minutes ago", @"Title");
-    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"Now", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"now", @"Title");
     // Just Now
     eftime.time = @"05:39:00";
     STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"44 minutes ago", @"Title");
-    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"Just now", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"just now", @"Title");
     // An hour ago
     eftime.time = @"05:20:00";
-    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"An hour ago", @"Title");
-    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"An hour ago", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"an hour ago", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"an hour ago", @"Title");
     // 1.5 hours ago
     eftime.time = @"04:50:00";
     STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"1.5 hours ago", @"Title");
@@ -460,23 +464,23 @@
     // Yesterday
     eftime.date = @"2013-01-11";
     eftime.time = @"13:20:00";
-    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"Yesterday", @"Title");
-    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"Yesterday", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"yesterday", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"yesterday", @"Title");
     // Yesterday
     eftime.date = @"2013-01-11";
     eftime.time = @"02:00:00";
-    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"Yesterday", @"Title");
-    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"Yesterday", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"yesterday", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"yesterday", @"Title");
     // Two days ago
     eftime.date = @"2013-01-10";
     eftime.time = @"14:00:00";
-    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"Two days ago", @"Title");
-    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"Two days ago", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"two days ago", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"two days ago", @"Title");
     // Two days ago
     eftime.date = @"2013-01-10";
     eftime.time = @"03:00:00";
-    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"Two days ago", @"Title");
-    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"Two days ago", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"two days ago", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"two days ago", @"Title");
     // 3 days ago
     eftime.date = @"2013-01-09";
     eftime.time = @"14:00:00";
@@ -528,6 +532,114 @@
     STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"2 years ago", @"Title");
     STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"2 years ago", @"Title");
     
+    
+    // in seconds
+    eftime.date = @"2013-01-12";
+    eftime.date_word = @"";
+    eftime.time = @"06:23:13";
+    eftime.time_word = @"";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"seconds ago", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"now", @"Title");
+    // Now
+    eftime.time = @"06:25:08";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in 2 minutes", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in 2 minutes", @"Title");
+    // Just Now
+    eftime.time = @"07:07:13";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in 44 minutes", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in 44 minutes", @"Title");
+    // In one hour
+    eftime.time = @"07:24:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in one hour", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in one hour", @"Title");
+    // In 1.5 hours
+    eftime.time = @"07:54:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in 1.5 hours", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in 1.5 hours", @"Title");
+    // In n hours, round up
+    eftime.time = @"11:17:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in 5 hours", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in 5 hours", @"Title");
+    // In n hours, round down
+    eftime.time = @"11:58:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in 5 hours", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in 5 hours", @"Title");
+    //
+    eftime.date = @"2013-01-12";
+    eftime.time = @"17:51:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in 11 hours", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in 11 hours", @"Title");
+    // Yesterday
+    eftime.date = @"2013-01-12";
+    eftime.time = @"18:30:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"tomorrow", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"tomorrow", @"Title");
+    // Yesterday
+    eftime.date = @"2013-01-13";
+    eftime.time = @"15:00:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"tomorrow", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"tomorrow", @"Title");
+    // In two days
+    eftime.date = @"2013-01-13";
+    eftime.time = @"22:00:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in two days", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in two days", @"Title");
+    // In two days
+    eftime.date = @"2013-01-14";
+    eftime.time = @"09:00:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in two days", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in two days", @"Title");
+    // In 3 days
+    eftime.date = @"2013-01-14";
+    eftime.time = @"22:00:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"Tue. in 3 days", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"Tue. in 3 days", @"Title");
+    // In 29 days
+    eftime.date = @"2013-02-10";
+    eftime.time = @"22:00:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"Mon. in 30 days", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"Mon. in 30 days", @"Title");
+    // In 1 month
+    eftime.date = @"2013-02-14";
+    eftime.time = @"22:00:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in 1 month", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in 1 month", @"Title");
+    // In 2 month
+    eftime.date = @"2013-03-09";
+    eftime.time = @"22:00:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in 2 months", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in 2 months", @"Title");
+    // In 12 months
+    eftime.date = @"2014-01-09";
+    eftime.time = @"22:00:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in 12 months", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in 12 months", @"Title");
+    // In 1 year
+    eftime.date = @"2014-02-04";
+    eftime.time = @"22:00:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in 1 year", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in 1 year", @"Title");
+    // In 1 year 1 month
+    eftime.date = @"2014-02-28";
+    eftime.time = @"22:00:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in 1 year 1 month", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in 1 year 1 month", @"Title");
+    // In 1 year 2 months
+    eftime.date = @"2014-3-09";
+    eftime.time = @"22:00:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in 1 year 2 months", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in 1 year 2 months", @"Title");
+    // In 1 year 12 months
+    eftime.date = @"2015-01-09";
+    eftime.time = @"22:00:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in 1 year 12 months", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in 1 year 12 months", @"Title");
+    // In 2 years
+    eftime.date = @"2015-01-14";
+    eftime.time = @"22:00:00";
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:0], @"in 2 years", @"Title");
+    STAssertEqualObjects([DateTimeUtil GetRelativeTime:[eftime getLocalDateComponent] format:1], @"in 2 years", @"Title");
+    
     // Same timezone, date only
     
     // Same timezone, time only
@@ -539,13 +651,13 @@
 {
     [self setNow:@"2013-01-12 14:23:05"];
     
-    CrossTime *xt = nil; //[CrossTime object];
-    xt.begin_at = nil; //[EFTime object];
+    CrossTime *xt = [CrossTime  object:self.moc];
+    xt.begin_at = [EFTime  object:self.moc];
     
     // Show original
     xt.origin = @"Original";
     xt.outputformat = [NSNumber numberWithInt:1];
-    xt.begin_at = nil; //[EFTime object];
+    xt.begin_at = [EFTime  object:self.moc];
     xt.begin_at.timezone = @"+08:00 CST";
     
     xt.begin_at.date = @"";
@@ -560,7 +672,7 @@
     // Show original, eat quote
     xt.origin = @"'Original'";
     xt.outputformat = [NSNumber numberWithInt:1];
-    xt.begin_at = nil; //[EFTime object];
+    xt.begin_at = [EFTime  object:self.moc];
     xt.begin_at.timezone = @"+08:00 CST";
     
     xt.begin_at.date = @"";
@@ -582,7 +694,7 @@
     xt.begin_at.time_word = @"";
     
     STAssertEqualObjects([xt getTimeTitle], @"2013-01-12 14:23:00", @"Title");
-    STAssertEqualObjects([xt getTimeDescription], @"Seconds ago", @"Description");
+    STAssertEqualObjects([xt getTimeDescription], @"seconds ago", @"Description");
     STAssertEqualObjects([xt getTimeSingleLine], @"2013-01-12 14:23:00", @"One Line");
     
     // Shwo original with valid date and time, eat double-quote
@@ -595,7 +707,7 @@
     xt.begin_at.time_word = @"";
     
     STAssertEqualObjects([xt getTimeTitle], @"2013-01-12 14:23:00", @"Title");
-    STAssertEqualObjects([xt getTimeDescription], @"Seconds ago", @"Description");
+    STAssertEqualObjects([xt getTimeDescription], @"seconds ago", @"Description");
     STAssertEqualObjects([xt getTimeSingleLine], @"2013-01-12 14:23:00", @"One Line");
 }
 
@@ -603,10 +715,10 @@
 {
     [self setNow:@"2013-01-12 14:23:05"];
     
-    CrossTime *xt = nil; //[CrossTime object];
+    CrossTime *xt = [CrossTime  object:self.moc];
     xt.origin = @"";
     xt.outputformat = [NSNumber numberWithInt:0];
-    xt.begin_at = nil; //[EFTime object];
+    xt.begin_at = [EFTime  object:self.moc];
     xt.begin_at.timezone = @"+08:00 CST";
     
     xt.begin_at.date = @"2013-01-12";
@@ -614,7 +726,7 @@
     xt.begin_at.time = @"06:23:00";
     xt.begin_at.time_word = @"";
     
-    STAssertEqualObjects([xt getTimeTitle], @"Seconds ago", @"Title");
+    STAssertEqualObjects([xt getTimeTitle], @"now", @"Title");
     STAssertEqualObjects([xt getTimeDescription], @"2:23PM Sat, Jan 12", @"Description");
     STAssertEqualObjects([xt getTimeSingleLine], @"2:23PM Sat, Jan 12", @"One Line");
     
@@ -622,7 +734,7 @@
     xt.begin_at.date_word = @"";
     xt.begin_at.time = @"";
     xt.begin_at.time_word = @"";
-    STAssertEqualObjects([xt getTimeTitle], @"Today", @"Title");
+    STAssertEqualObjects([xt getTimeTitle], @"today", @"Title");
     STAssertEqualObjects([xt getTimeDescription], @"Sat, Jan 12", @"Description");
     STAssertEqualObjects([xt getTimeSingleLine], @"Sat, Jan 12", @"One Line");
     
@@ -631,7 +743,7 @@
     xt.begin_at.date_word = @"";
     xt.begin_at.time = @"06:23:00";
     xt.begin_at.time_word = @"";
-    STAssertEqualObjects([xt getTimeTitle], @"Yesterday", @"Title");
+    STAssertEqualObjects([xt getTimeTitle], @"yesterday", @"Title");
     STAssertEqualObjects([xt getTimeDescription], @"2:23PM Fri, Jan 11", @"Description");
     STAssertEqualObjects([xt getTimeSingleLine], @"2:23PM Fri, Jan 11", @"One Line");
     
@@ -639,7 +751,7 @@
     xt.begin_at.date_word = @"";
     xt.begin_at.time = @"";;
     xt.begin_at.time_word = @"";
-    STAssertEqualObjects([xt getTimeTitle], @"Yesterday", @"Title");
+    STAssertEqualObjects([xt getTimeTitle], @"yesterday", @"Title");
     STAssertEqualObjects([xt getTimeDescription], @"Fri, Jan 11", @"Description");
     STAssertEqualObjects([xt getTimeSingleLine], @"Fri, Jan 11", @"One Line");
 }

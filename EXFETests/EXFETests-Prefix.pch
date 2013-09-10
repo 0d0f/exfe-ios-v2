@@ -5,4 +5,12 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
+    #import <RestKit/RestKit.h>
+    #import "UILog.h"
+    #import "EFConfig.h"
+    #import "EFUserDefaultsKeyDefines.h"
+    #import "Constants.h"
+    #import "AppDelegate.h"
+    #import "EFEntity.h"
+    #import "EFModel.h"
 #endif
