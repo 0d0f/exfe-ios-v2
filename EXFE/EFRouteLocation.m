@@ -30,10 +30,10 @@
     NSURL *baseURl = objectManager.HTTPClient.baseURL;
     
     if (self.locatinMask & kEFRouteLocationMaskXPlace) {
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/map_mark_diamond_blue@2x.png", IMG_ROOT]];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/map_mark_diamond_blue@2x.png", [EFConfig sharedInstance].IMG_ROOT]];
         self.iconUrl = url;
     } else if (self.locatinMask & kEFRouteLocationMaskDestination) {
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/map_mark_ring_blue@2x.png", IMG_ROOT]];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/map_mark_ring_blue@2x.png", [EFConfig sharedInstance].IMG_ROOT]];
         self.iconUrl = url;
     } else {
         NSString *endPoint = nil;

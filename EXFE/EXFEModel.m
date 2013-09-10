@@ -478,7 +478,7 @@ static NSString * kExtension           = @"exfe";
     
     if (success) {
         
-        NSURL *baseURL = [NSURL URLWithString:API_ROOT];
+        NSURL *baseURL = [NSURL URLWithString:[EFConfig sharedInstance].API_ROOT];
         RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
         
         RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:model];

@@ -69,7 +69,7 @@
     RKLogConfigureByName("RestKit", RKLogLevelDefault);
 #endif
     
-    RKLogInfo(@"API ROOT: %@", API_ROOT);
+    RKLogInfo(@"API ROOT: %@", [EFConfig sharedInstance].API_ROOT);
     
     [self registerWeixin];
     
