@@ -1141,11 +1141,11 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
 }
 
-- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource needDeleteRouteLocation:(NSString *)routeLocationId {
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource needDeleteRouteLocation:(NSString *)routeLocationId shouldPostToServer:(BOOL)shouldPost {
     dispatch_async(dispatch_get_main_queue(), ^{
         EFRouteLocation *routeLocation = [dataSource routeLocationForRouteLocationId:routeLocationId];
         if (routeLocation) {
-            [dataSource removeRouteLocation:routeLocation fromMapView:self.mapView];
+            [dataSource removeRouteLocation:routeLocation fromMapView:self.mapView shouldPostToServer:shouldPost];
         }
         
         if ([EFLocationManager defaultManager].userLocation) {
