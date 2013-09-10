@@ -42,16 +42,32 @@ static NSDate* s_Now = nil;
     NSDictionary *result = nil;
     switch (type) {
         case 0: // ISO 8601 
-            result = [NSDictionary dictionaryWithObjectsAndKeys:@"MM-dd", @"date", @"yyyy-MM-dd", @"dateWithYear", @"HH:mm:ss", @"time", nil];
+            result = @{
+                       @"date": NSLocalizedString(@"MM-dd", nil),
+                       @"dateWithYear": NSLocalizedString(@"yyyy-MM-dd", nil),
+                       @"time": NSLocalizedString(@"HH:mm:ss", nil)
+                       };
             break;
         case 1: // Long
-            result = [NSDictionary dictionaryWithObjectsAndKeys:@"EEEE, MMMM d", @"date", @"EEEE, MMMM d yyyy", @"dateWithYear", @"HH:mm", @"time", nil];
+            result = @{
+                       @"date": NSLocalizedString(@"EEEE, MMMM d", nil),
+                       @"dateWithYear": NSLocalizedString(@"EEEE, MMMM d yyyy", nil),
+                       @"time": NSLocalizedString(@"HH:mm", nil)
+                       };
             break;
         case 2: // Mid
-            result = [NSDictionary dictionaryWithObjectsAndKeys:@"EEE, MMM d", @"date", @"EEE, MMM d yyyy", @"dateWithYear", @"h:mma", @"time", nil];
+            result = @{
+                       @"date": NSLocalizedString(@"EEE, MMM d", nil),
+                       @"dateWithYear": NSLocalizedString(@"EEE, MMM d yyyy", nil),
+                       @"time": NSLocalizedString(@"h:mma", nil)
+                       };
             break;
         case 3 : // Short
-            result = [NSDictionary dictionaryWithObjectsAndKeys:@"MMM d", @"date", @"MMM d yyyy", @"dateWithYear", @"h:mm", @"time", nil];
+            result = @{
+                       @"date": NSLocalizedString(@"MMM d", nil),
+                       @"dateWithYear": NSLocalizedString(@"MMM d yyyy", nil),
+                       @"time": NSLocalizedString(@"h:mm", nil)
+                       };
             break;
         default:
             break;
@@ -154,7 +170,7 @@ static NSDate* s_Now = nil;
     // handle missing time
     if (([targetTime hasDate] && ![targetTime hasTime]) || ([baseTime hasDate] && ![baseTime hasTime])) {
         if (targetTime.year == baseTime.year && targetTime.month == baseTime.month && targetTime.day == baseTime.day) {
-            return @"today";
+            return NSLocalizedString(@"today", nil);
         }else{
             // Normalize date time
             if ([targetTime hasTime]){
@@ -293,9 +309,14 @@ static NSDate* s_Now = nil;
                 }else{
                     //NSInteger dd = (m + 1439) / 1440;
                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                    [dateFormatter setDateFormat:@"EEE"];
-                    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-                    [dateFormatter setLocale:usLocale];
+                    NSString *language = [NSLocale preferredLanguages][0];
+                    NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:language];
+                    [dateFormatter setLocale:locale];
+                    if ([language hasPrefix:@"zh"]) {
+                        [dateFormatter setDateFormat:@"EEEE"];
+                    } else {
+                        [dateFormatter setDateFormat:@"EEE"];
+                    }
                     NSString *weekday = [dateFormatter stringFromDate:target];
                     return [NSString stringWithFormat:NSLocalizedString(@"%@. in %i days", nil), weekday, dateSpan];
                 }
