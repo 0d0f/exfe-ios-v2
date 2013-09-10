@@ -206,6 +206,7 @@
 		4F33443D17DF03D700FE4E31 /* EFConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F33443B17DF03D700FE4E31 /* EFConfig.m */; };
 		4F33443E17DF03D700FE4E31 /* EFConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F33443B17DF03D700FE4E31 /* EFConfig.m */; };
 		4F33443F17DF03D700FE4E31 /* EFConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F33443B17DF03D700FE4E31 /* EFConfig.m */; };
+		4F33444517DF29A900FE4E31 /* EFRouteXAccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 761B24C217CFBE160091DD7B /* EFRouteXAccessViewController.m */; };
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
 		4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
 		4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
@@ -6373,8 +6374,8 @@
 				78A98E861560F832009E0806 /* EXFE */,
 				4F63DA7617172AA600136B7E /* 0d0f */,
 				4F63DC4517172B0700136B7E /* Pilot */,
-				4F1142D416AE40B000C30179 /* EXFETests */,
 				4FC40E1917D04A5700D64105 /* Shuady */,
+				4F1142D416AE40B000C30179 /* EXFETests */,
 			);
 		};
 /* End PBXProject section */
@@ -9102,6 +9103,7 @@
 				4FC40F2617D04A5700D64105 /* CCTemplate.m in Sources */,
 				4FC4114017D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */,
 				4F33443F17DF03D700FE4E31 /* EFConfig.m in Sources */,
+				4F33444517DF29A900FE4E31 /* EFRouteXAccessViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9517,14 +9519,21 @@
 					"DEBUG=1",
 					DEV,
 				);
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
+					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
+					"$(SRCROOT)/Vendor/Build/BlocksKit",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-force_load",
+					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
+				);
 				PRODUCT_NAME = 0d0f;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -9547,14 +9556,21 @@
 					"DEBUG=1",
 					DEV,
 				);
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
+					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
+					"$(SRCROOT)/Vendor/Build/BlocksKit",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-force_load",
+					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
+				);
 				PRODUCT_NAME = 0d0f;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -9644,14 +9660,15 @@
 					WWW,
 					SHUADY,
 				);
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
+					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Shuady-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/EXFE/Flurry\\\"",
-					"\\\"$(SRCROOT)/EXFE/SDKExport\\\"",
-					/Users/0day/Dev/exfeiosv2/Vendor/Build/BlocksKit,
+					"$(SRCROOT)/Vendor/Build/BlocksKit",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -9679,14 +9696,15 @@
 					RESTKIT_GENERATE_SEED_DB,
 					SHUADY,
 				);
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
+					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Shuady-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/EXFE/Flurry\\\"",
-					"\\\"$(SRCROOT)/EXFE/SDKExport\\\"",
-					/Users/0day/Dev/exfeiosv2/Vendor/Build/BlocksKit,
+					"$(SRCROOT)/Vendor/Build/BlocksKit",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -9812,7 +9830,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
+					"$(SRCROOT)/Vendor/Build/BlocksKit",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -9846,7 +9864,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
+					"$(SRCROOT)/Vendor/Build/BlocksKit",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",

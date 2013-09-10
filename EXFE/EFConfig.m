@@ -31,9 +31,9 @@ static NSDictionary * Config = nil;
                                  ,@"img": @"https://exfe.com/static/img"
                                  ,@"oauth": @"https://exfe.com/OAuth"
                                  }
-                   ,@"shuadycn": @{@"api": @""
-                                   ,@"img": @""
-                                   ,@"oauth": @""
+                   ,@"shuadycn": @{@"api": @"https://api.shuady.cn/v2/"
+                                   ,@"img": @"https://shuady.cn/static/img"
+                                   ,@"oauth": @"https://shuady.cn/OAuth"
                                    }
                    //                                ,@"share":   @{@"": @"",
                    //                                              @"": @"",
@@ -50,19 +50,24 @@ static NSDictionary * Config = nil;
     
 #ifdef DEBUG
     #ifdef WWW
-    return @"shuady";
-    // return @"shuadycn";
+        #ifdef SHUADY
+            return @"shuadycn";
+        #else
+            return @"shuady";
+        #endif
     #elif (defined PANDA) || (defined PILOT)
-    return @"panda";
+        return @"panda";
     #else
     // DEV
-    return @"black";
+        return @"black";
     #endif  // #ifdef WWW
 #else
     // WWW
-    return @"shuady";
-    // return @"shuadycn";
-    
+    #ifdef SHUADY
+        return @"shuadycn";
+    #else
+        return @"shuady";
+    #endif
 #endif  // #ifdef DEBUG
 }
 
