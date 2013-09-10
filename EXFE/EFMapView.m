@@ -367,9 +367,13 @@ static UIView * ReverseSubviews(UIView *view) {
 
 - (void)_init {
     // iOS 7
-//    if ([self respondsToSelector:@selector(setRotateEnabled:)]) {
-//        [self setRotateEnabled:NO];
-//    }
+    if ([self respondsToSelector:@selector(setRotateEnabled:)]) {
+        BOOL value = NO;
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[MKMapView instanceMethodSignatureForSelector:@selector(setRotateEnabled:)]];
+        [invocation setSelector:@selector(setRotateEnabled:)];
+        [invocation setArgument:&value atIndex:2];
+        [invocation invokeWithTarget:self];
+    }
     
     self.gestureView = ReverseSubviews(self);
     NSAssert(self.gestureView, @"There should be a gesture view.");
