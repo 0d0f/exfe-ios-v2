@@ -3774,7 +3774,7 @@
 		76D1FE06174100AA00D271B2 /* EFAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAPI.h; sourceTree = "<group>"; };
 		76D2DE111778061F00E8C53E /* EFDownloadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFDownloadOperation.h; sourceTree = "<group>"; };
 		76D2DE121778061F00E8C53E /* EFDownloadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFDownloadOperation.m; sourceTree = "<group>"; };
-		76D9657A1743D07000485325 /* EFConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFConfig.h; sourceTree = "<group>"; };
+		76D9657A1743D07000485325 /* EFConfigA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFConfigA.h; sourceTree = "<group>"; };
 		76DA465D17CD07D200E897B5 /* map_remove_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_remove_30.png; sourceTree = "<group>"; };
 		76DED7CC171C06A900C2F27E /* UILog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILog.h; sourceTree = "<group>"; };
 		76DED7CD171C06A900C2F27E /* UILog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILog.m; sourceTree = "<group>"; };
@@ -4590,7 +4590,7 @@
 			children = (
 				76DED7CB171C05FE00C2F27E /* Debug */,
 				4FD9376216D602A200ED6677 /* Extention */,
-				76D9657A1743D07000485325 /* EFConfig.h */,
+				76D9657A1743D07000485325 /* EFConfigA.h */,
 				7619DCE417CDD8C70095951B /* EFUserDefaultsKeyDefines.h */,
 				78FC07DE15D224FC004BB482 /* CTUtil.h */,
 				78FC07DF15D224FC004BB482 /* CTUtil.m */,

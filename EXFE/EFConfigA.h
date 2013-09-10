@@ -1,13 +1,13 @@
 //
-//  EFConfig.h
+//  EFConfigA.h
 //  EXFE
 //
 //  Created by 0day on 13-5-15.
 //
 //
 
-#ifndef EXFE_EFConfig_h
-#define EXFE_EFConfig_h
+#ifndef EXFE_EFConfigA_h
+#define EXFE_EFConfigA_h
 
 /**
  * DB version && name
@@ -65,4 +65,4 @@
     #define kTWConsumerSecret @"1q54ZzPppYc4kMWZEQi5dHKtSVVUFWPMLLQWeTOu90"
 #endif  // #ifdef DEBUG
 
-#endif  // #ifndef EXFE_EFConfig_h
+#endif  // #ifndef EXFE_EFConfigA_h
