@@ -501,7 +501,7 @@ static NSDictionary * _keywordDict = nil;
 + (NSString*) getBackgroundLink:(NSString*)imgname
 {
     //    https://exfe.com/static/img/xbg/westlake.jpg
-    return [NSString stringWithFormat:@"%@/xbg/%@",IMG_ROOT,imgname];
+    return [NSString stringWithFormat:@"%@/xbg/%@", [EFConfig sharedInstance].IMG_ROOT ,imgname];
 }
 
 + (void)checkUpdate

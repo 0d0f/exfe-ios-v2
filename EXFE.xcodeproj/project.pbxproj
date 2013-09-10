@@ -202,6 +202,10 @@
 		4F2D22E4176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */; };
 		4F2D22E5176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */; };
 		4F2D22E6176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */; };
+		4F33443C17DF03D700FE4E31 /* EFConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F33443B17DF03D700FE4E31 /* EFConfig.m */; };
+		4F33443D17DF03D700FE4E31 /* EFConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F33443B17DF03D700FE4E31 /* EFConfig.m */; };
+		4F33443E17DF03D700FE4E31 /* EFConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F33443B17DF03D700FE4E31 /* EFConfig.m */; };
+		4F33443F17DF03D700FE4E31 /* EFConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F33443B17DF03D700FE4E31 /* EFConfig.m */; };
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
 		4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
 		4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
@@ -3208,6 +3212,8 @@
 		4F2D22D1176994EE00FEA139 /* EXFEModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXFEModel.m; sourceTree = "<group>"; };
 		4F2D22E2176AF32E00FEA139 /* RecursiveDeleteOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecursiveDeleteOperation.h; sourceTree = "<group>"; };
 		4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecursiveDeleteOperation.m; sourceTree = "<group>"; };
+		4F33443A17DF03D700FE4E31 /* EFConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFConfig.h; sourceTree = "<group>"; };
+		4F33443B17DF03D700FE4E31 /* EFConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFConfig.m; sourceTree = "<group>"; };
 		4F3355CE168C4F4700D398C0 /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
 		4F3355CF168C4F4700D398C0 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
 		4F358D6B171D66F5005C2EE7 /* EFPasswordField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPasswordField.h; sourceTree = "<group>"; };
@@ -3774,7 +3780,7 @@
 		76D1FE06174100AA00D271B2 /* EFAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAPI.h; sourceTree = "<group>"; };
 		76D2DE111778061F00E8C53E /* EFDownloadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFDownloadOperation.h; sourceTree = "<group>"; };
 		76D2DE121778061F00E8C53E /* EFDownloadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFDownloadOperation.m; sourceTree = "<group>"; };
-		76D9657A1743D07000485325 /* EFConfigA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFConfigA.h; sourceTree = "<group>"; };
+		76D9657A1743D07000485325 /* EFKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFKeys.h; sourceTree = "<group>"; };
 		76DA465D17CD07D200E897B5 /* map_remove_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_remove_30.png; sourceTree = "<group>"; };
 		76DED7CC171C06A900C2F27E /* UILog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILog.h; sourceTree = "<group>"; };
 		76DED7CD171C06A900C2F27E /* UILog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILog.m; sourceTree = "<group>"; };
@@ -4590,7 +4596,7 @@
 			children = (
 				76DED7CB171C05FE00C2F27E /* Debug */,
 				4FD9376216D602A200ED6677 /* Extention */,
-				76D9657A1743D07000485325 /* EFConfigA.h */,
+				76D9657A1743D07000485325 /* EFKeys.h */,
 				7619DCE417CDD8C70095951B /* EFUserDefaultsKeyDefines.h */,
 				78FC07DE15D224FC004BB482 /* CTUtil.h */,
 				78FC07DF15D224FC004BB482 /* CTUtil.m */,
@@ -4602,6 +4608,8 @@
 				7840916B156F6AA5006DF115 /* Util.m */,
 				4F05D456175DAFAC0050A726 /* Constants.h */,
 				4F05D457175DAFAC0050A726 /* Constants.m */,
+				4F33443A17DF03D700FE4E31 /* EFConfig.h */,
+				4F33443B17DF03D700FE4E31 /* EFConfig.m */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -8550,6 +8558,7 @@
 				4F0C546E17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 				4F0F831317CF56D9001DD47E /* CCTemplate.m in Sources */,
 				4FC4113E17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */,
+				4F33443D17DF03D700FE4E31 /* EFConfig.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8821,6 +8830,7 @@
 				4F0C546F17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 				4F0F831417CF56D9001DD47E /* CCTemplate.m in Sources */,
 				4FC4113F17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */,
+				4F33443E17DF03D700FE4E31 /* EFConfig.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9091,6 +9101,7 @@
 				4FC40F2517D04A5700D64105 /* NSManagedObject+EXFE.m in Sources */,
 				4FC40F2617D04A5700D64105 /* CCTemplate.m in Sources */,
 				4FC4114017D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */,
+				4F33443F17DF03D700FE4E31 /* EFConfig.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9362,6 +9373,7 @@
 				4F0C546D17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 				4F0F831217CF56D9001DD47E /* CCTemplate.m in Sources */,
 				4FC4113D17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */,
+				4F33443C17DF03D700FE4E31 /* EFConfig.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
