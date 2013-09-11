@@ -10,6 +10,7 @@
 #import <RestKit/CoreData.h>
 #import "EFEntity.h"
 #import "DateTimeUtil.h"
+#import "EFConfig.h"
 
 
 @interface EXFETests (){
@@ -64,6 +65,9 @@
     NSLog(@"fun4: %i Asia/Shanghai", d );
     int e = [DateTimeUtil daysWithinEraFromDate:now toDate:then baseTimeZone:[NSTimeZone timeZoneWithName:@"PST8PDT"]];
     NSLog(@"fun4: %i PST8PDT", e );
+    
+    
+    NSLog([[EFConfig sharedInstance] suggestKey]);
     STAssertTrue(YES, @"OK");
     
     //STFail(@"Unit tests are not implemented yet in EXFETests");
