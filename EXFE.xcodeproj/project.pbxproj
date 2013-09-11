@@ -3252,11 +3252,12 @@
 		4F33443A17DF03D700FE4E31 /* EFConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFConfig.h; sourceTree = "<group>"; };
 		4F33443B17DF03D700FE4E31 /* EFConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFConfig.m; sourceTree = "<group>"; };
 		4F33445A17E0399B00FE4E31 /* ShuadyTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShuadyTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4F33445B17E0399B00FE4E31 /* ShuadyTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ShuadyTests-Info.plist"; path = "/Users/stony/git/exfe_ios/ShuadyTests-Info.plist"; sourceTree = "<absolute>"; };
 		4F33446D17E03E1C00FE4E31 /* 0d0fTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 0d0fTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4F33446E17E03E1D00FE4E31 /* 0d0fTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "0d0fTests-Info.plist"; path = "/Users/stony/git/exfe_ios/0d0fTests-Info.plist"; sourceTree = "<absolute>"; };
 		4F33447E17E03E1F00FE4E31 /* PilotTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PilotTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4F33447F17E03E1F00FE4E31 /* PilotTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PilotTests-Info.plist"; path = "/Users/stony/git/exfe_ios/PilotTests-Info.plist"; sourceTree = "<absolute>"; };
+		4F33448017E0433300FE4E31 /* Shuady-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Shuady-Info.plist"; sourceTree = "<group>"; };
+		4F33448117E0435200FE4E31 /* 0d0fTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "0d0fTests-Info.plist"; sourceTree = "<group>"; };
+		4F33448217E0435200FE4E31 /* PilotTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PilotTests-Info.plist"; sourceTree = "<group>"; };
+		4F33448317E0435300FE4E31 /* ShuadyTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ShuadyTests-Info.plist"; sourceTree = "<group>"; };
 		4F3355CE168C4F4700D398C0 /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
 		4F3355CF168C4F4700D398C0 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
 		4F358D6B171D66F5005C2EE7 /* EFPasswordField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPasswordField.h; sourceTree = "<group>"; };
@@ -3418,7 +3419,6 @@
 		4FBF2483167AE89D007C04E2 /* CrossCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossCard.h; sourceTree = "<group>"; };
 		4FBF2484167AE89D007C04E2 /* CrossCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossCard.m; sourceTree = "<group>"; };
 		4FC4110C17D04A5700D64105 /* Shuady.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shuady.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		4FC4110D17D04A5700D64105 /* Shuady-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Shuady-Info.plist"; path = "/Users/stony/git/exfe_ios/Shuady-Info.plist"; sourceTree = "<absolute>"; };
 		4FC4113B17D490FF00D64105 /* EFChangeCrossTimeOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChangeCrossTimeOperation.h; sourceTree = "<group>"; };
 		4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChangeCrossTimeOperation.m; sourceTree = "<group>"; };
 		4FC4114817D5949B00D64105 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = Localizable.strings; sourceTree = "<group>"; };
@@ -4428,10 +4428,10 @@
 		4F1142DB16AE40B000C30179 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				4F33446E17E03E1D00FE4E31 /* 0d0fTests-Info.plist */,
-				4F33447F17E03E1F00FE4E31 /* PilotTests-Info.plist */,
-				4F33445B17E0399B00FE4E31 /* ShuadyTests-Info.plist */,
 				4F1142DC16AE40B000C30179 /* EXFETests-Info.plist */,
+				4F33448117E0435200FE4E31 /* 0d0fTests-Info.plist */,
+				4F33448217E0435200FE4E31 /* PilotTests-Info.plist */,
+				4F33448317E0435300FE4E31 /* ShuadyTests-Info.plist */,
 				4F1142DD16AE40B000C30179 /* InfoPlist.strings */,
 				4F1142E316AE40B000C30179 /* EXFETests-Prefix.pch */,
 			);
@@ -6055,7 +6055,7 @@
 				78A98E931560F832009E0806 /* EXFE-Info.plist */,
 				4F63DE14171733C500136B7E /* 0d0f-Info.plist */,
 				4F00546F17292C2300D4B429 /* Pilot-Info.plist */,
-				4FC4110D17D04A5700D64105 /* Shuady-Info.plist */,
+				4F33448017E0433300FE4E31 /* Shuady-Info.plist */,
 				78A98E971560F832009E0806 /* main.m */,
 				78A98E991560F832009E0806 /* EXFE-Prefix.pch */,
 			);
@@ -9763,7 +9763,7 @@
 					"$(inherited)",
 					SHUADY,
 				);
-				INFOPLIST_FILE = "ShuadyTests-Info.plist";
+				INFOPLIST_FILE = "EXFETests/ShuadyTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = ShuadyTests;
@@ -9791,7 +9791,7 @@
 					RESTKIT_GENERATE_SEED_DB,
 					SHUADY,
 				);
-				INFOPLIST_FILE = "ShuadyTests-Info.plist";
+				INFOPLIST_FILE = "EXFETests/ShuadyTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = ShuadyTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -9818,7 +9818,7 @@
 					"$(inherited)",
 					DEV,
 				);
-				INFOPLIST_FILE = "0d0fTests-Info.plist";
+				INFOPLIST_FILE = "EXFETests/0d0fTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = 0d0fTests;
@@ -9846,7 +9846,7 @@
 					RESTKIT_GENERATE_SEED_DB,
 					DEV,
 				);
-				INFOPLIST_FILE = "0d0fTests-Info.plist";
+				INFOPLIST_FILE = "EXFETests/0d0fTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = 0d0fTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -9873,7 +9873,7 @@
 					"$(inherited)",
 					PILOT,
 				);
-				INFOPLIST_FILE = "PilotTests-Info.plist";
+				INFOPLIST_FILE = "EXFETests/PilotTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = PilotTests;
@@ -9901,7 +9901,7 @@
 					RESTKIT_GENERATE_SEED_DB,
 					PILOT,
 				);
-				INFOPLIST_FILE = "PilotTests-Info.plist";
+				INFOPLIST_FILE = "EXFETests/PilotTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = PilotTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -9924,7 +9924,7 @@
 					"DEBUG=1",
 					DEV,
 				);
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/../../Headers/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -9958,7 +9958,7 @@
 					"DEBUG=1",
 					DEV,
 				);
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/../../Headers/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -9999,7 +9999,11 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-force_load",
+					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
+				);
 				PRODUCT_NAME = Pilot;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -10029,7 +10033,11 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-force_load",
+					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
+				);
 				PRODUCT_NAME = Pilot;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -10054,7 +10062,7 @@
 					SHUADY,
 				);
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
-				INFOPLIST_FILE = "$(SRCROOT)/Shuady-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Shuady-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -10087,7 +10095,7 @@
 					SHUADY,
 				);
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
-				INFOPLIST_FILE = "$(SRCROOT)/Shuady-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Shuady-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
