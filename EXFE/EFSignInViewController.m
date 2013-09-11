@@ -56,7 +56,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     kViewTagErrorInline = 42,
     kViewTagSnsGroup = 51,
     kViewTagSnsFacebook = 52,
-    kViewTagSnsTwitter = 53
+    kViewTagSnsTwitter = 53,
+    kViewTagServerSwitch = 61
 };
 
 @interface EFSignInViewController (){
@@ -342,7 +343,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [snsLayoutView addSubview:background];
     
     CSLinearLayoutItem *snsItem = [CSLinearLayoutItem layoutItemForView:snsLayoutView];
-    snsItem.padding = CSLinearLayoutMakePadding(27, 12, 240, 12);
+    snsItem.padding = CSLinearLayoutMakePadding(27, 12, 0, 12);
     snsItem.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
     snsItem.fillMode = CSLinearLayoutItemFillModeNormal;
     [linearLayoutView addItem:snsItem];
@@ -401,6 +402,35 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
         item.fillMode = CSLinearLayoutItemFillModeNormal;
         [snsLayoutView addItem:item];
+    }
+    
+    {
+        TTTAttributedLabel *regionlabel = [[TTTAttributedLabel alloc] init];
+        regionlabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
+        regionlabel.textColor = [UIColor COLOR_GRAY];
+        NSString *scope = nil;
+        if ([@"CN" isEqualToString:[EFConfig sharedInstance].scope]) {
+            scope = NSLocalizedString(@"China mainland", nil);
+        } else {
+            scope = NSLocalizedString(@"Worldwide", nil);
+        }
+        NSString *full = [NSString stringWithFormat:NSLocalizedString(@"Your region: %@", nil), scope];
+        [regionlabel setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+            NSRange range = [[mutableAttributedString string] rangeOfString:scope options:NSCaseInsensitiveSearch];
+            [mutableAttributedString addAttribute:(NSString *)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:1] range:range];
+            return mutableAttributedString;
+        }];
+        regionlabel.frame = CGRectMake(0, 0, 290, 50);
+        [regionlabel sizeToFit];
+        
+        regionlabel.tag = kViewTagServerSwitch;
+        self.labelRegion = regionlabel;
+        
+        CSLinearLayoutItem *snsItem = [CSLinearLayoutItem layoutItemForView:regionlabel];
+        snsItem.padding = CSLinearLayoutMakePadding(10 , 15, 10, 15);
+        snsItem.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentLeft;
+        snsItem.fillMode = CSLinearLayoutItemFillModeNormal;
+        [linearLayoutView addItem:snsItem];
     }
     
     {

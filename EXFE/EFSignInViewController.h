@@ -34,6 +34,7 @@
 @property (nonatomic, strong) UIButton *btnFacebook;
 @property (nonatomic, strong) UIButton *btnTwitter;
 
+@property (nonatomic, strong) TTTAttributedLabel *labelRegion;
 
 @property (nonatomic, copy) id onExitBlock;
 @property (nonatomic, strong) NSMutableDictionary *identityCache;
