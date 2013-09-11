@@ -8,6 +8,9 @@
 
 #import "EFConfig.h"
 
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
+
 static NSDictionary * Config = nil;
 
 @implementation EFConfig
@@ -84,5 +87,23 @@ static NSDictionary * Config = nil;
 - (NSString *)OAUTH_ROOT
 {
     return Config[self.key][@"oauth"];
+}
+
+- (NSString *)suggestKey
+{
+    CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier = [netInfo subscriberCellularProvider];
+    NSString *isocode;
+    if (carrier) {
+        isocode = [[carrier isoCountryCode] uppercaseString];
+    } else {
+        NSLocale *locale = [NSLocale currentLocale];
+        isocode = [[locale objectForKey:NSLocaleCountryCode] uppercaseString];
+    }
+    if ([@"CN" isEqualToString:isocode]) {
+        return @"shuadycn";
+    } else {
+        return @"shuady";
+    }
 }
 @end

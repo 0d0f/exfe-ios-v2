@@ -207,6 +207,21 @@
 		4F33443E17DF03D700FE4E31 /* EFConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F33443B17DF03D700FE4E31 /* EFConfig.m */; };
 		4F33443F17DF03D700FE4E31 /* EFConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F33443B17DF03D700FE4E31 /* EFConfig.m */; };
 		4F33444517DF29A900FE4E31 /* EFRouteXAccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 761B24C217CFBE160091DD7B /* EFRouteXAccessViewController.m */; };
+		4F33444F17E0399B00FE4E31 /* EXFETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1142E116AE40B000C30179 /* EXFETests.m */; };
+		4F33445117E0399B00FE4E31 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1142D616AE40B000C30179 /* SenTestingKit.framework */; };
+		4F33445217E0399B00FE4E31 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8B1560F832009E0806 /* UIKit.framework */; };
+		4F33445317E0399B00FE4E31 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8D1560F832009E0806 /* Foundation.framework */; };
+		4F33445517E0399B00FE4E31 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F1142DD16AE40B000C30179 /* InfoPlist.strings */; };
+		4F33446217E03E1C00FE4E31 /* EXFETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1142E116AE40B000C30179 /* EXFETests.m */; };
+		4F33446417E03E1C00FE4E31 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1142D616AE40B000C30179 /* SenTestingKit.framework */; };
+		4F33446517E03E1C00FE4E31 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8B1560F832009E0806 /* UIKit.framework */; };
+		4F33446617E03E1C00FE4E31 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8D1560F832009E0806 /* Foundation.framework */; };
+		4F33446817E03E1C00FE4E31 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F1142DD16AE40B000C30179 /* InfoPlist.strings */; };
+		4F33447317E03E1F00FE4E31 /* EXFETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1142E116AE40B000C30179 /* EXFETests.m */; };
+		4F33447517E03E1F00FE4E31 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1142D616AE40B000C30179 /* SenTestingKit.framework */; };
+		4F33447617E03E1F00FE4E31 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8B1560F832009E0806 /* UIKit.framework */; };
+		4F33447717E03E1F00FE4E31 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8D1560F832009E0806 /* Foundation.framework */; };
+		4F33447917E03E1F00FE4E31 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F1142DD16AE40B000C30179 /* InfoPlist.strings */; };
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
 		4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
 		4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
@@ -3014,6 +3029,27 @@
 			remoteGlobalIDString = 78A98E861560F832009E0806;
 			remoteInfo = EXFE;
 		};
+		4F33445C17E039D700FE4E31 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78A98E7E1560F832009E0806 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4FC40E1917D04A5700D64105;
+			remoteInfo = Shuady;
+		};
+		4F33446017E03E1C00FE4E31 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78A98E7E1560F832009E0806 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 78A98E861560F832009E0806;
+			remoteInfo = EXFE;
+		};
+		4F33447117E03E1F00FE4E31 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78A98E7E1560F832009E0806 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 78A98E861560F832009E0806;
+			remoteInfo = EXFE;
+		};
 		4F38E9DD17B5422700B850B6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4F38E9D617B5422600B850B6 /* RestKit.xcodeproj */;
@@ -3215,6 +3251,12 @@
 		4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecursiveDeleteOperation.m; sourceTree = "<group>"; };
 		4F33443A17DF03D700FE4E31 /* EFConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFConfig.h; sourceTree = "<group>"; };
 		4F33443B17DF03D700FE4E31 /* EFConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFConfig.m; sourceTree = "<group>"; };
+		4F33445A17E0399B00FE4E31 /* ShuadyTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShuadyTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F33445B17E0399B00FE4E31 /* ShuadyTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ShuadyTests-Info.plist"; path = "/Users/stony/git/exfe_ios/ShuadyTests-Info.plist"; sourceTree = "<absolute>"; };
+		4F33446D17E03E1C00FE4E31 /* 0d0fTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 0d0fTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F33446E17E03E1D00FE4E31 /* 0d0fTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "0d0fTests-Info.plist"; path = "/Users/stony/git/exfe_ios/0d0fTests-Info.plist"; sourceTree = "<absolute>"; };
+		4F33447E17E03E1F00FE4E31 /* PilotTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PilotTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F33447F17E03E1F00FE4E31 /* PilotTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PilotTests-Info.plist"; path = "/Users/stony/git/exfe_ios/PilotTests-Info.plist"; sourceTree = "<absolute>"; };
 		4F3355CE168C4F4700D398C0 /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
 		4F3355CF168C4F4700D398C0 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
 		4F358D6B171D66F5005C2EE7 /* EFPasswordField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPasswordField.h; sourceTree = "<group>"; };
@@ -4187,6 +4229,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4F33445017E0399B00FE4E31 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33445117E0399B00FE4E31 /* SenTestingKit.framework in Frameworks */,
+				4F33445217E0399B00FE4E31 /* UIKit.framework in Frameworks */,
+				4F33445317E0399B00FE4E31 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33446317E03E1C00FE4E31 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33446417E03E1C00FE4E31 /* SenTestingKit.framework in Frameworks */,
+				4F33446517E03E1C00FE4E31 /* UIKit.framework in Frameworks */,
+				4F33446617E03E1C00FE4E31 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33447417E03E1F00FE4E31 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33447517E03E1F00FE4E31 /* SenTestingKit.framework in Frameworks */,
+				4F33447617E03E1F00FE4E31 /* UIKit.framework in Frameworks */,
+				4F33447717E03E1F00FE4E31 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4F63DB0117172AA600136B7E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -4356,6 +4428,9 @@
 		4F1142DB16AE40B000C30179 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4F33446E17E03E1D00FE4E31 /* 0d0fTests-Info.plist */,
+				4F33447F17E03E1F00FE4E31 /* PilotTests-Info.plist */,
+				4F33445B17E0399B00FE4E31 /* ShuadyTests-Info.plist */,
 				4F1142DC16AE40B000C30179 /* EXFETests-Info.plist */,
 				4F1142DD16AE40B000C30179 /* InfoPlist.strings */,
 				4F1142E316AE40B000C30179 /* EXFETests-Prefix.pch */,
@@ -5911,6 +5986,9 @@
 				4F63DC4317172AA600136B7E /* 0d0f.app */,
 				4F63DE1017172B0700136B7E /* Pilot.app */,
 				4FC4110C17D04A5700D64105 /* Shuady.app */,
+				4F33445A17E0399B00FE4E31 /* ShuadyTests.octest */,
+				4F33446D17E03E1C00FE4E31 /* 0d0fTests.octest */,
+				4F33447E17E03E1F00FE4E31 /* PilotTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -6271,6 +6349,63 @@
 			productReference = 4F1142D516AE40B000C30179 /* EXFETests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
+		4F33444B17E0399B00FE4E31 /* ShuadyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F33445717E0399B00FE4E31 /* Build configuration list for PBXNativeTarget "ShuadyTests" */;
+			buildPhases = (
+				4F33444E17E0399B00FE4E31 /* Sources */,
+				4F33445017E0399B00FE4E31 /* Frameworks */,
+				4F33445417E0399B00FE4E31 /* Resources */,
+				4F33445617E0399B00FE4E31 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4F33445D17E039D700FE4E31 /* PBXTargetDependency */,
+			);
+			name = ShuadyTests;
+			productName = EXFETests;
+			productReference = 4F33445A17E0399B00FE4E31 /* ShuadyTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+		4F33445E17E03E1C00FE4E31 /* 0d0fTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F33446A17E03E1C00FE4E31 /* Build configuration list for PBXNativeTarget "0d0fTests" */;
+			buildPhases = (
+				4F33446117E03E1C00FE4E31 /* Sources */,
+				4F33446317E03E1C00FE4E31 /* Frameworks */,
+				4F33446717E03E1C00FE4E31 /* Resources */,
+				4F33446917E03E1C00FE4E31 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4F33445F17E03E1C00FE4E31 /* PBXTargetDependency */,
+			);
+			name = 0d0fTests;
+			productName = EXFETests;
+			productReference = 4F33446D17E03E1C00FE4E31 /* 0d0fTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+		4F33446F17E03E1F00FE4E31 /* PilotTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F33447B17E03E1F00FE4E31 /* Build configuration list for PBXNativeTarget "PilotTests" */;
+			buildPhases = (
+				4F33447217E03E1F00FE4E31 /* Sources */,
+				4F33447417E03E1F00FE4E31 /* Frameworks */,
+				4F33447817E03E1F00FE4E31 /* Resources */,
+				4F33447A17E03E1F00FE4E31 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4F33447017E03E1F00FE4E31 /* PBXTargetDependency */,
+			);
+			name = PilotTests;
+			productName = EXFETests;
+			productReference = 4F33447E17E03E1F00FE4E31 /* PilotTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 		4F63DA7617172AA600136B7E /* 0d0f */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4F63DC3E17172AA600136B7E /* Build configuration list for PBXNativeTarget "0d0f" */;
@@ -6376,6 +6511,9 @@
 				4F63DC4517172B0700136B7E /* Pilot */,
 				4FC40E1917D04A5700D64105 /* Shuady */,
 				4F1142D416AE40B000C30179 /* EXFETests */,
+				4F33444B17E0399B00FE4E31 /* ShuadyTests */,
+				4F33445E17E03E1C00FE4E31 /* 0d0fTests */,
+				4F33446F17E03E1F00FE4E31 /* PilotTests */,
 			);
 		};
 /* End PBXProject section */
@@ -6417,6 +6555,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F1142DF16AE40B000C30179 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33445417E0399B00FE4E31 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33445517E0399B00FE4E31 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33446717E03E1C00FE4E31 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33446817E03E1C00FE4E31 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33447817E03E1F00FE4E31 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33447917E03E1F00FE4E31 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8280,6 +8442,45 @@
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
+		4F33445617E0399B00FE4E31 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		4F33446917E03E1C00FE4E31 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		4F33447A17E03E1F00FE4E31 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -8288,6 +8489,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F1142E216AE40B000C30179 /* EXFETests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33444E17E0399B00FE4E31 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33444F17E0399B00FE4E31 /* EXFETests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33446117E03E1C00FE4E31 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33446217E03E1C00FE4E31 /* EXFETests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33447217E03E1F00FE4E31 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33447317E03E1F00FE4E31 /* EXFETests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9387,6 +9612,21 @@
 			target = 78A98E861560F832009E0806 /* EXFE */;
 			targetProxy = 4F1142E916AE41B400C30179 /* PBXContainerItemProxy */;
 		};
+		4F33445D17E039D700FE4E31 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4FC40E1917D04A5700D64105 /* Shuady */;
+			targetProxy = 4F33445C17E039D700FE4E31 /* PBXContainerItemProxy */;
+		};
+		4F33445F17E03E1C00FE4E31 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 78A98E861560F832009E0806 /* EXFE */;
+			targetProxy = 4F33446017E03E1C00FE4E31 /* PBXContainerItemProxy */;
+		};
+		4F33447017E03E1F00FE4E31 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 78A98E861560F832009E0806 /* EXFE */;
+			targetProxy = 4F33447117E03E1F00FE4E31 /* PBXContainerItemProxy */;
+		};
 		4F38E9E617B5428F00B850B6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = RestKit;
@@ -9504,6 +9744,171 @@
 			};
 			name = Release;
 		};
+		4F33445817E0399B00FE4E31 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Shuady.app/Shuady";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					SHUADY,
+				);
+				INFOPLIST_FILE = "ShuadyTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = ShuadyTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		4F33445917E0399B00FE4E31 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Shuady.app/Shuady";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					RESTKIT_GENERATE_SEED_DB,
+					SHUADY,
+				);
+				INFOPLIST_FILE = "ShuadyTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_NAME = ShuadyTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		4F33446B17E03E1C00FE4E31 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/0d0f.app/0d0f";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					DEV,
+				);
+				INFOPLIST_FILE = "0d0fTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = 0d0fTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		4F33446C17E03E1C00FE4E31 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/0d0f.app/0d0f";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					RESTKIT_GENERATE_SEED_DB,
+					DEV,
+				);
+				INFOPLIST_FILE = "0d0fTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_NAME = 0d0fTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		4F33447C17E03E1F00FE4E31 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Pilot.app/Pilot";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					PILOT,
+				);
+				INFOPLIST_FILE = "PilotTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = PilotTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		4F33447D17E03E1F00FE4E31 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Pilot.app/Pilot";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					RESTKIT_GENERATE_SEED_DB,
+					PILOT,
+				);
+				INFOPLIST_FILE = "PilotTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_NAME = PilotTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
 		4F63DC3F17172AA600136B7E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -9519,10 +9924,7 @@
 					"DEBUG=1",
 					DEV,
 				);
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
-					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
-				);
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -9556,10 +9958,7 @@
 					"DEBUG=1",
 					DEV,
 				);
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
-					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
-				);
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -9593,10 +9992,7 @@
 					"DEBUG=1",
 					PILOT,
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
-					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
-				);
+				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/../../Headers/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Pilot-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -9626,10 +10022,7 @@
 					"DEBUG=1",
 					PILOT,
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
-					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
-				);
+				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/../../Headers/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Pilot-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -9660,10 +10053,7 @@
 					WWW,
 					SHUADY,
 				);
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
-					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
-				);
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/Shuady-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -9696,10 +10086,7 @@
 					RESTKIT_GENERATE_SEED_DB,
 					SHUADY,
 				);
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
-					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
-				);
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/Shuady-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -9822,10 +10209,7 @@
 					"DEBUG=1",
 					WWW,
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
-					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
-				);
+				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/../../Headers/**";
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -9856,10 +10240,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = RESTKIT_GENERATE_SEED_DB;
-				HEADER_SEARCH_PATHS = (
-					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
-					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
-				);
+				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/../../Headers/**";
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -9886,6 +10267,33 @@
 			buildConfigurations = (
 				4F1142E516AE40B000C30179 /* Debug */,
 				4F1142E616AE40B000C30179 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4F33445717E0399B00FE4E31 /* Build configuration list for PBXNativeTarget "ShuadyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F33445817E0399B00FE4E31 /* Debug */,
+				4F33445917E0399B00FE4E31 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4F33446A17E03E1C00FE4E31 /* Build configuration list for PBXNativeTarget "0d0fTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F33446B17E03E1C00FE4E31 /* Debug */,
+				4F33446C17E03E1C00FE4E31 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4F33447B17E03E1F00FE4E31 /* Build configuration list for PBXNativeTarget "PilotTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F33447C17E03E1F00FE4E31 /* Debug */,
+				4F33447D17E03E1F00FE4E31 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

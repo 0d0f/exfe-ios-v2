@@ -18,4 +18,6 @@
 
 + (instancetype)sharedInstance;
 
+- (NSString *)suggestKey;
+
 @end
