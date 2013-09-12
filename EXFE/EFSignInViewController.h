@@ -31,6 +31,7 @@
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 @property (nonatomic, strong) UIImageView *textFieldFrame;
 
+@property (nonatomic, strong) CSLinearLayoutView *snsGroup;
 @property (nonatomic, strong) UIButton *btnFacebook;
 @property (nonatomic, strong) UIButton *btnTwitter;
 

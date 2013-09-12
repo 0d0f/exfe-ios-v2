@@ -8,6 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+#define EFKeyServerScope          @"key.config.server.scope"
+
+#define EFServerKeyPanda          @"panda"
+#define EFServerKeyBlack          @"black"
+#define EFServerKeyShuady         @"shuady"
+#define EFServerScopeINT          @"ZZ"
+#define EFServerScopeCN           @"CN"
+
 @interface EFConfig : NSObject
 
 @property (nonatomic, readonly, copy) NSString * server;
