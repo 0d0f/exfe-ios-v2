@@ -64,6 +64,7 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
 
     EFStage _stage;
     CGFloat _y;
+    BOOL    _backEnable;
    
 }
 @property (nonatomic, copy) NSString *lastInputIdentity;
@@ -87,6 +88,7 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     if (self) {
         // Custom initialization
         _stage = kStageStart;
+        _backEnable = YES;
         self.lastInputIdentity = @"";
         self.identityCache = [NSMutableDictionary dictionaryWithCapacity:30];
         
@@ -115,15 +117,11 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     [self.view addSubview:linearLayoutView];
     
     UISwipeGestureRecognizer * swipeDownRecognizer = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-//            if ([sender.view isKindOfClass:[UIScrollView class]]){
-//                UIScrollView * scrollView = (UIScrollView *)sender.view;
-                    if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
-                        [self.parentViewController performSelector:@selector(hideStart)];
-                    }
-//            }
+        if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
+            [self.parentViewController performSelector:@selector(hideStart)];
+        }
     }];
     swipeDownRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
-//    [linearLayoutView addGestureRecognizer:swipeDownRecognizer];
     [self.view addGestureRecognizer:swipeDownRecognizer];
     
     {// TextField Frame
@@ -466,12 +464,21 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
                 [[EFConfig sharedInstance] saveScope:EFServerScopeCN];
             }
             // TODO reg a listener
+            AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+            [app switchContextByUserId:0 withAbandon:NO];
+            
+            _backEnable = NO;
+            if (_inputIdentity.text.length > 0) {
+                [self resetToStart];
+                [self.identityCache removeAllObjects];
+            }
             [self refreshServerInfo];
+            _backEnable = YES;
         }];
         [regionlabel addGestureRecognizer:tap];
         
         CSLinearLayoutItem *item = [CSLinearLayoutItem layoutItemForView:regionlabel];
-        item.padding = CSLinearLayoutMakePadding(10, 15, 10, 15);
+        item.padding = CSLinearLayoutMakePadding(30, 15, 10, 15);
         item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentLeft;
         item.fillMode = CSLinearLayoutItemFillModeNormal;
         item.hiddenType = CSLinearLayoutItemGone;
@@ -733,6 +740,13 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     }];
     self.labelRegion.frame = CGRectMake(0, 0, 290, 50);
     [self.labelRegion sizeToFit];
+}
+
+- (void)resetToStart
+{
+    _inputIdentity.text = @"";
+    [self textFieldDidChange:_inputIdentity];
+    [self setStage:kStageStart];
 }
 
 - (void)fillIdentityResp:(NSDictionary*)respDict
@@ -1293,9 +1307,9 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
 
 - (void)startOver:(id)sender
 {
-    _inputIdentity.text = @"";
-    [self textFieldDidChange:_inputIdentity];
-    [self setStage:kStageStart];
+    _backEnable = NO;
+    [self resetToStart];
+    _backEnable = YES;
 }
 
 - (void)syncFBAccount
@@ -1707,15 +1721,19 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
 #pragma mark UIScrollViewDelegate
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    _y = scrollView.contentOffset.y;
+    if (_backEnable){
+        _y = scrollView.contentOffset.y;
+    } else {
+        _y = -1;
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (_y == 0 && scrollView.contentOffset.y < 0) {
-        if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
-            [self.parentViewController performSelector:@selector(hideStart)];
-        }
+    if (_y >= 0 && _y <= 5 && scrollView.contentOffset.y < _y) {
+//        if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
+//            [self.parentViewController performSelector:@selector(hideStart)];
+//        }
     }
 }
 

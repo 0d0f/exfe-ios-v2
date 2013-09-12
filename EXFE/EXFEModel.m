@@ -642,8 +642,12 @@ static NSString * kExtension           = @"exfe";
         
         [self save];
         
+        [self.objectManager.operationQueue cancelAllOperations];
+        
         self.crossEntry = nil;
         self.exfeContext = nil;
+        
+        
     }
 //    [[QLog log] logWithFormat:@"gallery %zu stopped", (size_t) self.sequenceNumber];
 }
