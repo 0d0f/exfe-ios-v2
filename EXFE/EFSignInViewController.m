@@ -63,6 +63,7 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
 @interface EFSignInViewController (){
 
     EFStage _stage;
+    CGFloat _y;
    
 }
 @property (nonatomic, copy) NSString *lastInputIdentity;
@@ -108,21 +109,22 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     CSLinearLayoutView *linearLayoutView = [[CSLinearLayoutView alloc] initWithFrame:self.view.bounds];
     linearLayoutView.orientation = CSLinearLayoutViewOrientationVertical;
 //    linearLayoutView.alwaysBounceVertical = YES;
-    linearLayoutView.bounces = NO;
+//    linearLayoutView.bounces = NO;
     linearLayoutView.delegate = self;
     self.rootView = linearLayoutView;
     [self.view addSubview:linearLayoutView];
     
-    UISwipeGestureRecognizer * swipeRightRecognizer = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-            if ([sender.view isKindOfClass:[UIScrollView class]]){
+    UISwipeGestureRecognizer * swipeDownRecognizer = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+//            if ([sender.view isKindOfClass:[UIScrollView class]]){
 //                UIScrollView * scrollView = (UIScrollView *)sender.view;
                     if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
                         [self.parentViewController performSelector:@selector(hideStart)];
                     }
-            }
+//            }
     }];
-    swipeRightRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
-    [linearLayoutView addGestureRecognizer:swipeRightRecognizer];
+    swipeDownRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
+//    [linearLayoutView addGestureRecognizer:swipeDownRecognizer];
+    [self.view addGestureRecognizer:swipeDownRecognizer];
     
     {// TextField Frame
         UIImage *img = [[UIImage imageNamed:@"textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 9, 15, 9)];
@@ -489,6 +491,7 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self regObserver];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -501,6 +504,14 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     } afterDelay:0.233];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    [self unregObserver];
+    
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -511,6 +522,35 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
+}
+
+- (void)regObserver
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    
+}
+
+- (void)unregObserver
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    if ([self.view window]){
+    CGRect keyboardEndFrame;
+    [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
+        self.rootView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetHeight(keyboardEndFrame));
+    }
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    if ([self.view window]){
+        self.rootView.frame = self.view.bounds;
+    }
 }
 
 #pragma mark - UI Methods
@@ -1662,6 +1702,21 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     
     
     return YES;
+}
+
+#pragma mark UIScrollViewDelegate
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    _y = scrollView.contentOffset.y;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (_y == 0 && scrollView.contentOffset.y < 0) {
+        if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
+            [self.parentViewController performSelector:@selector(hideStart)];
+        }
+    }
 }
 
 #pragma mark - Private
