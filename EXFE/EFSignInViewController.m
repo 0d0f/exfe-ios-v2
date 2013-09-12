@@ -116,13 +116,10 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     self.rootView = linearLayoutView;
     [self.view addSubview:linearLayoutView];
     
-    UISwipeGestureRecognizer * swipeDownRecognizer = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-        if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
-            [self.parentViewController performSelector:@selector(hideStart)];
-        }
-    }];
+    UISwipeGestureRecognizer * swipeDownRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
+    swipeDownRecognizer.delegate = self;
     swipeDownRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
-    [self.view addGestureRecognizer:swipeDownRecognizer];
+    [self.rootView addGestureRecognizer:swipeDownRecognizer];
     
     {// TextField Frame
         UIImage *img = [[UIImage imageNamed:@"textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 9, 15, 9)];
@@ -1734,6 +1731,33 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
 //        if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
 //            [self.parentViewController performSelector:@selector(hideStart)];
 //        }
+    }
+}
+
+#pragma mark UIGestureRecognizerDelegate
+//- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+//{
+//    
+//}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *) otherGestureRecognizer
+{
+    return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if (self.rootView.contentOffset.y == 0) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (void)handleSwipeGesture:(UISwipeGestureRecognizer*)sender
+{
+    if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
+        [self.parentViewController performSelector:@selector(hideStart)];
     }
 }
 
