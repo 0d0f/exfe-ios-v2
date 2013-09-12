@@ -8,9 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+#define EFKeyServerScope          @"key.config.server.scope"
+
+#define EFServerKeyPanda          @"panda"
+#define EFServerKeyBlack          @"black"
+#define EFServerKeyShuady         @"shuady"
+#define EFServerScopeINT          @"ZZ"
+#define EFServerScopeCN           @"CN"
+
 @interface EFConfig : NSObject
 
-@property (nonatomic, readonly, copy) NSString * key;
+@property (nonatomic, readonly, copy) NSString * server;
+@property (nonatomic, readonly, copy) NSString * scope;
 
 @property (nonatomic, readonly, copy) NSString * API_ROOT;
 @property (nonatomic, readonly, copy) NSString * IMG_ROOT;
@@ -18,6 +27,10 @@
 
 + (instancetype)sharedInstance;
 
-- (NSString *)suggestKey;
+- (NSString *)suggestScope;
+
+- (void)saveScope:(NSString *)scope;
+- (NSString *)loadScope;
+- (void)clearScope;
 
 @end

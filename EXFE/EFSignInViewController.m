@@ -42,7 +42,7 @@ typedef NS_ENUM(NSUInteger, EFStage){
     kStageVerificate
 };
 
-typedef NS_ENUM(NSUInteger, EFViewTag) {
+typedef NS_ENUM(NSInteger, EFViewTag) {
     kViewTagNone,
     kViewTagInputIdentity = 11,
     kViewTagInputPassword = 12,
@@ -56,7 +56,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     kViewTagErrorInline = 42,
     kViewTagSnsGroup = 51,
     kViewTagSnsFacebook = 52,
-    kViewTagSnsTwitter = 53
+    kViewTagSnsTwitter = 53,
+    kViewTagServerSwitch = 61
 };
 
 @interface EFSignInViewController (){
@@ -199,6 +200,12 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         
         self.inputPassword = textfield;
         self.inputPassword.tag = kViewTagInputPassword;
+        
+        CSLinearLayoutItem * item = [CSLinearLayoutItem layoutItemForView:self.inputPassword];
+        item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item.fillMode = CSLinearLayoutItemFillModeNormal;
+        item.hiddenType = CSLinearLayoutItemGone;
+        [self.rootView addItem:item];
     }
     
     {// Input Username
@@ -217,6 +224,12 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         textfield.rightViewMode = UITextFieldViewModeAlways;
         self.inputUsername = textfield;
         self.inputUsername.tag = kViewTagInputUserName;
+        
+        CSLinearLayoutItem * item = [CSLinearLayoutItem layoutItemForView:_inputUsername];
+        item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item.hiddenType = CSLinearLayoutItemGone;
+        item.fillMode = CSLinearLayoutItemFillModeNormal;
+        [self.rootView addItem:item];
     }
     
     {// Start button
@@ -233,6 +246,12 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         [btn setBackgroundImage:btnImage forState:UIControlStateNormal];
         self.btnStart = btn;
         self.btnStart.tag = kViewTagButtonStart;
+        
+        CSLinearLayoutItem * item = [CSLinearLayoutItem layoutItemForView:self.btnStart];
+        item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item.hiddenType = CSLinearLayoutItemGone;
+        item.fillMode = CSLinearLayoutItemFillModeNormal;
+        [self.rootView addItem:item];
     }
     
     {// Start with new account
@@ -249,6 +268,46 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         [btn setBackgroundImage:btnImage forState:UIControlStateNormal];
         self.btnStartNewUser = btn;
         self.btnStartNewUser.tag = kViewTagButtonNewUser;
+        
+        CSLinearLayoutItem * item = [CSLinearLayoutItem layoutItemForView:_btnStartNewUser];
+        item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item.fillMode = CSLinearLayoutItemFillModeNormal;
+        item.hiddenType = CSLinearLayoutItemGone;
+        [self.rootView addItem:item];
+    }
+    
+    {// Verification Title
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 280, 40)];
+        label.text = NSLocalizedString(@"Verification", nil);
+        label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21.0];
+        label.backgroundColor = [UIColor clearColor];
+        [label wrapContent];
+        self.labelVerifyTitle = label;
+        self.labelVerifyTitle.tag = kViewTagVerificationTitle;
+        
+        CSLinearLayoutItem * item = [CSLinearLayoutItem layoutItemForView:_labelVerifyTitle];
+        item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item.fillMode = CSLinearLayoutItemFillModeNormal;
+        item.hiddenType = CSLinearLayoutItemGone;
+        [self.rootView addItem:item];
+    }
+    
+    {// Verification Description
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 280, 80)];
+        label.text = NSLocalizedString(@"This number requires verification before proceeding. Verification request is sent, please check your message for instructions.", nil);
+        label.numberOfLines = 0;
+        label.backgroundColor = [UIColor clearColor];
+        label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
+        [label wrapContent];
+        label.lineBreakMode = NSLineBreakByWordWrapping;
+        self.labelVerifyDescription = label;
+        self.labelVerifyDescription.tag = kViewTagVerificationDescription;
+        
+        CSLinearLayoutItem * item = [CSLinearLayoutItem layoutItemForView:_labelVerifyDescription];
+        item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item.fillMode = CSLinearLayoutItemFillModeNormal;
+        item.hiddenType = CSLinearLayoutItemGone;
+        [self.rootView addItem:item];
     }
     
     {// Start over
@@ -264,29 +323,13 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
         [btn setBackgroundImage:btnImage forState:UIControlStateNormal];
         self.btnStartOver = btn;
-        self.btnStartOver.tag = kViewTagButtonNewUser;
-    }
-    
-    {// Verification Title
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 280, 40)];
-        label.text = NSLocalizedString(@"Verification", nil);
-        label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21.0];
-        label.backgroundColor = [UIColor clearColor];
-        [label wrapContent];
-        self.labelVerifyTitle = label;
-        self.labelVerifyTitle.tag = kViewTagVerificationTitle;
-    }
-    
-    {// Verification Description
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 280, 80)];
-        label.text = NSLocalizedString(@"This number requires verification before proceeding. Verification request is sent, please check your message for instructions.", nil);
-        label.numberOfLines = 0;
-        label.backgroundColor = [UIColor clearColor];
-        label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
-        [label wrapContent];
-        label.lineBreakMode = NSLineBreakByWordWrapping;
-        self.labelVerifyDescription = label;
-        self.labelVerifyDescription.tag = kViewTagVerificationDescription;
+        self.btnStartOver.tag = kViewTagButtonStartOver;
+        
+        CSLinearLayoutItem * item = [CSLinearLayoutItem layoutItemForView:_btnStartOver];
+        item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item.fillMode = CSLinearLayoutItemFillModeNormal;
+        item.hiddenType = CSLinearLayoutItemGone;
+        [self.rootView addItem:item];
     }
     
     {// Overlay error hint
@@ -340,11 +383,13 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     UIImageView *background = [[UIImageView alloc] initWithFrame:snsLayoutView.bounds];
     background.image = [image resizableImageWithCapInsets:insets];
     [snsLayoutView addSubview:background];
+    self.snsGroup = snsLayoutView;
     
     CSLinearLayoutItem *snsItem = [CSLinearLayoutItem layoutItemForView:snsLayoutView];
-    snsItem.padding = CSLinearLayoutMakePadding(27, 12, 240, 12);
+    snsItem.padding = CSLinearLayoutMakePadding(27, 12, 0, 12);
     snsItem.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
     snsItem.fillMode = CSLinearLayoutItemFillModeNormal;
+    snsItem.hiddenType = CSLinearLayoutItemGone;
     [linearLayoutView addItem:snsItem];
     
     {
@@ -404,11 +449,40 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     {
+        TTTAttributedLabel *regionlabel = [[TTTAttributedLabel alloc] init];
+        regionlabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
+        regionlabel.textColor = [UIColor COLOR_GRAY];
+        regionlabel.backgroundColor = [UIColor clearColor];        
+        regionlabel.tag = kViewTagServerSwitch;
+        self.labelRegion = regionlabel;
+        
+        UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+            NSString *scope = [EFConfig sharedInstance].scope;
+            if ([EFServerScopeCN isEqualToString:scope ]) {
+                [[EFConfig sharedInstance] saveScope:EFServerScopeINT];
+            } else {
+                [[EFConfig sharedInstance] saveScope:EFServerScopeCN];
+            }
+            // TODO reg a listener
+            [self refreshServerInfo];
+        }];
+        [regionlabel addGestureRecognizer:tap];
+        
+        CSLinearLayoutItem *item = [CSLinearLayoutItem layoutItemForView:regionlabel];
+        item.padding = CSLinearLayoutMakePadding(10, 15, 10, 15);
+        item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentLeft;
+        item.fillMode = CSLinearLayoutItemFillModeNormal;
+        item.hiddenType = CSLinearLayoutItemGone;
+        [linearLayoutView addItem:item];
+    }
+    
+    {
         UIActivityIndicatorView *aiView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         aiView.frame = (CGRect){{0, 0}, {20, 20}};
         self.indicator = aiView;
     }
     
+    [self refreshServerInfo];
     [self setStage:kStageStart];
 }
 
@@ -444,16 +518,25 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 {
     _stage = stage;
     switch (_stage){
-        case kStageStart:
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputPassword]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputUserName]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStart]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonNewUser]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStartOver]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationTitle]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
-            [self.rootView removeItem:[self.rootView findItemByTag:_inlineError.tag]];
+        case kStageStart:{
+            
+            NSArray * tags = @[@(kViewTagInputPassword),
+                               @(kViewTagInputUserName),
+                               @(kViewTagButtonStart),
+                               @(kViewTagButtonNewUser),
+                               @(kViewTagButtonStartOver),
+                               @(kViewTagVerificationTitle),
+                               @(kViewTagVerificationDescription),
+                               @(kViewTagErrorHint),
+                               @(_inlineError.tag)];
+            
+            for (NSNumber * tag in tags) {
+                CSLinearLayoutItem *item = [self.rootView findItemByTag:[tag integerValue]];
+                item.hiddenType = CSLinearLayoutItemGone;
+                UIView * v= [self.rootView viewWithTag:[tag integerValue]];
+                v.hidden = YES;
+            }
+            
             _line1.hidden = YES;
             _line2.hidden = YES;
             _textFieldFrame.frame = CGRectMake(15, 20, 290, 50);
@@ -464,39 +547,30 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _inputUsername.text = @"";
             [self textFieldDidChange:_inputUsername];
             [_inputIdentity becomeFirstResponder];
-            break;
+        } break;
         case kStageSignIn:{
             // show rest login form
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputUserName]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonNewUser]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStartOver]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationTitle]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
-            [self.rootView removeItem:[self.rootView findItemByTag:_inlineError.tag]];
+            NSArray * tags = @[@(kViewTagInputUserName),
+                               @(kViewTagButtonNewUser),
+                               @(kViewTagButtonStartOver),
+                               @(kViewTagVerificationTitle),
+                               @(kViewTagVerificationDescription),
+                               @(kViewTagErrorHint),
+                               @(_inlineError.tag)];
             
-            CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:_inputIdentity.tag];
-            
-            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:_inputPassword.tag];
-            if (item1 == nil) {
-                item1 = [CSLinearLayoutItem layoutItemForView:self.inputPassword];
-                item1.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
-                item1.fillMode = CSLinearLayoutItemFillModeNormal;
-                [self.rootView insertItem:item1 afterItem:baseItem];
-            } else {
-                [self.rootView moveItem:item1 afterItem:baseItem];
+            for (NSNumber * tag in tags) {
+                CSLinearLayoutItem *item = [self.rootView findItemByTag:[tag integerValue]];
+                item.hiddenType = CSLinearLayoutItemGone;
+                UIView * v= [self.rootView viewWithTag:[tag integerValue]];
+                v.hidden = YES;
             }
+            
+            _inputPassword.hidden = NO;
+            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:_inputPassword.tag];
             item1.padding = CSLinearLayoutMakePadding(0, 15, 4, 15);
             
+            _btnStart.hidden = NO;
             CSLinearLayoutItem *item2 = [self.rootView findItemByTag:_btnStart.tag];
-            if (item2 == nil){
-                item2 = [CSLinearLayoutItem layoutItemForView:self.btnStart];
-                item2.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
-                item2.fillMode = CSLinearLayoutItemFillModeNormal;
-                [self.rootView insertItem:item2 afterItem:item1];
-            } else {
-                [self.rootView moveItem:item2 afterItem:item1];
-            }
             item2.padding = CSLinearLayoutMakePadding(6, 15, 0, 15);
             
             _line1.hidden = NO;
@@ -513,46 +587,31 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
         }    break;
         case kStageSignUp:{
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStart]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStartOver]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationTitle]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
-            [self.rootView removeItem:[self.rootView findItemByTag:_inlineError.tag]];
-           
-            CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:_inputIdentity.tag];
             
-            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:_inputPassword.tag];
-            if (item1 == nil) {
-                item1 = [CSLinearLayoutItem layoutItemForView:_inputPassword];
-                item1.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
-                item1.fillMode = CSLinearLayoutItemFillModeNormal;
-                [self.rootView insertItem:item1 afterItem:baseItem];
-            } else {
-                [self.rootView moveItem:item1 afterItem:baseItem];
+            NSArray * tags = @[@(kViewTagButtonStart),
+                               @(kViewTagButtonStartOver),
+                               @(kViewTagVerificationTitle),
+                               @(kViewTagVerificationDescription),
+                               @(kViewTagErrorHint),
+                               @(_inlineError.tag)];
+            
+            for (NSNumber * tag in tags) {
+                CSLinearLayoutItem *item = [self.rootView findItemByTag:[tag integerValue]];
+                item.hiddenType = CSLinearLayoutItemGone;
+                UIView * v= [self.rootView viewWithTag:[tag integerValue]];
+                v.hidden = YES;
             }
+            
+            _inputPassword.hidden = NO;
+            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:_inputPassword.tag];
             item1.padding = CSLinearLayoutMakePadding(0, 15, 0, 15);
             
+            _inputUsername.hidden = NO;
             CSLinearLayoutItem *item2 = [self.rootView findItemByTag:_inputUsername.tag];
-            if (item2 == nil) {
-                item2 = [CSLinearLayoutItem layoutItemForView:_inputUsername];
-                item2.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
-                item2.fillMode = CSLinearLayoutItemFillModeNormal;
-                [self.rootView insertItem:item2 afterItem:item1];
-            } else {
-                [self.rootView moveItem:item2 afterItem:item1];
-            }
             item2.padding = CSLinearLayoutMakePadding(0, 15, 4, 15);
             
+            _btnStartNewUser.hidden = NO;
             CSLinearLayoutItem *item3 = [self.rootView findItemByTag:_btnStartNewUser.tag];
-            if (item3 == nil){
-                item3 = [CSLinearLayoutItem layoutItemForView:_btnStartNewUser];
-                item3.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
-                item3.fillMode = CSLinearLayoutItemFillModeNormal;
-                [self.rootView insertItem:item3 afterItem:item2];
-            } else {
-                [self.rootView moveItem:item3 afterItem:item2];
-            }
             item3.padding = CSLinearLayoutMakePadding(6, 15, 0, 15);
             
             _line1.hidden = NO;
@@ -568,24 +627,22 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
         }  break;
         case kStageVerificate:{
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputPassword]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputUserName]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStart]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonNewUser]];
-            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
-            [self.rootView removeItem:[self.rootView findItemByTag:_inlineError.tag]];
+            NSArray * tags = @[@(kViewTagInputPassword),
+                               @(kViewTagInputUserName),
+                               @(kViewTagButtonStart),
+                               @(kViewTagButtonNewUser),
+                               @(kViewTagErrorHint),
+                               @(_inlineError.tag)];
             
-            CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:_inputIdentity.tag];
-            
-            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:_labelVerifyTitle.tag];
-            if (item1 == nil) {
-                item1 = [CSLinearLayoutItem layoutItemForView:_labelVerifyTitle];
-                item1.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
-                item1.fillMode = CSLinearLayoutItemFillModeNormal;
-                [self.rootView insertItem:item1 afterItem:baseItem];
-            } else {
-                [self.rootView moveItem:item1 afterItem:baseItem];
+            for (NSNumber * tag in tags) {
+                CSLinearLayoutItem *item = [self.rootView findItemByTag:[tag integerValue]];
+                item.hiddenType = CSLinearLayoutItemGone;
+                UIView * v= [self.rootView viewWithTag:[tag integerValue]];
+                v.hidden = YES;
             }
+            
+            _labelVerifyTitle.hidden = NO;
+            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:_labelVerifyTitle.tag];
             item1.padding = CSLinearLayoutMakePadding(5, 20, 0, 20);
             
             
@@ -599,27 +656,12 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                     _labelVerifyDescription.text = NSLocalizedString(@"This email requires verification before proceeding. Verification request is sent, please check your email for instructions.", nil);
                     break;
             }
-            
+            _labelVerifyDescription.hidden = NO;
             CSLinearLayoutItem *item2 = [self.rootView findItemByTag:_labelVerifyDescription.tag];
-            if (item2 == nil) {
-                item2 = [CSLinearLayoutItem layoutItemForView:_labelVerifyDescription];
-                item2.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
-                item2.fillMode = CSLinearLayoutItemFillModeNormal;
-                [self.rootView insertItem:item2 afterItem:item1];
-            } else {
-                [self.rootView moveItem:item2 afterItem:item1];
-            }
             item2.padding = CSLinearLayoutMakePadding(0, 20, 0, 20);
             
+            _btnStartOver.hidden = NO;
             CSLinearLayoutItem *item3 = [self.rootView findItemByTag:_btnStartOver.tag];
-            if (item3 == nil){
-                item3 = [CSLinearLayoutItem layoutItemForView:_btnStartOver];
-                item3.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
-                item3.fillMode = CSLinearLayoutItemFillModeNormal;
-                [self.rootView insertItem:item3 afterItem:item2];
-            } else {
-                [self.rootView moveItem:item3 afterItem:item2];
-            }
             item3.padding = CSLinearLayoutMakePadding(10, 15, 0, 15);
             
             _line1.hidden = YES;
@@ -631,6 +673,26 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         default:
             break;
     }
+}
+
+- (void)refreshServerInfo
+{
+    NSString *scope = nil;
+    if ([EFServerScopeCN isEqualToString:[EFConfig sharedInstance].scope]) {
+        scope = NSLocalizedString(@"China mainland", nil);
+        self.snsGroup.hidden = YES;
+    } else {
+        scope = NSLocalizedString(@"Worldwide", nil);
+        self.snsGroup.hidden = NO;
+    }
+    NSString *full = [NSString stringWithFormat:NSLocalizedString(@"Your region: %@", nil), scope];
+    [self.labelRegion setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+        NSRange range = [[mutableAttributedString string] rangeOfString:scope options:NSCaseInsensitiveSearch];
+        [mutableAttributedString addAttribute:(NSString *)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:1] range:range];
+        return mutableAttributedString;
+    }];
+    self.labelRegion.frame = CGRectMake(0, 0, 290, 50);
+    [self.labelRegion sizeToFit];
 }
 
 - (void)fillIdentityResp:(NSDictionary*)respDict
