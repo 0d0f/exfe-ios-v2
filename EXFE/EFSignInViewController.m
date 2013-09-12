@@ -112,6 +112,7 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     linearLayoutView.orientation = CSLinearLayoutViewOrientationVertical;
 //    linearLayoutView.alwaysBounceVertical = YES;
 //    linearLayoutView.bounces = NO;
+    linearLayoutView.autoAdjustContentSize = YES;
     linearLayoutView.delegate = self;
     self.rootView = linearLayoutView;
     [self.view addSubview:linearLayoutView];
@@ -466,7 +467,7 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
             
             _backEnable = NO;
             if (_inputIdentity.text.length > 0) {
-                [self resetToStart];
+//                [self resetToStart];
                 [self.identityCache removeAllObjects];
             }
             [self refreshServerInfo];
@@ -544,9 +545,10 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
 - (void)keyboardWillShow:(NSNotification *)notification
 {
     if ([self.view window]){
-    CGRect keyboardEndFrame;
-    [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
+        CGRect keyboardEndFrame;
+        [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
         self.rootView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetHeight(keyboardEndFrame));
+        [self refreshServerInfo];
     }
 }
 
@@ -554,6 +556,7 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
 {
     if ([self.view window]){
         self.rootView.frame = self.view.bounds;
+        [self refreshServerInfo];
     }
 }
 
@@ -591,6 +594,7 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
             _inputUsername.text = @"";
             [self textFieldDidChange:_inputUsername];
             [_inputIdentity becomeFirstResponder];
+            [self refreshServerInfo];
         } break;
         case kStageSignIn:{
             // show rest login form
@@ -629,6 +633,7 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
             [self textFieldDidChange:_inputUsername];
             _inputIdentity.rightView = nil;
             _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
+            [self refreshServerInfo];
         }    break;
         case kStageSignUp:{
             
@@ -669,6 +674,7 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
             _inputUsername.returnKeyType = UIReturnKeyDone;
             _inputIdentity.rightView = nil;
             _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
+            [self refreshServerInfo];
         }  break;
         case kStageVerificate:{
             NSArray * tags = @[@(kViewTagInputPassword),
@@ -713,6 +719,7 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
             _textFieldFrame.frame = CGRectMake(15, 20, 290, 50);
             _inputIdentity.rightView = nil;
             _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
+            [self refreshServerInfo];
         }   break;
         default:
             break;
@@ -737,6 +744,16 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     }];
     self.labelRegion.frame = CGRectMake(0, 0, 290, 50);
     [self.labelRegion sizeToFit];
+    CSLinearLayoutItem *item = [self.rootView findItemByTag:_labelRegion.tag];
+    item.padding = CSLinearLayoutMakePadding(30, 15, 10, 15);
+
+    [self.rootView layoutSubviews];
+
+    if (self.rootView.layoutOffset <= self.rootView.bounds.size.height){
+        CSLinearLayoutItem *item = [self.rootView findItemByTag:_labelRegion.tag];
+        CGFloat top = CGRectGetHeight(self.rootView.bounds) - CGRectGetMaxY(self.labelRegion.frame) + 20;
+        item.padding = CSLinearLayoutMakePadding(top, 15, 10, 15);
+    }
 }
 
 - (void)resetToStart
