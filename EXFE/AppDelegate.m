@@ -567,6 +567,15 @@
         EXFEModel * model = [[EXFEModel alloc] initWithUser:user_id];
         self.model = model;
         [self.model start];
+    } else if (self.model != nil && self.model.userId == 0 && self.model.userId == user_id){
+        [self.model stop];
+        if (flag) {
+            [self.model abandonCachePath];
+            [self.model clearUserData];
+        }
+        EXFEModel * model = [[EXFEModel alloc] initWithUser:user_id];
+        self.model = model;
+        [self.model start];
     }
 }
 

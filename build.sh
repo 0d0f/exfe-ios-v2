@@ -29,7 +29,7 @@ fi
 # check param
 if [ "$PROFILE" = "" ] ; then
   echo "Error: Missing params"
-  echo "Usage: Profile: $0 -p [exfe|0d0f|pilot]"
+  echo "Usage: Profile: $0 -p [exfe|0d0f|pilot|shuady]"
   exit 1;
 fi
 # switch profile
@@ -51,11 +51,17 @@ if [ "$PROFILE" = "pilot" ]; then
   BUILD_ACTION="build"
   SIGN=""
 fi
+if [ "$PROFILE" = "shuady" ]; then
+  echo "Switch profile shuady"
+  PROJECT="Shuady"
+  BUILD_ACTION="build"
+  SIGN=""
+fi
 
 #check value
 if [ "$PROJECT" = "" ] ; then
   echo "Error: Unknown Profile"
-  echo "Usage: Profile: $0 -p [exfe|0d0f|pilot]"
+  echo "Usage: Profile: $0 -p [exfe|0d0f|pilot|shuady]"
   exit 1;
 fi
 

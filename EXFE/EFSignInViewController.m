@@ -63,6 +63,8 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
 @interface EFSignInViewController (){
 
     EFStage _stage;
+    CGFloat _y;
+    BOOL    _backEnable;
    
 }
 @property (nonatomic, copy) NSString *lastInputIdentity;
@@ -86,6 +88,7 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     if (self) {
         // Custom initialization
         _stage = kStageStart;
+        _backEnable = YES;
         self.lastInputIdentity = @"";
         self.identityCache = [NSMutableDictionary dictionaryWithCapacity:30];
         
@@ -108,21 +111,15 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     CSLinearLayoutView *linearLayoutView = [[CSLinearLayoutView alloc] initWithFrame:self.view.bounds];
     linearLayoutView.orientation = CSLinearLayoutViewOrientationVertical;
 //    linearLayoutView.alwaysBounceVertical = YES;
-    linearLayoutView.bounces = NO;
+//    linearLayoutView.bounces = NO;
     linearLayoutView.delegate = self;
     self.rootView = linearLayoutView;
     [self.view addSubview:linearLayoutView];
     
-    UISwipeGestureRecognizer * swipeRightRecognizer = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-            if ([sender.view isKindOfClass:[UIScrollView class]]){
-//                UIScrollView * scrollView = (UIScrollView *)sender.view;
-                    if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
-                        [self.parentViewController performSelector:@selector(hideStart)];
-                    }
-            }
-    }];
-    swipeRightRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
-    [linearLayoutView addGestureRecognizer:swipeRightRecognizer];
+    UISwipeGestureRecognizer * swipeDownRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
+    swipeDownRecognizer.delegate = self;
+    swipeDownRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
+    [self.rootView addGestureRecognizer:swipeDownRecognizer];
     
     {// TextField Frame
         UIImage *img = [[UIImage imageNamed:@"textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 9, 15, 9)];
@@ -464,12 +461,21 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
                 [[EFConfig sharedInstance] saveScope:EFServerScopeCN];
             }
             // TODO reg a listener
+            AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+            [app switchContextByUserId:0 withAbandon:NO];
+            
+            _backEnable = NO;
+            if (_inputIdentity.text.length > 0) {
+                [self resetToStart];
+                [self.identityCache removeAllObjects];
+            }
             [self refreshServerInfo];
+            _backEnable = YES;
         }];
         [regionlabel addGestureRecognizer:tap];
         
         CSLinearLayoutItem *item = [CSLinearLayoutItem layoutItemForView:regionlabel];
-        item.padding = CSLinearLayoutMakePadding(10, 15, 10, 15);
+        item.padding = CSLinearLayoutMakePadding(30, 15, 10, 15);
         item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentLeft;
         item.fillMode = CSLinearLayoutItemFillModeNormal;
         item.hiddenType = CSLinearLayoutItemGone;
@@ -489,6 +495,7 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self regObserver];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -501,6 +508,14 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     } afterDelay:0.233];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    [self unregObserver];
+    
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -511,6 +526,35 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
+}
+
+- (void)regObserver
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    
+}
+
+- (void)unregObserver
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    if ([self.view window]){
+    CGRect keyboardEndFrame;
+    [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
+        self.rootView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetHeight(keyboardEndFrame));
+    }
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    if ([self.view window]){
+        self.rootView.frame = self.view.bounds;
+    }
 }
 
 #pragma mark - UI Methods
@@ -693,6 +737,13 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     }];
     self.labelRegion.frame = CGRectMake(0, 0, 290, 50);
     [self.labelRegion sizeToFit];
+}
+
+- (void)resetToStart
+{
+    _inputIdentity.text = @"";
+    [self textFieldDidChange:_inputIdentity];
+    [self setStage:kStageStart];
 }
 
 - (void)fillIdentityResp:(NSDictionary*)respDict
@@ -1253,9 +1304,9 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
 
 - (void)startOver:(id)sender
 {
-    _inputIdentity.text = @"";
-    [self textFieldDidChange:_inputIdentity];
-    [self setStage:kStageStart];
+    _backEnable = NO;
+    [self resetToStart];
+    _backEnable = YES;
 }
 
 - (void)syncFBAccount
@@ -1662,6 +1713,52 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     
     
     return YES;
+}
+
+#pragma mark UIScrollViewDelegate
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if (_backEnable){
+        _y = scrollView.contentOffset.y;
+    } else {
+        _y = -1;
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (_y >= 0 && _y <= 5 && scrollView.contentOffset.y < _y) {
+//        if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
+//            [self.parentViewController performSelector:@selector(hideStart)];
+//        }
+    }
+}
+
+#pragma mark UIGestureRecognizerDelegate
+//- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+//{
+//    
+//}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *) otherGestureRecognizer
+{
+    return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if (self.rootView.contentOffset.y == 0) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (void)handleSwipeGesture:(UISwipeGestureRecognizer*)sender
+{
+    if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
+        [self.parentViewController performSelector:@selector(hideStart)];
+    }
 }
 
 #pragma mark - Private

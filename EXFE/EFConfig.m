@@ -86,12 +86,16 @@ static NSDictionary * Config = nil;
 
 - (NSString *)scope
 {
+#ifdef SHUADY
+    return EFServerScopeCN;
+#else
     NSString *scope = [self loadScope];
     if ([scope length] > 0) {
         return scope;
     } else {
         return [self suggestScope];
     }
+#endif
 }
 
 - (NSString *)API_ROOT
