@@ -1568,7 +1568,7 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
             if (code) {
                 NSInteger c = [code integerValue];
                 NSInteger t = c / 100;
-                switch (c) {
+                switch (t) {
                     case 2:{
                         NSString *msg = nil;
                         switch (provider) {
