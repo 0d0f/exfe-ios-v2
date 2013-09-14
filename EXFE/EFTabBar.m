@@ -52,10 +52,9 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 @property (nonatomic, strong) UIImage *backgroundImage;
 
 @property (nonatomic, strong) CAShapeLayer *maskLayer;
-@property (nonatomic, strong) CAShapeLayer *innerShadowLayer;
 
-- (void)showButtonWithMaskPath:(CGPathRef)maskPath innerShadowPath:(CGPathRef)shadowPath  animated:(BOOL)animated;
-- (void)dismissButtonWithMaskPath:(CGPathRef)maskPath innerShadowPath:(CGPathRef)shadowPath animated:(BOOL)animated;
+- (void)showButtonWithMaskPath:(CGPathRef)maskPath animated:(BOOL)animated;
+- (void)dismissButtonWithMaskPath:(CGPathRef)maskPath animated:(BOOL)animated;
 
 @end
 
@@ -69,27 +68,13 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         self.layer.mask = maskLayer;
         
         self.maskLayer = maskLayer;
-        
-        CAShapeLayer *innerShadowLayer = [CAShapeLayer layer];
-        innerShadowLayer.needsDisplayOnBoundsChange = YES;
-        innerShadowLayer.shouldRasterize = YES;
-        innerShadowLayer.rasterizationScale = [UIScreen mainScreen].scale;
-        innerShadowLayer.contentsScale = [UIScreen mainScreen].scale;
-        innerShadowLayer.shadowColor = [UIColor blackColor].CGColor;
-        innerShadowLayer.shadowOffset = (CGSize){0.0f, 0.0f};
-        innerShadowLayer.shadowOpacity = 0.5f;
-        innerShadowLayer.shadowRadius = kInnserShadowRadius;
-        innerShadowLayer.fillRule = kCAFillRuleEvenOdd;
-//        [self.layer addSublayer:innerShadowLayer];
-        
-        self.innerShadowLayer = innerShadowLayer;
     }
     
     return self;
 }
 
 
-- (void)showButtonWithMaskPath:(CGPathRef)maskPath innerShadowPath:(CGPathRef)shadowPath  animated:(BOOL)animated {
+- (void)showButtonWithMaskPath:(CGPathRef)maskPath animated:(BOOL)animated {
     if (animated) {
         // mask animation
         CABasicAnimation *maskAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
@@ -100,23 +85,12 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         maskAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         
         [self.maskLayer addAnimation:maskAnimation forKey:@"maskAnimation"];
-        
-        // shadow animation
-        CABasicAnimation *shadowAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
-        shadowAnimation.duration = 0.233f;
-        shadowAnimation.fromValue = (id)self.innerShadowLayer.path;
-        shadowAnimation.toValue = (__bridge id)shadowPath;
-        shadowAnimation.fillMode = kCAFillModeForwards;
-        shadowAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        
-        [self.innerShadowLayer addAnimation:shadowAnimation forKey:@"shadowAnimation"];
     }
     
     self.maskLayer.path = maskPath;
-    self.innerShadowLayer.path = shadowPath;
 }
 
-- (void)dismissButtonWithMaskPath:(CGPathRef)maskPath innerShadowPath:(CGPathRef)shadowPath animated:(BOOL)animated {
+- (void)dismissButtonWithMaskPath:(CGPathRef)maskPath animated:(BOOL)animated {
     if (animated) {
         // mask animation
         CABasicAnimation *maskAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
@@ -127,20 +101,9 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         maskAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         
         [self.maskLayer addAnimation:maskAnimation forKey:@"maskAnimation"];
-        
-        // shadow animation
-        CABasicAnimation *shadowAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
-        shadowAnimation.duration = 0.233f;
-        shadowAnimation.fromValue = (id)self.innerShadowLayer.path;
-        shadowAnimation.toValue = (__bridge id)shadowPath;
-        shadowAnimation.fillMode = kCAFillModeForwards;
-        shadowAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        
-        [self.innerShadowLayer addAnimation:shadowAnimation forKey:@"shadowAnimation"];
     }
     
     self.maskLayer.path = maskPath;
-    self.innerShadowLayer.path = shadowPath;
 }
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage {
@@ -210,11 +173,14 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 @property (nonatomic, assign) BOOL isButtonsShowed;
 @property (nonatomic, strong) UIImageView *shadowImageView;
 @property (nonatomic, strong) EFTabBarBackgroundView *backgroundView;
-@property (nonatomic, strong) CAShapeLayer *outerShadowLayer;
 @property (nonatomic, assign) NSUInteger preSelectedIndex;
 @property (nonatomic, assign) EFTabBarItemState preSelectedTabBarItemState;
 @property (nonatomic, strong) UIView *gestureView;
 @property (nonatomic, copy) EFTabBarTitlePressedBlock titlePressedBlock;
+
+@property (nonatomic, strong) UIScrollView  *scrollView;
+@property (nonatomic, assign) NSUInteger    visibleCount;
+@property (nonatomic, strong) UIImageView   *tabBarArrowView;
 
 @property (nonatomic, weak) UIWindow *originWindow;
 @property (nonatomic, strong) UIWindow *window;
@@ -222,7 +188,6 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 
 @interface EFTabBar (Private)
 - (void)_resetButtons;
-- (void)_layoutButtons;
 - (void)_showButtonsAnimated:(BOOL)animated;
 - (void)_dismissButtonsAnimated:(BOOL)animated;
 - (void)_addGestureRecognizers;
@@ -251,6 +216,8 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     
     self = [super initWithFrame:frame];
     if (self) {
+        self.clipsToBounds = YES;
+        
         // title label
         UILabel *label = [[UILabel alloc] initWithFrame:(CGRect){{kTitleEdgeBlank, floor((CGRectGetHeight(frame) - 20.0f - CGRectGetHeight(frame) + kTabBarItemSize.height) * 0.5f)}, {CGRectGetWidth(frame) - kTitleEdgeBlank * 2, CGRectGetHeight(frame) - kTabBarItemSize.height}}];
         label.textAlignment = NSTextAlignmentCenter;
@@ -277,25 +244,20 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         UIView *outerShadowView = [[UIView alloc] initWithFrame:frame];
         outerShadowView.backgroundColor = [UIColor clearColor];
         
-        CAShapeLayer *outerShadowLayer = [CAShapeLayer layer];
-        outerShadowLayer.shouldRasterize = YES;
-        outerShadowLayer.rasterizationScale = [UIScreen mainScreen].scale;
-        outerShadowLayer.contentsScale = [UIScreen mainScreen].scale;
-        outerShadowLayer.fillMode = kCAFillRuleEvenOdd;
-        outerShadowLayer.shadowOffset = (CGSize){0.0f, 0.0f};
-        outerShadowLayer.shadowOpacity = 1.0f;
-        outerShadowLayer.shadowRadius = kOuterShadowRadius;
-        
-//        [outerShadowView.layer addSublayer:outerShadowLayer];
-        self.outerShadowLayer = outerShadowLayer;
-        
         [self insertSubview:outerShadowView belowSubview:label];
-        
         
         // backgroundView
         _backgroundView = [[EFTabBarBackgroundView alloc] initWithFrame:kDoubleheightStyleFrame];
         _backgroundView.backgroundImage = self.backgroundImage;
         [self insertSubview:_backgroundView belowSubview:label];
+        
+        CGPoint startPoint = (CGPoint){CGRectGetWidth(self.frame), CGRectGetHeight(self.bounds)};
+        CGPoint endPoint = (CGPoint){startPoint.x - 122.0f, floor(CGRectGetHeight(self.bounds) - 20.0f)};
+        CGPathRef maskPath = CreateMaskPath(self.bounds, startPoint, endPoint);
+        
+        [self.backgroundView showButtonWithMaskPath:maskPath animated:NO];
+        
+        CGPathRelease(maskPath);
         
         // left button
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -314,12 +276,30 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         [self addSubview:button];
         self.leftButton = button;
         
+        // scroll view
+        CGRect scrollViewFrame = (CGRect){{0.0f, CGRectGetHeight(frame) - kTabBarButtonSize.height}, {CGRectGetWidth(frame), kTabBarButtonSize.height}};
+        UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:scrollViewFrame];
+        scrollView.showsHorizontalScrollIndicator = NO;
+        scrollView.showsVerticalScrollIndicator = NO;
+        scrollView.backgroundColor = [UIColor clearColor];
+        scrollView.delegate = self;
+        [self.backgroundView addSubview:scrollView];
+        self.scrollView = scrollView;
+        
         // button base view
-        UIView *baseView = [[UIView alloc] initWithFrame:(CGRect){{0, CGRectGetHeight(frame) - kTabBarButtonSize.height}, {CGRectGetWidth(frame), kTabBarButtonSize.height}}];
+        UIView *baseView = [[UIView alloc] initWithFrame:(CGRect){CGPointZero, kTabBarButtonSize}];
         baseView.backgroundColor = [UIColor clearColor];
         baseView.clipsToBounds = NO;
-        [self.backgroundView addSubview:baseView];
+        [self.scrollView addSubview:baseView];
         self.buttonBaseView = baseView;
+        
+        // arrow
+        UIImageView *arrowView = [[UIImageView alloc] initWithFrame:(CGRect){CGPointZero, {6.0f, 30.0f}}];
+        arrowView.image = [UIImage imageNamed:@"tab_tri.png"];
+        arrowView.center = (CGPoint){CGRectGetWidth(frame) - 3.0f, CGRectGetMidY(scrollViewFrame)};
+        arrowView.alpha = 0.0f;
+        [self.backgroundView insertSubview:arrowView atIndex:0];
+        self.tabBarArrowView = arrowView;
         
         // shadow
         UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tabshadow_x.png"]];
@@ -340,6 +320,9 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
                              context:NULL];
         
         self.tabBarStyle = style;
+        
+#warning - test
+        self.visibleCount = 3;
     }
     return self;
 }
@@ -360,6 +343,16 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     } else if (object == self.tabBarViewController && [keyPath isEqualToString:@"selectedIndex"]) {
         UIViewController<EFTabBarDataSource> *viewController = (UIViewController<EFTabBarDataSource> *)self.tabBarViewController.viewControllers[self.tabBarViewController.selectedIndex];
         self.shadowImageView.image = viewController.shadowImage;
+        
+        if (!self.isButtonsShowed) {
+            UIView *selectedControl = [self.buttons objectAtIndex:self.tabBarViewController.selectedIndex];
+            CGRect frame = (CGRect){{CGRectGetWidth(self.scrollView.frame) - kTabBarButtonSize.width, 0.0f}, selectedControl.frame.size};
+            frame = [self.scrollView convertRect:frame toView:selectedControl.superview];
+            
+            CGPoint center = selectedControl.center;
+            center.x = CGRectGetMidX(frame);
+            selectedControl.center = center;
+        }
     } else if ([object isKindOfClass:[EFTabBarItem class]] && [keyPath isEqualToString:@"shouldPop"]) {
         NSUInteger index = [self.tabBarItems indexOfObject:object];
         NSAssert(index != NSNotFound, @"index shouldn't be NSNotFound");
@@ -394,8 +387,13 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
                       context:NULL];
         }
         
+        // resize scrollView content size
+        NSUInteger count = tabBarItems.count;
+        
+        CGSize contentSize = (CGSize){CGRectGetWidth(self.scrollView.frame) + count * (kTabBarButtonSize.width + kButtonSpacing)};
+        self.scrollView.contentSize = contentSize;
+        
         [self _resetButtons];
-        [self _layoutButtons];
     }
 }
 
@@ -446,6 +444,71 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     [self _setSelectedIndex:index];
 }
 
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    // fix content offset
+    CGPoint contentOffset = scrollView.contentOffset;
+    CGFloat contentOffsetX = contentOffset.x;
+    contentOffsetX -= kTabBarButtonSize.width + kButtonSpacing;
+    contentOffsetX = contentOffsetX < 0.0f ? 0.0f : contentOffsetX;
+    
+    // mask animation
+    CGPoint startPoint = (CGPoint){CGRectGetWidth(self.frame) - contentOffsetX, CGRectGetHeight(self.bounds)};
+    CGPoint endPoint = (CGPoint){startPoint.x - 122.0f, floor(CGRectGetHeight(self.bounds) - 20.0f)};
+    
+    CGPathRef maskPath = CreateMaskPath(self.bounds, startPoint, endPoint);
+    
+    [self.backgroundView showButtonWithMaskPath:maskPath animated:NO];
+    
+    CGPathRelease(maskPath);
+    
+    // shadow image view
+    CGRect shadowFrame = self.shadowImageView.frame;
+    shadowFrame.origin = (CGPoint){-contentOffsetX, CGRectGetHeight(self.frame) - 26.0f};
+    self.shadowImageView.frame = shadowFrame;
+    
+    // selected control center
+    UIView *selectedControl = [self.buttons objectAtIndex:self.tabBarViewController.selectedIndex];
+    CGFloat contentOffsetX2 = contentOffset.x;
+    contentOffsetX2  = contentOffsetX2 < 0.0f ? 0.0f : contentOffsetX2;
+    NSUInteger index = (NSUInteger)floor(contentOffsetX2 / (kTabBarButtonSize.width + kButtonSpacing));
+    
+    if (index <= self.self.tabBarViewController.selectedIndex) {
+        CGRect frame = (CGRect){{CGRectGetWidth(self.scrollView.frame) - kTabBarButtonSize.width + contentOffset.x, 0.0f}, selectedControl.frame.size};
+        frame = [self.scrollView convertRect:frame toView:selectedControl.superview];
+        
+        CGPoint center = selectedControl.center;
+        center.x = CGRectGetMidX(frame);
+        selectedControl.center = center;
+    } else {
+        CGRect frame = [self _buttonFrameAtIndex:self.tabBarViewController.selectedIndex];
+        CGPoint center = (CGPoint){CGRectGetMidX(frame), CGRectGetMidY(frame)};
+        selectedControl.center = center;
+        
+        if (self.visibleCount < self.tabBarItems.count) {
+            if (index <= self.visibleCount) {
+                CGFloat alpha = contentOffsetX / (self.visibleCount * (kTabBarButtonSize.width + kButtonSpacing));
+                self.tabBarArrowView.alpha = alpha;
+            } else {
+                if (contentOffset.x < CGRectGetWidth(self.buttonBaseView.frame) - (kTabBarButtonSize.width + kButtonSpacing)) {
+                    self.tabBarArrowView.alpha = 1.0f;
+                } else {
+                    self.tabBarArrowView.alpha = 0.0f;
+                }
+            }
+        }
+    }
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    if (velocity.x <= 0) {
+        [self _dismissButtonsAnimated:YES];
+    } else {
+        [self _showButtonsAnimated:YES];
+    }
+}
+
 #pragma mark - Action
 
 - (void)buttonPressed:(EFTabBarItemControl *)sender {
@@ -455,19 +518,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         [self _setSelectedIndex:index];
     } else {
         if (self.isButtonsShowed) {
-            if (index != self.tabBarViewController.selectedIndex) {
-                self.shadowImageView.alpha = 0.0f;
-                [UIView animateWithDuration:0.233f
-                                 animations:^{
-                                     self.shadowImageView.alpha = 1.0f;
-                                 } completion:^(BOOL finished){
-                                 }];
-                
-                [self.tabBarViewController setSelectedIndex:index
-                                                   animated:YES];
-            }
-            
-            [self _dismissButtonsAnimated:YES];
+            [self _setSelectedIndex:index];
         } else {
             [self _showButtonsAnimated:YES];
         }
@@ -479,6 +530,8 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 }
 
 - (void)_back {
+    self.scrollView.delegate = nil;
+    
     if (self.tabBarViewController.backButtonActionHandler) {
         self.tabBarViewController.backButtonActionHandler();
     } else {
@@ -562,7 +615,8 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     // resize button base view
     NSUInteger count = [self.tabBarItems count];
     CGRect baseViewFrame = self.buttonBaseView.frame;
-    baseViewFrame.size.width = (count + 1) * (kTabBarButtonSize.width + kButtonSpacing) - kButtonSpacing;
+    baseViewFrame.origin.x = CGRectGetWidth(self.scrollView.frame) - (kTabBarButtonSize.width + kButtonSpacing);
+    baseViewFrame.size.width = (count + 1) * (kTabBarButtonSize.width + kButtonSpacing);
     self.buttonBaseView.frame = baseViewFrame;
     
     // add buttons
@@ -606,13 +660,12 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     self.buttons = buttons;
 }
 
-- (void)_layoutButtons {
-    [self _dismissButtonsAnimated:NO];
-}
-
 - (void)_showButtonsAnimated:(BOOL)animated {
+    [self _removeMaskWindow];
+    
     self.isButtonsShowed = YES;
     self.gestureView.userInteractionEnabled = NO;
+    self.scrollView.scrollEnabled = YES;
     
     // disable the contol swipe
     for (EFTabBarItemControl *button in self.buttons) {
@@ -626,73 +679,8 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     // highlight selected one
     self.tabBarViewController.selectedViewController.customTabBarItem.tabBarItemState = kEFTabBarItemStateHighlight;
     
-    // Destination frame
-    CGRect destinationFrame = self.buttonBaseView.frame;
-    destinationFrame.origin = (CGPoint){CGRectGetWidth(self.frame) - CGRectGetWidth(destinationFrame), CGRectGetHeight(self.frame) - kTabBarButtonSize.height};
-    
-    CGRect shadowFrame = self.shadowImageView.frame;
-    if (animated) {
-        CGPoint offset = (CGPoint){CGRectGetMinX(destinationFrame) - CGRectGetMinX(self.buttonBaseView.frame), CGRectGetMinY(destinationFrame) - CGRectGetMinY(self.buttonBaseView.frame)};
-        shadowFrame.origin.x += offset.x;
-        shadowFrame.origin.y += offset.y;
-    }
-    
-    // mask animation
-    CGPoint startPoint = (CGPoint){CGRectGetWidth(self.frame) - CGRectGetWidth(destinationFrame) + 2 * kTabBarButtonSize.width, CGRectGetHeight(self.bounds)};
-    CGPoint endPoint = (CGPoint){startPoint.x - 122.0f, floor(CGRectGetHeight(self.bounds) - 20.0f)};
-    
-    CGPathRef maskPath = CreateMaskPath(self.bounds, startPoint, endPoint);
-    
-    CGRect largerRect = CGRectMake(self.bounds.origin.x,
-                                   self.bounds.origin.y,
-                                   self.bounds.size.width,
-                                   self.bounds.size.height + kInnserShadowRadius);
-    CGPoint largerStartPoint = (CGPoint){startPoint.x, startPoint.y + kInnserShadowRadius};
-    CGPoint largerEndPoint = (CGPoint){endPoint.x, endPoint.y + kInnserShadowRadius};
-    
-    CGMutablePathRef shadowPath = CreateMaskPath(largerRect, largerStartPoint, largerEndPoint);
-    CGPathAddPath(shadowPath, NULL, maskPath);
-    CGPathCloseSubpath(shadowPath);
-    
-    [self.backgroundView showButtonWithMaskPath:maskPath
-                                innerShadowPath:shadowPath
-                                       animated:YES];
-    
-    CABasicAnimation *shadowAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
-    shadowAnimation.duration = 0.233f;
-    shadowAnimation.fromValue = (id)self.outerShadowLayer.path;
-    shadowAnimation.toValue = (__bridge id)maskPath;
-    shadowAnimation.fillMode = kCAFillModeForwards;
-    shadowAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    
-    [self.outerShadowLayer addAnimation:shadowAnimation forKey:@"shadowAnimation"];
-    self.outerShadowLayer.path = maskPath;
-    
-    CGPathRelease(maskPath);
-    CGPathRelease(shadowPath);
-    
-    // buttons animation
-    [UIView setAnimationsEnabled:animated];
-    [UIView animateWithDuration:0.233f
-                     animations:^{
-                         self.buttonBaseView.frame = destinationFrame;
-                         self.shadowImageView.frame = shadowFrame;
-                     }
-                     completion:^(BOOL finished){
-                         [UIView setAnimationsEnabled:YES];
-                     }];
-    
-    [UIView setAnimationsEnabled:animated];
-    [UIView animateWithDuration:0.233f
-                     animations:^{
-                         for (int i = 0; i < self.buttons.count; i++) {
-                             EFTabBarItemControl *button = self.buttons[i];
-                             button.frame = [self _buttonFrameAtIndex:i];
-                         }
-                     }
-                     completion:^(BOOL finished){
-                         [UIView setAnimationsEnabled:YES];
-                     }];
+    // Change Offset
+    [self.scrollView setContentOffset:(CGPoint){self.visibleCount * (kTabBarButtonSize.width + kButtonSpacing), 0.0f} animated:animated];
     
     [self _addMaskWindow];
 }
@@ -700,6 +688,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 - (void)_dismissButtonsAnimated:(BOOL)animated {
     [self _removeMaskWindow];
     self.gestureView.userInteractionEnabled = YES;
+    self.scrollView.scrollEnabled = NO;
     
     ((UIViewController<EFTabBarDataSource> *)(self.tabBarViewController.viewControllers[self.preSelectedIndex])).customTabBarItem.tabBarItemState = self.preSelectedTabBarItemState;
     
@@ -708,88 +697,29 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         button.swipeEnable = YES;
     }
     
-    // Destination frame
-    CGRect destinationFrame = self.buttonBaseView.frame;
-    destinationFrame.origin = (CGPoint){CGRectGetWidth(self.frame) - 2 * kTabBarButtonSize.width, CGRectGetHeight(self.frame) - kTabBarButtonSize.height};
+    // destination frame
+    CGRect scrollViewDestinationFrame = self.scrollView.frame;
+    scrollViewDestinationFrame.origin.y = CGRectGetHeight(self.frame) - kTabBarButtonSize.height;
     
-    CGRect shadowFrame = self.shadowImageView.frame;
+    __weak typeof(self) weakSelf = self;
+    void (^animationBlock)(void) = ^{
+        weakSelf.scrollView.frame = scrollViewDestinationFrame;
+    };
+    
     if (animated) {
-        CGPoint offset = (CGPoint){CGRectGetMinX(destinationFrame) - CGRectGetMinX(self.buttonBaseView.frame), CGRectGetMinY(destinationFrame) - CGRectGetMinY(self.buttonBaseView.frame)};
-        shadowFrame.origin.x += offset.x;
-        shadowFrame.origin.y += offset.y;
-    }
-    
-    // mask animation
-    CGPoint startPoint = (CGPoint){CGRectGetWidth(self.frame), CGRectGetHeight(self.bounds)};
-    CGPoint endPoint = (CGPoint){startPoint.x - 122.0f, floor(CGRectGetHeight(self.bounds) - 20.0f)};
-    
-    CGPathRef maskPath = CreateMaskPath(self.bounds, startPoint, endPoint);
-    
-    CGRect largerRect = CGRectMake(self.bounds.origin.x,
-                                   self.bounds.origin.y,
-                                   self.bounds.size.width,
-                                   self.bounds.size.height + kInnserShadowRadius);
-    CGPoint largerStartPoint = (CGPoint){startPoint.x, startPoint.y + kInnserShadowRadius};
-    CGPoint largerEndPoint = (CGPoint){endPoint.x, endPoint.y + kInnserShadowRadius};
-    
-    CGMutablePathRef shadowPath = CreateMaskPath(largerRect, largerStartPoint, largerEndPoint);
-    CGPathAddPath(shadowPath, NULL, maskPath);
-    CGPathCloseSubpath(shadowPath);
-    
-    [self.backgroundView dismissButtonWithMaskPath:maskPath
-                                   innerShadowPath:shadowPath
-                                          animated:YES];
-    
-    CABasicAnimation *shadowAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
-    shadowAnimation.duration = 0.233f;
-    shadowAnimation.fromValue = (id)self.outerShadowLayer.path;
-    shadowAnimation.toValue = (__bridge id)maskPath;
-    shadowAnimation.fillMode = kCAFillModeForwards;
-    shadowAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    
-    [self.outerShadowLayer addAnimation:shadowAnimation forKey:@"shadowAnimation"];
-    self.outerShadowLayer.path = maskPath;
-    
-    CGPathRelease(maskPath);
-    CGPathRelease(shadowPath);
-    
-    if (NSNotFound != self.tabBarViewController.selectedIndex) {
-        [UIView setAnimationsEnabled:animated];
         [UIView animateWithDuration:0.233f
-                         animations:^{
-                             for (int i = 0; i < self.buttons.count; i++) {
-                                 EFTabBarItemControl *button = self.buttons[i];
-                                 
-                                 if (button.tabBarItem.shouldPop) {
-                                     CGRect frame = [self _buttonFrameAtIndex:-1];
-                                     frame.origin.x += 10;
-                                     button.frame = frame;
-                                 } else {
-                                     if (i < self.tabBarViewController.selectedIndex) {
-                                         button.frame = [self _buttonFrameAtIndex:i + 1];
-                                     } else if (i > self.tabBarViewController.selectedIndex) {
-                                         button.frame = [self _buttonFrameAtIndex:i];
-                                     } else {
-                                         button.frame = [self _buttonFrameAtIndex:0];
-                                     }
-                                 }
-                             }
-                         }
-                         completion:^(BOOL finished){
-                             [UIView setAnimationsEnabled:YES];
-                         }];
+                         animations:animationBlock];
+    } else {
+        animationBlock();
     }
     
-    // buttons animation
-    [UIView setAnimationsEnabled:animated];
-    [UIView animateWithDuration:0.233f
-                     animations:^{
-                         self.buttonBaseView.frame = destinationFrame;
-                         self.shadowImageView.frame = shadowFrame;
-                     }
-                     completion:^(BOOL finished){
-                         [UIView setAnimationsEnabled:YES];
-                     }];
+    // tabBar arrow
+    CGPoint tabBarArrowCenter = self.tabBarArrowView.center;
+    tabBarArrowCenter.y = CGRectGetMidY(self.scrollView.frame);
+    self.tabBarArrowView.center = tabBarArrowCenter;
+    
+    // change content offset
+    [self.scrollView setContentOffset:CGPointZero animated:animated];
     
     self.isButtonsShowed = NO;
 }
@@ -820,7 +750,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 }
 
 - (CGRect)_buttonFrameAtIndex:(NSInteger)index {
-    return (CGRect){{(index + 1) * (kTabBarButtonSize.width + kButtonSpacing), 0}, kTabBarButtonSize};
+    return (CGRect){{(index + 1) * (kTabBarButtonSize.width + kButtonSpacing) + kButtonSpacing, 0}, kTabBarButtonSize};
 }
 
 - (void)_setSelectedIndex:(NSUInteger)index {

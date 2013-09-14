@@ -15,6 +15,9 @@ typedef enum {
 
 @class EFTabBarViewController;
 @interface EFTabBar : UIView
+<
+UIScrollViewDelegate
+>
 
 @property (weak, nonatomic, readonly) UILabel *titleLabel;
 @property (nonatomic, strong) UIImage *backgroundImage;
