@@ -747,14 +747,14 @@
     
     EFTabBarItem *tabBarItem1 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_x_30.png"]];
     tabBarItem1.highlightImage = [UIImage imageNamed:@"widget_x_30shine.png"];
+    tabBarItem1.tabBarItemLevel = kEFTabBarItemLevelNormal;
     
     crossGroupViewController.customTabBarItem = tabBarItem1;
     crossGroupViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
     crossGroupViewController.shadowImage = [UIImage imageNamed:@"tabshadow_x.png"];
     
     // ConvViewController
-    WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithModel:model] ;
-
+    WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithModel:model];
     
     NSUInteger conversationCount = [cross.conversation_count unsignedIntegerValue];
     
@@ -762,6 +762,7 @@
     tabBarItem2.highlightImage = [UIImage imageNamed:@"widget_conv_30shine.png"];
     tabBarItem2.titleEnable = YES;
     tabBarItem2.title = conversationCount > 0 ? [NSString stringWithFormat:@"%u", conversationCount] : nil;
+    tabBarItem2.tabBarItemLevel = kEFTabBarItemLevelNormal;
     
     conversationViewController.customTabBarItem = tabBarItem2;
     conversationViewController.tabBarStyle = kEFTabBarStyleNormal;
@@ -778,6 +779,7 @@
     
     EFTabBarItem *tabBarItem3 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_exfee_30.png"]];
     tabBarItem3.highlightImage = [UIImage imageNamed:@"widget_exfee_30shine.png"];
+    tabBarItem3.tabBarItemLevel = kEFTabBarItemLevelNormal;
     
     exfeeViewController.customTabBarItem = tabBarItem3;
     exfeeViewController.tabBarStyle = kEFTabBarStyleNormal;
@@ -789,6 +791,7 @@
     
     EFTabBarItem *tabBarItem4 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_routex_30.png"]];
     tabBarItem4.highlightImage = [UIImage imageNamed:@"widget_routex_30shine.png"];
+    tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelLow;
     
     routeXViewController.customTabBarItem = tabBarItem4;
     routeXViewController.tabBarStyle = kEFTabBarStyleNormal;
@@ -796,7 +799,7 @@
     routeXViewController.model = model;
     
     // Init TabBarViewController
-    EFCrossTabBarViewController *tabBarViewController = [[EFCrossTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController, routeXViewController]];
+    EFCrossTabBarViewController *tabBarViewController = [[EFCrossTabBarViewController alloc] initWithViewControllers:[NSMutableArray arrayWithObjects:crossGroupViewController, conversationViewController, exfeeViewController, routeXViewController, nil]];
     tabBarViewController.model = self.model;
     tabBarViewController.crossId = crossId;
     if (cross) {

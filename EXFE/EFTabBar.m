@@ -167,7 +167,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 
 @interface EFTabBar ()
 @property (nonatomic, strong) UIButton *leftButton;
-@property (nonatomic, strong) NSArray *buttons;
+@property (nonatomic, strong) NSMutableArray *buttons;
 @property (nonatomic, weak) EFTabBarItemControl *alertButton;
 @property (nonatomic, strong) UIView *buttonBaseView;
 @property (nonatomic, assign) BOOL isButtonsShowed;
@@ -198,6 +198,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 - (void)_addMaskWindow;
 - (void)_removeMaskWindow;
 - (void)_layoutMaskAnimated:(BOOL)animated;
+- (void)_reorderTabBarItems;
 @end
 
 @interface EFTabBar (Action)
@@ -373,7 +374,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 
 #pragma mark - Getter && Setter
 
-- (void)setTabBarItems:(NSArray *)tabBarItems {
+- (void)setTabBarItems:(NSMutableArray *)tabBarItems {
     if (_tabBarItems == tabBarItems)
         return;
     
@@ -513,7 +514,9 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         [self _setSelectedIndex:index];
     } else {
         if (self.isButtonsShowed) {
+            sender.tabBarItem.tabBarItemLevel = kEFTabBarItemLevelNormal;
             [self _setSelectedIndex:index];
+            [self _reorderTabBarItems];
         } else {
             [self _showButtonsAnimated:YES];
         }
@@ -667,6 +670,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     self.isButtonsShowed = YES;
     self.gestureView.userInteractionEnabled = NO;
     self.scrollView.scrollEnabled = YES;
+    self.tabBarArrowView.hidden = NO;
     
     // disable the contol swipe
     for (EFTabBarItemControl *button in self.buttons) {
@@ -686,6 +690,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     [self _removeMaskWindow];
     self.gestureView.userInteractionEnabled = YES;
     self.scrollView.scrollEnabled = NO;
+    self.tabBarArrowView.hidden = YES;
     
     CGPoint contetOffset = self.scrollView.contentOffset;
     
@@ -868,6 +873,43 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
                          animations:animation];
     } else {
         animation();
+    }
+}
+
+- (void)_reorderTabBarItems {
+    NSMutableArray *visibleTabBarItems = [[NSMutableArray alloc] init];
+    NSMutableArray *hidenTabBarItems = [[NSMutableArray alloc] init];
+    
+    for (int index = 0; index < self.tabBarItems.count; index++) {
+        EFTabBarItem *item = self.tabBarItems[index];
+        if (kEFTabBarItemLevelNormal == item.tabBarItemLevel) {
+            [visibleTabBarItems addObject:item];
+        } else {
+            [hidenTabBarItems addObject:item];
+        }
+    }
+    
+    [self.tabBarItems removeAllObjects];
+    [self.tabBarItems addObjectsFromArray:visibleTabBarItems];
+    [self.tabBarItems addObjectsFromArray:hidenTabBarItems];
+    
+    self.visibleCount = visibleTabBarItems.count;
+    
+    for (NSUInteger index = 0; index < self.tabBarItems.count; index++) {
+        UIViewController<EFTabBarDataSource> *viewController = self.tabBarViewController.viewControllers[index];
+        EFTabBarItem *orderedTabBarItem = self.tabBarItems[index];
+        
+        if (orderedTabBarItem != viewController.customTabBarItem) {
+            NSUInteger j = 0;
+            for (j = index + 1; j < self.tabBarViewController.viewControllers.count; j++) {
+                UIViewController<EFTabBarDataSource> *viewController2 = self.tabBarViewController.viewControllers[index];
+                if (orderedTabBarItem == viewController2.customTabBarItem) {
+                    break;
+                }
+            }
+            
+            [self.tabBarViewController exchangeViewControllerAtIndex:index withViewControllerAtIndex:j];
+        }
     }
 }
 
