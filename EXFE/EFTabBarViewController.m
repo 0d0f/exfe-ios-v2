@@ -125,9 +125,6 @@
         }
         
         _tabBar.tabBarItems = tabBarItems;
-        
-        // select
-        [_tabBar setSelectedIndex:self.defaultIndex];
     }
 }
 

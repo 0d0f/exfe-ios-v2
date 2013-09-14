@@ -792,14 +792,20 @@
     EFTabBarItem *tabBarItem4 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_routex_30.png"]];
     tabBarItem4.highlightImage = [UIImage imageNamed:@"widget_routex_30shine.png"];
     if (cross) {
+        BOOL isRouteXDefault = NO;
         for (NSDictionary *widgetInfo in cross.widget) {
             NSString *type = [widgetInfo valueForKey:@"type"];
             if ([type isEqualToString:@"routex"]) {
                 NSNumber *isDefaultNumber = [widgetInfo valueForKey:@"default"];
                 if (isDefaultNumber && [isDefaultNumber boolValue]) {
+                    isRouteXDefault = YES;
                     tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelDefault;
                 }
             }
+        }
+        
+        if (!isRouteXDefault) {
+            tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelLow;
         }
     } else {
         tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelLow;
