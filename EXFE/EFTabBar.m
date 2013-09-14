@@ -663,6 +663,12 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 - (void)_showButtonsAnimated:(BOOL)animated {
     [self _removeMaskWindow];
     
+    if (!self.isButtonsShowed) {
+        // cache index & state
+        self.preSelectedIndex = self.tabBarViewController.selectedIndex;
+        self.preSelectedTabBarItemState = self.tabBarViewController.selectedViewController.customTabBarItem.tabBarItemState;
+    }
+    
     self.isButtonsShowed = YES;
     self.gestureView.userInteractionEnabled = NO;
     self.scrollView.scrollEnabled = YES;
@@ -671,10 +677,6 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     for (EFTabBarItemControl *button in self.buttons) {
         button.swipeEnable = NO;
     }
-    
-    // cache index & state
-    self.preSelectedIndex = self.tabBarViewController.selectedIndex;
-    self.preSelectedTabBarItemState = self.tabBarViewController.selectedViewController.customTabBarItem.tabBarItemState;
     
     // highlight selected one
     self.tabBarViewController.selectedViewController.customTabBarItem.tabBarItemState = kEFTabBarItemStateHighlight;
