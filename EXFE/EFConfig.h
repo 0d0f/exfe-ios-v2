@@ -27,7 +27,10 @@
 
 + (instancetype)sharedInstance;
 
+- (BOOL)avalableForScope:(NSString *)scope;
 - (NSString *)suggestScope;
+- (NSString *)alias:(NSString *)scope;
+- (BOOL)sameServerScope:(NSString *)scope;
 
 - (void)saveScope:(NSString *)scope;
 - (NSString *)loadScope;
