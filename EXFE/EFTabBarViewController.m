@@ -127,7 +127,7 @@
         _tabBar.tabBarItems = tabBarItems;
         
         // select
-        self.selectedIndex = self.defaultIndex;
+        [_tabBar setSelectedIndex:self.defaultIndex];
     }
 }
 
@@ -250,6 +250,10 @@
 
 - (void)exchangeViewControllerAtIndex:(NSUInteger)anIndex withViewControllerAtIndex:(NSUInteger)anotherIndex {
     [self.viewControllers exchangeObjectAtIndex:anIndex withObjectAtIndex:anotherIndex];
+}
+
+- (void)reorderViewControllers {
+    [self.tabBar reorderTabBarItems];
 }
 
 #pragma mark - Private

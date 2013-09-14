@@ -22,11 +22,11 @@
     
     // Build a context that's the same dimensions as the new size
     CGContextRef context = CGBitmapContextCreate(NULL,
-                                                 image.size.width,
-                                                 image.size.height,
+                                                 (size_t)image.size.width,
+                                                 (size_t)image.size.height,
                                                  CGImageGetBitsPerComponent(image.CGImage),
                                                  0,
-                                                 CGImageGetColorSpace(image.CGImage),
+                                                 CGColorSpaceCreateDeviceRGB(), //CGImageGetColorSpace(image.CGImage),
                                                  CGImageGetBitmapInfo(image.CGImage));
 
     // Create a clipping path with rounded corners

@@ -29,5 +29,6 @@ UIScrollViewDelegate
 - (id)initWithStyle:(EFTabBarStyle)style;
 
 - (void)setSelectedIndex:(NSUInteger)index;
+- (void)reorderTabBarItems;
 
 @end

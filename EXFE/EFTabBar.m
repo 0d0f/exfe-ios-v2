@@ -339,25 +339,29 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     if (object == self.titleLabel && [keyPath isEqualToString:@"text"]) {
         [self _changeTitleFrameAimated:YES];
     } else if (object == self.tabBarViewController && [keyPath isEqualToString:@"selectedIndex"]) {
-        UIViewController<EFTabBarDataSource> *viewController = (UIViewController<EFTabBarDataSource> *)self.tabBarViewController.viewControllers[self.tabBarViewController.selectedIndex];
-        self.shadowImageView.image = viewController.shadowImage;
+        __weak typeof(self) weakSelf = self;
         
-        if (!self.isButtonsShowed) {
-            for (NSUInteger index = 0; index < self.tabBarItems.count; index++) {
-                if (index == self.tabBarViewController.selectedIndex) {
-                    UIView *selectedControl = [self.buttons objectAtIndex:self.tabBarViewController.selectedIndex];
-                    CGRect frame = (CGRect){{CGRectGetWidth(self.scrollView.frame) - kTabBarButtonSize.width, 0.0f}, selectedControl.frame.size};
-                    frame = [self.scrollView convertRect:frame toView:selectedControl.superview];
-                    
-                    CGPoint center = selectedControl.center;
-                    center.x = CGRectGetMidX(frame);
-                    selectedControl.center = center;
-                } else {
-                    UIView *control = [self.buttons objectAtIndex:index];
-                    control.frame = [self _buttonFrameAtIndex:index];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIViewController<EFTabBarDataSource> *viewController = (UIViewController<EFTabBarDataSource> *)weakSelf.tabBarViewController.viewControllers[weakSelf.tabBarViewController.selectedIndex];
+            weakSelf.shadowImageView.image = viewController.shadowImage;
+            
+            if (!weakSelf.isButtonsShowed) {
+                for (NSUInteger index = 0; index < weakSelf.tabBarItems.count; index++) {
+                    if (index == weakSelf.tabBarViewController.selectedIndex) {
+                        UIView *selectedControl = [weakSelf.buttons objectAtIndex:weakSelf.tabBarViewController.selectedIndex];
+                        CGRect frame = (CGRect){{CGRectGetWidth(weakSelf.scrollView.frame) - kTabBarButtonSize.width, 0.0f}, selectedControl.frame.size};
+                        frame = [weakSelf.scrollView convertRect:frame toView:selectedControl.superview];
+                        
+                        CGPoint center = selectedControl.center;
+                        center.x = CGRectGetMidX(frame);
+                        selectedControl.center = center;
+                    } else {
+                        UIView *control = [weakSelf.buttons objectAtIndex:index];
+                        control.frame = [weakSelf _buttonFrameAtIndex:index];
+                    }
                 }
             }
-        }
+        });
     } else if ([object isKindOfClass:[EFTabBarItem class]] && [keyPath isEqualToString:@"shouldPop"]) {
         NSUInteger index = [self.tabBarItems indexOfObject:object];
         NSAssert(index != NSNotFound, @"index shouldn't be NSNotFound");
@@ -448,6 +452,10 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 
 - (void)setSelectedIndex:(NSUInteger)index {
     [self _setSelectedIndex:index];
+}
+
+- (void)reorderTabBarItems {
+    [self _reorderTabBarItems];
 }
 
 #pragma mark - UIScrollViewDelegate

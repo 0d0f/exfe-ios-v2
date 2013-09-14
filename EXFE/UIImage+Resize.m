@@ -117,11 +117,11 @@
     
     // Build a context that's the same dimensions as the new size
     CGContextRef bitmap = CGBitmapContextCreate(NULL,
-                                                newRect.size.width,
-                                                newRect.size.height,
+                                                (size_t)newRect.size.width,
+                                                (size_t)newRect.size.height,
                                                 CGImageGetBitsPerComponent(imageRef),
                                                 0,
-                                                CGImageGetColorSpace(imageRef),
+                                                CGColorSpaceCreateDeviceRGB(), //CGImageGetColorSpace(imageRef),
                                                 CGImageGetBitmapInfo(imageRef));
     
     // Rotate and/or flip the image if required by its orientation

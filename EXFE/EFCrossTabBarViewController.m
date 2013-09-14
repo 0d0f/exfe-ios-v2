@@ -16,7 +16,7 @@
 #import "CCTemplate.h"
 
 @interface EFCrossTabBarViewController ()
-
+@property (nonatomic, assign) BOOL hasLocalCross;
 @end
 
 @implementation EFCrossTabBarViewController
@@ -44,9 +44,13 @@
     [super viewWillAppear:animated];
     [self regObserver];
     if (!self.cross) {
+        self.hasLocalCross = NO;
+        
         self.cross = [self.model getCrossById:self.crossId];
         [self.model loadCrossWithCrossId:self.crossId updatedTime:nil];
     } else {
+        self.hasLocalCross = YES;
+        
         [self.model loadCrossWithCrossId:[self.cross.cross_id unsignedIntegerValue] updatedTime:self.cross.updated_at];
     }
     [self refreshUI];
@@ -295,6 +299,12 @@
 {
     if (self.cross) {
         [self fillHead:self.cross];
+        
+        if (!self.hasLocalCross) {
+            self.hasLocalCross = YES;
+            [self reorderViewControllers];
+            [self setSelectedIndex:self.defaultIndex animated:YES];
+        }
     }
 }
 

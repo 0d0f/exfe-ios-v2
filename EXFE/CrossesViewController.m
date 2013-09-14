@@ -702,8 +702,8 @@
         if (!strongTab) {
             return;
         }
-        NSUInteger toJumpIndex = [strongTab indexOfViewControllerForClass:class];
-        NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
+        NSUInteger toJumpIndex = class ? [strongTab indexOfViewControllerForClass:class] : strongTab.defaultIndex;
+        NSAssert(toJumpIndex != NSNotFound, @"MUST be there!");
         
         [strongTab.tabBar setSelectedIndex:toJumpIndex];
     };
@@ -791,7 +791,19 @@
     
     EFTabBarItem *tabBarItem4 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_routex_30.png"]];
     tabBarItem4.highlightImage = [UIImage imageNamed:@"widget_routex_30shine.png"];
-    tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelLow;
+    if (cross) {
+        for (NSDictionary *widgetInfo in cross.widget) {
+            NSString *type = [widgetInfo valueForKey:@"type"];
+            if ([type isEqualToString:@"routex"]) {
+                NSNumber *isDefaultNumber = [widgetInfo valueForKey:@"default"];
+                if (isDefaultNumber && [isDefaultNumber boolValue]) {
+                    tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelDefault;
+                }
+            }
+        }
+    } else {
+        tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelLow;
+    }
     
     routeXViewController.customTabBarItem = tabBarItem4;
     routeXViewController.tabBarStyle = kEFTabBarStyleNormal;
@@ -866,7 +878,7 @@
                     [self.navigationController popToRootViewControllerAnimated:NO];
                 }
                 NSInteger crossId = [crossIdString integerValue];
-                Class cls = [CrossGroupViewController class];
+                Class cls = nil;    //[CrossGroupViewController class];
                 if (pathComponents.count > 1) {
                     NSString *tab = [pathComponents objectAtIndex:1];
                     if ([@"conversation" caseInsensitiveCompare:tab] == NSOrderedSame) {

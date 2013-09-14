@@ -58,5 +58,6 @@ typedef void (^EFTabBarViewControllerBehaviorBlock)(void);
 - (NSUInteger)indexOfViewController:(UIViewController<EFTabBarDataSource> *)viewController; // start from 0, return the first index that found. NOTE: viewController CANNOT be nil!
 
 - (void)exchangeViewControllerAtIndex:(NSUInteger)anIndex withViewControllerAtIndex:(NSUInteger)anotherIndex;
+- (void)reorderViewControllers;
 
 @end
