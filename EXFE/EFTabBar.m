@@ -321,9 +321,6 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
                              context:NULL];
         
         self.tabBarStyle = style;
-        
-#warning - test
-        self.visibleCount = 3;
     }
     return self;
 }
@@ -402,6 +399,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         self.scrollView.contentSize = contentSize;
         
         [self _resetButtons];
+        [self _reorderTabBarItems];
     }
 }
 
@@ -880,12 +878,17 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     NSMutableArray *visibleTabBarItems = [[NSMutableArray alloc] init];
     NSMutableArray *hidenTabBarItems = [[NSMutableArray alloc] init];
     
+    EFTabBarItem *defaultTabBarItem = nil;
+    
     for (int index = 0; index < self.tabBarItems.count; index++) {
         EFTabBarItem *item = self.tabBarItems[index];
         if (kEFTabBarItemLevelNormal == item.tabBarItemLevel) {
             [visibleTabBarItems addObject:item];
-        } else {
+        } else if (kEFTabBarItemLevelLow == item.tabBarItemLevel) {
             [hidenTabBarItems addObject:item];
+        } else {
+            defaultTabBarItem = item;
+            [visibleTabBarItems addObject:item];
         }
     }
     
@@ -910,6 +913,13 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
             
             [self.tabBarViewController exchangeViewControllerAtIndex:index withViewControllerAtIndex:j];
         }
+    }
+    
+    if (defaultTabBarItem) {
+        NSUInteger defaultIndex = [self.tabBarItems indexOfObject:defaultTabBarItem];
+        self.tabBarViewController.defaultIndex = defaultIndex;
+    } else {
+        self.tabBarViewController.defaultIndex = 0;
     }
 }
 

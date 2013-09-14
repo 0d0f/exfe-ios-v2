@@ -10,7 +10,8 @@
 
 typedef enum {
     kEFTabBarItemLevelNormal = 0,   // Show when taped
-    kEFTabBarItemLevelLow           // Hide when taped, swipe to show
+    kEFTabBarItemLevelLow,          // Hide when taped, swipe to show
+    kEFTabBarItemLevelDefault
 } EFTabBarItemLevel;
 
 typedef enum {

@@ -127,7 +127,7 @@
         _tabBar.tabBarItems = tabBarItems;
         
         // select
-        self.selectedIndex = 0;
+        self.selectedIndex = self.defaultIndex;
     }
 }
 
