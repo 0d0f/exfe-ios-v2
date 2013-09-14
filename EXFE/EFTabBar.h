@@ -15,16 +15,20 @@ typedef enum {
 
 @class EFTabBarViewController;
 @interface EFTabBar : UIView
+<
+UIScrollViewDelegate
+>
 
 @property (weak, nonatomic, readonly) UILabel *titleLabel;
 @property (nonatomic, strong) UIImage *backgroundImage;
 
-@property (nonatomic, strong) NSArray *tabBarItems;
+@property (nonatomic, strong) NSMutableArray *tabBarItems;
 @property (nonatomic, weak) EFTabBarViewController *tabBarViewController;
 @property (nonatomic, assign) EFTabBarStyle tabBarStyle;
 
 - (id)initWithStyle:(EFTabBarStyle)style;
 
 - (void)setSelectedIndex:(NSUInteger)index;
+- (void)reorderTabBarItems;
 
 @end
