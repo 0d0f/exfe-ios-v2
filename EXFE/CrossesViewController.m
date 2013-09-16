@@ -748,6 +748,7 @@
     EFTabBarItem *tabBarItem1 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_x_30.png"]];
     tabBarItem1.highlightImage = [UIImage imageNamed:@"widget_x_30shine.png"];
     tabBarItem1.tabBarItemLevel = kEFTabBarItemLevelNormal;
+    tabBarItem1.defaultOrder = 0;
     
     crossGroupViewController.customTabBarItem = tabBarItem1;
     crossGroupViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
@@ -763,6 +764,7 @@
     tabBarItem2.titleEnable = YES;
     tabBarItem2.title = conversationCount > 0 ? [NSString stringWithFormat:@"%u", conversationCount] : nil;
     tabBarItem2.tabBarItemLevel = kEFTabBarItemLevelNormal;
+    tabBarItem2.defaultOrder = 1;
     
     conversationViewController.customTabBarItem = tabBarItem2;
     conversationViewController.tabBarStyle = kEFTabBarStyleNormal;
@@ -780,6 +782,7 @@
     EFTabBarItem *tabBarItem3 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_exfee_30.png"]];
     tabBarItem3.highlightImage = [UIImage imageNamed:@"widget_exfee_30shine.png"];
     tabBarItem3.tabBarItemLevel = kEFTabBarItemLevelNormal;
+    tabBarItem3.defaultOrder = 2;
     
     exfeeViewController.customTabBarItem = tabBarItem3;
     exfeeViewController.tabBarStyle = kEFTabBarStyleNormal;
@@ -791,20 +794,33 @@
     
     EFTabBarItem *tabBarItem4 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_routex_30.png"]];
     tabBarItem4.highlightImage = [UIImage imageNamed:@"widget_routex_30shine.png"];
+    tabBarItem4.defaultOrder = 3;
+    
     if (cross) {
-        BOOL isRouteXDefault = NO;
+        BOOL shouldRouteXVisible = NO;
         for (NSDictionary *widgetInfo in cross.widget) {
             NSString *type = [widgetInfo valueForKey:@"type"];
             if ([type isEqualToString:@"routex"]) {
-                NSNumber *isDefaultNumber = [widgetInfo valueForKey:@"default"];
-                if (isDefaultNumber && [isDefaultNumber boolValue]) {
-                    isRouteXDefault = YES;
-                    tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelDefault;
+                if ([NSNull null] != (NSNull *)[widgetInfo valueForKey:@"my_status"]) {
+                    shouldRouteXVisible = YES;
+                    NSNumber *isDefaultNumber = [widgetInfo valueForKey:@"default"];
+                    
+                    if (isDefaultNumber) {
+                        if ([isDefaultNumber boolValue]) {
+                            tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelDefault;
+                            
+                            tabBarItem1.tabBarItemLevel = kEFTabBarItemLevelLow;
+                            tabBarItem2.tabBarItemLevel = kEFTabBarItemLevelLow;
+                            tabBarItem3.tabBarItemLevel = kEFTabBarItemLevelLow;
+                        } else {
+                            tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelNormal;
+                        }
+                    }
                 }
             }
         }
         
-        if (!isRouteXDefault) {
+        if (!shouldRouteXVisible) {
             tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelLow;
         }
     } else {

@@ -180,10 +180,6 @@
     NSParameterAssert(self.viewControllers.count);
     NSParameterAssert(selectedIndex >= 0 && selectedIndex < self.viewControllers.count);
     
-    if (_selectedIndex == selectedIndex) {
-        return;
-    }
-    
     [self willChangeValueForKey:@"selectedIndex"];
     _selectedIndex = selectedIndex;
     [self didChangeValueForKey:@"selectedIndex"];
