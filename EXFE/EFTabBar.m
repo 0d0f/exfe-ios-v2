@@ -495,9 +495,14 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-    if (targetContentOffset->x <= 0.0f && self.isButtonsShowed) {
-        [self _dismissButtonsAnimated:YES];
-    } else if (velocity.x <= -300) {
+    // fix content offset
+    CGPoint contentOffset = *targetContentOffset;
+    CGFloat contentOffsetX2 = contentOffset.x;
+    contentOffsetX2  = contentOffsetX2 < 0.0f ? 0.0f : contentOffsetX2;
+    NSUInteger index = (NSUInteger)floor(contentOffsetX2 / (kTabBarButtonSize.width + kButtonSpacing));
+    
+    if (index <= self.tabBarViewController.selectedIndex) {
+        targetContentOffset->x = 0.0f;
         [self _dismissButtonsAnimated:YES];
     }
 }
