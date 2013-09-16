@@ -61,6 +61,7 @@
 @property (nonatomic, strong) EFGeomarkGroupViewController  *geomarkGroupViewController;
 @property (nonatomic, strong) EFMapPersonViewController     *personViewController;
 @property (nonatomic, strong) EFRouteXAccessViewController  *accessViewController;
+@property (nonatomic, strong) EFRouteXMenuViewController    *menuViewController;
 
 @property (nonatomic, strong) UIAlertView           *backgroundAlertView;
 @property (nonatomic, strong) UIAlertView           *noGPSAlertView;
@@ -706,6 +707,13 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     NSArray *locations = nil;
     EFMapPerson *person = [self.mapDataSource personAtIndex:cell.index];
     
+    if (person == [self.mapDataSource me]) {
+        EFRouteXMenuViewController *menuViewController = [[EFRouteXMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+        menuViewController.delegate = self;
+        self.menuViewController = menuViewController;
+        [self.menuViewController presentFromViewController:self animated:YES];
+    }
+    
     locations = person.locations;
     self.mapDataSource.selectedPerson = person;
     
@@ -753,6 +761,38 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     }
     
     [self _zoomToPersonLocation:person];
+}
+
+#pragma mark - EFRouteXMenuViewControllerDelegate
+
+- (void)menuViewControllerWannaShowRouteX:(EFRouteXMenuViewController *)menuViewController {
+    [menuViewController dismissAnimated:YES];
+    
+    if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi]) {
+        UIGraphicsBeginImageContextWithOptions(self.view.frame.size, 1, [UIScreen mainScreen].scale);
+        [self.view.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        NSData *imageData = UIImageJPEGRepresentation(image, 0.8f);
+        NSData *thumbImageData = UIImageJPEGRepresentation(image, 0.1f);
+        
+        WXImageObject *imageObject = [WXImageObject object];
+        imageObject.imageData = imageData;
+        
+        WXMediaMessage *mediaMessage = [WXMediaMessage message];
+        [mediaMessage setThumbData:thumbImageData];
+        mediaMessage.title = self.cross.title;
+        mediaMessage.description = @"test";
+        mediaMessage.mediaObject = imageObject;
+        
+        SendMessageToWXReq *requestMessage = [[SendMessageToWXReq alloc] init];
+        requestMessage.bText = NO;
+        requestMessage.scene = WXSceneSession;
+        requestMessage.message = mediaMessage;
+        
+        [WXApi sendReq:requestMessage];
+    }
 }
 
 #pragma mark -

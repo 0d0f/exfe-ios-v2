@@ -2461,6 +2461,10 @@
 		7670127A1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
 		7670127B1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
 		7670127C1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
+		7683B79617E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7683B79517E7423000B4D96D /* EFRouteXMenuViewController.m */; };
+		7683B79717E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7683B79517E7423000B4D96D /* EFRouteXMenuViewController.m */; };
+		7683B79817E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7683B79517E7423000B4D96D /* EFRouteXMenuViewController.m */; };
+		7683B79917E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7683B79517E7423000B4D96D /* EFRouteXMenuViewController.m */; };
 		7686099E17817BC700534731 /* NSString+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 7686099D17817BC700534731 /* NSString+Format.m */; };
 		7686099F17817BC700534731 /* NSString+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 7686099D17817BC700534731 /* NSString+Format.m */; };
 		768609A017817BC700534731 /* NSString+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 7686099D17817BC700534731 /* NSString+Format.m */; };
@@ -3675,6 +3679,8 @@
 		767012741729086100B5445E /* EFSearchTipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchTipViewController.h; sourceTree = "<group>"; };
 		767012751729086100B5445E /* EFSearchTipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchTipViewController.m; sourceTree = "<group>"; };
 		767012761729086100B5445E /* EFSearchTipViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFSearchTipViewController.xib; sourceTree = "<group>"; };
+		7683B79417E7423000B4D96D /* EFRouteXMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRouteXMenuViewController.h; sourceTree = "<group>"; };
+		7683B79517E7423000B4D96D /* EFRouteXMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRouteXMenuViewController.m; sourceTree = "<group>"; };
 		7686099C17817BC700534731 /* NSString+Format.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Format.h"; sourceTree = "<group>"; };
 		7686099D17817BC700534731 /* NSString+Format.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Format.m"; sourceTree = "<group>"; };
 		7688C79417B0DE7E00CBB6E8 /* EFAccessInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAccessInfo.h; sourceTree = "<group>"; };
@@ -4902,6 +4908,8 @@
 				766032FC17C21C1B00B21A12 /* EFMapPersonViewController.m */,
 				761B24C117CFBE160091DD7B /* EFRouteXAccessViewController.h */,
 				761B24C217CFBE160091DD7B /* EFRouteXAccessViewController.m */,
+				7683B79417E7423000B4D96D /* EFRouteXMenuViewController.h */,
+				7683B79517E7423000B4D96D /* EFRouteXMenuViewController.m */,
 			);
 			name = RouteX;
 			sourceTree = "<group>";
@@ -8571,6 +8579,7 @@
 				4F63DA9E17172AA600136B7E /* EXIconToolBar.m in Sources */,
 				4F63DA9F17172AA600136B7E /* EXButton.m in Sources */,
 				4F63DAA017172AA600136B7E /* EXInnerButton.m in Sources */,
+				7683B79717E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */,
 				4F63DAA117172AA600136B7E /* EXNavigationBar.m in Sources */,
 				4F63DAA217172AA600136B7E /* EXOverlayView.m in Sources */,
 				4F63DAA417172AA600136B7E /* ConversationInputAccessoryView.m in Sources */,
@@ -8843,6 +8852,7 @@
 				4F63DC6D17172B0700136B7E /* EXIconToolBar.m in Sources */,
 				4F63DC6E17172B0700136B7E /* EXButton.m in Sources */,
 				4F63DC6F17172B0700136B7E /* EXInnerButton.m in Sources */,
+				7683B79817E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */,
 				4F63DC7017172B0700136B7E /* EXNavigationBar.m in Sources */,
 				4F63DC7117172B0700136B7E /* EXOverlayView.m in Sources */,
 				4F63DC7317172B0700136B7E /* ConversationInputAccessoryView.m in Sources */,
@@ -9115,6 +9125,7 @@
 				4FC40E3B17D04A5700D64105 /* EXIconToolBar.m in Sources */,
 				4FC40E3C17D04A5700D64105 /* EXButton.m in Sources */,
 				4FC40E3D17D04A5700D64105 /* EXInnerButton.m in Sources */,
+				7683B79917E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */,
 				4FC40E3E17D04A5700D64105 /* EXNavigationBar.m in Sources */,
 				4FC40E3F17D04A5700D64105 /* EXOverlayView.m in Sources */,
 				4FC40E4017D04A5700D64105 /* ConversationInputAccessoryView.m in Sources */,
@@ -9387,6 +9398,7 @@
 				7841389A15AD36C2002E1030 /* EXIconToolBar.m in Sources */,
 				7803EB8B15AD801500291B69 /* EXButton.m in Sources */,
 				78B9FCF115B4680F00F5E4D3 /* EXInnerButton.m in Sources */,
+				7683B79617E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */,
 				78B9FD3315B5498200F5E4D3 /* EXNavigationBar.m in Sources */,
 				7809620015BDB70B0071E9D0 /* EXOverlayView.m in Sources */,
 				78FB79E815D0ECFC00DF9D73 /* ConversationInputAccessoryView.m in Sources */,
