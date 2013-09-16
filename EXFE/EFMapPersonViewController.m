@@ -195,7 +195,7 @@
         
         // update destination distance info
         if (destination) {
-            CLLocationDistance distanceFromDest = ceil([[self.mapDataSource me].lastLocation distanceFromRouteLocation:destination]);
+            CLLocationDistance distanceFromDest = ceil([self.person.lastLocation distanceFromRouteLocation:destination]);
             NSString *unit = NSLocalizedString(@"m", nil);
             
             if (distanceFromDest > 1000) {
