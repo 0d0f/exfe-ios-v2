@@ -298,7 +298,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         UIImageView *arrowView = [[UIImageView alloc] initWithFrame:(CGRect){CGPointZero, {6.0f, 30.0f}}];
         arrowView.image = [UIImage imageNamed:@"tab_tri.png"];
         arrowView.center = (CGPoint){CGRectGetWidth(frame) - 3.0f, CGRectGetMidY(scrollViewFrame)};
-        arrowView.alpha = 0.0f;
+        arrowView.hidden = YES;
         [self.backgroundView insertSubview:arrowView atIndex:0];
         self.tabBarArrowView = arrowView;
         
@@ -490,8 +490,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         
         if (self.visibleCount < self.tabBarItems.count) {
             if (index <= self.visibleCount) {
-                CGFloat alpha = contentOffsetX / (self.visibleCount * (kTabBarButtonSize.width + kButtonSpacing));
-                self.tabBarArrowView.alpha = alpha;
+                self.tabBarArrowView.alpha = 1.0f;
             } else {
                 if (contentOffset.x < CGRectGetWidth(self.buttonBaseView.frame) - (kTabBarButtonSize.width + kButtonSpacing)) {
                     self.tabBarArrowView.alpha = 1.0f;
@@ -504,10 +503,10 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-    if (velocity.x <= 0) {
+    if (targetContentOffset->x <= 0.0f && self.isButtonsShowed) {
         [self _dismissButtonsAnimated:YES];
-    } else {
-        [self _showButtonsAnimated:YES];
+    } else if (velocity.x <= -300) {
+        [self _dismissButtonsAnimated:YES];
     }
 }
 
