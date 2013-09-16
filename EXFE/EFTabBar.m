@@ -485,10 +485,10 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         selectedControl.center = center;
         
         if (self.visibleCount <= self.tabBarItems.count) {
-            if (index < self.visibleCount) {
-                self.tabBarArrowView.alpha = 1.0f;
-            } else {
+            if (contentOffset.x >= (self.tabBarItems.count * (kTabBarButtonSize.width + kButtonSpacing))) {
                 self.tabBarArrowView.alpha = 0.0f;
+            } else {
+                self.tabBarArrowView.alpha = 1.0f;
             }
         }
     }
@@ -921,6 +921,36 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     [self.tabBarItems addObjectsFromArray:hidenTabBarItems];
     
     self.visibleCount = visibleTabBarItems.count;
+    
+    if (1 == self.visibleCount) {
+        for (EFTabBarItemControl *button in self.buttons) {
+            button.swipeActionHandler = ^(EFTabBarItemControl *control, UISwipeGestureRecognizerDirection direction){
+                NSAssert(self.tabBarViewController.viewControllers.count, @"TabBarViewController.viewController can't be empty.");
+                
+                if (UISwipeGestureRecognizerDirectionRight) {
+                    [self _showButtonsAnimated:YES];
+                    [self.scrollView setContentOffset:(CGPoint){(kTabBarButtonSize.width + kButtonSpacing) * self.tabBarItems.count, 0.0f} animated:YES];
+                }
+            };
+        }
+    } else {
+        for (EFTabBarItemControl *button in self.buttons) {
+            button.swipeActionHandler = ^(EFTabBarItemControl *control, UISwipeGestureRecognizerDirection direction){
+                NSAssert(self.tabBarViewController.viewControllers.count, @"TabBarViewController.viewController can't be empty.");
+                
+                if (UISwipeGestureRecognizerDirectionLeft == direction) {
+                    NSUInteger nextIndex = (self.tabBarViewController.selectedIndex + 1) % self.visibleCount;
+                    [self _setSelectedIndex:nextIndex];
+                } else if (UISwipeGestureRecognizerDirectionRight) {
+                    NSInteger nextIndex = self.tabBarViewController.selectedIndex - 1;
+                    if (nextIndex < 0) {
+                        nextIndex = self.visibleCount - 1;
+                    }
+                    [self _setSelectedIndex:nextIndex];
+                }
+            };
+        }
+    }
     
     for (NSUInteger index = 0; index < self.tabBarItems.count; index++) {
         UIViewController<EFTabBarDataSource> *viewController = self.tabBarViewController.viewControllers[index];
