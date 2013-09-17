@@ -80,25 +80,9 @@
         case MKAnnotationViewDragStateEnding:
         case MKAnnotationViewDragStateCanceling:
         {
-            CGPoint center = (CGPoint){self.center.x, self.center.y - kUnpinOffset};
-            [UIView animateWithDuration:0.133f
-                                  delay:0.0f
-                                options:UIViewAnimationOptionCurveEaseOut
-                             animations:^{
-                                 self.center = center;
-                             }
-                             completion:^(BOOL finished){
-                                 CGPoint nextCenter = (CGPoint){self.center.x, self.center.y + kUnpinOffset};
-                                 [UIView animateWithDuration:0.1f
-                                                       delay:0.0f
-                                                     options:UIViewAnimationOptionCurveEaseIn
-                                                  animations:^{
-                                                      self.center = nextCenter;
-                                                  }
-                                                  completion:^(BOOL finished){
-                                                      [super setDragState:dragState animated:animated];
-                                                  }];
-                             }];
+            CGPoint center = (CGPoint){self.center.x, self.center.y};
+            self.center = center;
+            [super setDragState:dragState animated:animated];
         }
             break;
         case MKAnnotationViewDragStateDragging:
@@ -114,17 +98,6 @@
 - (void)handleTap:(UITapGestureRecognizer *)gesture {
     if ([self.delegate respondsToSelector:@selector(annotationView:didTapAtCoordinate:)]) {
         [self.delegate annotationView:self didTapAtCoordinate:self.annotation.coordinate];
-    }
-    
-    return;
-    UIGestureRecognizerState state = gesture.state;
-    
-    if (UIGestureRecognizerStateEnded == state) {
-        if (self.selected) {
-            [self.mapView deselectAnnotation:self.annotation animated:YES];
-        } else {
-            [self.mapView selectAnnotation:self.annotation animated:YES];
-        }
     }
 }
 
