@@ -344,9 +344,9 @@
                     if (path && [path isKindOfClass:[NSString class]]) {
                         RKLogInfo(@"receive path: %@", path);
                         if (path.length > 0) {
-                            url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:@"" path:path];
+                            url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:[EFConfig sharedInstance].scope path:path];
                         } else {
-                            url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:@"" path:@"/"];
+                            url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:[EFConfig sharedInstance].scope path:@"/"];
                         }
                         RKLogInfo(@"combined url %@", url);
                     }

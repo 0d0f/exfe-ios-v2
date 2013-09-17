@@ -103,12 +103,12 @@
     // Head View
     EFHeadView *headView = [[EFHeadView alloc] initWithFrame:(CGRect){{0.0f, 9.0f}, {320.0f, 56.0f}}];
     headView.headPressedHandler = ^{
-        NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, @"", @"/profile?animated=yes"];
+        NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, [EFConfig sharedInstance].scope, @"/profile?animated=yes"];
         NSURL *url = [NSURL URLWithString:urlstr];
         [[UIApplication sharedApplication] openURL:url];
     };
     headView.titlePressedHandler = ^{
-        NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, @"", @"/gather?animated=yes"];
+        NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, [EFConfig sharedInstance].scope, @"/gather?animated=yes"];
         NSURL *url = [NSURL URLWithString:urlstr];
         [[UIApplication sharedApplication] openURL:url];
     };
@@ -270,7 +270,7 @@
     unverified_description.linkAttributes = mutableLinkAttributes;
     unverified_description.delegate = self;
     unverified_description.text = text;
-    NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, @"", @"/profile?animated=yes"];
+    NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, [EFConfig sharedInstance].scope, @"/profile?animated=yes"];
     NSURL *url = [NSURL URLWithString:urlstr];
     [unverified_description addLinkToURL:url withRange:range];
     [unverified_description sizeToFit];
@@ -758,7 +758,7 @@
                                   withRowAnimation:UITableViewRowAnimationNone];
             [self.tableView endUpdates];
         }
-        NSString *urlstr = [NSString stringWithFormat:@"%@://%@/!%@%@", [UIApplication sharedApplication].defaultScheme, @"", cross.cross_id, @"?animated=yes"];
+        NSString *urlstr = [NSString stringWithFormat:@"%@://%@/!%@%@", [UIApplication sharedApplication].defaultScheme, [EFConfig sharedInstance].scope, cross.cross_id, @"?animated=yes"];
         NSURL *url = [NSURL URLWithString:urlstr];
         [[UIApplication sharedApplication] openURL:url];
         
@@ -826,7 +826,7 @@
 - (void)onClickConversation:(UIView *)card {
     [Flurry logEvent:@"CLICK_CROSS_CARD_CONVERSATION"];
     CrossCard *c = (CrossCard *)card;
-    NSString *urlstr = [NSString stringWithFormat:@"%@://%@/!%@%@", [UIApplication sharedApplication].defaultScheme, @"", c.cross_id, @"/conversation?animated=yes"];
+    NSString *urlstr = [NSString stringWithFormat:@"%@://%@/!%@%@", [UIApplication sharedApplication].defaultScheme, [EFConfig sharedInstance].scope, c.cross_id, @"/conversation?animated=yes"];
     NSURL *url = [NSURL URLWithString:urlstr];
     [[UIApplication sharedApplication] openURL:url];
 }
