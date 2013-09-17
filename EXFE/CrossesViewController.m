@@ -807,6 +807,8 @@
                 
                 NSNumber *isDefaultNumber = [widgetInfo valueForKey:@"default"];
                 if (isDefaultNumber) {
+                    shouldRouteXVisible = YES;
+                    
                     if ([isDefaultNumber boolValue]) {
                         tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelDefault;
                         
