@@ -56,6 +56,9 @@
             self.meterLabel.hidden = YES;
             self.stateLabel.textAlignment = NSTextAlignmentCenter;
             self.stateLabel.frame = kStateLabelNormalFrame;
+            self.stateLabel.text = infoText;
+            [self.stateLabel sizeToFit];
+            self.stateLabel.frame = (CGRect){{(CGRectGetWidth(self.frame) - CGRectGetWidth(self.stateLabel.frame)) * 0.5f, CGRectGetMinY(self.stateLabel.frame)}, self.stateLabel.frame.size};
         }
     } else {
         if (self.person.locationState == kEFMapPersonLocationStateArrival) {
@@ -65,13 +68,14 @@
             self.stateLabel.frame = kStateLabelMeterFrame;
             self.stateLabel.text = infoText;
             [self.stateLabel sizeToFit];
+            self.stateLabel.frame = (CGRect){{CGRectGetMaxX(self.stateView.frame) + 2.0f, CGRectGetMinY(self.stateLabel.frame)}, self.stateLabel.frame.size};
             
             EFGradientView *gradientView = (EFGradientView *)[self.stateView viewWithTag:kGradientViewTag];
             gradientView.colors = @[[UIColor COLOR_RGB(0xCC, 0xCC, 0xCC)],
                                     [UIColor COLOR_RGB(0x7F, 0x7F, 0x7F)]];
             self.stateView.hidden = NO;
             self.meterLabel.hidden = YES;
-            self.stateLabel.textAlignment = NSTextAlignmentCenter;
+            self.stateLabel.textAlignment = NSTextAlignmentLeft;
         } else if (self.person.locationState == kEFMapPersonLocationStateOnTheWay) {
             if (self.person.connectState == kEFMapPersonConnectStateOnline) {
                 self.stateImageView.image = [UIImage imageNamed:@"map_arrow_14red.png"];
@@ -123,8 +127,8 @@
                     self.stateView.hidden = NO;
                     self.stateImageView.hidden = YES;
                     self.meterLabel.hidden = YES;
-                    self.stateLabel.textAlignment = NSTextAlignmentCenter;
-                    self.stateLabel.frame = kStateLabelNormalFrame;
+                    self.stateLabel.textAlignment = NSTextAlignmentLeft;
+                    self.stateLabel.frame = (CGRect){{CGRectGetMaxX(self.stateView.frame) + 2.0f, CGRectGetMinY(self.stateLabel.frame)}, self.stateLabel.frame.size};
                 } else {
                     NSDate *timestamp = self.person.lastLocation.timestamp;
                     NSString *value = [timestamp formatedTimeIntervalValueFromNow];
@@ -154,6 +158,8 @@
                 self.meterLabel.hidden = YES;
                 self.stateLabel.textAlignment = NSTextAlignmentCenter;
                 self.stateLabel.frame = kStateLabelNormalFrame;
+                [self.stateLabel sizeToFit];
+                self.stateLabel.frame = (CGRect){{(CGRectGetWidth(self.frame) - CGRectGetWidth(self.stateLabel.frame)) * 0.5f, CGRectGetMinY(self.stateLabel.frame)}, self.stateLabel.frame.size};
             }
         }
     }
