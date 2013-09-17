@@ -396,18 +396,18 @@
     
     [Flurry logEvent:@"HANDLE_OPEN_URL"];
     
-    NSString *schema = url.scheme;
+    NSString *schema __attribute__((unused)) = url.scheme;
     NSString *host = url.host;
     NSString *scope = [[[host componentsSeparatedByString:@"."] lastObject] uppercaseString];
-    NSString *query = [url query];
-    NSDictionary *params = [Util splitQuery:query];
-    NSString *token = [params objectForKey:@"token"];
-    NSString *user_id = [params objectForKey:@"user_id"];
-    NSString *username = [params objectForKey:@"username"];
+    NSString *query __attribute__((unused)) = [url query];
+    NSDictionary *params = [url queryComponents];
+    NSString *token = [[params objectForKey:@"token"] lastObject];
+    NSString *user_id = [[params objectForKey:@"user_id"] lastObject];
+    NSString *username = [[params objectForKey:@"username"] lastObject];
     if (!username) {
         username = @"";
     }
-    NSString *identity_id __attribute__((unused)) = [params objectForKey:@"identity_id"];
+    NSString *identity_id __attribute__((unused)) = [[params objectForKey:@"identity_id"] lastObject];
     
     self.url = url;
     
