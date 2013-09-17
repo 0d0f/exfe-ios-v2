@@ -86,7 +86,6 @@ extern NSString *const EXCrossListDidChangeNotification;
 + (BOOL) isValidPhoneNumber:(NSString*)phonenumber;
 + (NSString *) formatPhoneNumber:(NSString*)phonenumber;
 
-+ (void) showErrorWithMetaObject:(Meta *)meta delegate:(id)delegate __attribute__ ((deprecated));
 + (void) showConnectError:(NSError *)err delegate:(id)delegate;
 + (void) handleDefaultBannerTitle:(NSString *)title andMessage:(NSString *)message;
 + (void) handleRetryBannerFor:(EFNetworkOperation *)operation withTitle:(NSString *)title andMessage:(NSString *)message andRetry:(BOOL)retry;

@@ -170,7 +170,7 @@
             [self.headView showAnimated:NO];
         }
         
-        [self refreshAll];
+        [self refreshUI];
     
         //Load cross from remote
         NSDate *updated_at = [[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
@@ -292,13 +292,13 @@
     self.unverified_title = unverified_title;
     [self.view addSubview:unverified_title];
     
-    [self registerAsObserver];
+    [self regObserver];
     
     [self refreshWelcome];
 }
 
 - (void)dealloc {
-    [self unregisterForChangeNotification];
+    [self unregObserver];
     self.crossList = nil;
 }
 
@@ -312,11 +312,52 @@
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
     
-    [self refreshAll];
-    [self.tableView reloadData];
+    [self refreshUI];
 }
 
+- (void)forceSignOut {
+    [Util signout];
+    
+    EFLandingViewController *viewController = [[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil];
+    [self presentViewController:viewController animated:YES completion:nil];
+}
 
+#pragma mark KVO methods
+- (void)regObserver
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshUI)
+                                                 name:EXCrossListDidChangeNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshWelcome)
+                                                 name:UIApplicationDidChangeStatusBarFrameNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleLoadMeSuccess:)
+                                                 name:kEFNotificationNameLoadMeSuccess
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshUI)
+                                                 name:kEFNotificationNameLoadCrossListSuccess
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameLoadMeFailure
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameLoadCrossListFailure
+                                               object:nil];
+}
+
+- (void)unregObserver
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)handleLoadMeSuccess:(NSNotification *)notif {
     
@@ -327,37 +368,101 @@
     [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
 }
 
-#pragma mark KVO methods
-- (void)registerAsObserver
-{
-    if (self.crossChangeObserver == nil) {
-        self.crossChangeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:EXCrossListDidChangeNotification
-                                                                                     object:nil
-                                                                                      queue:[NSOperationQueue mainQueue]
-                                                                                 usingBlock:^(NSNotification *note) {
-                                                                                     [self refreshAll];
-                                                                                 }];
-    }
+- (void)handleNotification:(NSNotification *)notification {
+    NSString *name = notification.name;
+    NSDictionary *userInfo = notification.userInfo;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(refreshWelcome)
-                                                 name:UIApplicationDidChangeStatusBarFrameNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleLoadMeSuccess:)
-                                                 name:kEFNotificationNameLoadMeSuccess
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(refreshAll)
-                                                 name:kEFNotificationNameLoadCrossListSuccess
-                                               object:nil];
-}
-
-- (void)unregisterForChangeNotification
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    if (self.crossChangeObserver) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self.crossChangeObserver];
+    
+    if ([name hasSuffix:@".success"] && userInfo) {
+        // for success
+        NSString *cat = userInfo[@"type"];
+        NSNumber *num = userInfo[@"id"];
+        
+        if ([@"user" isEqualToString:cat]) {
+            
+        } else {
+            // for others
+        }
+        
+    } else if ([name hasSuffix:@".failure"] && userInfo) {
+        // for failure
+        NSString *cat = userInfo[@"type"];
+        NSNumber *num = userInfo[@"id"];
+        
+        if ([@"user" isEqualToString:cat]) {
+            //            if (num && self.model.userId == [num unsignedIntegerValue] ) {
+            if ([kEFNotificationNameLoadMeFailure isEqualToString:name]) {
+                Meta *meta = userInfo[@"meta"];
+                if (meta) {
+                    NSInteger c = [meta.code integerValue];
+                    NSInteger t = c / 100;
+                    
+                    switch (t) {
+                        case 4:{
+                            if (c == 401) {
+                                if ([@"invalid_auth" isEqualToString:meta.errorDetail]) {
+                                    NSString *errormsg = NSLocalizedString(@"Authentication failed due to security concerns, please sign in again.", nil);
+                                    UIAlertView *alerView = [UIAlertView alertViewWithTitle:@"" message:errormsg];
+#ifdef DEBUG
+                                    [alerView setCancelButtonWithTitle:NSLocalizedString(@"Cancel", nil) handler:nil];
+#endif
+                                    [alerView addButtonWithTitle:NSLocalizedString(@"OK", nil) handler:^{ [self forceSignOut];}];
+                                    [alerView show];
+                                }
+                            }
+                        } break;
+                            
+                        default:{
+                            
+                        } break;
+                    }
+                } else {
+                    NSError *error __attribute__((unused)) = userInfo[@"error"];
+                    //                        if ([@"NSCocoaErrorDomain" isEqualToString:error.domain]) {
+                    //                            [self.model loadCrossListAfter:self.model.latestModify];
+                    //                        }
+                }
+                
+            } else {
+                // Other notification
+            }
+            //            }
+        } else if ([@"cross" isEqualToString:cat]) {
+            if ([kEFNotificationNameLoadCrossListFailure isEqualToString:name]) {
+                Meta *meta = userInfo[@"meta"];
+                if (meta) {
+                    NSInteger c = [meta.code integerValue];
+                    NSInteger t = c / 100;
+                    
+                    switch (t) {
+                        case 4:{
+                            if (c == 401) {
+                                if ([@"invalid_auth" isEqualToString:meta.errorDetail]) {
+                                    NSString *errormsg = NSLocalizedString(@"Authentication failed due to security concerns, please sign in again.", nil);
+                                    UIAlertView *alerView = [UIAlertView alertViewWithTitle:@"" message:errormsg];
+#ifdef DEBUG
+                                    [alerView setCancelButtonWithTitle:NSLocalizedString(@"Cancel", nil) handler:nil];
+#endif
+                                    [alerView addButtonWithTitle:NSLocalizedString(@"OK", nil) handler:^{ [self forceSignOut];}];
+                                    [alerView show];
+                                }
+                            }
+                        } break;
+                            
+                        default:{
+                            
+                        } break;
+                    }
+                } else {
+                    NSError *error __attribute__((unused)) = userInfo[@"error"];
+                    //                        if ([@"NSCocoaErrorDomain" isEqualToString:error.domain]) {
+                    //                            [self.model loadCrossListAfter:self.model.latestModify];
+                    //                        }
+                }
+            }
+        } else {
+            // for others
+        }
     }
 }
 
@@ -369,7 +474,7 @@
 }
 
 #pragma mark Refresh
-- (void)refreshAll {
+- (void)refreshUI {
     self.crossList = [self.model getCrossList];
     
     [self refreshWelcome];
@@ -431,18 +536,6 @@
     } else {
         self.unverified_description.hidden = YES;
         self.unverified_title.hidden = YES;
-    }
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex __attribute__ ((deprecated))
-{
-    if (alertView.tag == 500) {
-        if (buttonIndex == alertView.firstOtherButtonIndex) {
-            [Util signout];
-            
-            EFLandingViewController *viewController = [[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil];
-            [self presentModalViewController:viewController animated:NO];
-        }
     }
 }
 

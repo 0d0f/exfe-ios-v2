@@ -568,7 +568,7 @@
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
         
-        [self.model loadCrossList];
+//        [self.model loadCrossList];
         
         [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     }
@@ -592,8 +592,7 @@
     
     [self switchContextByUserId:0 withAbandon:YES];
     
-    CrossesViewController *rootViewController = self.crossesViewController;
-    [rootViewController refreshAll];
+    [NSNotificationCenter.defaultCenter postNotificationName:EXCrossListDidChangeNotification object:self];
     
     [self.navigationController popToRootViewControllerAnimated:YES];
     
