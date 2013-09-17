@@ -447,7 +447,7 @@
                     [self jumpTo:url];
                 } else {
                     // merge identities
-                    RKLogInfo(@"Merge %u to %u by url", uid, self.model.userId);
+                    RKLogInfo(@"Merge (%@/%u) to %u by url", username, uid, self.model.userId);
                     [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Merge accounts", nil)
                                                 message:[NSString stringWithFormat:NSLocalizedString(@"Merge account %@ into your current signed-in account?", nil), username]
                                       cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
