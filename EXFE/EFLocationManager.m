@@ -11,6 +11,7 @@
 #import "EFAPI.h"
 #import "CCTemplate.h"
 #import "Util.h"
+#import "EFConfig.h"
 
 #define kDefaultTimerTimeInterval   (5.0f)
 #define kDefaultPostBackgroundTimeInterval  (5.0f)
@@ -255,11 +256,14 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
                 [self stopUpdatingHeading];
             }
         } else {
-            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-            localNotification.alertBody = NSLocalizedString(@"RouteX will show your location for 20 minutes, only to those who're agreed.", nil);
-            localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:2.33f];
-            localNotification.userInfo = @{@"key": @"backgroudLocationUpdate"};
-            [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+#warning MUST solve this problem in next version.
+            if ([[EFConfig sharedInstance].scope isEqualToString:EFServerScopeCN]) {
+                UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+                localNotification.alertBody = NSLocalizedString(@"RouteX will show your location for 20 minutes, only to those who're agreed.", nil);
+                localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:2.33f];
+                localNotification.userInfo = @{@"key": @"backgroudLocationUpdate"};
+                [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+            }
         }
         
         self.enterBackgroundTimestamp = [NSDate date];
