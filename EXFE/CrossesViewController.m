@@ -803,18 +803,18 @@
             if ([type isEqualToString:@"routex"]) {
                 if ([NSNull null] != (NSNull *)[widgetInfo valueForKey:@"my_status"]) {
                     shouldRouteXVisible = YES;
-                    NSNumber *isDefaultNumber = [widgetInfo valueForKey:@"default"];
-                    
-                    if (isDefaultNumber) {
-                        if ([isDefaultNumber boolValue]) {
-                            tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelDefault;
-                            
-                            tabBarItem1.tabBarItemLevel = kEFTabBarItemLevelLow;
-                            tabBarItem2.tabBarItemLevel = kEFTabBarItemLevelLow;
-                            tabBarItem3.tabBarItemLevel = kEFTabBarItemLevelLow;
-                        } else {
-                            tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelNormal;
-                        }
+                }
+                
+                NSNumber *isDefaultNumber = [widgetInfo valueForKey:@"default"];
+                if (isDefaultNumber) {
+                    if ([isDefaultNumber boolValue]) {
+                        tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelDefault;
+                        
+                        tabBarItem1.tabBarItemLevel = kEFTabBarItemLevelLow;
+                        tabBarItem2.tabBarItemLevel = kEFTabBarItemLevelLow;
+                        tabBarItem3.tabBarItemLevel = kEFTabBarItemLevelLow;
+                    } else {
+                        tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelNormal;
                     }
                 }
             }
