@@ -328,32 +328,39 @@
 - (void)receivePushData:(NSDictionary *)userInfo isOnForeground:(BOOL)isForeground {
     
     if (isForeground == NO) {
-        
         if (userInfo != nil) {
             id arg = [userInfo valueForKeyPath:@"args"];
             if(arg && [arg isKindOfClass:[NSDictionary class]]) {
                 RKLogInfo(@"receive old push");
             } else  {
                 NSURL *url = nil;
-                NSString * path = [userInfo valueForKeyPath:@"path"];
-                if (path && [path isKindOfClass:[NSString class]]) {
-                    
-                    if (path.length > 0) {
-                        url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:@"" path:path];
-                    } else {
-                        url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:@"" path:@"/"];
-                    }
-                    
+                NSString * u = [userInfo valueForKeyPath:@"url"];
+                if (u && [u isKindOfClass:[NSString class]]) {
+                    RKLogInfo(@"receive url: %@", u);
+                    // some filter for safety?
+                    url = [NSURL URLWithString:u];
                 } else {
-                    NSString * u = [userInfo valueForKeyPath:@"url"];
-                    if (u && [u isKindOfClass:[NSString class]]) {
-                        // some filter for safety?
-                        url = [NSURL URLWithString:u];
+                    NSString * path = [userInfo valueForKeyPath:@"path"];
+                    if (path && [path isKindOfClass:[NSString class]]) {
+                        RKLogInfo(@"receive path: %@", path);
+                        if (path.length > 0) {
+                            url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:@"" path:path];
+                        } else {
+                            url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:@"" path:@"/"];
+                        }
+                        RKLogInfo(@"combined url %@", url);
                     }
                 }
                 
                 if (url) {
-                    [self jumpTo:url];
+                    NSString *scope = [[[url.host componentsSeparatedByString:@"."] lastObject] uppercaseString];
+                    if ([[EFConfig sharedInstance] sameServerScope:scope]) {
+                        [self jumpTo:url];
+                    } else {
+                        RKLogWarning(@"Not same server");
+                    }
+                } else {
+                    RKLogWarning(@"Invalid url or path field");
                 }
             }
         }
@@ -424,10 +431,11 @@
             [self jumpTo:url];
         } else {
             if (![[EFConfig sharedInstance] sameServerScope:scope]) {
+                // TODO
                 // [[EFConfig sharedInstance] saveScope:scope];
                 // 1 sign out
                 // 2 login
-                
+                RKLogWarning(@"Not same server.");
                 
             }else {
                 NSUInteger uid = [user_id integerValue];

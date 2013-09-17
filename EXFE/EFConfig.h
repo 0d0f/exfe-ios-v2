@@ -15,6 +15,7 @@
 #define EFServerKeyShuady         @"shuady"
 #define EFServerScopeINT          @"ZZ"
 #define EFServerScopeCN           @"CN"
+#define EFServerScopeDEF          EFServerScopeCN
 
 @interface EFConfig : NSObject
 

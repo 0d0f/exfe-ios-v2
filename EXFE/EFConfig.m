@@ -55,11 +55,6 @@ static NSDictionary * Config = nil;
                                                           ,@"oauth": @"https://shuady.cn/OAuth"
                                                           }
                                         }
-                   //                                ,@"share":   @{@"": @"",
-                   //                                              @"": @"",
-                   //                                              @"": @"",
-                   //                                              @"": @"",
-                   //                                              @"": @""}
                    };
     });
     return sharedInstance;
@@ -94,7 +89,7 @@ static NSDictionary * Config = nil;
 {
     NSDictionary * dict = Config[self.server][self.scope];
     if (!dict) {
-        dict = Config[self.server][EFServerScopeINT];
+        dict = Config[self.server][EFServerScopeDEF];
     }
     return dict[@"api"];
 }
@@ -103,7 +98,7 @@ static NSDictionary * Config = nil;
 {
     NSDictionary * dict = Config[self.server][self.scope];
     if (!dict) {
-        dict = Config[self.server][EFServerScopeINT];
+        dict = Config[self.server][EFServerScopeDEF];
     }
     return dict[@"img"];
 }
@@ -112,14 +107,14 @@ static NSDictionary * Config = nil;
 {
     NSDictionary * dict = Config[self.server][self.scope];
     if (!dict) {
-        dict = Config[self.server][EFServerScopeINT];
+        dict = Config[self.server][EFServerScopeDEF];
     }
     return dict[@"oauth"];
 }
 
 - (BOOL)avalableForScope:(NSString *)scope
 {
-    return Config[self.server][self.scope] != nil;
+    return Config[self.server][scope] != nil;
 }
 
 - (NSString *)suggestScope
@@ -130,7 +125,7 @@ static NSDictionary * Config = nil;
     if (carrier) {
         isocode = [carrier isoCountryCode];
     } else {
-        NSLocale *locale = [NSLocale currentLocale];
+        NSLocale *locale = [NSLocale autoupdatingCurrentLocale];
         isocode = [locale objectForKey:NSLocaleCountryCode];
     }
     if ([@"CN" compare:isocode options:NSCaseInsensitiveSearch] == NSOrderedSame) {
@@ -142,7 +137,10 @@ static NSDictionary * Config = nil;
 
 - (NSString *)alias:(NSString *)scope
 {
-    if (scope.length == 0 || [@"COM" compare:scope options:NSCaseInsensitiveSearch] == NSOrderedSame){
+    if (scope.length == 0) {
+        return EFServerScopeDEF;
+    }
+    if ([@"COM" compare:scope options:NSCaseInsensitiveSearch] == NSOrderedSame){
         return EFServerScopeINT;
     }
     return [scope uppercaseString];
@@ -152,7 +150,7 @@ static NSDictionary * Config = nil;
 {
     NSString *s = [self alias:scope];
     if (![self avalableForScope:s]) {
-        s = EFServerScopeINT;
+        s = EFServerScopeDEF;
     }
     return [s isEqualToString:self.scope];
 }
