@@ -352,29 +352,6 @@ static NSDictionary * _keywordDict = nil;
 }
 
 #pragma mark error handler
-+ (void) showErrorWithMetaObject:(Meta*)meta delegate:(id)delegate{
-    
-    for (UIWindow* window in [UIApplication sharedApplication].windows) {
-        NSArray* subviews = window.subviews;
-        if ([subviews count] > 0)
-            if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
-                return;
-    }
-    NSString *errormsg = @"";
-    if ([meta.code intValue] == 401) {
-        errormsg = NSLocalizedString(@"Authentication failed due to security concerns, please sign in again.", nil);
-        
-#ifdef WWW
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil),nil];
-#else
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil),nil];
-#endif
-        
-        alertView.tag = 500;
-        [alertView show];
-    }
-}
-
 + (void) showConnectError:(NSError*)err delegate:(id)delegate{
 
     NSString *errormsg = @"";

@@ -11,14 +11,6 @@
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
 
-#define EFKeyServerScope      @"key.config.server.scope"
-
-#define EFServerKeyPanda          @"panda"
-#define EFServerKeyBlack          @"black"
-#define EFServerKeyShuady         @"shuady"
-#define EFServerScopeINT          @"ZZ"
-#define EFServerScopeCN           @"CN"
-
 
 static NSDictionary * Config = nil;
 
@@ -63,11 +55,6 @@ static NSDictionary * Config = nil;
                                                           ,@"oauth": @"https://shuady.cn/OAuth"
                                                           }
                                         }
-                   //                                ,@"share":   @{@"": @"",
-                   //                                              @"": @"",
-                   //                                              @"": @"",
-                   //                                              @"": @"",
-                   //                                              @"": @""}
                    };
     });
     return sharedInstance;
@@ -100,17 +87,34 @@ static NSDictionary * Config = nil;
 
 - (NSString *)API_ROOT
 {
-    return Config[self.server][self.scope][@"api"];
+    NSDictionary * dict = Config[self.server][self.scope];
+    if (!dict) {
+        dict = Config[self.server][EFServerScopeDEF];
+    }
+    return dict[@"api"];
 }
 
 - (NSString *)IMG_ROOT
 {
-    return Config[self.server][self.scope][@"img"];
+    NSDictionary * dict = Config[self.server][self.scope];
+    if (!dict) {
+        dict = Config[self.server][EFServerScopeDEF];
+    }
+    return dict[@"img"];
 }
 
 - (NSString *)OAUTH_ROOT
 {
-    return Config[self.server][self.scope][@"oauth"];
+    NSDictionary * dict = Config[self.server][self.scope];
+    if (!dict) {
+        dict = Config[self.server][EFServerScopeDEF];
+    }
+    return dict[@"oauth"];
+}
+
+- (BOOL)avalableForScope:(NSString *)scope
+{
+    return Config[self.server][scope] != nil;
 }
 
 - (NSString *)suggestScope
@@ -119,16 +123,36 @@ static NSDictionary * Config = nil;
     CTCarrier *carrier = [netInfo subscriberCellularProvider];
     NSString *isocode;
     if (carrier) {
-        isocode = [[carrier isoCountryCode] uppercaseString];
+        isocode = [carrier isoCountryCode];
     } else {
-        NSLocale *locale = [NSLocale currentLocale];
-        isocode = [[locale objectForKey:NSLocaleCountryCode] uppercaseString];
+        NSLocale *locale = [NSLocale autoupdatingCurrentLocale];
+        isocode = [locale objectForKey:NSLocaleCountryCode];
     }
-    if ([@"CN" isEqualToString:isocode]) {
+    if ([@"CN" compare:isocode options:NSCaseInsensitiveSearch] == NSOrderedSame) {
         return EFServerScopeCN;
     } else {
         return EFServerScopeINT;
     }
+}
+
+- (NSString *)alias:(NSString *)scope
+{
+    if (scope.length == 0) {
+        return EFServerScopeDEF;
+    }
+    if ([@"COM" compare:scope options:NSCaseInsensitiveSearch] == NSOrderedSame){
+        return EFServerScopeINT;
+    }
+    return [scope uppercaseString];
+}
+
+- (BOOL)sameServerScope:(NSString *)scope
+{
+    NSString *s = [self alias:scope];
+    if (![self avalableForScope:s]) {
+        s = EFServerScopeDEF;
+    }
+    return [s isEqualToString:self.scope];
 }
 
 - (void)saveScope:(NSString *)scope

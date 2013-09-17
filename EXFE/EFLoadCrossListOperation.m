@@ -34,17 +34,38 @@ NSString *kEFNotificationNameLoadCrossListFailure = @"notification.loadCrossList
     
     [self.model.apiServer loadCrossesAfter:self.updatedTime
                                    success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                       self.state = kEFNetworkOperationStateSuccess;
-                                       NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];
-                                       [userInfo setValue:@"cross" forKey:@"type"];
-                                       self.successUserInfo = userInfo;
-                                       
-                                       [self finish];
+                                       if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]){
+                                           Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
+                                           NSInteger code = [meta.code integerValue];
+                                           NSInteger type = code / 100;
+                                           switch (type) {
+                                               case 2:
+                                               {
+                                                   self.state = kEFNetworkOperationStateSuccess;
+                                                   NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];
+                                                   [userInfo setValue:@"cross" forKey:@"type"];
+                                                   [userInfo setValue:[NSNull null] forKey:@"id"];
+                                                   self.successUserInfo = userInfo;
+                                                   
+                                                   [self finish];
+                                               } break;
+                                               default:{
+                                                   self.state = kEFNetworkOperationStateFailure;
+                                                   NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];
+                                                   [userInfo setValue:@"cross" forKey:@"type"];
+                                                   [userInfo setValue:[NSNull null] forKey:@"id"];
+                                                   self.failureUserInfo = userInfo;
+                                                   
+                                                   [self finish];
+                                               } break;
+                                           }
+                                       }
                                    }
                                    failure:^(RKObjectRequestOperation *operation, NSError *error) {
                                        self.state = kEFNetworkOperationStateFailure;
                                        NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
                                        userInfo[@"type"] = @"cross";
+                                       [userInfo setValue:[NSNull null] forKey:@"id"];
                                        self.failureUserInfo = userInfo;
                                        self.error = error;
                                        

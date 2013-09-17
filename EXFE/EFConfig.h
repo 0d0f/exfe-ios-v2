@@ -15,6 +15,7 @@
 #define EFServerKeyShuady         @"shuady"
 #define EFServerScopeINT          @"ZZ"
 #define EFServerScopeCN           @"CN"
+#define EFServerScopeDEF          EFServerScopeCN
 
 @interface EFConfig : NSObject
 
@@ -27,7 +28,10 @@
 
 + (instancetype)sharedInstance;
 
+- (BOOL)avalableForScope:(NSString *)scope;
 - (NSString *)suggestScope;
+- (NSString *)alias:(NSString *)scope;
+- (BOOL)sameServerScope:(NSString *)scope;
 
 - (void)saveScope:(NSString *)scope;
 - (NSString *)loadScope;

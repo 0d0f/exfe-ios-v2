@@ -157,6 +157,28 @@
     [headerView addGestureRecognizer:tapHeaderRecognizer];
     
     [self syncUser];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self regObserver];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [self unregObserver];
+    [super viewDidDisappear:animated];
+}
+
+- (void)gotoBack:(UIButton*)sender{
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
+
+#pragma mark KVO methods
+- (void)regObserver
+{
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleLoadMeSuccess:)
                                                  name:kEFNotificationNameLoadMeSuccess
@@ -181,10 +203,12 @@
                                              selector:@selector(handleIdentityChange:)
                                                  name:kEFNotificationUpdateIdentityAvatarSuccess
                                                object:nil];
+    
 }
 
-- (void)gotoBack:(UIButton*)sender{
-    [self.navigationController popToRootViewControllerAnimated:YES];
+- (void)unregObserver
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)handleLoadMeSuccess:(NSNotification *)notif {

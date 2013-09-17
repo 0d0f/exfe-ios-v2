@@ -30,10 +30,7 @@ TTTAttributedLabelDelegate
 }
 
 @property (nonatomic, strong) NSArray* crossList;
-@property (nonatomic, strong) id crossChangeObserver;
 @property (nonatomic, assign) BOOL needHeaderAnimation;
-
-- (void)refreshAll;
 
 - (Cross*)crossWithId:(int)cross_id;
 - (void)refreshTableViewWithCrossId:(int)cross_id;
