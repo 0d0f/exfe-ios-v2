@@ -991,7 +991,10 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     if (!pathView) {
         [self addBreadcrumPathForPerson:person toMapView:mapView];
     } else {
-        [path replaceAllMapPointsWithMapPoints:person.locations];
+        NSMutableArray *locations = [[NSMutableArray alloc] initWithArray:person.locations];
+        [locations insertObject:person.lastLocation atIndex:0];
+        
+        [path replaceAllMapPointsWithMapPoints:locations];
         if (kEFMapPersonConnectStateOnline == person.connectState) {
             path.linecolor = [UIColor COLOR_RGB(0xFF, 0x7E, 0x98)];
         } else {
