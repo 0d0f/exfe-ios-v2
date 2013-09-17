@@ -199,12 +199,8 @@
             NSString *unit = NSLocalizedString(@"m", nil);
             
             if (distanceFromDest > 1000) {
+                distanceFromDest = ceil(distanceFromDest / 1000);
                 unit = NSLocalizedString(@"km", nil);
-                distanceFromDest = distanceFromDest / 1000;
-                if (distanceFromDest >= 99) {
-                    distanceFromDest = 99;
-                    unit = NSLocalizedString(@"+km", nil);
-                }
             } else {
                 if (distanceFromDest > 10) {
                     distanceFromDest = (distanceFromDest / 10) * 10;
