@@ -400,7 +400,7 @@
                     switch (t) {
                         case 4:{
                             if (c == 401) {
-                                if ([@"invalid_auth" isEqualToString:meta.errorDetail]) {
+                                if ([@"invalid_auth" isEqualToString:meta.errorType]) {
                                     NSString *errormsg = NSLocalizedString(@"Authentication failed due to security concerns, please sign in again.", nil);
                                     UIAlertView *alerView = [UIAlertView alertViewWithTitle:@"" message:errormsg];
 #ifdef DEBUG
@@ -437,7 +437,7 @@
                     switch (t) {
                         case 4:{
                             if (c == 401) {
-                                if ([@"invalid_auth" isEqualToString:meta.errorDetail]) {
+                                if ([@"invalid_auth" isEqualToString:meta.errorType]) {
                                     NSString *errormsg = NSLocalizedString(@"Authentication failed due to security concerns, please sign in again.", nil);
                                     UIAlertView *alerView = [UIAlertView alertViewWithTitle:@"" message:errormsg];
 #ifdef DEBUG
