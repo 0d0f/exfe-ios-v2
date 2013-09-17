@@ -129,9 +129,21 @@
 }
 
 - (void)_addRouteXStatuesWithStatus:(BOOL)status {
-    NSMutableArray *widgets = [[NSMutableArray alloc] initWithArray:self.cross.widget];
-    NSDictionary *widget = @{@"type": @"routex", @"my_status": [NSNumber numberWithBool:status]};
-    [widgets addObject:widget];
+    NSMutableArray *widgets = [[NSMutableArray alloc] init];
+    
+    BOOL hasRouteX = NO;
+    for (NSDictionary *widgetDict in self.cross.widget) {
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithDictionary:widgetDict];
+        if ([[dict valueForKey:@"type"] isEqualToString:@"routex"]) {
+            hasRouteX = YES;
+            [dict setValue:[NSNumber numberWithBool:status] forKey:@"my_status"];
+        }
+    }
+    if (!hasRouteX) {
+        NSDictionary *widget = @{@"type": @"routex", @"my_status": [NSNumber numberWithBool:status]};
+        [widgets addObject:widget];
+    }
+    
     self.cross.widget = widgets;
     
     __weak typeof(self) weakSelf = self;
@@ -788,7 +800,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         
         SendMessageToWXReq *requestMessage = [[SendMessageToWXReq alloc] init];
         requestMessage.bText = NO;
-        requestMessage.scene = WXSceneSession;
+        requestMessage.scene = WXSceneTimeline;
         requestMessage.message = mediaMessage;
         
         [WXApi sendReq:requestMessage];
