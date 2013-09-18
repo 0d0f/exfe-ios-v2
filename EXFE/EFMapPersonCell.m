@@ -43,7 +43,7 @@
     if (self.person.connectState == kEFMapPersonConnectStateUnknow) {
         if (self.person.lastLocation) {
             NSDate *timestamp = self.person.lastLocation.timestamp;
-            infoText = [timestamp formatedTimeIntervalFromNow];
+            infoText = [timestamp formatedTimeIntervalFromNowMinutesUpTo90];
             self.stateImageView.hidden = YES;
             self.stateView.hidden = YES;
             self.meterLabel.hidden = YES;
@@ -131,8 +131,8 @@
                     self.stateLabel.frame = (CGRect){{CGRectGetMaxX(self.stateView.frame) + 2.0f, CGRectGetMinY(self.stateLabel.frame)}, self.stateLabel.frame.size};
                 } else {
                     NSDate *timestamp = self.person.lastLocation.timestamp;
-                    NSString *value = [timestamp formatedTimeIntervalValueFromNow];
-                    NSString *unit = [timestamp formatedTimeIntervalUnitFromNow];
+                    NSString *value = [timestamp formatedTimeIntervalValueFromNowMinutesUpTo90];
+                    NSString *unit = [timestamp formatedTimeIntervalUnitFromNowMinutesUpTo90];
                     
                     infoText = value;
                     

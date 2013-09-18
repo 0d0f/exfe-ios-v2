@@ -31,6 +31,7 @@
 
 @property (nonatomic, weak)     id<EFHTTPStreamingDelegate> delegate;
 @property (nonatomic, assign)   NSUInteger                  retryTimes;     // Default as INFINITY
+@property (nonatomic, assign)   BOOL                        isOpened;
 
 - (id)initWithURL:(NSURL *)aURL;
 

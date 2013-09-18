@@ -14,6 +14,7 @@
 #import "EFLocation.h"
 #import "Util.h"
 #import "EFMarauderMapDataSource.h"
+#import "NSDate+RouteXDateFormater.h"
 
 @interface EFGeomarkPersonCell ()
 
@@ -129,15 +130,8 @@
                 locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%@ apart", nil), distanceMeString];
             }
         } else {
-            NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:self.person.lastLocation.timestamp];
-            NSInteger time = timeInterval / 60;
-            BOOL isMinutes = YES;
-            if (time / 60) {
-                time = time / 60;
-                isMinutes = NO;
-            }
+            NSString *timeString = [self.person.lastLocation.timestamp formatedTimeIntervalFromNowMinutesUpTo90];
             
-            NSString *timeString = [NSString stringWithFormat:(isMinutes ? NSLocalizedString(@"%dm ago", nil) : NSLocalizedString(@"%dh ago", nil)), time];
             if (distanceDestString) {
                 locationInfo = [NSString stringWithFormat:NSLocalizedString(@"%@ %@ to arrive", nil), timeString, distanceDestString];
             } else {

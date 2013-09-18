@@ -128,6 +128,8 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
 }
 
 - (void)open {
+    self.isOpened = NO;
+    
     NSURL *serverurl = self.url;
     CFHTTPMessageRef message = CFHTTPMessageCreateRequest(kCFAllocatorDefault, (CFStringRef)@"POST", (__bridge CFURLRef)serverurl, kCFHTTPVersion1_1);
 //    CFHTTPMessageSetHeaderFieldValue(message, (CFStringRef)@"Accept-Encoding", (CFStringRef)@"gzip, deflate");
@@ -147,11 +149,15 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
             [self reconnect];
             
             return;
+        } else {
+            self.isOpened = YES;
         }
     }
 }
 
 - (void)close {
+    self.isOpened = NO;
+    
     if (_stream) {
         CFReadStreamClose(_stream);
         CFReadStreamUnscheduleFromRunLoop(_stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
