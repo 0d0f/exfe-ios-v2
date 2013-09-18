@@ -651,6 +651,10 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
 
 #pragma mark - Streaming
 
+- (BOOL)isStreamOpened {
+    return self.httpStreaming.isOpened;
+}
+
 - (void)openStreaming {
     [self closeStreaming];
     
