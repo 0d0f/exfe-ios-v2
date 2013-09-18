@@ -81,7 +81,11 @@
         
         timeInterval = h + 0.1 * m;
         
-        string = [NSString stringWithFormat:@"%.1f", timeInterval];
+        if (m) {
+            string = [NSString stringWithFormat:@"%.1f", timeInterval];
+        } else {
+            string = [NSString stringWithFormat:@"%.0f", timeInterval];
+        }
     } else {
         string = [NSString stringWithFormat:@"%.0f", timeInterval];
     }
