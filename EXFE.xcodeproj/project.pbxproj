@@ -2362,6 +2362,10 @@
 		763BE927179FD836003BF97C /* map_shadow_gap.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE926179FD836003BF97C /* map_shadow_gap.png */; };
 		763BE928179FD836003BF97C /* map_shadow_gap.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE926179FD836003BF97C /* map_shadow_gap.png */; };
 		763BE929179FD836003BF97C /* map_shadow_gap.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE926179FD836003BF97C /* map_shadow_gap.png */; };
+		76448BF417E9A29400ED18CB /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448BF317E9A29400ED18CB /* NSString+Encode.m */; };
+		76448BF517E9A29400ED18CB /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448BF317E9A29400ED18CB /* NSString+Encode.m */; };
+		76448BF617E9A29400ED18CB /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448BF317E9A29400ED18CB /* NSString+Encode.m */; };
+		76448BF717E9A29400ED18CB /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448BF317E9A29400ED18CB /* NSString+Encode.m */; };
 		764CD8F2173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
 		764CD8F3173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
 		764CD8F4173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
@@ -3624,6 +3628,8 @@
 		763AD4DD17B394C4007C7A9D /* map_arrow_14g5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_arrow_14g5@2x.png"; sourceTree = "<group>"; };
 		763BE922179FD770003BF97C /* map_shadow_gap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_shadow_gap@2x.png"; sourceTree = "<group>"; };
 		763BE926179FD836003BF97C /* map_shadow_gap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_shadow_gap.png; sourceTree = "<group>"; };
+		76448BF217E9A29400ED18CB /* NSString+Encode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Encode.h"; sourceTree = "<group>"; };
+		76448BF317E9A29400ED18CB /* NSString+Encode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Encode.m"; sourceTree = "<group>"; };
 		764CD8F0173A5C4600627237 /* EFNotificationBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFNotificationBannerView.h; sourceTree = "<group>"; };
 		764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFNotificationBannerView.m; sourceTree = "<group>"; };
 		764CD8FC173A8F9400627237 /* cautionbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cautionbar.png; sourceTree = "<group>"; };
@@ -4729,6 +4735,8 @@
 				4F2CF06D17BF54FE00E3A4B2 /* XQueryComponents.m */,
 				76F3EEE417C2318E00D353FA /* NSDate+RouteXDateFormater.h */,
 				76F3EEE517C2318E00D353FA /* NSDate+RouteXDateFormater.m */,
+				76448BF217E9A29400ED18CB /* NSString+Encode.h */,
+				76448BF317E9A29400ED18CB /* NSString+Encode.m */,
 			);
 			name = Extention;
 			sourceTree = "<group>";
@@ -8643,6 +8651,7 @@
 				4F63DAE917172AA600136B7E /* ExfeeCollectionViewCell.m in Sources */,
 				4F63DAEA17172AA600136B7E /* EXMenu.m in Sources */,
 				4F63DAEB17172AA600136B7E /* EXBasicMenu.m in Sources */,
+				76448BF517E9A29400ED18CB /* NSString+Encode.m in Sources */,
 				4F63DAEC17172AA600136B7E /* User+EXFE.m in Sources */,
 				4F63DAED17172AA600136B7E /* WCAlertView.m in Sources */,
 				4F63DAEF17172AA600136B7E /* ExfeeAddCollectionViewCell.m in Sources */,
@@ -8916,6 +8925,7 @@
 				4F63DCB817172B0700136B7E /* ExfeeCollectionViewCell.m in Sources */,
 				4F63DCB917172B0700136B7E /* EXMenu.m in Sources */,
 				4F63DCBA17172B0700136B7E /* EXBasicMenu.m in Sources */,
+				76448BF617E9A29400ED18CB /* NSString+Encode.m in Sources */,
 				4F63DCBB17172B0700136B7E /* User+EXFE.m in Sources */,
 				4F63DCBC17172B0700136B7E /* WCAlertView.m in Sources */,
 				4F63DCBE17172B0700136B7E /* ExfeeAddCollectionViewCell.m in Sources */,
@@ -9189,6 +9199,7 @@
 				4FC40E7B17D04A5700D64105 /* EXMenu.m in Sources */,
 				4FC40E7C17D04A5700D64105 /* EXBasicMenu.m in Sources */,
 				4FC40E7D17D04A5700D64105 /* User+EXFE.m in Sources */,
+				76448BF717E9A29400ED18CB /* NSString+Encode.m in Sources */,
 				4FC40E7E17D04A5700D64105 /* WCAlertView.m in Sources */,
 				4FC40E7F17D04A5700D64105 /* ExfeeAddCollectionViewCell.m in Sources */,
 				4FC40E8017D04A5700D64105 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
@@ -9462,6 +9473,7 @@
 				4FA013AE16F3546A00F40CB6 /* ExfeeCollectionViewCell.m in Sources */,
 				4F29C92616F85F7B001BB176 /* EXMenu.m in Sources */,
 				4F29C92A16F962CA001BB176 /* EXBasicMenu.m in Sources */,
+				76448BF417E9A29400ED18CB /* NSString+Encode.m in Sources */,
 				4F29C93016F9A5B5001BB176 /* User+EXFE.m in Sources */,
 				4FA0C40A16FB626B00E25C74 /* WCAlertView.m in Sources */,
 				4FA84B09170155DD0096FB5A /* ExfeeAddCollectionViewCell.m in Sources */,
