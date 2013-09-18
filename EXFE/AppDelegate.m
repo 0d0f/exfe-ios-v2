@@ -336,19 +336,19 @@
                 NSURL *url = nil;
                 NSString * u = [userInfo valueForKeyPath:@"url"];
                 if (u && [u isKindOfClass:[NSString class]]) {
-                    RKLogInfo(@"receive url: %@", u);
+                    RKLogDebug(@"receive url: %@", u);
                     // some filter for safety?
                     url = [NSURL URLWithString:u];
                 } else {
                     NSString * path = [userInfo valueForKeyPath:@"path"];
                     if (path && [path isKindOfClass:[NSString class]]) {
-                        RKLogInfo(@"receive path: %@", path);
+                        RKLogDebug(@"receive path: %@", path);
                         if (path.length > 0) {
                             url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:[EFConfig sharedInstance].scope path:path];
                         } else {
                             url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:[EFConfig sharedInstance].scope path:@"/"];
                         }
-                        RKLogInfo(@"combined url %@", url);
+                        RKLogDebug(@"combined url %@", url);
                     }
                 }
                 
@@ -437,6 +437,8 @@
                 // 2 login
                 RKLogWarning(@"Not same server.");
                 
+                [Util handleDefaultBannerTitle:NSLocalizedString(@"Failed to merge accounts.", nil) andMessage:NSLocalizedString(@"Authentication token expired.", nil)];
+                
             }else {
                 NSUInteger uid = [user_id integerValue];
                 if (uid == self.model.userId) {
@@ -447,7 +449,7 @@
                     [self jumpTo:url];
                 } else {
                     // merge identities
-                    RKLogInfo(@"Merge (%@/%u) to %u by url", username, uid, self.model.userId);
+                    RKLogDebug(@"Merge (%@/%u) to %u by url", username, uid, self.model.userId);
                     [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Merge accounts", nil)
                                                 message:[NSString stringWithFormat:NSLocalizedString(@"Merge account %@ into your current signed-in account?", nil), username]
                                       cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
@@ -514,7 +516,7 @@
 
 - (void)jumpTo:(NSURL *)url
 {
-    RKLogInfo(@"Jump to: %@", url.path);
+    RKLogDebug(@"Jump to: %@", url.path);
     
     NSString *host = url.host;
     NSString *scope = [[host componentsSeparatedByString:@"."] lastObject];
