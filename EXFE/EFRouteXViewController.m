@@ -153,10 +153,11 @@
 }
 
 - (void)_startUpdating {
-//    [self.mapDataSource registerToUpdateLocation];
     [self.mapDataSource getPeopleBreadcrumbs];
     
-    [self.mapDataSource openStreaming];
+    if (![self.mapDataSource isStreamOpened]) {
+        [self.mapDataSource openStreaming];
+    }
     
     // start updating location
     [[EFLocationManager defaultManager] startUpdatingLocation];

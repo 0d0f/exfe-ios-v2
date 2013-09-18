@@ -973,6 +973,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         if (!error) {
             NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
             NSDictionary *params = [Util splitQuery:responseStr];
+            // NSDictionary *params = [responseStr dictionaryFromQueryComponents]; //#import "XQueryComponents.h"
             
             AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
             [app.model.apiServer addReverseAuthIdentity:kProviderTwitter withToken:[params valueForKey:@"oauth_token"] andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {

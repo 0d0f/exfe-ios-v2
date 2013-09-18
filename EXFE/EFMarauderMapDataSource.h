@@ -109,6 +109,7 @@ EFHTTPStreamingDelegate
 /**
  * Streaming
  */
+- (BOOL)isStreamOpened;
 - (void)openStreaming;
 - (void)closeStreaming;
 
