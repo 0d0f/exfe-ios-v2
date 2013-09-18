@@ -175,7 +175,7 @@ typedef void (^completionBlock)(void);
         opacityAnimation.fillMode = kCAFillModeForwards;
         opacityAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         
-        [self.backgroundMaskView.layer addAnimation:opacityAnimation forKey:@"opacity"];
+        [self.backgroundMaskView.layer addAnimation:opacityAnimation forKey:@""];
         
         // transform animation
         CABasicAnimation *transformAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
@@ -185,7 +185,7 @@ typedef void (^completionBlock)(void);
         transformAnimation.fillMode = kCAFillModeForwards;
         transformAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         
-        [self.cardView.layer addAnimation:transformAnimation forKey:@"opacity"];
+        [self.cardView.layer addAnimation:transformAnimation forKey:@""];
     }
     
     self.backgroundMaskView.layer.opacity = newOpacity;
@@ -208,7 +208,7 @@ typedef void (^completionBlock)(void);
         opacityAnimation.delegate = self;
         opacityAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         
-        [self.backgroundMaskView.layer addAnimation:opacityAnimation forKey:@"opacity"];
+        [self.backgroundMaskView.layer addAnimation:opacityAnimation forKey:@""];
         
         // transform animation
         CABasicAnimation *transformAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
@@ -218,7 +218,7 @@ typedef void (^completionBlock)(void);
         transformAnimation.fillMode = kCAFillModeForwards;
         transformAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         
-        [self.cardView.layer addAnimation:transformAnimation forKey:@"opacity"];
+        [self.cardView.layer addAnimation:transformAnimation forKey:@""];
     }
     
     self.backgroundMaskView.layer.opacity = newOpacity;
