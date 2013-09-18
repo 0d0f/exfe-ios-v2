@@ -31,10 +31,10 @@
 - (void)_reloadData {
     EFTimestampAnnotation *annotation = (EFTimestampAnnotation *)self.annotation;
     
-    self.timestampLabel.text = [annotation.timestamp formatedTimeIntervalValueFromNow];
+    self.timestampLabel.text = [annotation.timestamp formatedTimeIntervalValueFromNowMinutesUpTo90];
     [self.timestampLabel sizeToFit];
     
-    self.meterLabel.text = [annotation.timestamp formatedTimeIntervalUnitFromNow];
+    self.meterLabel.text = [annotation.timestamp formatedTimeIntervalUnitFromNowMinutesUpTo90];
     [self.meterLabel sizeToFit];
     self.meterLabel.frame = (CGRect){{CGRectGetWidth(self.timestampLabel.frame) + 2, 1.0f}, self.meterLabel.frame.size};
     

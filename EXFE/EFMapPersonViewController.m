@@ -189,7 +189,7 @@
         if (kEFMapPersonConnectStateOnline == self.person.connectState) {
             personInfo = NSLocalizedString(@"Current location", nil);
         } else {
-            NSString *timeInterval = [self.person.lastLocation.timestamp formatedTimeIntervalFromNow];
+            NSString *timeInterval = [self.person.lastLocation.timestamp formatedTimeIntervalFromNowMinutesUpTo90];
             personInfo = [NSString stringWithFormat:NSLocalizedString(@"%@ location", nil), timeInterval];
         }
         
