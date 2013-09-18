@@ -16,7 +16,7 @@
 #define kDefaultTimerTimeInterval   (5.0f)
 #define kDefaultPostBackgroundTimeInterval  (5.0f)
 #define kHasPostUserLocationKey     @"key.hasPostUserLocation"
-#define kDefaultBackgroundDuration  (1200.0f)
+#define kDefaultBackgroundDuration  (1800.0f)
 
 NSString *EFNotificationUserLocationDidChange = @"notification.userLocation.didChange";
 NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet";
@@ -259,7 +259,7 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 #warning MUST solve this problem in next version.
             if ([[EFConfig sharedInstance].scope isEqualToString:EFServerScopeCN]) {
                 UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-                localNotification.alertBody = NSLocalizedString(@"RouteX will show your location for 20 minutes, only to those who're agreed.", nil);
+                localNotification.alertBody = NSLocalizedString(@"RouteX will show your location for 30 minutes, only to those who're agreed.", nil);
                 localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:2.33f];
                 localNotification.userInfo = @{@"key": @"backgroudLocationUpdate"};
                 [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
