@@ -9961,7 +9961,6 @@
 					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/Build/BlocksKit",
@@ -9998,7 +9997,6 @@
 					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/Build/BlocksKit",
@@ -10035,7 +10033,6 @@
 					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Pilot-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
@@ -10072,7 +10069,6 @@
 					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Pilot-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
@@ -10107,7 +10103,6 @@
 				);
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Shuady-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/Build/BlocksKit",
@@ -10140,7 +10135,6 @@
 				);
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Shuady-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/Build/BlocksKit",
@@ -10161,7 +10155,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
@@ -10186,17 +10179,19 @@
 					"$(BUILT_PRODUCTS_DIR)/../../Headers",
 					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/EXFE/Flurry",
 					"$(SRCROOT)/EXFE/SDKExport",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-all_load",
+					"-force_load",
+					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
 				);
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -10205,7 +10200,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
@@ -10215,10 +10209,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					RESTKIT_GENERATE_SEED_DB,
-					"DEBUG=1",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = RESTKIT_GENERATE_SEED_DB;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -10227,7 +10218,7 @@
 					"$(BUILT_PRODUCTS_DIR)/../../Headers",
 					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/EXFE/Flurry",
 					"$(SRCROOT)/EXFE/SDKExport",
@@ -10235,11 +10226,13 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-all_load",
+					"-force_load",
+					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
 				);
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -10249,7 +10242,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Heng Duanmu (Y8Y7R577E7)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/FacebookSDK\"",
@@ -10266,7 +10259,6 @@
 					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
 				);
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/Build/BlocksKit",
@@ -10277,7 +10269,6 @@
 					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 				WRAPPER_EXTENSION = app;
@@ -10288,19 +10279,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: EXFE HOLDINGS";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/FacebookSDK\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = RESTKIT_GENERATE_SEED_DB;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					RESTKIT_GENERATE_SEED_DB,
+					WWW,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
 					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
 				);
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/Build/BlocksKit",
