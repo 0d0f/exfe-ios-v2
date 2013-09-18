@@ -262,11 +262,13 @@
     unverified_description.backgroundColor = [UIColor COLOR_WA(0xEE, 0xFF)];
     unverified_description.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
     unverified_description.textColor = [UIColor COLOR_BLACK_19];
+    unverified_description.shadowColor = [UIColor whiteColor];
+    unverified_description.shadowOffset = CGSizeMake(0, 1);
     unverified_description.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
     unverified_description.textAlignment = NSTextAlignmentCenter;
     NSMutableDictionary *mutableLinkAttributes = [NSMutableDictionary dictionary];
     [mutableLinkAttributes setObject:[UIColor COLOR_BLACK_19] forKey:(NSString*)kCTForegroundColorAttributeName];
-    [mutableLinkAttributes setObject:[NSNumber numberWithBool:YES] forKey:(NSString *)kCTUnderlineStyleAttributeName];
+    [mutableLinkAttributes setObject:@(YES) forKey:(NSString *)kCTUnderlineStyleAttributeName];
     unverified_description.linkAttributes = mutableLinkAttributes;
     unverified_description.delegate = self;
     unverified_description.text = text;
@@ -281,9 +283,11 @@
     [self.view addSubview:unverified_description];
     
     UILabel *unverified_title = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 290, 200)];
-    unverified_title.font = [UIFont fontWithName:@"HelveticaNeue" size:12];
+    unverified_title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
     unverified_title.textAlignment = NSTextAlignmentCenter;
     unverified_title.textColor = [UIColor COLOR_RED_EXFE];
+    unverified_title.shadowColor = [UIColor whiteColor];
+    unverified_title.shadowOffset = CGSizeMake(0, 1);
     unverified_title.backgroundColor = [UIColor COLOR_WA(0xEE, 0xFF)];
     unverified_title.text = NSLocalizedString(@"Unverified account.", nil);
     [unverified_title sizeToFit];
@@ -514,7 +518,7 @@
     NSSet *identites = [User getDefaultUser].identities;
     NSUInteger c = 0;
     for (Identity *ident in identites) {
-        if ([ident.status isEqualToString:@"VERIFYING"]) {
+        if (![@"CONNECTED" isEqualToString:ident.status] && ![@"REVOKED" isEqualToString:ident.status]) {
             c ++;
         }
     }
