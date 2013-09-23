@@ -179,12 +179,13 @@
 
 - (NSString*) getHumanReadableString:(NSTimeZone*)baseTimeZone{
     
-    NSDictionary *dict = [DateTimeUtil datetimeTemplate:2];
-    
-    NSString * datestr = [self date];
-    NSString * timestr = [self time];
+//    NSDictionary *dict = [DateTimeUtil datetimeTemplate:2];
+//    
+//    NSString * datestr = [self date];
+//    NSString * timestr = [self time];
     
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSString* result = nil;
     if ([self hasTime]){
         NSDateComponents *comps = [self getLocalDateComponent];
         NSDate* localDate = [gregorian dateFromComponents:comps];
@@ -194,22 +195,81 @@
             NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:language];
             [formatter setLocale:locale];
             NSDateComponents *thisYear = [gregorian components:NSYearCalendarUnit fromDate:[DateTimeUtil dateNow]];
-            if (thisYear.year == comps.year) {
-                [formatter setDateFormat:[dict valueForKey:@"date"]];
-            }else{
-                [formatter setDateFormat:[dict valueForKey:@"dateWithYear"]];
+            BOOL sameYear = thisYear.year == comps.year;
+            
+            if ([self hasDateWord]) {
+                if ([self hasTimeWord]) {
+                    if (sameYear) {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"'%@' h:mma EEE, MMM d '%@'", @"time", nil), self.time_word, self.date_word];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:localDate];
+                    } else {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"'%@' h:mma EEE, MMM d yyyy '%@'", @"time", nil), self.time_word, self.date_word];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:localDate];
+                    }
+                } else {
+                    if (sameYear) {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"h:mma EEE, MMM d '%@'", @"time", nil), self.date_word];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:localDate];
+                    } else {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"h:mma EEE, MMM d yyyy '%@'", @"time", nil), self.date_word];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:localDate];
+                    }
+                }
+            } else {
+                if ([self hasTimeWord]) {
+                    if (sameYear) {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"'%@' h:mma EEE, MMM d", @"time", nil), self.time_word];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:localDate];
+                    } else {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"'%@' h:mma EEE, MMM d yyyy", @"time", nil), self.time_word];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:localDate];
+                    }
+                } else {
+                    if (sameYear) {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"h:mma EEE, MMM d", @"time", nil)];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:localDate];
+                    } else {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"h:mma EEE, MMM d yyyy", @"time", nil)];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:localDate];
+                    }
+                }
             }
-
-            datestr = [formatter stringFromDate:localDate];
-            [formatter setDateFormat:[dict valueForKey:@"time"]];
-            timestr = [formatter stringFromDate:localDate];
+            
         }else{
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             NSString *language = [NSLocale preferredLanguages][0];
             NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:language];
             [formatter setLocale:locale];
-            [formatter setDateFormat:[dict valueForKey:@"time"]];
-            timestr = [formatter stringFromDate:localDate];
+            
+            if ([self hasDateWord]) {
+                if ([self hasTimeWord]) {
+                    NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"'%@' h:mma, '%@'", @"time", nil), self.time_word, self.date_word];
+                    [formatter setDateFormat:fmt];
+                    result = [formatter stringFromDate:localDate];
+                } else {
+                    NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"h:mma, '%@'", @"time", nil), self.date_word];
+                    [formatter setDateFormat:fmt];
+                    result = [formatter stringFromDate:localDate];
+                }
+            } else {
+                if ([self hasTimeWord]) {
+                    NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"'%@' h:mma", @"time", nil), self.time_word];
+                    [formatter setDateFormat:fmt];
+                    result = [formatter stringFromDate:localDate];
+                } else {
+                    NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"h:mma", @"time", nil)];
+                    [formatter setDateFormat:fmt];
+                    result = [formatter stringFromDate:localDate];
+                }
+            }
         }
     } else {
         if ([self hasDate]) {
@@ -220,77 +280,69 @@
             NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:language];
             [formatter setLocale:locale];
             NSDateComponents *thisYear = [gregorian components:NSYearCalendarUnit fromDate:[DateTimeUtil dateNow]];
-            if (thisYear.year == comps.year) {
-                [formatter setDateFormat:[dict valueForKey:@"date"]];
-            }else{
-                [formatter setDateFormat:[dict valueForKey:@"dateWithYear"]];
-            }
-            datestr = [formatter stringFromDate:date];
-        }else{
             
-        }
-    }
-    
-    NSString* result = nil;
-    if ([self hasDate]) {
-        if ([self hasDateWord]) {
-            if ([self hasTime]) {
+            BOOL sameYear = thisYear.year == comps.year;
+            
+            if ([self hasDateWord]) {
                 if ([self hasTimeWord]) {
-                    result =  [NSString stringWithFormat:@"%@ %@ %@ %@", self.time_word, timestr, datestr, self.date_word];
-                }else{
-                    result =  [NSString stringWithFormat:@"%@ %@ %@", timestr, datestr, self.date_word];
+                    if (sameYear) {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"'%@', EEE, MMM d '%@'", @"time", nil), self.time_word, self.date_word];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:date];
+                    } else {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"'%@', EEE, MMM d yyyy '%@'", @"time", nil), self.time_word, self.date_word];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:date];
+                    }
+                } else {
+                    if (sameYear) {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"EEE, MMM d '%@'", @"time", nil), self.date_word];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:date];
+                    } else {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"EEE, MMM d yyyy '%@'", @"time", nil), self.date_word];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:date];
+                    }
                 }
-            }else{
+            } else {
                 if ([self hasTimeWord]) {
-                    result =  [NSString stringWithFormat:@"%@, %@ %@", self.time_word, datestr, self.date_word];
-                }else{
-                    result =  [NSString stringWithFormat:@"%@ %@", datestr, self.date_word];
-                }
-            }
-        }else{
-            if ([self hasTime]) {
-                if ([self hasTimeWord]) {
-                    result =  [NSString stringWithFormat:@"%@ %@ %@", self.time_word, timestr, datestr];
-                }else{
-                    result =  [NSString stringWithFormat:@"%@ %@", timestr, datestr];
-                }
-            }else{
-                if ([self hasTimeWord]) {
-                    result =  [NSString stringWithFormat:@"%@, %@", self.time_word, datestr];
-                }else{
-                    result =  [NSString stringWithFormat:@"%@", datestr];
-                }
-            }
-        }
-    }else{
-        if ([self hasDateWord]) {
-            if ([self hasTime]) {
-                if ([self hasTimeWord]) {
-                    result =  [NSString stringWithFormat:@"%@ %@, %@", self.time_word, timestr, self.date_word];
-                }else{
-                    result =  [NSString stringWithFormat:@"%@, %@", timestr, self.date_word];
-                }
-            }else{
-                if ([self hasTimeWord]) {
-                    result =  [NSString stringWithFormat:@"%@, %@", self.time_word, self.date_word];
-                }else{
-                    result =  [NSString stringWithFormat:@"%@", self.date_word];
+                    if (sameYear) {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"'%@', EEE, MMM d", @"time", nil), self.time_word];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:date];
+                    } else {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"'%@', EEE, MMM d yyyy", @"time", nil), self.time_word];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:date];
+                    }
+                } else {
+                    if (sameYear) {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"EEE, MMM d", @"time", nil)];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:date];
+                    } else {
+                        NSString *fmt = [NSString stringWithFormat:NSLocalizedStringFromTable(@"EEE, MMM d yyyy", @"time", nil)];
+                        [formatter setDateFormat:fmt];
+                        result = [formatter stringFromDate:date];
+                    }
                 }
             }
-        }else{
-            if ([self hasTime]) {
+        } else {
+            if ([self hasDateWord]) {
                 if ([self hasTimeWord]) {
-                    result =  [NSString stringWithFormat:@"%@ %@", self.time_word, timestr];
-                }else{
-                    result =  [NSString stringWithFormat:@"%@", timestr];
+                    result =  [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@, %@", @"time", nil), self.time_word, self.date_word];
+                } else {
+                    result =  [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@", @"time", nil), self.date_word];
                 }
-            }else{
+            } else {
                 if ([self hasTimeWord]) {
-                    result =  [NSString stringWithFormat:@"%@", self.time_word];
-                }else{
-                    result =  [NSString stringWithFormat:@""];
+                    result =  [NSString stringWithFormat:NSLocalizedStringFromTable(@"%@", @"time", nil), self.time_word];
+                } else {
+                    result = @"";
                 }
             }
+            
         }
     }
     return result;

@@ -67,7 +67,7 @@
     NSLog(@"fun4: %i PST8PDT", e );
     
     
-    NSLog([[EFConfig sharedInstance] suggestKey]);
+    NSLog([[EFConfig sharedInstance] suggestScope]);
     STAssertTrue(YES, @"OK");
     
     //STFail(@"Unit tests are not implemented yet in EXFETests");
