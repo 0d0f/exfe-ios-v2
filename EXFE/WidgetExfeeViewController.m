@@ -69,6 +69,7 @@ typedef enum {
 
 @interface WidgetExfeeViewController ()
 
+@property (nonatomic, weak) Cross *cross;
 @property (nonatomic, weak) Exfee *exfee;
 
 @end
@@ -77,6 +78,11 @@ typedef enum {
 
 {}
 #pragma mark Getter/Setter
+- (Cross *)cross
+{
+    return self.tabBarViewController.cross;
+}
+
 - (Exfee *)exfee
 {
     return self.tabBarViewController.cross.exfee;
@@ -236,6 +242,16 @@ typedef enum {
 }
 
 #pragma mark Actions
+- (void)removeCross
+{
+    NSString *title = [NSLocalizedString(@"Remove this {{X_NOUN}}", nil) templateFromDict:[Util keywordDict]];
+    NSString *message = [NSLocalizedString(@"No one can access this {{X_NOUN}} any more, please confirm to remove.", nil) templateFromDict:[Util keywordDict]];
+    UIAlertView *alertView = [UIAlertView alertViewWithTitle:title message:message];
+    [alertView setCancelButtonWithTitle:NSLocalizedString(@"Cancel", nil) handler:nil];
+    [alertView addButtonWithTitle:NSLocalizedString(@"OK", nil) handler:^{ [self.model removeCross:self.cross]; }];
+    [alertView show];
+}
+
 - (void)removeInvitation
 {
     
@@ -569,9 +585,13 @@ typedef enum {
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     BOOL lastHost = NO;
-    // TODO: temp walkaround The only host cannot be removed
+    BOOL isMe = NO;
+    BOOL isHost = NO;
+    
     if (_selected_invitation) {
+        isMe = [[User getDefaultUser] isMe:_selected_invitation.identity];
         if ([_selected_invitation.host boolValue] == YES) {
+            isHost = YES;
             NSInteger count = 0;
             for (Invitation *inv in self.sortedInvitations) {
                 if ([inv.host boolValue] == YES) {
@@ -587,11 +607,11 @@ typedef enum {
     NSInteger section = indexPath.section;
     switch (section) {
         case 1:
-            return !lastHost;
+            return !lastHost || (isMe && isHost);
         //  break;
         case 2:
             if (indexPath.row == 0) {
-                return !lastHost;
+                return !lastHost || (isMe && isHost);;
             } else {
                 return YES;
             }
@@ -605,9 +625,13 @@ typedef enum {
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     BOOL lastHost = NO;
+    BOOL isMe = NO;
+    BOOL isHost = NO;
     // TODO: temp walkaround The only host cannot be removed
     if (_selected_invitation) {
+        isMe = [[User getDefaultUser] isMe:_selected_invitation.identity];
         if ([_selected_invitation.host boolValue] == YES) {
+            isHost = YES;
             NSInteger count = 0;
             for (Invitation *inv in self.sortedInvitations) {
                 if ([inv.host boolValue] == YES) {
@@ -625,11 +649,21 @@ typedef enum {
         case 1:
             if (!lastHost) {
                 [self removeInvitation];
+            } else {
+                if (isMe && isHost) {
+                    [self removeCross];
+                }
             }
             break;
         case 2:
-            if (indexPath.row == 0 && !lastHost) {
-                [self removeInvitation];
+            if (indexPath.row == 0) {
+                if (lastHost) {
+                    if (isMe && isHost) {
+                        [self removeCross];
+                    }
+                } else {
+                    [self removeInvitation];
+                }
             } else {
                 // remove notification identity;
                 NSUInteger r = indexPath.row - 1;
