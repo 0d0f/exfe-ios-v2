@@ -144,15 +144,17 @@
         self.operationBaseView = operationBaseView;
         
         EFGradientView *backgroundView = [[EFGradientView alloc] initWithFrame:operationBaseView.bounds];
-        backgroundView.colors = @[[UIColor COLOR_RGBA(0x19, 0x19, 0x19, 192.0f)],
-                                     [UIColor COLOR_RGB(0x19, 0x19, 0x19)]];
+        backgroundView.colors = @[[UIColor COLOR_RGB(80.0f, 80.0f, 80.0f)],
+                                  [UIColor COLOR_RGB(0x19, 0x19, 0x19)]];
         backgroundView.alpha = 0.88f;
         [operationBaseView addSubview:backgroundView];
         
         UIButton *okButton = [UIButton buttonWithType:UIButtonTypeCustom];
         okButton.frame = (CGRect){{CGRectGetWidth(operationBaseView.frame) - kButtonWidth, 0.0f}, {kButtonWidth, kOperationViewHeight}};
         [okButton setTitle:NSLocalizedString(@"确认", nil) forState:UIControlStateNormal];
-        [okButton setTitleColor:[UIColor COLOR_RGB(0x58, 0x9D, 0xFF)] forState:UIControlStateNormal];
+        [okButton setTitleColor:[UIColor COLOR_RGB(0x00, 0x78, 0xFF)] forState:UIControlStateNormal];
+        [okButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.5f] forState:UIControlStateNormal];
+        okButton.titleLabel.shadowOffset = (CGSize){0.0f, 1.0f};
         [okButton addTarget:self
                      action:@selector(okButtonPressed:)
            forControlEvents:UIControlEventTouchUpInside];
@@ -188,11 +190,7 @@
     if (![self _isImageAdded:info]) {
         if (self.imageDicts.count < kMaxImageCount) {
             [self _addImage:info];
-        } else {
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
         }
-    } else {
-        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     }
 }
 
