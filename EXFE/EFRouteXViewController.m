@@ -957,8 +957,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                               
                                                               if (isWechat) {
                                                                   if ([WXApi isWXAppInstalled] &&
-                                                                      [WXApi isWXAppSupportApi] &&
-                                                                      [WXApi getApiVersion] <= [WXApi getWXAppSupportMaxApiVersion]) {
+                                                                      [WXApi isWXAppSupportApi]) {
                                                                       [delegate.model.apiServer getRouteXUrlInCross:self.cross
                                                                                                             success:^(NSString *url){
                                                                                                                 if (weakPersonViewController && weakPersonViewController == weakSelf.personViewController) {
