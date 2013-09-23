@@ -11,6 +11,7 @@
 #import "User+EXFE.h"
 #import "Identity+EXFE.h"
 #import "IdentityId.h"
+#import "NSString+Encode.h"
 
 @interface EFRouteLocation (Private)
 
@@ -30,17 +31,17 @@
     NSURL *baseURl = objectManager.HTTPClient.baseURL;
     
     if (self.locatinMask & kEFRouteLocationMaskXPlace) {
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/map_mark_diamond_blue@2x.png", IMG_ROOT]];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/map_mark_diamond_blue@2x.png", [EFConfig sharedInstance].IMG_ROOT]];
         self.iconUrl = url;
     } else if (self.locatinMask & kEFRouteLocationMaskDestination) {
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/map_mark_ring_blue@2x.png", IMG_ROOT]];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/map_mark_ring_blue@2x.png", [EFConfig sharedInstance].IMG_ROOT]];
         self.iconUrl = url;
     } else {
         NSString *endPoint = nil;
         if (kEFRouteLocationColorBlue == self.markColor) {
-            endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=blue", self.markTitle];
+            endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=blue", [self.markTitle encodeString:NSUTF8StringEncoding]];
         } else {
-            endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=red", self.markTitle];
+            endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=red", [self.markTitle encodeString:NSUTF8StringEncoding]];
         }
         NSURL *url = [NSURL URLWithString:endPoint
                             relativeToURL:baseURl];
@@ -137,7 +138,7 @@
                             NSArray *kv = [param componentsSeparatedByString:@"="];
                             if (kv.count == 2) {
                                 if ([kv[0] isEqualToString:@"content"]) {
-                                    self.markTitle = kv[1];
+                                    self.markTitle = [kv[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                                 } else if ([kv[0] isEqualToString:@"color"]) {
                                     if ([kv[1] isEqualToString:@"red"]) {
                                         self.markColor = kEFRouteLocationColorRed;

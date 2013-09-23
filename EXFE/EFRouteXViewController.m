@@ -61,6 +61,7 @@
 @property (nonatomic, strong) EFGeomarkGroupViewController  *geomarkGroupViewController;
 @property (nonatomic, strong) EFMapPersonViewController     *personViewController;
 @property (nonatomic, strong) EFRouteXAccessViewController  *accessViewController;
+@property (nonatomic, strong) EFRouteXMenuViewController    *menuViewController;
 
 @property (nonatomic, strong) UIAlertView           *backgroundAlertView;
 @property (nonatomic, strong) UIAlertView           *noGPSAlertView;
@@ -128,9 +129,21 @@
 }
 
 - (void)_addRouteXStatuesWithStatus:(BOOL)status {
-    NSMutableArray *widgets = [[NSMutableArray alloc] initWithArray:self.cross.widget];
-    NSDictionary *widget = @{@"type": @"routex", @"my_status": [NSNumber numberWithBool:status]};
-    [widgets addObject:widget];
+    NSMutableArray *widgets = [[NSMutableArray alloc] init];
+    
+    BOOL hasRouteX = NO;
+    for (NSDictionary *widgetDict in self.cross.widget) {
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithDictionary:widgetDict];
+        if ([[dict valueForKey:@"type"] isEqualToString:@"routex"]) {
+            hasRouteX = YES;
+            [dict setValue:[NSNumber numberWithBool:status] forKey:@"my_status"];
+        }
+    }
+    if (!hasRouteX) {
+        NSDictionary *widget = @{@"type": @"routex", @"my_status": [NSNumber numberWithBool:status]};
+        [widgets addObject:widget];
+    }
+    
     self.cross.widget = widgets;
     
     __weak typeof(self) weakSelf = self;
@@ -140,10 +153,11 @@
 }
 
 - (void)_startUpdating {
-//    [self.mapDataSource registerToUpdateLocation];
     [self.mapDataSource getPeopleBreadcrumbs];
     
-    [self.mapDataSource openStreaming];
+    if (![self.mapDataSource isStreamOpened]) {
+        [self.mapDataSource openStreaming];
+    }
     
     // start updating location
     [[EFLocationManager defaultManager] startUpdatingLocation];
@@ -706,6 +720,13 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     NSArray *locations = nil;
     EFMapPerson *person = [self.mapDataSource personAtIndex:cell.index];
     
+    if (person == [self.mapDataSource me]) {
+        EFRouteXMenuViewController *menuViewController = [[EFRouteXMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+        menuViewController.delegate = self;
+        self.menuViewController = menuViewController;
+        [self.menuViewController presentFromViewController:self animated:YES];
+    }
+    
     locations = person.locations;
     self.mapDataSource.selectedPerson = person;
     
@@ -753,6 +774,38 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     }
     
     [self _zoomToPersonLocation:person];
+}
+
+#pragma mark - EFRouteXMenuViewControllerDelegate
+
+- (void)menuViewControllerWannaShowRouteX:(EFRouteXMenuViewController *)menuViewController {
+    [menuViewController dismissAnimated:YES];
+    
+    if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi]) {
+        UIGraphicsBeginImageContextWithOptions(self.view.frame.size, 1, [UIScreen mainScreen].scale);
+        [self.view.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        NSData *imageData = UIImageJPEGRepresentation(image, 0.8f);
+        NSData *thumbImageData = UIImageJPEGRepresentation(image, 0.1f);
+        
+        WXImageObject *imageObject = [WXImageObject object];
+        imageObject.imageData = imageData;
+        
+        WXMediaMessage *mediaMessage = [WXMediaMessage message];
+        [mediaMessage setThumbData:thumbImageData];
+        mediaMessage.title = self.cross.title;
+        mediaMessage.description = @"test";
+        mediaMessage.mediaObject = imageObject;
+        
+        SendMessageToWXReq *requestMessage = [[SendMessageToWXReq alloc] init];
+        requestMessage.bText = NO;
+        requestMessage.scene = WXSceneTimeline;
+        requestMessage.message = mediaMessage;
+        
+        [WXApi sendReq:requestMessage];
+    }
 }
 
 #pragma mark -
@@ -1141,11 +1194,11 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
 }
 
-- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource needDeleteRouteLocation:(NSString *)routeLocationId {
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource needDeleteRouteLocation:(NSString *)routeLocationId shouldPostToServer:(BOOL)shouldPost {
     dispatch_async(dispatch_get_main_queue(), ^{
         EFRouteLocation *routeLocation = [dataSource routeLocationForRouteLocationId:routeLocationId];
         if (routeLocation) {
-            [dataSource removeRouteLocation:routeLocation fromMapView:self.mapView];
+            [dataSource removeRouteLocation:routeLocation fromMapView:self.mapView shouldPostToServer:shouldPost];
         }
         
         if ([EFLocationManager defaultManager].userLocation) {

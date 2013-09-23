@@ -478,7 +478,7 @@ static NSString * kExtension           = @"exfe";
     
     if (success) {
         
-        NSURL *baseURL = [NSURL URLWithString:API_ROOT];
+        NSURL *baseURL = [NSURL URLWithString:[EFConfig sharedInstance].API_ROOT];
         RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
         
         RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:model];
@@ -642,8 +642,12 @@ static NSString * kExtension           = @"exfe";
         
         [self save];
         
+        [self.objectManager.operationQueue cancelAllOperations];
+        
         self.crossEntry = nil;
         self.exfeContext = nil;
+        
+        
     }
 //    [[QLog log] logWithFormat:@"gallery %zu stopped", (size_t) self.sequenceNumber];
 }

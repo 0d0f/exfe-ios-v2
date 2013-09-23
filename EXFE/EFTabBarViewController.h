@@ -29,7 +29,7 @@ typedef void (^EFTabBarViewControllerBehaviorBlock)(void);
 @interface EFTabBarViewController : UIViewController
 
 @property (weak, nonatomic, readonly) EFTabBar *tabBar;
-@property (nonatomic, strong) NSArray *viewControllers; // should sorted by yourself, and set the tabBarItem level
+@property (nonatomic, strong) NSMutableArray *viewControllers; // will sort by tabBarItem level
 
 @property (nonatomic, weak) UIViewController<EFTabBarDataSource> *selectedViewController;
 @property (nonatomic, assign) NSUInteger selectedIndex; // Init as NSNotFound
@@ -48,7 +48,7 @@ typedef void (^EFTabBarViewControllerBehaviorBlock)(void);
 @property (nonatomic, copy) EFTabBarViewControllerBehaviorBlock viewWillDisappearHandler;
 @property (nonatomic, copy) EFTabBarViewControllerBehaviorBlock viewDidDisappearHandler;
 
-- (id)initWithViewControllers:(NSArray *)viewControllers;
+- (id)initWithViewControllers:(NSMutableArray *)viewControllers;
 
 - (void)setSelectedViewController:(UIViewController<EFTabBarDataSource> *)selectedViewController animated:(BOOL)animated;
 - (void)setSelectedIndex:(NSUInteger)selectedIndex animated:(BOOL)animated;
@@ -56,5 +56,8 @@ typedef void (^EFTabBarViewControllerBehaviorBlock)(void);
 - (NSArray *)viewControllersForClass:(Class)controllerClass;    // return an empty array if has not found.
 - (NSUInteger)indexOfViewControllerForClass:(Class)viewControllerClass; // start from 0, return the first index that found. NOTE: viewControllerClass CANNOT be nil!
 - (NSUInteger)indexOfViewController:(UIViewController<EFTabBarDataSource> *)viewController; // start from 0, return the first index that found. NOTE: viewController CANNOT be nil!
+
+- (void)exchangeViewControllerAtIndex:(NSUInteger)anIndex withViewControllerAtIndex:(NSUInteger)anotherIndex;
+- (void)reorderViewControllers;
 
 @end

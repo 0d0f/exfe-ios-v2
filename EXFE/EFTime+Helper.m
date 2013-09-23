@@ -190,6 +190,9 @@
         NSDate* localDate = [gregorian dateFromComponents:comps];
         if ([self hasDate]) {
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            NSString *language = [NSLocale preferredLanguages][0];
+            NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:language];
+            [formatter setLocale:locale];
             NSDateComponents *thisYear = [gregorian components:NSYearCalendarUnit fromDate:[DateTimeUtil dateNow]];
             if (thisYear.year == comps.year) {
                 [formatter setDateFormat:[dict valueForKey:@"date"]];
@@ -202,6 +205,9 @@
             timestr = [formatter stringFromDate:localDate];
         }else{
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            NSString *language = [NSLocale preferredLanguages][0];
+            NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:language];
+            [formatter setLocale:locale];
             [formatter setDateFormat:[dict valueForKey:@"time"]];
             timestr = [formatter stringFromDate:localDate];
         }
@@ -210,6 +216,9 @@
             NSDateComponents *comps = [self getUTCDateComponent];
             NSDate *date = [gregorian dateFromComponents:comps];
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            NSString *language = [NSLocale preferredLanguages][0];
+            NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:language];
+            [formatter setLocale:locale];
             NSDateComponents *thisYear = [gregorian components:NSYearCalendarUnit fromDate:[DateTimeUtil dateNow]];
             if (thisYear.year == comps.year) {
                 [formatter setDateFormat:[dict valueForKey:@"date"]];

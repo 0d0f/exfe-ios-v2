@@ -69,7 +69,7 @@
     RKLogConfigureByName("RestKit", RKLogLevelDefault);
 #endif
     
-    RKLogInfo(@"API ROOT: %@", API_ROOT);
+    RKLogInfo(@"API ROOT: %@", [EFConfig sharedInstance].API_ROOT);
     
     [self registerWeixin];
     
@@ -328,21 +328,39 @@
 - (void)receivePushData:(NSDictionary *)userInfo isOnForeground:(BOOL)isForeground {
     
     if (isForeground == NO) {
-        
         if (userInfo != nil) {
             id arg = [userInfo valueForKeyPath:@"args"];
             if(arg && [arg isKindOfClass:[NSDictionary class]]) {
                 RKLogInfo(@"receive old push");
             } else  {
-                NSString * path = [userInfo valueForKeyPath:@"path"];
-                if (path && [path isKindOfClass:[NSString class]]) {
-                    NSURL *url = nil;
-                    if (path.length > 0) {
-                        url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:@"" path:path];
-                    } else {
-                        url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:@"" path:@"/"];
+                NSURL *url = nil;
+                NSString * u = [userInfo valueForKeyPath:@"url"];
+                if (u && [u isKindOfClass:[NSString class]]) {
+                    RKLogDebug(@"receive url: %@", u);
+                    // some filter for safety?
+                    url = [NSURL URLWithString:u];
+                } else {
+                    NSString * path = [userInfo valueForKeyPath:@"path"];
+                    if (path && [path isKindOfClass:[NSString class]]) {
+                        RKLogDebug(@"receive path: %@", path);
+                        if (path.length > 0) {
+                            url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:[EFConfig sharedInstance].scope path:path];
+                        } else {
+                            url = [[NSURL alloc] initWithScheme:[UIApplication sharedApplication].defaultScheme host:[EFConfig sharedInstance].scope path:@"/"];
+                        }
+                        RKLogDebug(@"combined url %@", url);
                     }
-                    [self jumpTo:url];
+                }
+                
+                if (url) {
+                    NSString *scope = [[[url.host componentsSeparatedByString:@"."] lastObject] uppercaseString];
+                    if ([[EFConfig sharedInstance] sameServerScope:scope]) {
+                        [self jumpTo:url];
+                    } else {
+                        RKLogWarning(@"Not same server");
+                    }
+                } else {
+                    RKLogWarning(@"Invalid url or path field");
                 }
             }
         }
@@ -378,23 +396,29 @@
     
     [Flurry logEvent:@"HANDLE_OPEN_URL"];
     
-    NSString *query = [url query];
-    NSDictionary *params = [Util splitQuery:query];
-    NSString *token = [params objectForKey:@"token"];
-    NSString *user_id = [params objectForKey:@"user_id"];
-    NSString *username = [params objectForKey:@"username"];
+    NSString *schema __attribute__((unused)) = url.scheme;
+    NSString *host = url.host;
+    NSString *scope = [[[host componentsSeparatedByString:@"."] lastObject] uppercaseString];
+    NSString *query __attribute__((unused)) = [url query];
+    NSDictionary *params = [url queryComponents];
+    NSString *token = [[params objectForKey:@"token"] lastObject];
+    NSString *user_id = [[params objectForKey:@"user_id"] lastObject];
+    NSString *username = [[params objectForKey:@"username"] lastObject];
     if (!username) {
         username = @"";
     }
-    NSString *identity_id __attribute__((unused)) = [params objectForKey:@"identity_id"];
+    NSString *identity_id __attribute__((unused)) = [[params objectForKey:@"identity_id"] lastObject];
     
     self.url = url;
     
     if (token.length > 0 && [user_id integerValue] > 0){
         
-        EFAPIServer *server = self.model.apiServer;
-        if (![server isLoggedIn]) {
+
+        if (![self.model isLoggedIn]) {
             RKLogInfo(@"Sign In by url");
+            if (![[EFConfig sharedInstance] sameServerScope:scope]) {
+                [[EFConfig sharedInstance] saveScope:scope];
+            }
             
             // TODO check token is valid: query for profile with the time in future; HTTP 200 with API 304 is valid.
             [self switchContextByUserId:[user_id integerValue] withAbandon:NO];
@@ -406,72 +430,82 @@
             [self signinDidFinish];
             [self jumpTo:url];
         } else {
-            NSUInteger uid = [user_id integerValue];
-            if (uid == self.model.userId) {
-                RKLogInfo(@"Jump in by url");
-                // refresh token
-                // self.model.userToken = token; // We want the token maps to a single client.
-                // [self.model saveUserData];
-                [self jumpTo:url];
-            } else {
-                // merge identities
-                RKLogInfo(@"Merge %u to %u by url", uid, self.model.userId);
-                [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Merge accounts", nil)
-                                            message:[NSString stringWithFormat:NSLocalizedString(@"Merge account %@ into your current signed-in account?", nil), username]
-                                  cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                  otherButtonTitles:@[NSLocalizedString(@"Merge", nil)]
-                                            handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                                if (buttonIndex == alertView.firstOtherButtonIndex ) {
-                                                    RKLogInfo(@"Start merge");
-                                                    [server mergeAllByToken:token
-                                                                    success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                                        if ([responseObject isKindOfClass:[NSDictionary class]]) {
-                                                                            NSDictionary *body = responseObject;
-                                                                            Meta * meta = [body valueForKey:@"meta"]; 
-                                                                            NSInteger c = [[meta valueForKey:@"code"] integerValue];
-                                                                            NSInteger t = c / 100;
-                                                                            switch (t) {
-                                                                                case 2:
-                                                                                    RKLogInfo(@"finish merge. Jump!");
-                                                                                    [self jumpTo:url];
-                                                                                    
-                                                                                    if ([url.path hasPrefix:@"/!"]) {
-                                                                                        [self performBlock:^(id sender) {
+            if (![[EFConfig sharedInstance] sameServerScope:scope]) {
+                // TODO
+                // [[EFConfig sharedInstance] saveScope:scope];
+                // 1 sign out
+                // 2 login
+                RKLogWarning(@"Not same server.");
+                
+                [Util handleDefaultBannerTitle:NSLocalizedString(@"Failed to merge accounts.", nil) andMessage:NSLocalizedString(@"Authentication token expired.", nil)];
+                
+            }else {
+                NSUInteger uid = [user_id integerValue];
+                if (uid == self.model.userId) {
+                    RKLogInfo(@"Jump in by url");
+                    // refresh token
+                    // self.model.userToken = token; // We want the token maps to a single client.
+                    // [self.model saveUserData];
+                    [self jumpTo:url];
+                } else {
+                    // merge identities
+                    RKLogDebug(@"Merge (%@/%u) to %u by url", username, uid, self.model.userId);
+                    [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Merge accounts", nil)
+                                                message:[NSString stringWithFormat:NSLocalizedString(@"Merge account %@ into your current signed-in account?", nil), username]
+                                      cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                      otherButtonTitles:@[NSLocalizedString(@"Merge", nil)]
+                                                handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                                    if (buttonIndex == alertView.firstOtherButtonIndex ) {
+                                                        RKLogInfo(@"Start merge");
+                                                        [self.model.apiServer mergeAllByToken:token
+                                                                        success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                                            if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                                                                                NSDictionary *body = responseObject;
+                                                                                Meta * meta = [body valueForKey:@"meta"];
+                                                                                NSInteger c = [[meta valueForKey:@"code"] integerValue];
+                                                                                NSInteger t = c / 100;
+                                                                                switch (t) {
+                                                                                    case 2:
+                                                                                        RKLogInfo(@"finish merge. Jump!");
+                                                                                        [self jumpTo:url];
+                                                                                        
+                                                                                        if ([url.path hasPrefix:@"/!"]) {
+                                                                                            [self performBlock:^(id sender) {
+                                                                                                [self.model loadMe];
+                                                                                            } afterDelay:3];
+                                                                                        } else {
                                                                                             [self.model loadMe];
-                                                                                        } afterDelay:3];
-                                                                                    } else {
-                                                                                        [self.model loadMe];
-                                                                                    }
-                                                                                    break;
-                                                                                    
-                                                                                default:
-                                                                                    // 400: error_browsing_identity_token
-                                                                                    // 400: error_invitation_token
-                                                                                    // 400: no_identity_ids
-                                                                                    // 400: error_user_status
-                                                                                    // 401: no_signin
-                                                                                    // 500: server_error
-                                                                                    
-                                                                                    // [self jumpTo:url];
-                                                                                    RKLogError(@"Merge fail for %i %@. NO Jump!", c, [meta valueForKey:@"errorType"]);
-                                                                                    [Util handleDefaultBannerTitle:NSLocalizedString(@"Failed to merge accounts.", nil) andMessage:NSLocalizedString(@"Authentication token expired.", nil)];
-                                                                                    break;
+                                                                                        }
+                                                                                        break;
+                                                                                        
+                                                                                    default:
+                                                                                        // 400: error_browsing_identity_token
+                                                                                        // 400: error_invitation_token
+                                                                                        // 400: no_identity_ids
+                                                                                        // 400: error_user_status
+                                                                                        // 401: no_signin
+                                                                                        // 500: server_error
+                                                                                        
+                                                                                        // [self jumpTo:url];
+                                                                                        RKLogError(@"Merge fail for %i %@. NO Jump!", c, [meta valueForKey:@"errorType"]);
+                                                                                        [Util handleDefaultBannerTitle:NSLocalizedString(@"Failed to merge accounts.", nil) andMessage:NSLocalizedString(@"Authentication token expired.", nil)];
+                                                                                        break;
+                                                                                }
                                                                             }
                                                                         }
-                                                                    }
-                                                                    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                                        #warning test only
-                                                                        RKLogError(@"Merge fail for error %@. NO Jump!", error);
-                                                                        // [self jumpTo:url];
-                                                                        // HTTP 500 NSURLErrorBadServerResponse AFNetworkingErrorDomain  
-                                                                        // HTTP 4xx
-                                                                        [Util handleDefaultBannerTitle:NSLocalizedString(@"Failed to merge accounts.", nil) andMessage:NSLocalizedString(@"Failed to connect to server.", nil)];
-                                                                    }];
-                                                } else {
-                                                    RKLogInfo(@"Not merge. Jump!");
-                                                    [self jumpTo:url];
-                                                }
-                                            }];
+                                                                        failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                                            RKLogError(@"Merge fail for error %@. NO Jump!", error);
+                                                                            // [self jumpTo:url];
+                                                                            // HTTP 500 NSURLErrorBadServerResponse AFNetworkingErrorDomain
+                                                                            // HTTP 4xx
+                                                                            [Util handleDefaultBannerTitle:NSLocalizedString(@"Failed to merge accounts.", nil) andMessage:NSLocalizedString(@"Failed to connect to server.", nil)];
+                                                                        }];
+                                                    } else {
+                                                        RKLogInfo(@"Not merge. Jump!");
+                                                        [self jumpTo:url];
+                                                    }
+                                                }];
+                }
             }
         }
     }else{
@@ -482,7 +516,20 @@
 
 - (void)jumpTo:(NSURL *)url
 {
-    RKLogInfo(@"Jump to: %@", url.path);
+    RKLogDebug(@"Jump to: %@", url.path);
+    
+    NSString *host = url.host;
+    NSString *scope = [[host componentsSeparatedByString:@"."] lastObject];
+    
+    if (![self.model isLoggedIn]) {
+        RKLogInfo(@"Not Logged In. Ignore");
+        return;
+    }
+    if (![[EFConfig sharedInstance] sameServerScope:scope]) {
+        RKLogInfo(@"Logged in with another server. Ignore");
+        return;
+    }
+    
     NSArray *pathComps = [url pathComponents];
     NSDictionary * params = [url queryComponents];
     NSArray *anim = [params objectForKey:@"animated"];
@@ -523,7 +570,7 @@
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
         
-        [self.model loadCrossList];
+//        [self.model loadCrossList];
         
         [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     }
@@ -547,8 +594,7 @@
     
     [self switchContextByUserId:0 withAbandon:YES];
     
-    CrossesViewController *rootViewController = self.crossesViewController;
-    [rootViewController refreshAll];
+    [NSNotificationCenter.defaultCenter postNotificationName:EXCrossListDidChangeNotification object:self];
     
     [self.navigationController popToRootViewControllerAnimated:YES];
     
@@ -561,6 +607,15 @@
     if (self.model == nil || self.model.userId != user_id) {
         [self.model stop];
         if (flag && self.model.userId > 0) {
+            [self.model abandonCachePath];
+            [self.model clearUserData];
+        }
+        EXFEModel * model = [[EXFEModel alloc] initWithUser:user_id];
+        self.model = model;
+        [self.model start];
+    } else if (self.model != nil && self.model.userId == 0 && self.model.userId == user_id){
+        [self.model stop];
+        if (flag) {
             [self.model abandonCachePath];
             [self.model clearUserData];
         }

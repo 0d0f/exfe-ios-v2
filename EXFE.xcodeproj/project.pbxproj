@@ -202,6 +202,26 @@
 		4F2D22E4176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */; };
 		4F2D22E5176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */; };
 		4F2D22E6176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */; };
+		4F33443C17DF03D700FE4E31 /* EFConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F33443B17DF03D700FE4E31 /* EFConfig.m */; };
+		4F33443D17DF03D700FE4E31 /* EFConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F33443B17DF03D700FE4E31 /* EFConfig.m */; };
+		4F33443E17DF03D700FE4E31 /* EFConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F33443B17DF03D700FE4E31 /* EFConfig.m */; };
+		4F33443F17DF03D700FE4E31 /* EFConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F33443B17DF03D700FE4E31 /* EFConfig.m */; };
+		4F33444517DF29A900FE4E31 /* EFRouteXAccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 761B24C217CFBE160091DD7B /* EFRouteXAccessViewController.m */; };
+		4F33444F17E0399B00FE4E31 /* EXFETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1142E116AE40B000C30179 /* EXFETests.m */; };
+		4F33445117E0399B00FE4E31 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1142D616AE40B000C30179 /* SenTestingKit.framework */; };
+		4F33445217E0399B00FE4E31 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8B1560F832009E0806 /* UIKit.framework */; };
+		4F33445317E0399B00FE4E31 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8D1560F832009E0806 /* Foundation.framework */; };
+		4F33445517E0399B00FE4E31 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F1142DD16AE40B000C30179 /* InfoPlist.strings */; };
+		4F33446217E03E1C00FE4E31 /* EXFETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1142E116AE40B000C30179 /* EXFETests.m */; };
+		4F33446417E03E1C00FE4E31 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1142D616AE40B000C30179 /* SenTestingKit.framework */; };
+		4F33446517E03E1C00FE4E31 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8B1560F832009E0806 /* UIKit.framework */; };
+		4F33446617E03E1C00FE4E31 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8D1560F832009E0806 /* Foundation.framework */; };
+		4F33446817E03E1C00FE4E31 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F1142DD16AE40B000C30179 /* InfoPlist.strings */; };
+		4F33447317E03E1F00FE4E31 /* EXFETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1142E116AE40B000C30179 /* EXFETests.m */; };
+		4F33447517E03E1F00FE4E31 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1142D616AE40B000C30179 /* SenTestingKit.framework */; };
+		4F33447617E03E1F00FE4E31 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8B1560F832009E0806 /* UIKit.framework */; };
+		4F33447717E03E1F00FE4E31 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8D1560F832009E0806 /* Foundation.framework */; };
+		4F33447917E03E1F00FE4E31 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F1142DD16AE40B000C30179 /* InfoPlist.strings */; };
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
 		4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
 		4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
@@ -2342,6 +2362,10 @@
 		763BE927179FD836003BF97C /* map_shadow_gap.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE926179FD836003BF97C /* map_shadow_gap.png */; };
 		763BE928179FD836003BF97C /* map_shadow_gap.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE926179FD836003BF97C /* map_shadow_gap.png */; };
 		763BE929179FD836003BF97C /* map_shadow_gap.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE926179FD836003BF97C /* map_shadow_gap.png */; };
+		76448BF417E9A29400ED18CB /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448BF317E9A29400ED18CB /* NSString+Encode.m */; };
+		76448BF517E9A29400ED18CB /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448BF317E9A29400ED18CB /* NSString+Encode.m */; };
+		76448BF617E9A29400ED18CB /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448BF317E9A29400ED18CB /* NSString+Encode.m */; };
+		76448BF717E9A29400ED18CB /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448BF317E9A29400ED18CB /* NSString+Encode.m */; };
 		764CD8F2173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
 		764CD8F3173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
 		764CD8F4173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
@@ -2441,6 +2465,10 @@
 		7670127A1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
 		7670127B1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
 		7670127C1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
+		7683B79617E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7683B79517E7423000B4D96D /* EFRouteXMenuViewController.m */; };
+		7683B79717E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7683B79517E7423000B4D96D /* EFRouteXMenuViewController.m */; };
+		7683B79817E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7683B79517E7423000B4D96D /* EFRouteXMenuViewController.m */; };
+		7683B79917E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7683B79517E7423000B4D96D /* EFRouteXMenuViewController.m */; };
 		7686099E17817BC700534731 /* NSString+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 7686099D17817BC700534731 /* NSString+Format.m */; };
 		7686099F17817BC700534731 /* NSString+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 7686099D17817BC700534731 /* NSString+Format.m */; };
 		768609A017817BC700534731 /* NSString+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 7686099D17817BC700534731 /* NSString+Format.m */; };
@@ -2707,6 +2735,14 @@
 		76DA465E17CD07D200E897B5 /* map_remove_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 76DA465D17CD07D200E897B5 /* map_remove_30.png */; };
 		76DA465F17CD07D200E897B5 /* map_remove_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 76DA465D17CD07D200E897B5 /* map_remove_30.png */; };
 		76DA466017CD07D200E897B5 /* map_remove_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 76DA465D17CD07D200E897B5 /* map_remove_30.png */; };
+		76DC712417E323AB00177F47 /* tab_tri@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76DC712317E323AB00177F47 /* tab_tri@2x.png */; };
+		76DC712517E323AB00177F47 /* tab_tri@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76DC712317E323AB00177F47 /* tab_tri@2x.png */; };
+		76DC712617E323AB00177F47 /* tab_tri@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76DC712317E323AB00177F47 /* tab_tri@2x.png */; };
+		76DC712717E323AB00177F47 /* tab_tri@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76DC712317E323AB00177F47 /* tab_tri@2x.png */; };
+		76DC712C17E323D800177F47 /* tab_tri.png in Resources */ = {isa = PBXBuildFile; fileRef = 76DC712B17E323D800177F47 /* tab_tri.png */; };
+		76DC712D17E323D800177F47 /* tab_tri.png in Resources */ = {isa = PBXBuildFile; fileRef = 76DC712B17E323D800177F47 /* tab_tri.png */; };
+		76DC712E17E323D800177F47 /* tab_tri.png in Resources */ = {isa = PBXBuildFile; fileRef = 76DC712B17E323D800177F47 /* tab_tri.png */; };
+		76DC712F17E323D800177F47 /* tab_tri.png in Resources */ = {isa = PBXBuildFile; fileRef = 76DC712B17E323D800177F47 /* tab_tri.png */; };
 		76DED7C3171BEDE000C2F27E /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76DED7CE171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
 		76DED7CF171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
@@ -3009,6 +3045,27 @@
 			remoteGlobalIDString = 78A98E861560F832009E0806;
 			remoteInfo = EXFE;
 		};
+		4F33445C17E039D700FE4E31 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78A98E7E1560F832009E0806 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4FC40E1917D04A5700D64105;
+			remoteInfo = Shuady;
+		};
+		4F33446017E03E1C00FE4E31 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78A98E7E1560F832009E0806 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 78A98E861560F832009E0806;
+			remoteInfo = EXFE;
+		};
+		4F33447117E03E1F00FE4E31 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78A98E7E1560F832009E0806 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 78A98E861560F832009E0806;
+			remoteInfo = EXFE;
+		};
 		4F38E9DD17B5422700B850B6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4F38E9D617B5422600B850B6 /* RestKit.xcodeproj */;
@@ -3208,6 +3265,15 @@
 		4F2D22D1176994EE00FEA139 /* EXFEModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXFEModel.m; sourceTree = "<group>"; };
 		4F2D22E2176AF32E00FEA139 /* RecursiveDeleteOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecursiveDeleteOperation.h; sourceTree = "<group>"; };
 		4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecursiveDeleteOperation.m; sourceTree = "<group>"; };
+		4F33443A17DF03D700FE4E31 /* EFConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFConfig.h; sourceTree = "<group>"; };
+		4F33443B17DF03D700FE4E31 /* EFConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFConfig.m; sourceTree = "<group>"; };
+		4F33445A17E0399B00FE4E31 /* ShuadyTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShuadyTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F33446D17E03E1C00FE4E31 /* 0d0fTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 0d0fTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F33447E17E03E1F00FE4E31 /* PilotTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PilotTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F33448017E0433300FE4E31 /* Shuady-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Shuady-Info.plist"; sourceTree = "<group>"; };
+		4F33448117E0435200FE4E31 /* 0d0fTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "0d0fTests-Info.plist"; sourceTree = "<group>"; };
+		4F33448217E0435200FE4E31 /* PilotTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PilotTests-Info.plist"; sourceTree = "<group>"; };
+		4F33448317E0435300FE4E31 /* ShuadyTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ShuadyTests-Info.plist"; sourceTree = "<group>"; };
 		4F3355CE168C4F4700D398C0 /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
 		4F3355CF168C4F4700D398C0 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
 		4F358D6B171D66F5005C2EE7 /* EFPasswordField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPasswordField.h; sourceTree = "<group>"; };
@@ -3369,7 +3435,6 @@
 		4FBF2483167AE89D007C04E2 /* CrossCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossCard.h; sourceTree = "<group>"; };
 		4FBF2484167AE89D007C04E2 /* CrossCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossCard.m; sourceTree = "<group>"; };
 		4FC4110C17D04A5700D64105 /* Shuady.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shuady.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		4FC4110D17D04A5700D64105 /* Shuady-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Shuady-Info.plist"; path = "/Users/stony/git/exfe_ios/Shuady-Info.plist"; sourceTree = "<absolute>"; };
 		4FC4113B17D490FF00D64105 /* EFChangeCrossTimeOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChangeCrossTimeOperation.h; sourceTree = "<group>"; };
 		4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChangeCrossTimeOperation.m; sourceTree = "<group>"; };
 		4FC4114817D5949B00D64105 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = Localizable.strings; sourceTree = "<group>"; };
@@ -3563,6 +3628,8 @@
 		763AD4DD17B394C4007C7A9D /* map_arrow_14g5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_arrow_14g5@2x.png"; sourceTree = "<group>"; };
 		763BE922179FD770003BF97C /* map_shadow_gap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_shadow_gap@2x.png"; sourceTree = "<group>"; };
 		763BE926179FD836003BF97C /* map_shadow_gap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_shadow_gap.png; sourceTree = "<group>"; };
+		76448BF217E9A29400ED18CB /* NSString+Encode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Encode.h"; sourceTree = "<group>"; };
+		76448BF317E9A29400ED18CB /* NSString+Encode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Encode.m"; sourceTree = "<group>"; };
 		764CD8F0173A5C4600627237 /* EFNotificationBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFNotificationBannerView.h; sourceTree = "<group>"; };
 		764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFNotificationBannerView.m; sourceTree = "<group>"; };
 		764CD8FC173A8F9400627237 /* cautionbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cautionbar.png; sourceTree = "<group>"; };
@@ -3618,6 +3685,8 @@
 		767012741729086100B5445E /* EFSearchTipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchTipViewController.h; sourceTree = "<group>"; };
 		767012751729086100B5445E /* EFSearchTipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchTipViewController.m; sourceTree = "<group>"; };
 		767012761729086100B5445E /* EFSearchTipViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFSearchTipViewController.xib; sourceTree = "<group>"; };
+		7683B79417E7423000B4D96D /* EFRouteXMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRouteXMenuViewController.h; sourceTree = "<group>"; };
+		7683B79517E7423000B4D96D /* EFRouteXMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRouteXMenuViewController.m; sourceTree = "<group>"; };
 		7686099C17817BC700534731 /* NSString+Format.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Format.h"; sourceTree = "<group>"; };
 		7686099D17817BC700534731 /* NSString+Format.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Format.m"; sourceTree = "<group>"; };
 		7688C79417B0DE7E00CBB6E8 /* EFAccessInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAccessInfo.h; sourceTree = "<group>"; };
@@ -3774,8 +3843,10 @@
 		76D1FE06174100AA00D271B2 /* EFAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAPI.h; sourceTree = "<group>"; };
 		76D2DE111778061F00E8C53E /* EFDownloadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFDownloadOperation.h; sourceTree = "<group>"; };
 		76D2DE121778061F00E8C53E /* EFDownloadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFDownloadOperation.m; sourceTree = "<group>"; };
-		76D9657A1743D07000485325 /* EFConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFConfig.h; sourceTree = "<group>"; };
+		76D9657A1743D07000485325 /* EFKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFKeys.h; sourceTree = "<group>"; };
 		76DA465D17CD07D200E897B5 /* map_remove_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_remove_30.png; sourceTree = "<group>"; };
+		76DC712317E323AB00177F47 /* tab_tri@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_tri@2x.png"; sourceTree = "<group>"; };
+		76DC712B17E323D800177F47 /* tab_tri.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_tri.png; sourceTree = "<group>"; };
 		76DED7CC171C06A900C2F27E /* UILog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILog.h; sourceTree = "<group>"; };
 		76DED7CD171C06A900C2F27E /* UILog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILog.m; sourceTree = "<group>"; };
 		76E96BA1177AAC4400C06ECD /* EFModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFModel.h; sourceTree = "<group>"; };
@@ -4180,6 +4251,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4F33445017E0399B00FE4E31 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33445117E0399B00FE4E31 /* SenTestingKit.framework in Frameworks */,
+				4F33445217E0399B00FE4E31 /* UIKit.framework in Frameworks */,
+				4F33445317E0399B00FE4E31 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33446317E03E1C00FE4E31 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33446417E03E1C00FE4E31 /* SenTestingKit.framework in Frameworks */,
+				4F33446517E03E1C00FE4E31 /* UIKit.framework in Frameworks */,
+				4F33446617E03E1C00FE4E31 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33447417E03E1F00FE4E31 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33447517E03E1F00FE4E31 /* SenTestingKit.framework in Frameworks */,
+				4F33447617E03E1F00FE4E31 /* UIKit.framework in Frameworks */,
+				4F33447717E03E1F00FE4E31 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4F63DB0117172AA600136B7E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -4350,6 +4451,9 @@
 			isa = PBXGroup;
 			children = (
 				4F1142DC16AE40B000C30179 /* EXFETests-Info.plist */,
+				4F33448117E0435200FE4E31 /* 0d0fTests-Info.plist */,
+				4F33448217E0435200FE4E31 /* PilotTests-Info.plist */,
+				4F33448317E0435300FE4E31 /* ShuadyTests-Info.plist */,
 				4F1142DD16AE40B000C30179 /* InfoPlist.strings */,
 				4F1142E316AE40B000C30179 /* EXFETests-Prefix.pch */,
 			);
@@ -4590,7 +4694,7 @@
 			children = (
 				76DED7CB171C05FE00C2F27E /* Debug */,
 				4FD9376216D602A200ED6677 /* Extention */,
-				76D9657A1743D07000485325 /* EFConfig.h */,
+				76D9657A1743D07000485325 /* EFKeys.h */,
 				7619DCE417CDD8C70095951B /* EFUserDefaultsKeyDefines.h */,
 				78FC07DE15D224FC004BB482 /* CTUtil.h */,
 				78FC07DF15D224FC004BB482 /* CTUtil.m */,
@@ -4602,6 +4706,8 @@
 				7840916B156F6AA5006DF115 /* Util.m */,
 				4F05D456175DAFAC0050A726 /* Constants.h */,
 				4F05D457175DAFAC0050A726 /* Constants.m */,
+				4F33443A17DF03D700FE4E31 /* EFConfig.h */,
+				4F33443B17DF03D700FE4E31 /* EFConfig.m */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -4629,6 +4735,8 @@
 				4F2CF06D17BF54FE00E3A4B2 /* XQueryComponents.m */,
 				76F3EEE417C2318E00D353FA /* NSDate+RouteXDateFormater.h */,
 				76F3EEE517C2318E00D353FA /* NSDate+RouteXDateFormater.m */,
+				76448BF217E9A29400ED18CB /* NSString+Encode.h */,
+				76448BF317E9A29400ED18CB /* NSString+Encode.m */,
 			);
 			name = Extention;
 			sourceTree = "<group>";
@@ -4808,6 +4916,8 @@
 				766032FC17C21C1B00B21A12 /* EFMapPersonViewController.m */,
 				761B24C117CFBE160091DD7B /* EFRouteXAccessViewController.h */,
 				761B24C217CFBE160091DD7B /* EFRouteXAccessViewController.m */,
+				7683B79417E7423000B4D96D /* EFRouteXMenuViewController.h */,
+				7683B79517E7423000B4D96D /* EFRouteXMenuViewController.m */,
 			);
 			name = RouteX;
 			sourceTree = "<group>";
@@ -5422,6 +5532,8 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				76DC712B17E323D800177F47 /* tab_tri.png */,
+				76DC712317E323AB00177F47 /* tab_tri@2x.png */,
 				761B24AE17CF4D270091DD7B /* map_arrow_blue.png */,
 				766176D117C93AE500E98E74 /* portrait_frame_40.png */,
 				766176D217C93AE500E98E74 /* portrait_frame_40@2x.png */,
@@ -5902,6 +6014,9 @@
 				4F63DC4317172AA600136B7E /* 0d0f.app */,
 				4F63DE1017172B0700136B7E /* Pilot.app */,
 				4FC4110C17D04A5700D64105 /* Shuady.app */,
+				4F33445A17E0399B00FE4E31 /* ShuadyTests.octest */,
+				4F33446D17E03E1C00FE4E31 /* 0d0fTests.octest */,
+				4F33447E17E03E1F00FE4E31 /* PilotTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -5968,7 +6083,7 @@
 				78A98E931560F832009E0806 /* EXFE-Info.plist */,
 				4F63DE14171733C500136B7E /* 0d0f-Info.plist */,
 				4F00546F17292C2300D4B429 /* Pilot-Info.plist */,
-				4FC4110D17D04A5700D64105 /* Shuady-Info.plist */,
+				4F33448017E0433300FE4E31 /* Shuady-Info.plist */,
 				78A98E971560F832009E0806 /* main.m */,
 				78A98E991560F832009E0806 /* EXFE-Prefix.pch */,
 			);
@@ -6262,6 +6377,63 @@
 			productReference = 4F1142D516AE40B000C30179 /* EXFETests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
+		4F33444B17E0399B00FE4E31 /* ShuadyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F33445717E0399B00FE4E31 /* Build configuration list for PBXNativeTarget "ShuadyTests" */;
+			buildPhases = (
+				4F33444E17E0399B00FE4E31 /* Sources */,
+				4F33445017E0399B00FE4E31 /* Frameworks */,
+				4F33445417E0399B00FE4E31 /* Resources */,
+				4F33445617E0399B00FE4E31 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4F33445D17E039D700FE4E31 /* PBXTargetDependency */,
+			);
+			name = ShuadyTests;
+			productName = EXFETests;
+			productReference = 4F33445A17E0399B00FE4E31 /* ShuadyTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+		4F33445E17E03E1C00FE4E31 /* 0d0fTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F33446A17E03E1C00FE4E31 /* Build configuration list for PBXNativeTarget "0d0fTests" */;
+			buildPhases = (
+				4F33446117E03E1C00FE4E31 /* Sources */,
+				4F33446317E03E1C00FE4E31 /* Frameworks */,
+				4F33446717E03E1C00FE4E31 /* Resources */,
+				4F33446917E03E1C00FE4E31 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4F33445F17E03E1C00FE4E31 /* PBXTargetDependency */,
+			);
+			name = 0d0fTests;
+			productName = EXFETests;
+			productReference = 4F33446D17E03E1C00FE4E31 /* 0d0fTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+		4F33446F17E03E1F00FE4E31 /* PilotTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F33447B17E03E1F00FE4E31 /* Build configuration list for PBXNativeTarget "PilotTests" */;
+			buildPhases = (
+				4F33447217E03E1F00FE4E31 /* Sources */,
+				4F33447417E03E1F00FE4E31 /* Frameworks */,
+				4F33447817E03E1F00FE4E31 /* Resources */,
+				4F33447A17E03E1F00FE4E31 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4F33447017E03E1F00FE4E31 /* PBXTargetDependency */,
+			);
+			name = PilotTests;
+			productName = EXFETests;
+			productReference = 4F33447E17E03E1F00FE4E31 /* PilotTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 		4F63DA7617172AA600136B7E /* 0d0f */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4F63DC3E17172AA600136B7E /* Build configuration list for PBXNativeTarget "0d0f" */;
@@ -6365,8 +6537,11 @@
 				78A98E861560F832009E0806 /* EXFE */,
 				4F63DA7617172AA600136B7E /* 0d0f */,
 				4F63DC4517172B0700136B7E /* Pilot */,
-				4F1142D416AE40B000C30179 /* EXFETests */,
 				4FC40E1917D04A5700D64105 /* Shuady */,
+				4F1142D416AE40B000C30179 /* EXFETests */,
+				4F33444B17E0399B00FE4E31 /* ShuadyTests */,
+				4F33445E17E03E1C00FE4E31 /* 0d0fTests */,
+				4F33446F17E03E1F00FE4E31 /* PilotTests */,
 			);
 		};
 /* End PBXProject section */
@@ -6408,6 +6583,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F1142DF16AE40B000C30179 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33445417E0399B00FE4E31 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33445517E0399B00FE4E31 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33446717E03E1C00FE4E31 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33446817E03E1C00FE4E31 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33447817E03E1F00FE4E31 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33447917E03E1F00FE4E31 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6477,6 +6676,7 @@
 				4F63DB5117172AA600136B7E /* btn_light.png in Resources */,
 				4F63DB5217172AA600136B7E /* btn_light@2x.png in Resources */,
 				4F63DB5317172AA600136B7E /* navbar.png in Resources */,
+				76DC712517E323AB00177F47 /* tab_tri@2x.png in Resources */,
 				4F63DB5417172AA600136B7E /* navbar@2x.png in Resources */,
 				4F63DB5517172AA600136B7E /* exclamation.png in Resources */,
 				4F63DB5617172AA600136B7E /* exclamation@2x.png in Resources */,
@@ -6511,6 +6711,7 @@
 				76DA465F17CD07D200E897B5 /* map_remove_30.png in Resources */,
 				4F63DB7917172AA600136B7E /* rome.jpg in Resources */,
 				4F63DB7A17172AA600136B7E /* rome@2x.jpg in Resources */,
+				76DC712D17E323D800177F47 /* tab_tri.png in Resources */,
 				4F63DB7B17172AA600136B7E /* place_18.png in Resources */,
 				4F63DB7C17172AA600136B7E /* place_18@2x.png in Resources */,
 				4F63DB7D17172AA600136B7E /* spin_36_0.png in Resources */,
@@ -6940,6 +7141,7 @@
 				4F63DD2217172B0700136B7E /* navbar.png in Resources */,
 				4F63DD2317172B0700136B7E /* navbar@2x.png in Resources */,
 				4F63DD2417172B0700136B7E /* exclamation.png in Resources */,
+				76DC712617E323AB00177F47 /* tab_tri@2x.png in Resources */,
 				4F63DD2517172B0700136B7E /* exclamation@2x.png in Resources */,
 				4F63DD2617172B0700136B7E /* FullScreenViewController.xib in Resources */,
 				4F63DD2717172B0700136B7E /* device_android.png in Resources */,
@@ -6974,6 +7176,7 @@
 				4F63DD4817172B0700136B7E /* rome.jpg in Resources */,
 				4F63DD4917172B0700136B7E /* rome@2x.jpg in Resources */,
 				4F63DD4A17172B0700136B7E /* place_18.png in Resources */,
+				76DC712E17E323D800177F47 /* tab_tri.png in Resources */,
 				4F63DD4B17172B0700136B7E /* place_18@2x.png in Resources */,
 				4F63DD4C17172B0700136B7E /* spin_36_0.png in Resources */,
 				4F63DD4D17172B0700136B7E /* spin_36_1.png in Resources */,
@@ -7420,6 +7623,7 @@
 				4FC40F9217D04A5700D64105 /* textfield_divider@2x.png in Resources */,
 				4FC40F9317D04A5700D64105 /* exfee_inputfield.png in Resources */,
 				4FC40F9417D04A5700D64105 /* exfee_inputfield@2x.png in Resources */,
+				76DC712F17E323D800177F47 /* tab_tri.png in Resources */,
 				4FC40F9517D04A5700D64105 /* btn_back.png in Resources */,
 				4FC40F9617D04A5700D64105 /* btn_back@2x.png in Resources */,
 				4FC40F9717D04A5700D64105 /* time_18@2x.png in Resources */,
@@ -7499,6 +7703,7 @@
 				4FC40FE117D04A5700D64105 /* xedit_textfield.png in Resources */,
 				4FC40FE217D04A5700D64105 /* xedit_textfield@2x.png in Resources */,
 				4FC40FE317D04A5700D64105 /* gather_add.png in Resources */,
+				76DC712717E323AB00177F47 /* tab_tri@2x.png in Resources */,
 				4FC40FE417D04A5700D64105 /* gather_add@2x.png in Resources */,
 				4FC40FE517D04A5700D64105 /* map_edit_bg.png in Resources */,
 				4FC40FE617D04A5700D64105 /* map_edit_bg@2x.png in Resources */,
@@ -7879,6 +8084,7 @@
 				78867BC715E794260091A47C /* textfield_divider@2x.png in Resources */,
 				78C8E9A315EAA7D1001E495B /* exfee_inputfield.png in Resources */,
 				78C8E9A415EAA7D1001E495B /* exfee_inputfield@2x.png in Resources */,
+				76DC712C17E323D800177F47 /* tab_tri.png in Resources */,
 				783BA9DF15EC82F900AD832D /* btn_back.png in Resources */,
 				783BA9E015EC82F900AD832D /* btn_back@2x.png in Resources */,
 				78CA7C1C15ECD3E700AAD1DF /* time_18@2x.png in Resources */,
@@ -7958,6 +8164,7 @@
 				788A69F716A403AC003EA9ED /* xedit_textfield.png in Resources */,
 				788A69F816A403AC003EA9ED /* xedit_textfield@2x.png in Resources */,
 				788A69FB16A4123F003EA9ED /* gather_add.png in Resources */,
+				76DC712417E323AB00177F47 /* tab_tri@2x.png in Resources */,
 				788A69FC16A4123F003EA9ED /* gather_add@2x.png in Resources */,
 				7882F80616A68B52004309DF /* map_edit_bg.png in Resources */,
 				7882F80716A68B52004309DF /* map_edit_bg@2x.png in Resources */,
@@ -8271,6 +8478,45 @@
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
+		4F33445617E0399B00FE4E31 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		4F33446917E03E1C00FE4E31 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		4F33447A17E03E1F00FE4E31 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -8279,6 +8525,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F1142E216AE40B000C30179 /* EXFETests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33444E17E0399B00FE4E31 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33444F17E0399B00FE4E31 /* EXFETests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33446117E03E1C00FE4E31 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33446217E03E1C00FE4E31 /* EXFETests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F33447217E03E1F00FE4E31 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F33447317E03E1F00FE4E31 /* EXFETests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8317,6 +8587,7 @@
 				4F63DA9E17172AA600136B7E /* EXIconToolBar.m in Sources */,
 				4F63DA9F17172AA600136B7E /* EXButton.m in Sources */,
 				4F63DAA017172AA600136B7E /* EXInnerButton.m in Sources */,
+				7683B79717E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */,
 				4F63DAA117172AA600136B7E /* EXNavigationBar.m in Sources */,
 				4F63DAA217172AA600136B7E /* EXOverlayView.m in Sources */,
 				4F63DAA417172AA600136B7E /* ConversationInputAccessoryView.m in Sources */,
@@ -8380,6 +8651,7 @@
 				4F63DAE917172AA600136B7E /* ExfeeCollectionViewCell.m in Sources */,
 				4F63DAEA17172AA600136B7E /* EXMenu.m in Sources */,
 				4F63DAEB17172AA600136B7E /* EXBasicMenu.m in Sources */,
+				76448BF517E9A29400ED18CB /* NSString+Encode.m in Sources */,
 				4F63DAEC17172AA600136B7E /* User+EXFE.m in Sources */,
 				4F63DAED17172AA600136B7E /* WCAlertView.m in Sources */,
 				4F63DAEF17172AA600136B7E /* ExfeeAddCollectionViewCell.m in Sources */,
@@ -8550,6 +8822,7 @@
 				4F0C546E17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 				4F0F831317CF56D9001DD47E /* CCTemplate.m in Sources */,
 				4FC4113E17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */,
+				4F33443D17DF03D700FE4E31 /* EFConfig.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8588,6 +8861,7 @@
 				4F63DC6D17172B0700136B7E /* EXIconToolBar.m in Sources */,
 				4F63DC6E17172B0700136B7E /* EXButton.m in Sources */,
 				4F63DC6F17172B0700136B7E /* EXInnerButton.m in Sources */,
+				7683B79817E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */,
 				4F63DC7017172B0700136B7E /* EXNavigationBar.m in Sources */,
 				4F63DC7117172B0700136B7E /* EXOverlayView.m in Sources */,
 				4F63DC7317172B0700136B7E /* ConversationInputAccessoryView.m in Sources */,
@@ -8651,6 +8925,7 @@
 				4F63DCB817172B0700136B7E /* ExfeeCollectionViewCell.m in Sources */,
 				4F63DCB917172B0700136B7E /* EXMenu.m in Sources */,
 				4F63DCBA17172B0700136B7E /* EXBasicMenu.m in Sources */,
+				76448BF617E9A29400ED18CB /* NSString+Encode.m in Sources */,
 				4F63DCBB17172B0700136B7E /* User+EXFE.m in Sources */,
 				4F63DCBC17172B0700136B7E /* WCAlertView.m in Sources */,
 				4F63DCBE17172B0700136B7E /* ExfeeAddCollectionViewCell.m in Sources */,
@@ -8821,6 +9096,7 @@
 				4F0C546F17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 				4F0F831417CF56D9001DD47E /* CCTemplate.m in Sources */,
 				4FC4113F17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */,
+				4F33443E17DF03D700FE4E31 /* EFConfig.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8859,6 +9135,7 @@
 				4FC40E3B17D04A5700D64105 /* EXIconToolBar.m in Sources */,
 				4FC40E3C17D04A5700D64105 /* EXButton.m in Sources */,
 				4FC40E3D17D04A5700D64105 /* EXInnerButton.m in Sources */,
+				7683B79917E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */,
 				4FC40E3E17D04A5700D64105 /* EXNavigationBar.m in Sources */,
 				4FC40E3F17D04A5700D64105 /* EXOverlayView.m in Sources */,
 				4FC40E4017D04A5700D64105 /* ConversationInputAccessoryView.m in Sources */,
@@ -8922,6 +9199,7 @@
 				4FC40E7B17D04A5700D64105 /* EXMenu.m in Sources */,
 				4FC40E7C17D04A5700D64105 /* EXBasicMenu.m in Sources */,
 				4FC40E7D17D04A5700D64105 /* User+EXFE.m in Sources */,
+				76448BF717E9A29400ED18CB /* NSString+Encode.m in Sources */,
 				4FC40E7E17D04A5700D64105 /* WCAlertView.m in Sources */,
 				4FC40E7F17D04A5700D64105 /* ExfeeAddCollectionViewCell.m in Sources */,
 				4FC40E8017D04A5700D64105 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
@@ -9091,6 +9369,8 @@
 				4FC40F2517D04A5700D64105 /* NSManagedObject+EXFE.m in Sources */,
 				4FC40F2617D04A5700D64105 /* CCTemplate.m in Sources */,
 				4FC4114017D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */,
+				4F33443F17DF03D700FE4E31 /* EFConfig.m in Sources */,
+				4F33444517DF29A900FE4E31 /* EFRouteXAccessViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9129,6 +9409,7 @@
 				7841389A15AD36C2002E1030 /* EXIconToolBar.m in Sources */,
 				7803EB8B15AD801500291B69 /* EXButton.m in Sources */,
 				78B9FCF115B4680F00F5E4D3 /* EXInnerButton.m in Sources */,
+				7683B79617E7423000B4D96D /* EFRouteXMenuViewController.m in Sources */,
 				78B9FD3315B5498200F5E4D3 /* EXNavigationBar.m in Sources */,
 				7809620015BDB70B0071E9D0 /* EXOverlayView.m in Sources */,
 				78FB79E815D0ECFC00DF9D73 /* ConversationInputAccessoryView.m in Sources */,
@@ -9192,6 +9473,7 @@
 				4FA013AE16F3546A00F40CB6 /* ExfeeCollectionViewCell.m in Sources */,
 				4F29C92616F85F7B001BB176 /* EXMenu.m in Sources */,
 				4F29C92A16F962CA001BB176 /* EXBasicMenu.m in Sources */,
+				76448BF417E9A29400ED18CB /* NSString+Encode.m in Sources */,
 				4F29C93016F9A5B5001BB176 /* User+EXFE.m in Sources */,
 				4FA0C40A16FB626B00E25C74 /* WCAlertView.m in Sources */,
 				4FA84B09170155DD0096FB5A /* ExfeeAddCollectionViewCell.m in Sources */,
@@ -9362,6 +9644,7 @@
 				4F0C546D17CCF6CE00649C4F /* NSManagedObject+EXFE.m in Sources */,
 				4F0F831217CF56D9001DD47E /* CCTemplate.m in Sources */,
 				4FC4113D17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */,
+				4F33443C17DF03D700FE4E31 /* EFConfig.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9372,6 +9655,21 @@
 			isa = PBXTargetDependency;
 			target = 78A98E861560F832009E0806 /* EXFE */;
 			targetProxy = 4F1142E916AE41B400C30179 /* PBXContainerItemProxy */;
+		};
+		4F33445D17E039D700FE4E31 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4FC40E1917D04A5700D64105 /* Shuady */;
+			targetProxy = 4F33445C17E039D700FE4E31 /* PBXContainerItemProxy */;
+		};
+		4F33445F17E03E1C00FE4E31 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 78A98E861560F832009E0806 /* EXFE */;
+			targetProxy = 4F33446017E03E1C00FE4E31 /* PBXContainerItemProxy */;
+		};
+		4F33447017E03E1F00FE4E31 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 78A98E861560F832009E0806 /* EXFE */;
+			targetProxy = 4F33447117E03E1F00FE4E31 /* PBXContainerItemProxy */;
 		};
 		4F38E9E617B5428F00B850B6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -9490,6 +9788,171 @@
 			};
 			name = Release;
 		};
+		4F33445817E0399B00FE4E31 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Shuady.app/Shuady";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					SHUADY,
+				);
+				INFOPLIST_FILE = "EXFETests/ShuadyTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = ShuadyTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		4F33445917E0399B00FE4E31 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Shuady.app/Shuady";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					RESTKIT_GENERATE_SEED_DB,
+					SHUADY,
+				);
+				INFOPLIST_FILE = "EXFETests/ShuadyTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_NAME = ShuadyTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		4F33446B17E03E1C00FE4E31 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/0d0f.app/0d0f";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					DEV,
+				);
+				INFOPLIST_FILE = "EXFETests/0d0fTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = 0d0fTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		4F33446C17E03E1C00FE4E31 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/0d0f.app/0d0f";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					RESTKIT_GENERATE_SEED_DB,
+					DEV,
+				);
+				INFOPLIST_FILE = "EXFETests/0d0fTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_NAME = 0d0fTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		4F33447C17E03E1F00FE4E31 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Pilot.app/Pilot";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					PILOT,
+				);
+				INFOPLIST_FILE = "EXFETests/PilotTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = PilotTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		4F33447D17E03E1F00FE4E31 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Pilot.app/Pilot";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					RESTKIT_GENERATE_SEED_DB,
+					PILOT,
+				);
+				INFOPLIST_FILE = "EXFETests/PilotTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_NAME = PilotTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
 		4F63DC3F17172AA600136B7E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -9505,14 +9968,20 @@
 					"DEBUG=1",
 					DEV,
 				);
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
+					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
+					"$(SRCROOT)/Vendor/Build/BlocksKit",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-force_load",
+					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
+				);
 				PRODUCT_NAME = 0d0f;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -9535,14 +10004,20 @@
 					"DEBUG=1",
 					DEV,
 				);
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
+					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
+					"$(SRCROOT)/Vendor/Build/BlocksKit",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-force_load",
+					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
+				);
 				PRODUCT_NAME = 0d0f;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -9565,14 +10040,20 @@
 					"DEBUG=1",
 					PILOT,
 				);
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
+					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Pilot-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-force_load",
+					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
+				);
 				PRODUCT_NAME = Pilot;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -9595,14 +10076,20 @@
 					"DEBUG=1",
 					PILOT,
 				);
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
+					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Pilot-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-force_load",
+					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
+				);
 				PRODUCT_NAME = Pilot;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -9627,13 +10114,10 @@
 					SHUADY,
 				);
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
-				INFOPLIST_FILE = "$(SRCROOT)/Shuady-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Shuady-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/EXFE/Flurry\\\"",
-					"\\\"$(SRCROOT)/EXFE/SDKExport\\\"",
-					/Users/0day/Dev/exfeiosv2/Vendor/Build/BlocksKit,
+					"$(SRCROOT)/Vendor/Build/BlocksKit",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -9662,13 +10146,10 @@
 					SHUADY,
 				);
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
-				INFOPLIST_FILE = "$(SRCROOT)/Shuady-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Shuady-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/EXFE/Flurry\\\"",
-					"\\\"$(SRCROOT)/EXFE/SDKExport\\\"",
-					/Users/0day/Dev/exfeiosv2/Vendor/Build/BlocksKit,
+					"$(SRCROOT)/Vendor/Build/BlocksKit",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -9686,7 +10167,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
@@ -9711,17 +10191,19 @@
 					"$(BUILT_PRODUCTS_DIR)/../../Headers",
 					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/EXFE/Flurry",
 					"$(SRCROOT)/EXFE/SDKExport",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-all_load",
+					"-force_load",
+					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
 				);
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -9730,7 +10212,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
@@ -9740,10 +10221,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					RESTKIT_GENERATE_SEED_DB,
-					"DEBUG=1",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = RESTKIT_GENERATE_SEED_DB;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -9752,7 +10230,7 @@
 					"$(BUILT_PRODUCTS_DIR)/../../Headers",
 					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/EXFE/Flurry",
 					"$(SRCROOT)/EXFE/SDKExport",
@@ -9760,11 +10238,13 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-all_load",
+					"-force_load",
+					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
 				);
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -9774,7 +10254,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/FacebookSDK\"",
@@ -9788,13 +10267,12 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
-					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
+					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
 				);
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
+					"$(SRCROOT)/Vendor/Build/BlocksKit",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -9802,7 +10280,6 @@
 					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 				WRAPPER_EXTENSION = app;
@@ -9813,22 +10290,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: EXFE HOLDINGS";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor/FacebookSDK\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = RESTKIT_GENERATE_SEED_DB;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					RESTKIT_GENERATE_SEED_DB,
+					WWW,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
-					"${SRCROOT}/Vendor/Build/BlocksKit/Headers",
+					"$(SRCROOT)/Vendor/Build/BlocksKit/Headers",
 				);
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Vendor/Build/BlocksKit\"",
+					"$(SRCROOT)/Vendor/Build/BlocksKit",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -9850,6 +10330,33 @@
 			buildConfigurations = (
 				4F1142E516AE40B000C30179 /* Debug */,
 				4F1142E616AE40B000C30179 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4F33445717E0399B00FE4E31 /* Build configuration list for PBXNativeTarget "ShuadyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F33445817E0399B00FE4E31 /* Debug */,
+				4F33445917E0399B00FE4E31 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4F33446A17E03E1C00FE4E31 /* Build configuration list for PBXNativeTarget "0d0fTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F33446B17E03E1C00FE4E31 /* Debug */,
+				4F33446C17E03E1C00FE4E31 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4F33447B17E03E1F00FE4E31 /* Build configuration list for PBXNativeTarget "PilotTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F33447C17E03E1F00FE4E31 /* Debug */,
+				4F33447D17E03E1F00FE4E31 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

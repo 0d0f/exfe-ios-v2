@@ -103,12 +103,12 @@
     // Head View
     EFHeadView *headView = [[EFHeadView alloc] initWithFrame:(CGRect){{0.0f, 9.0f}, {320.0f, 56.0f}}];
     headView.headPressedHandler = ^{
-        NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, @"", @"/profile?animated=yes"];
+        NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, [EFConfig sharedInstance].scope, @"/profile?animated=yes"];
         NSURL *url = [NSURL URLWithString:urlstr];
         [[UIApplication sharedApplication] openURL:url];
     };
     headView.titlePressedHandler = ^{
-        NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, @"", @"/gather?animated=yes"];
+        NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, [EFConfig sharedInstance].scope, @"/gather?animated=yes"];
         NSURL *url = [NSURL URLWithString:urlstr];
         [[UIApplication sharedApplication] openURL:url];
     };
@@ -170,7 +170,7 @@
             [self.headView showAnimated:NO];
         }
         
-        [self refreshAll];
+        [self refreshUI];
     
         //Load cross from remote
         NSDate *updated_at = [[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
@@ -262,15 +262,17 @@
     unverified_description.backgroundColor = [UIColor COLOR_WA(0xEE, 0xFF)];
     unverified_description.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
     unverified_description.textColor = [UIColor COLOR_BLACK_19];
+    unverified_description.shadowColor = [UIColor whiteColor];
+    unverified_description.shadowOffset = CGSizeMake(0, 1);
     unverified_description.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
     unverified_description.textAlignment = NSTextAlignmentCenter;
     NSMutableDictionary *mutableLinkAttributes = [NSMutableDictionary dictionary];
     [mutableLinkAttributes setObject:[UIColor COLOR_BLACK_19] forKey:(NSString*)kCTForegroundColorAttributeName];
-    [mutableLinkAttributes setObject:[NSNumber numberWithBool:YES] forKey:(NSString *)kCTUnderlineStyleAttributeName];
+    [mutableLinkAttributes setObject:@(YES) forKey:(NSString *)kCTUnderlineStyleAttributeName];
     unverified_description.linkAttributes = mutableLinkAttributes;
     unverified_description.delegate = self;
     unverified_description.text = text;
-    NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, @"", @"/profile?animated=yes"];
+    NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, [EFConfig sharedInstance].scope, @"/profile?animated=yes"];
     NSURL *url = [NSURL URLWithString:urlstr];
     [unverified_description addLinkToURL:url withRange:range];
     [unverified_description sizeToFit];
@@ -281,9 +283,11 @@
     [self.view addSubview:unverified_description];
     
     UILabel *unverified_title = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 290, 200)];
-    unverified_title.font = [UIFont fontWithName:@"HelveticaNeue" size:12];
+    unverified_title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
     unverified_title.textAlignment = NSTextAlignmentCenter;
     unverified_title.textColor = [UIColor COLOR_RED_EXFE];
+    unverified_title.shadowColor = [UIColor whiteColor];
+    unverified_title.shadowOffset = CGSizeMake(0, 1);
     unverified_title.backgroundColor = [UIColor COLOR_WA(0xEE, 0xFF)];
     unverified_title.text = NSLocalizedString(@"Unverified account.", nil);
     [unverified_title sizeToFit];
@@ -292,13 +296,13 @@
     self.unverified_title = unverified_title;
     [self.view addSubview:unverified_title];
     
-    [self registerAsObserver];
+    [self regObserver];
     
     [self refreshWelcome];
 }
 
 - (void)dealloc {
-    [self unregisterForChangeNotification];
+    [self unregObserver];
     self.crossList = nil;
 }
 
@@ -312,11 +316,52 @@
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
     
-    [self refreshAll];
-    [self.tableView reloadData];
+    [self refreshUI];
 }
 
+- (void)forceSignOut {
+    [Util signout];
+    
+    EFLandingViewController *viewController = [[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil];
+    [self presentViewController:viewController animated:YES completion:nil];
+}
 
+#pragma mark KVO methods
+- (void)regObserver
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshUI)
+                                                 name:EXCrossListDidChangeNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshWelcome)
+                                                 name:UIApplicationDidChangeStatusBarFrameNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleLoadMeSuccess:)
+                                                 name:kEFNotificationNameLoadMeSuccess
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshUI)
+                                                 name:kEFNotificationNameLoadCrossListSuccess
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameLoadMeFailure
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameLoadCrossListFailure
+                                               object:nil];
+}
+
+- (void)unregObserver
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)handleLoadMeSuccess:(NSNotification *)notif {
     
@@ -327,37 +372,101 @@
     [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
 }
 
-#pragma mark KVO methods
-- (void)registerAsObserver
-{
-    if (self.crossChangeObserver == nil) {
-        self.crossChangeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:EXCrossListDidChangeNotification
-                                                                                     object:nil
-                                                                                      queue:[NSOperationQueue mainQueue]
-                                                                                 usingBlock:^(NSNotification *note) {
-                                                                                     [self refreshAll];
-                                                                                 }];
-    }
+- (void)handleNotification:(NSNotification *)notification {
+    NSString *name = notification.name;
+    NSDictionary *userInfo = notification.userInfo;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(refreshWelcome)
-                                                 name:UIApplicationDidChangeStatusBarFrameNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleLoadMeSuccess:)
-                                                 name:kEFNotificationNameLoadMeSuccess
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(refreshAll)
-                                                 name:kEFNotificationNameLoadCrossListSuccess
-                                               object:nil];
-}
-
-- (void)unregisterForChangeNotification
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    if (self.crossChangeObserver) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self.crossChangeObserver];
+    
+    if ([name hasSuffix:@".success"] && userInfo) {
+        // for success
+        NSString *cat = userInfo[@"type"];
+        NSNumber *num = userInfo[@"id"];
+        
+        if ([@"user" isEqualToString:cat]) {
+            
+        } else {
+            // for others
+        }
+        
+    } else if ([name hasSuffix:@".failure"] && userInfo) {
+        // for failure
+        NSString *cat = userInfo[@"type"];
+        NSNumber *num = userInfo[@"id"];
+        
+        if ([@"user" isEqualToString:cat]) {
+            //            if (num && self.model.userId == [num unsignedIntegerValue] ) {
+            if ([kEFNotificationNameLoadMeFailure isEqualToString:name]) {
+                Meta *meta = userInfo[@"meta"];
+                if (meta) {
+                    NSInteger c = [meta.code integerValue];
+                    NSInteger t = c / 100;
+                    
+                    switch (t) {
+                        case 4:{
+                            if (c == 401) {
+                                if ([@"invalid_auth" isEqualToString:meta.errorType]) {
+                                    NSString *errormsg = NSLocalizedString(@"Authentication failed due to security concerns, please sign in again.", nil);
+                                    UIAlertView *alerView = [UIAlertView alertViewWithTitle:@"" message:errormsg];
+#ifdef DEBUG
+                                    [alerView setCancelButtonWithTitle:NSLocalizedString(@"Cancel", nil) handler:nil];
+#endif
+                                    [alerView addButtonWithTitle:NSLocalizedString(@"OK", nil) handler:^{ [self forceSignOut];}];
+                                    [alerView show];
+                                }
+                            }
+                        } break;
+                            
+                        default:{
+                            
+                        } break;
+                    }
+                } else {
+                    NSError *error __attribute__((unused)) = userInfo[@"error"];
+                    //                        if ([@"NSCocoaErrorDomain" isEqualToString:error.domain]) {
+                    //                            [self.model loadCrossListAfter:self.model.latestModify];
+                    //                        }
+                }
+                
+            } else {
+                // Other notification
+            }
+            //            }
+        } else if ([@"cross" isEqualToString:cat]) {
+            if ([kEFNotificationNameLoadCrossListFailure isEqualToString:name]) {
+                Meta *meta = userInfo[@"meta"];
+                if (meta) {
+                    NSInteger c = [meta.code integerValue];
+                    NSInteger t = c / 100;
+                    
+                    switch (t) {
+                        case 4:{
+                            if (c == 401) {
+                                if ([@"invalid_auth" isEqualToString:meta.errorType]) {
+                                    NSString *errormsg = NSLocalizedString(@"Authentication failed due to security concerns, please sign in again.", nil);
+                                    UIAlertView *alerView = [UIAlertView alertViewWithTitle:@"" message:errormsg];
+#ifdef DEBUG
+                                    [alerView setCancelButtonWithTitle:NSLocalizedString(@"Cancel", nil) handler:nil];
+#endif
+                                    [alerView addButtonWithTitle:NSLocalizedString(@"OK", nil) handler:^{ [self forceSignOut];}];
+                                    [alerView show];
+                                }
+                            }
+                        } break;
+                            
+                        default:{
+                            
+                        } break;
+                    }
+                } else {
+                    NSError *error __attribute__((unused)) = userInfo[@"error"];
+                    //                        if ([@"NSCocoaErrorDomain" isEqualToString:error.domain]) {
+                    //                            [self.model loadCrossListAfter:self.model.latestModify];
+                    //                        }
+                }
+            }
+        } else {
+            // for others
+        }
     }
 }
 
@@ -369,7 +478,7 @@
 }
 
 #pragma mark Refresh
-- (void)refreshAll {
+- (void)refreshUI {
     self.crossList = [self.model getCrossList];
     
     [self refreshWelcome];
@@ -409,7 +518,7 @@
     NSSet *identites = [User getDefaultUser].identities;
     NSUInteger c = 0;
     for (Identity *ident in identites) {
-        if ([ident.status isEqualToString:@"VERIFYING"]) {
+        if (![@"CONNECTED" isEqualToString:ident.status] && ![@"REVOKED" isEqualToString:ident.status]) {
             c ++;
         }
     }
@@ -431,18 +540,6 @@
     } else {
         self.unverified_description.hidden = YES;
         self.unverified_title.hidden = YES;
-    }
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex __attribute__ ((deprecated))
-{
-    if (alertView.tag == 500) {
-        if (buttonIndex == alertView.firstOtherButtonIndex) {
-            [Util signout];
-            
-            EFLandingViewController *viewController = [[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil];
-            [self presentModalViewController:viewController animated:NO];
-        }
     }
 }
 
@@ -665,7 +762,7 @@
                                   withRowAnimation:UITableViewRowAnimationNone];
             [self.tableView endUpdates];
         }
-        NSString *urlstr = [NSString stringWithFormat:@"%@://%@/!%@%@", [UIApplication sharedApplication].defaultScheme, @"", cross.cross_id, @"?animated=yes"];
+        NSString *urlstr = [NSString stringWithFormat:@"%@://%@/!%@%@", [UIApplication sharedApplication].defaultScheme, [EFConfig sharedInstance].scope, cross.cross_id, @"?animated=yes"];
         NSURL *url = [NSURL URLWithString:urlstr];
         [[UIApplication sharedApplication] openURL:url];
         
@@ -702,8 +799,8 @@
         if (!strongTab) {
             return;
         }
-        NSUInteger toJumpIndex = [strongTab indexOfViewControllerForClass:class];
-        NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
+        NSUInteger toJumpIndex = class ? [strongTab indexOfViewControllerForClass:class] : strongTab.defaultIndex;
+        NSAssert(toJumpIndex != NSNotFound, @"MUST be there!");
         
         [strongTab.tabBar setSelectedIndex:toJumpIndex];
     };
@@ -733,7 +830,7 @@
 - (void)onClickConversation:(UIView *)card {
     [Flurry logEvent:@"CLICK_CROSS_CARD_CONVERSATION"];
     CrossCard *c = (CrossCard *)card;
-    NSString *urlstr = [NSString stringWithFormat:@"%@://%@/!%@%@", [UIApplication sharedApplication].defaultScheme, @"", c.cross_id, @"/conversation?animated=yes"];
+    NSString *urlstr = [NSString stringWithFormat:@"%@://%@/!%@%@", [UIApplication sharedApplication].defaultScheme, [EFConfig sharedInstance].scope, c.cross_id, @"/conversation?animated=yes"];
     NSURL *url = [NSURL URLWithString:urlstr];
     [[UIApplication sharedApplication] openURL:url];
 }
@@ -747,14 +844,15 @@
     
     EFTabBarItem *tabBarItem1 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_x_30.png"]];
     tabBarItem1.highlightImage = [UIImage imageNamed:@"widget_x_30shine.png"];
+    tabBarItem1.tabBarItemLevel = kEFTabBarItemLevelNormal;
+    tabBarItem1.defaultOrder = 0;
     
     crossGroupViewController.customTabBarItem = tabBarItem1;
     crossGroupViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
     crossGroupViewController.shadowImage = [UIImage imageNamed:@"tabshadow_x.png"];
     
     // ConvViewController
-    WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithModel:model] ;
-
+    WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithModel:model];
     
     NSUInteger conversationCount = [cross.conversation_count unsignedIntegerValue];
     
@@ -762,6 +860,8 @@
     tabBarItem2.highlightImage = [UIImage imageNamed:@"widget_conv_30shine.png"];
     tabBarItem2.titleEnable = YES;
     tabBarItem2.title = conversationCount > 0 ? [NSString stringWithFormat:@"%u", conversationCount] : nil;
+    tabBarItem2.tabBarItemLevel = kEFTabBarItemLevelNormal;
+    tabBarItem2.defaultOrder = 1;
     
     conversationViewController.customTabBarItem = tabBarItem2;
     conversationViewController.tabBarStyle = kEFTabBarStyleNormal;
@@ -778,6 +878,8 @@
     
     EFTabBarItem *tabBarItem3 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_exfee_30.png"]];
     tabBarItem3.highlightImage = [UIImage imageNamed:@"widget_exfee_30shine.png"];
+    tabBarItem3.tabBarItemLevel = kEFTabBarItemLevelNormal;
+    tabBarItem3.defaultOrder = 2;
     
     exfeeViewController.customTabBarItem = tabBarItem3;
     exfeeViewController.tabBarStyle = kEFTabBarStyleNormal;
@@ -789,6 +891,40 @@
     
     EFTabBarItem *tabBarItem4 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_routex_30.png"]];
     tabBarItem4.highlightImage = [UIImage imageNamed:@"widget_routex_30shine.png"];
+    tabBarItem4.defaultOrder = 3;
+    
+    if (cross) {
+        BOOL shouldRouteXVisible = NO;
+        for (NSDictionary *widgetInfo in cross.widget) {
+            NSString *type = [widgetInfo valueForKey:@"type"];
+            if ([type isEqualToString:@"routex"]) {
+                if ([NSNull null] != (NSNull *)[widgetInfo valueForKey:@"my_status"]) {
+                    shouldRouteXVisible = YES;
+                }
+                
+                NSNumber *isDefaultNumber = [widgetInfo valueForKey:@"default"];
+                if (isDefaultNumber) {
+                    shouldRouteXVisible = YES;
+                    
+                    if ([isDefaultNumber boolValue]) {
+                        tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelDefault;
+                        
+                        tabBarItem1.tabBarItemLevel = kEFTabBarItemLevelLow;
+                        tabBarItem2.tabBarItemLevel = kEFTabBarItemLevelLow;
+                        tabBarItem3.tabBarItemLevel = kEFTabBarItemLevelLow;
+                    } else {
+                        tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelNormal;
+                    }
+                }
+            }
+        }
+        
+        if (!shouldRouteXVisible) {
+            tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelLow;
+        }
+    } else {
+        tabBarItem4.tabBarItemLevel = kEFTabBarItemLevelLow;
+    }
     
     routeXViewController.customTabBarItem = tabBarItem4;
     routeXViewController.tabBarStyle = kEFTabBarStyleNormal;
@@ -796,7 +932,7 @@
     routeXViewController.model = model;
     
     // Init TabBarViewController
-    EFCrossTabBarViewController *tabBarViewController = [[EFCrossTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController, routeXViewController]];
+    EFCrossTabBarViewController *tabBarViewController = [[EFCrossTabBarViewController alloc] initWithViewControllers:[NSMutableArray arrayWithObjects:crossGroupViewController, conversationViewController, exfeeViewController, routeXViewController, nil]];
     tabBarViewController.model = self.model;
     tabBarViewController.crossId = crossId;
     if (cross) {
@@ -863,7 +999,7 @@
                     [self.navigationController popToRootViewControllerAnimated:NO];
                 }
                 NSInteger crossId = [crossIdString integerValue];
-                Class cls = [CrossGroupViewController class];
+                Class cls = nil;    //[CrossGroupViewController class];
                 if (pathComponents.count > 1) {
                     NSString *tab = [pathComponents objectAtIndex:1];
                     if ([@"conversation" caseInsensitiveCompare:tab] == NSOrderedSame) {

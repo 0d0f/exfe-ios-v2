@@ -333,7 +333,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
         [self.delegate mapDataSource:self didGetRouteLocations:self.tempGeomarks];
         
         for (EFRouteLocation *toRemoveGeomark in toRemoveGeomarks) {
-            [self.delegate mapDataSource:self needDeleteRouteLocation:toRemoveGeomark.locationId];
+            [self.delegate mapDataSource:self needDeleteRouteLocation:toRemoveGeomark.locationId shouldPostToServer:NO];
         }
     }
     
@@ -618,7 +618,7 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     return [self.routeLocationAnnotationMap objectForKey:routeLocation.locationId];
 }
 
-- (void)removeRouteLocation:(EFRouteLocation *)routeLocation fromMapView:(MKMapView *)mapView {
+- (void)removeRouteLocation:(EFRouteLocation *)routeLocation fromMapView:(MKMapView *)mapView shouldPostToServer:(BOOL)shouldPost {
     NSParameterAssert(routeLocation);
     NSParameterAssert(mapView);
     
@@ -631,12 +631,18 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
         [self _updatePersonState:person];
     }
     
-    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [delegate.model.apiServer deleteRouteXDeleteGeomark:routeLocation
-                                                inCross:self.cross
-                                                   type:@"location"
-                                                success:^{}
-                                                failure:^(NSError *error){}];
+    if (shouldPost) {
+        AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [delegate.model.apiServer deleteRouteXDeleteGeomark:routeLocation
+                                                    inCross:self.cross
+                                                       type:@"location"
+                                                    success:^{}
+                                                    failure:^(NSError *error){}];
+    }
+}
+
+- (void)removeRouteLocation:(EFRouteLocation *)routeLocation fromMapView:(MKMapView *)mapView {
+    [self removeRouteLocation:routeLocation fromMapView:mapView shouldPostToServer:YES];
 }
 
 - (NSArray *)allRouteLocations {
@@ -644,6 +650,10 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
 }
 
 #pragma mark - Streaming
+
+- (BOOL)isStreamOpened {
+    return self.httpStreaming.isOpened;
+}
 
 - (void)openStreaming {
     [self closeStreaming];
@@ -837,8 +847,8 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
             if ([action isEqualToString:@"delete"]) {
                 if ([type isEqualToString:@"location"]) {
                     NSString *routeLocationId = [jsonDictionary valueForKey:@"id"];
-                    if ([self.delegate respondsToSelector:@selector(mapDataSource:needDeleteRouteLocation:)]) {
-                        [self.delegate mapDataSource:self needDeleteRouteLocation:routeLocationId];
+                    if ([self.delegate respondsToSelector:@selector(mapDataSource:needDeleteRouteLocation:shouldPostToServer:)]) {
+                        [self.delegate mapDataSource:self needDeleteRouteLocation:routeLocationId shouldPostToServer:NO];
                     }
                 }
             } else if ([action isEqualToString:@"update"]) {
@@ -985,7 +995,10 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     if (!pathView) {
         [self addBreadcrumPathForPerson:person toMapView:mapView];
     } else {
-        [path replaceAllMapPointsWithMapPoints:person.locations];
+        NSMutableArray *locations = [[NSMutableArray alloc] initWithArray:person.locations];
+        [locations insertObject:person.lastLocation atIndex:0];
+        
+        [path replaceAllMapPointsWithMapPoints:locations];
         if (kEFMapPersonConnectStateOnline == person.connectState) {
             path.linecolor = [UIColor COLOR_RGB(0xFF, 0x7E, 0x98)];
         } else {

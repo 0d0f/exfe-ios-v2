@@ -257,6 +257,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     CSLinearLayoutView *snsLayoutView = [[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 0, 296, 106)];
     snsLayoutView.tag = kViewTagSnsGroup;
     snsLayoutView.orientation = CSLinearLayoutViewOrientationHorizontal;
+    if ([EFServerScopeCN isEqualToString:[EFConfig sharedInstance].scope]) {
+        snsLayoutView.hidden = YES;
+    } else {
+        snsLayoutView.hidden = NO;
+    }
     
     UIEdgeInsets insets = UIEdgeInsetsMake(6, 6, 6, 6);
     UIImage *image = [UIImage imageNamed:@"table.png"];
@@ -968,6 +973,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         if (!error) {
             NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
             NSDictionary *params = [Util splitQuery:responseStr];
+            // NSDictionary *params = [responseStr dictionaryFromQueryComponents]; //#import "XQueryComponents.h"
             
             AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
             [app.model.apiServer addReverseAuthIdentity:kProviderTwitter withToken:[params valueForKey:@"oauth_token"] andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {

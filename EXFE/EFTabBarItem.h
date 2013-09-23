@@ -10,7 +10,8 @@
 
 typedef enum {
     kEFTabBarItemLevelNormal = 0,   // Show when taped
-    kEFTabBarItemLevelLow           // Hide when taped, swipe to show
+    kEFTabBarItemLevelLow,          // Hide when taped, swipe to show
+    kEFTabBarItemLevelDefault
 } EFTabBarItemLevel;
 
 typedef enum {
@@ -29,6 +30,7 @@ typedef enum {
 
 @property (nonatomic, assign) EFTabBarItemState tabBarItemState;    // default as kEFTabBarItemStateNormal
 @property (nonatomic, assign) EFTabBarItemLevel tabBarItemLevel;    // default as kEFTabBarItemLevelNormal
+@property (nonatomic, assign) NSUInteger defaultOrder;
 
 + (EFTabBarItem *)tabBarItemWithImage:(UIImage *)image;
 - (id)initWithImage:(UIImage *)image;

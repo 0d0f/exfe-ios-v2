@@ -560,8 +560,7 @@
     [app.model.apiServer gatherCross:_cross
                                       success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                           [MBProgressHUD hideHUDForView:self.view animated:YES];
-                                          AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-                                          [app.crossesViewController refreshAll];
+                                          [NSNotificationCenter.defaultCenter postNotificationName:EXCrossListDidChangeNotification object:self];
                                           [self.navigationController popViewControllerAnimated:YES];
                                       }
                                       failure:^(RKObjectRequestOperation *operation, NSError *error) {

@@ -37,7 +37,7 @@
                                                           height,
                                                           8,
                                                           0,
-                                                          CGImageGetColorSpace(imageRef),
+                                                          CGColorSpaceCreateDeviceRGB(), //CGImageGetColorSpace(imageRef),
                                                           kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedFirst);
     
     // Draw the image into the context and retrieve the new image, which will now have an alpha layer
@@ -62,11 +62,11 @@
     
     // Build a context that's the same dimensions as the new size
     CGContextRef bitmap = CGBitmapContextCreate(NULL,
-                                                newRect.size.width,
-                                                newRect.size.height,
+                                                (size_t)newRect.size.width,
+                                                (size_t)newRect.size.height,
                                                 CGImageGetBitsPerComponent(self.CGImage),
                                                 0,
-                                                CGImageGetColorSpace(self.CGImage),
+                                                CGColorSpaceCreateDeviceRGB(), //CGImageGetColorSpace(self.CGImage),
                                                 CGImageGetBitmapInfo(self.CGImage));
     
     // Draw the image in the center of the context, leaving a gap around the edges

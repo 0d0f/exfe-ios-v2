@@ -464,7 +464,9 @@
                 else if(showTimeMode==1)
                 {
                     NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
-                    [dateformat_to setLocale:[NSLocale currentLocale]];
+                    NSString *language = [NSLocale preferredLanguages][0];
+                    NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:language];
+                    [dateformat_to setLocale:locale];
 
                     
                     [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];

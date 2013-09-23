@@ -11,7 +11,7 @@
 #import "EFPasswordField.h"
 #import "TTTAttributedLabel.h"
 
-@interface EFSignInViewController : UIViewController<UITextFieldDelegate, UIScrollViewDelegate>
+@interface EFSignInViewController : UIViewController<UITextFieldDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) CSLinearLayoutView *rootView;
 @property (nonatomic, strong) UITextField *inputIdentity;
@@ -31,9 +31,11 @@
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 @property (nonatomic, strong) UIImageView *textFieldFrame;
 
+@property (nonatomic, strong) CSLinearLayoutView *snsGroup;
 @property (nonatomic, strong) UIButton *btnFacebook;
 @property (nonatomic, strong) UIButton *btnTwitter;
 
+@property (nonatomic, strong) TTTAttributedLabel *labelRegion;
 
 @property (nonatomic, copy) id onExitBlock;
 @property (nonatomic, strong) NSMutableDictionary *identityCache;

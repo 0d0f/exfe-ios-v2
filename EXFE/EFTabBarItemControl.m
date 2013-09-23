@@ -17,6 +17,7 @@
 @interface EFTabBarItemControl ()
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @end
 
 @interface EFTabBarItemControl (Private)
@@ -67,6 +68,8 @@
         
         [tap requireGestureRecognizerToFail:pan];
         
+        self.panGesture = pan;
+        
         self.touchEnable = YES;
         self.swipeEnable = YES;
         
@@ -104,6 +107,16 @@
 }
 
 #pragma mark - Getter && Setter
+
+- (void)setSwipeEnable:(BOOL)swipeEnable {
+    [self willChangeValueForKey:@"swipeEnable"];
+    
+    _swipeEnable = swipeEnable;
+    
+    self.panGesture.enabled = swipeEnable;
+    
+    [self didChangeValueForKey:@"swipeEnable"];
+}
 
 - (void)setTabBarItem:(EFTabBarItem *)tabBarItem {
     if (_tabBarItem == tabBarItem)

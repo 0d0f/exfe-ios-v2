@@ -38,13 +38,12 @@ NSString *kEFNotificationNameEditExfeeFailure = @"notification.EditExfee.failure
     [self.model.apiServer editExfee:self.exfee
                          byIdentity:self.byIdentity
                             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
-                                {
+                                if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
                                     Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
                                     NSInteger code = [meta.code integerValue];
                                     NSInteger type = code / 100;
                                     switch (type) {
-                                        case 2: // HTTP OK
+                                        case 2:
                                         {
                                             self.state = kEFNetworkOperationStateSuccess;
                                             NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[mappingResult dictionary]];

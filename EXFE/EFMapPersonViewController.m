@@ -189,22 +189,18 @@
         if (kEFMapPersonConnectStateOnline == self.person.connectState) {
             personInfo = NSLocalizedString(@"Current location", nil);
         } else {
-            NSString *timeInterval = [self.person.lastLocation.timestamp formatedTimeIntervalFromNow];
+            NSString *timeInterval = [self.person.lastLocation.timestamp formatedTimeIntervalFromNowMinutesUpTo90];
             personInfo = [NSString stringWithFormat:NSLocalizedString(@"%@ location", nil), timeInterval];
         }
         
         // update destination distance info
         if (destination) {
-            CLLocationDistance distanceFromDest = ceil([[self.mapDataSource me].lastLocation distanceFromRouteLocation:destination]);
+            CLLocationDistance distanceFromDest = ceil([self.person.lastLocation distanceFromRouteLocation:destination]);
             NSString *unit = NSLocalizedString(@"m", nil);
             
             if (distanceFromDest > 1000) {
+                distanceFromDest = ceil(distanceFromDest / 1000);
                 unit = NSLocalizedString(@"km", nil);
-                distanceFromDest = distanceFromDest / 1000;
-                if (distanceFromDest >= 99) {
-                    distanceFromDest = 99;
-                    unit = NSLocalizedString(@"+km", nil);
-                }
             } else {
                 if (distanceFromDest > 10) {
                     distanceFromDest = (distanceFromDest / 10) * 10;

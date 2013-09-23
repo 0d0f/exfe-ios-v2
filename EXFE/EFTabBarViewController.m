@@ -28,7 +28,7 @@
     } _cache;
 }
 
-- (id)initWithViewControllers:(NSArray *)viewControllers {
+- (id)initWithViewControllers:(NSMutableArray *)viewControllers {
     self = [super init];
     if (self) {
         // self.view frame
@@ -104,7 +104,7 @@
 
 #pragma mark - Getter && Setter
 
-- (void)setViewControllers:(NSArray *)viewControllers {
+- (void)setViewControllers:(NSMutableArray *)viewControllers {
     if (viewControllers == _viewControllers)
         return;
     
@@ -114,6 +114,9 @@
         _selectedViewController = nil;
     }
     if (viewControllers && viewControllers.count) {
+        // own it
+        _viewControllers = viewControllers;
+        
         // tabBarItems
         NSMutableArray *tabBarItems = [[NSMutableArray alloc] initWithCapacity:[viewControllers count]];
         for (UIViewController<EFTabBarDataSource> *viewController in viewControllers) {
@@ -122,12 +125,6 @@
         }
         
         _tabBar.tabBarItems = tabBarItems;
-        
-        // own it
-        _viewControllers = viewControllers;
-        
-        // select
-        self.selectedIndex = 0;
     }
 }
 
@@ -182,10 +179,6 @@
 - (void)setSelectedIndex:(NSUInteger)selectedIndex animated:(BOOL)animated {
     NSParameterAssert(self.viewControllers.count);
     NSParameterAssert(selectedIndex >= 0 && selectedIndex < self.viewControllers.count);
-    
-    if (_selectedIndex == selectedIndex) {
-        return;
-    }
     
     [self willChangeValueForKey:@"selectedIndex"];
     _selectedIndex = selectedIndex;
@@ -246,6 +239,14 @@
     NSParameterAssert(viewController);
     
     return [self indexOfViewControllerForClass:[viewController class]];
+}
+
+- (void)exchangeViewControllerAtIndex:(NSUInteger)anIndex withViewControllerAtIndex:(NSUInteger)anotherIndex {
+    [self.viewControllers exchangeObjectAtIndex:anIndex withObjectAtIndex:anotherIndex];
+}
+
+- (void)reorderViewControllers {
+    [self.tabBar reorderTabBarItems];
 }
 
 #pragma mark - Private

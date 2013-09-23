@@ -98,10 +98,10 @@ static NSDictionary * _keywordDict = nil;
     for(NSString *parameter in [query componentsSeparatedByString:@"&"]) {
         NSRange range = [parameter rangeOfString:@"="];
         if(range.location != NSNotFound){
-            [parameters setValue:[[parameter substringFromIndex:range.location+range.length] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding]
-                          forKey:[[parameter substringToIndex:range.location] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
+            [parameters setValue:[[parameter substringFromIndex:range.location+range.length] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
+                          forKey:[[parameter substringToIndex:range.location] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
         } else {
-            [parameters setValue:[[NSString alloc] init] forKey:[parameter stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
+            [parameters setValue:[[NSString alloc] init] forKey:[parameter stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
         }
     }
     return parameters;
@@ -352,29 +352,6 @@ static NSDictionary * _keywordDict = nil;
 }
 
 #pragma mark error handler
-+ (void) showErrorWithMetaObject:(Meta*)meta delegate:(id)delegate{
-    
-    for (UIWindow* window in [UIApplication sharedApplication].windows) {
-        NSArray* subviews = window.subviews;
-        if ([subviews count] > 0)
-            if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
-                return;
-    }
-    NSString *errormsg = @"";
-    if ([meta.code intValue] == 401) {
-        errormsg = NSLocalizedString(@"Authentication failed due to security concerns, please sign in again.", nil);
-        
-#ifdef WWW
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil),nil];
-#else
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil),nil];
-#endif
-        
-        alertView.tag = 500;
-        [alertView show];
-    }
-}
-
 + (void) showConnectError:(NSError*)err delegate:(id)delegate{
 
     NSString *errormsg = @"";
@@ -501,7 +478,7 @@ static NSDictionary * _keywordDict = nil;
 + (NSString*) getBackgroundLink:(NSString*)imgname
 {
     //    https://exfe.com/static/img/xbg/westlake.jpg
-    return [NSString stringWithFormat:@"%@/xbg/%@",IMG_ROOT,imgname];
+    return [NSString stringWithFormat:@"%@/xbg/%@", [EFConfig sharedInstance].IMG_ROOT ,imgname];
 }
 
 + (void)checkUpdate
