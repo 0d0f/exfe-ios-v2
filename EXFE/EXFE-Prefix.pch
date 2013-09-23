@@ -13,7 +13,7 @@
 #ifdef DEBUG
 #define RKLogLevelDefault RKLogLevelTrace
 #else
-#define RKLogLevelDefault RKLogLevelInfo
+#define RKLogLevelDefault RKLogLevelWarning
 #endif
 
     #import <UIKit/UIKit.h>
