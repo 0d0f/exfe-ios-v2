@@ -1081,6 +1081,14 @@
 		4F7AA201179803A5005C4223 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA200179803A5005C4223 /* Identity.m */; };
 		4F7AA202179803A5005C4223 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA200179803A5005C4223 /* Identity.m */; };
 		4F7AA203179803A5005C4223 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA200179803A5005C4223 /* Identity.m */; };
+		4F7D7FF517EED80B0073DE6E /* time.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F7D7FF317EED80B0073DE6E /* time.strings */; };
+		4F7D7FF617EED80B0073DE6E /* time.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F7D7FF317EED80B0073DE6E /* time.strings */; };
+		4F7D7FF717EED80B0073DE6E /* time.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F7D7FF317EED80B0073DE6E /* time.strings */; };
+		4F7D7FF817EED80B0073DE6E /* time.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F7D7FF317EED80B0073DE6E /* time.strings */; };
+		4F7D7FFE17EF28610073DE6E /* time.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F7D7FFC17EF28610073DE6E /* time.strings */; };
+		4F7D7FFF17EF28610073DE6E /* time.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F7D7FFC17EF28610073DE6E /* time.strings */; };
+		4F7D800017EF28610073DE6E /* time.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F7D7FFC17EF28610073DE6E /* time.strings */; };
+		4F7D800117EF28610073DE6E /* time.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F7D7FFC17EF28610073DE6E /* time.strings */; };
 		4F8507D017841B8C00BB86FA /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8507C617841B8C00BB86FA /* NBNumberFormat.m */; };
 		4F8507D117841B8C00BB86FA /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8507C617841B8C00BB86FA /* NBNumberFormat.m */; };
 		4F8507D217841B8C00BB86FA /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8507C617841B8C00BB86FA /* NBNumberFormat.m */; };
@@ -3325,6 +3333,8 @@
 		4F7AA1FB1797FDEE005C4223 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		4F7AA1FF179803A4005C4223 /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
 		4F7AA200179803A5005C4223 /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
+		4F7D7FF417EED80B0073DE6E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/time.strings; sourceTree = "<group>"; };
+		4F7D7FFD17EF28610073DE6E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/time.strings"; sourceTree = "<group>"; };
 		4F8507C517841B8C00BB86FA /* NBNumberFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBNumberFormat.h; path = "Vendor/libPhoneNumber-iOS/libPhoneNumber/NBNumberFormat.h"; sourceTree = SOURCE_ROOT; };
 		4F8507C617841B8C00BB86FA /* NBNumberFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBNumberFormat.m; path = "Vendor/libPhoneNumber-iOS/libPhoneNumber/NBNumberFormat.m"; sourceTree = SOURCE_ROOT; };
 		4F8507C717841B8C00BB86FA /* NBPhoneMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBPhoneMetaData.h; path = "Vendor/libPhoneNumber-iOS/libPhoneNumber/NBPhoneMetaData.h"; sourceTree = SOURCE_ROOT; };
@@ -4834,6 +4844,7 @@
 		4FE77625177C1C8800B20A32 /* en.lproj */ = {
 			isa = PBXGroup;
 			children = (
+				4F7D7FF317EED80B0073DE6E /* time.strings */,
 				78A98E941560F832009E0806 /* InfoPlist.strings */,
 				4FE77626177C1CA200B20A32 /* Localizable.strings */,
 			);
@@ -4843,6 +4854,7 @@
 		4FE7762B177C1E4700B20A32 /* zh-Hans.lproj */ = {
 			isa = PBXGroup;
 			children = (
+				4F7D7FFC17EF28610073DE6E /* time.strings */,
 				4FE7762C177C1E6200B20A32 /* Localizable.strings */,
 			);
 			name = "zh-Hans.lproj";
@@ -6679,6 +6691,7 @@
 				76DC712517E323AB00177F47 /* tab_tri@2x.png in Resources */,
 				4F63DB5417172AA600136B7E /* navbar@2x.png in Resources */,
 				4F63DB5517172AA600136B7E /* exclamation.png in Resources */,
+				4F7D7FF617EED80B0073DE6E /* time.strings in Resources */,
 				4F63DB5617172AA600136B7E /* exclamation@2x.png in Resources */,
 				4F63DB5717172AA600136B7E /* FullScreenViewController.xib in Resources */,
 				4F63DB5817172AA600136B7E /* device_android.png in Resources */,
@@ -6728,6 +6741,7 @@
 				4F63DB8C17172AA600136B7E /* Default.png in Resources */,
 				4F63DB8D17172AA600136B7E /* Default@2x.png in Resources */,
 				4F63DB9017172AA600136B7E /* identity_facebook_40.png in Resources */,
+				4F7D7FFF17EF28610073DE6E /* time.strings in Resources */,
 				4F63DB9117172AA600136B7E /* identity_facebook_40@2x.png in Resources */,
 				4F63DB9217172AA600136B7E /* identity_more_40.png in Resources */,
 				4F63DB9317172AA600136B7E /* identity_more_40@2x.png in Resources */,
@@ -7144,6 +7158,7 @@
 				76DC712617E323AB00177F47 /* tab_tri@2x.png in Resources */,
 				4F63DD2517172B0700136B7E /* exclamation@2x.png in Resources */,
 				4F63DD2617172B0700136B7E /* FullScreenViewController.xib in Resources */,
+				4F7D7FF717EED80B0073DE6E /* time.strings in Resources */,
 				4F63DD2717172B0700136B7E /* device_android.png in Resources */,
 				4F63DD2817172B0700136B7E /* device_android@2x.png in Resources */,
 				4F63DD2917172B0700136B7E /* device_iphone.png in Resources */,
@@ -7193,6 +7208,7 @@
 				4F63DD6017172B0700136B7E /* identity_facebook_40@2x.png in Resources */,
 				4F63DD6117172B0700136B7E /* identity_more_40.png in Resources */,
 				4F63DD6217172B0700136B7E /* identity_more_40@2x.png in Resources */,
+				4F7D800017EF28610073DE6E /* time.strings in Resources */,
 				4F63DD6317172B0700136B7E /* identity_twitter_40.png in Resources */,
 				4F63DD6417172B0700136B7E /* identity_twitter_40@2x.png in Resources */,
 				4F63DD6517172B0700136B7E /* x_bg.png in Resources */,
@@ -7859,6 +7875,7 @@
 				4FC4107D17D04A5700D64105 /* home_bg.png in Resources */,
 				4FC4107E17D04A5700D64105 /* home_bg@2x.png in Resources */,
 				4FC4107F17D04A5700D64105 /* home_bar.png in Resources */,
+				4F7D7FF817EED80B0073DE6E /* time.strings in Resources */,
 				4FC4108017D04A5700D64105 /* home_bar@2x.png in Resources */,
 				4FC4108117D04A5700D64105 /* EFSearchTipViewController.xib in Resources */,
 				4FC4108317D04A5700D64105 /* btn_white_44.png in Resources */,
@@ -7986,6 +8003,7 @@
 				4FC410FD17D04A5700D64105 /* location_btn.png in Resources */,
 				4FC410FE17D04A5700D64105 /* btn_pad@2x.png in Resources */,
 				4FC410FF17D04A5700D64105 /* map_arrow_blue@2x.png in Resources */,
+				4F7D800117EF28610073DE6E /* time.strings in Resources */,
 				4FC4110017D04A5700D64105 /* map_remove_30@2x.png in Resources */,
 				4FC4110117D04A5700D64105 /* map_arrow_12g5@2x.png in Resources */,
 				4FC4110217D04A5700D64105 /* portrait_frame_40@2x.png in Resources */,
@@ -8320,6 +8338,7 @@
 				4F00544B17265C8500D4B429 /* home_bg.png in Resources */,
 				4F00544C17265C8500D4B429 /* home_bg@2x.png in Resources */,
 				4F00545B17266FD800D4B429 /* home_bar.png in Resources */,
+				4F7D7FF517EED80B0073DE6E /* time.strings in Resources */,
 				4F00545E17266FD800D4B429 /* home_bar@2x.png in Resources */,
 				7670127A1729086100B5445E /* EFSearchTipViewController.xib in Resources */,
 				4F00547717296C4100D4B429 /* btn_white_44.png in Resources */,
@@ -8447,6 +8466,7 @@
 				76B1240417968C9900A73E59 /* location_btn.png in Resources */,
 				76B1241E1797C81D00A73E59 /* btn_pad@2x.png in Resources */,
 				76B1242B1798331A00A73E59 /* map_arrow_blue@2x.png in Resources */,
+				4F7D7FFE17EF28610073DE6E /* time.strings in Resources */,
 				76B1243A1798398400A73E59 /* map_remove_30@2x.png in Resources */,
 				76B1245917992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */,
 				766176D617C93AE500E98E74 /* portrait_frame_40@2x.png in Resources */,
@@ -9702,6 +9722,22 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
+		4F7D7FF317EED80B0073DE6E /* time.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4F7D7FF417EED80B0073DE6E /* en */,
+			);
+			name = time.strings;
+			sourceTree = "<group>";
+		};
+		4F7D7FFC17EF28610073DE6E /* time.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4F7D7FFD17EF28610073DE6E /* zh-Hans */,
+			);
+			name = time.strings;
+			sourceTree = "<group>";
+		};
 		4FC4114717D5949B00D64105 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -10122,7 +10158,7 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-force_load",
-					"${BUILT_PRODUCTS_DIR}/libBlocksKit.a",
+					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
 				);
 				PRODUCT_NAME = Shuady;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -10154,7 +10190,7 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-force_load",
-					"${BUILT_PRODUCTS_DIR}/libBlocksKit.a",
+					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
 				);
 				PRODUCT_NAME = Shuady;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -10196,11 +10232,7 @@
 					"$(SRCROOT)/EXFE/Flurry",
 					"$(SRCROOT)/EXFE/SDKExport",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-force_load",
-					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
@@ -10236,11 +10268,7 @@
 					"$(SRCROOT)/EXFE/SDKExport",
 				);
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-force_load",
-					"${SRCROOT}/Vendor/Build/BlocksKit/libBlocksKit.a",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
