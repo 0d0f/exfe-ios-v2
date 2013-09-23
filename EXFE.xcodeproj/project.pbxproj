@@ -2386,6 +2386,10 @@
 		76448C7917F002F200ED18CB /* portrait_frame_22.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448C7717F002F200ED18CB /* portrait_frame_22.png */; };
 		76448C7A17F002F200ED18CB /* portrait_frame_22.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448C7717F002F200ED18CB /* portrait_frame_22.png */; };
 		76448C7B17F002F200ED18CB /* portrait_frame_22.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448C7717F002F200ED18CB /* portrait_frame_22.png */; };
+		76448C7D17F0274600ED18CB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C7C17F0274600ED18CB /* AudioToolbox.framework */; };
+		76448C7E17F0275100ED18CB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C7C17F0274600ED18CB /* AudioToolbox.framework */; };
+		76448C7F17F0275800ED18CB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C7C17F0274600ED18CB /* AudioToolbox.framework */; };
+		76448C8017F0276000ED18CB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C7C17F0274600ED18CB /* AudioToolbox.framework */; };
 		764CD8F2173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
 		764CD8F3173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
 		764CD8F4173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
@@ -3656,6 +3660,7 @@
 		76448C6A17EFEC9500ED18CB /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		76448C7217F002CE00ED18CB /* portrait_frame_22@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_frame_22@2x.png"; sourceTree = "<group>"; };
 		76448C7717F002F200ED18CB /* portrait_frame_22.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_frame_22.png; sourceTree = "<group>"; };
+		76448C7C17F0274600ED18CB /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		764CD8F0173A5C4600627237 /* EFNotificationBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFNotificationBannerView.h; sourceTree = "<group>"; };
 		764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFNotificationBannerView.m; sourceTree = "<group>"; };
 		764CD8FC173A8F9400627237 /* cautionbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cautionbar.png; sourceTree = "<group>"; };
@@ -4311,6 +4316,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76448C7E17F0275100ED18CB /* AudioToolbox.framework in Frameworks */,
 				76448C6D17EFECA200ED18CB /* AssetsLibrary.framework in Frameworks */,
 				76448C6C17EFEC9D00ED18CB /* ImageIO.framework in Frameworks */,
 				766032C317C0D4AC00B21A12 /* AddressBookUI.framework in Frameworks */,
@@ -4349,6 +4355,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76448C7F17F0275800ED18CB /* AudioToolbox.framework in Frameworks */,
 				76448C6F17EFECAD00ED18CB /* AssetsLibrary.framework in Frameworks */,
 				76448C6E17EFECA900ED18CB /* ImageIO.framework in Frameworks */,
 				766032BB17C0D4A500B21A12 /* AddressBookUI.framework in Frameworks */,
@@ -4387,6 +4394,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76448C8017F0276000ED18CB /* AudioToolbox.framework in Frameworks */,
 				76448C7117EFECB800ED18CB /* AssetsLibrary.framework in Frameworks */,
 				76448C7017EFECB400ED18CB /* ImageIO.framework in Frameworks */,
 				4FC40F2817D04A5700D64105 /* AddressBookUI.framework in Frameworks */,
@@ -4425,6 +4433,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76448C7D17F0274600ED18CB /* AudioToolbox.framework in Frameworks */,
 				76448C6B17EFEC9500ED18CB /* AssetsLibrary.framework in Frameworks */,
 				76448C6917EFEC8B00ED18CB /* ImageIO.framework in Frameworks */,
 				766032C417C0D4B400B21A12 /* AddressBookUI.framework in Frameworks */,
@@ -6070,6 +6079,7 @@
 		78A98E8A1560F832009E0806 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				76448C7C17F0274600ED18CB /* AudioToolbox.framework */,
 				76448C6A17EFEC9500ED18CB /* AssetsLibrary.framework */,
 				76448C6817EFEC8B00ED18CB /* ImageIO.framework */,
 				766032BA17C0D4A500B21A12 /* AddressBookUI.framework */,

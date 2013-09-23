@@ -11,6 +11,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <ImageIO/ImageIO.h>
 #import <QuartzCore/QuartzCore.h>
+#import <AudioToolbox/AudioToolbox.h>
 #import "EFGradientView.h"
 #import "Util.h"
 
@@ -187,7 +188,11 @@
     if (![self _isImageAdded:info]) {
         if (self.imageDicts.count < kMaxImageCount) {
             [self _addImage:info];
+        } else {
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
         }
+    } else {
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     }
 }
 
