@@ -29,6 +29,7 @@
 #import "Util.h"
 #import "WXApi.h"
 #import "CCTemplate.h"
+#import "EFImagePickerViewController.h"
 
 #define kAnnotationOffsetY  (-50.0f)
 #define kShadowOffset       (3.0f)
@@ -782,29 +783,36 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     [menuViewController dismissAnimated:YES];
     
     if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi]) {
-        UIGraphicsBeginImageContextWithOptions(self.view.frame.size, 1, [UIScreen mainScreen].scale);
-        [self.view.layer renderInContext:UIGraphicsGetCurrentContext()];
-        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+        EFImagePickerViewController *imagePicker = [[EFImagePickerViewController alloc] init];
+        imagePicker.cancelActionHandler = ^(EFImagePickerViewController *picker){
+            [picker.presentingViewController dismissViewControllerAnimated:YES
+                                                                completion:nil];
+        };
+        [self.tabBarViewController presentViewController:imagePicker animated:YES completion:nil];
         
-        NSData *imageData = UIImageJPEGRepresentation(image, 0.8f);
-        NSData *thumbImageData = UIImageJPEGRepresentation(image, 0.1f);
-        
-        WXImageObject *imageObject = [WXImageObject object];
-        imageObject.imageData = imageData;
-        
-        WXMediaMessage *mediaMessage = [WXMediaMessage message];
-        [mediaMessage setThumbData:thumbImageData];
-        mediaMessage.title = self.cross.title;
-        mediaMessage.description = @"test";
-        mediaMessage.mediaObject = imageObject;
-        
-        SendMessageToWXReq *requestMessage = [[SendMessageToWXReq alloc] init];
-        requestMessage.bText = NO;
-        requestMessage.scene = WXSceneTimeline;
-        requestMessage.message = mediaMessage;
-        
-        [WXApi sendReq:requestMessage];
+//        UIGraphicsBeginImageContextWithOptions(self.view.frame.size, 1, [UIScreen mainScreen].scale);
+//        [self.view.layer renderInContext:UIGraphicsGetCurrentContext()];
+//        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+//        UIGraphicsEndImageContext();
+//        
+//        NSData *imageData = UIImageJPEGRepresentation(image, 0.8f);
+//        NSData *thumbImageData = UIImageJPEGRepresentation(image, 0.1f);
+//        
+//        WXImageObject *imageObject = [WXImageObject object];
+//        imageObject.imageData = imageData;
+//        
+//        WXMediaMessage *mediaMessage = [WXMediaMessage message];
+//        [mediaMessage setThumbData:thumbImageData];
+//        mediaMessage.title = self.cross.title;
+//        mediaMessage.description = @"test";
+//        mediaMessage.mediaObject = imageObject;
+//        
+//        SendMessageToWXReq *requestMessage = [[SendMessageToWXReq alloc] init];
+//        requestMessage.bText = NO;
+//        requestMessage.scene = WXSceneTimeline;
+//        requestMessage.message = mediaMessage;
+//        
+//        [WXApi sendReq:requestMessage];
     }
 }
 
@@ -949,8 +957,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                               
                                                               if (isWechat) {
                                                                   if ([WXApi isWXAppInstalled] &&
-                                                                      [WXApi isWXAppSupportApi] &&
-                                                                      [WXApi getApiVersion] <= [WXApi getWXAppSupportMaxApiVersion]) {
+                                                                      [WXApi isWXAppSupportApi]) {
                                                                       [delegate.model.apiServer getRouteXUrlInCross:self.cross
                                                                                                             success:^(NSString *url){
                                                                                                                 if (weakPersonViewController && weakPersonViewController == weakSelf.personViewController) {

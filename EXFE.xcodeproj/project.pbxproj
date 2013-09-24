@@ -2378,6 +2378,30 @@
 		76448BF517E9A29400ED18CB /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448BF317E9A29400ED18CB /* NSString+Encode.m */; };
 		76448BF617E9A29400ED18CB /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448BF317E9A29400ED18CB /* NSString+Encode.m */; };
 		76448BF717E9A29400ED18CB /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448BF317E9A29400ED18CB /* NSString+Encode.m */; };
+		76448C6417EFE86B00ED18CB /* EFImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448C6317EFE86B00ED18CB /* EFImagePickerViewController.m */; };
+		76448C6517EFE86B00ED18CB /* EFImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448C6317EFE86B00ED18CB /* EFImagePickerViewController.m */; };
+		76448C6617EFE86B00ED18CB /* EFImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448C6317EFE86B00ED18CB /* EFImagePickerViewController.m */; };
+		76448C6717EFE86B00ED18CB /* EFImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448C6317EFE86B00ED18CB /* EFImagePickerViewController.m */; };
+		76448C6917EFEC8B00ED18CB /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C6817EFEC8B00ED18CB /* ImageIO.framework */; };
+		76448C6B17EFEC9500ED18CB /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C6A17EFEC9500ED18CB /* AssetsLibrary.framework */; };
+		76448C6C17EFEC9D00ED18CB /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C6817EFEC8B00ED18CB /* ImageIO.framework */; };
+		76448C6D17EFECA200ED18CB /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C6A17EFEC9500ED18CB /* AssetsLibrary.framework */; };
+		76448C6E17EFECA900ED18CB /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C6817EFEC8B00ED18CB /* ImageIO.framework */; };
+		76448C6F17EFECAD00ED18CB /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C6A17EFEC9500ED18CB /* AssetsLibrary.framework */; };
+		76448C7017EFECB400ED18CB /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C6817EFEC8B00ED18CB /* ImageIO.framework */; };
+		76448C7117EFECB800ED18CB /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C6A17EFEC9500ED18CB /* AssetsLibrary.framework */; };
+		76448C7317F002CE00ED18CB /* portrait_frame_22@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448C7217F002CE00ED18CB /* portrait_frame_22@2x.png */; };
+		76448C7417F002CE00ED18CB /* portrait_frame_22@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448C7217F002CE00ED18CB /* portrait_frame_22@2x.png */; };
+		76448C7517F002CE00ED18CB /* portrait_frame_22@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448C7217F002CE00ED18CB /* portrait_frame_22@2x.png */; };
+		76448C7617F002CE00ED18CB /* portrait_frame_22@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448C7217F002CE00ED18CB /* portrait_frame_22@2x.png */; };
+		76448C7817F002F200ED18CB /* portrait_frame_22.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448C7717F002F200ED18CB /* portrait_frame_22.png */; };
+		76448C7917F002F200ED18CB /* portrait_frame_22.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448C7717F002F200ED18CB /* portrait_frame_22.png */; };
+		76448C7A17F002F200ED18CB /* portrait_frame_22.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448C7717F002F200ED18CB /* portrait_frame_22.png */; };
+		76448C7B17F002F200ED18CB /* portrait_frame_22.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448C7717F002F200ED18CB /* portrait_frame_22.png */; };
+		76448C7D17F0274600ED18CB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C7C17F0274600ED18CB /* AudioToolbox.framework */; };
+		76448C7E17F0275100ED18CB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C7C17F0274600ED18CB /* AudioToolbox.framework */; };
+		76448C7F17F0275800ED18CB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C7C17F0274600ED18CB /* AudioToolbox.framework */; };
+		76448C8017F0276000ED18CB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C7C17F0274600ED18CB /* AudioToolbox.framework */; };
 		764CD8F2173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
 		764CD8F3173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
 		764CD8F4173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
@@ -3646,6 +3670,13 @@
 		763BE926179FD836003BF97C /* map_shadow_gap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_shadow_gap.png; sourceTree = "<group>"; };
 		76448BF217E9A29400ED18CB /* NSString+Encode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Encode.h"; sourceTree = "<group>"; };
 		76448BF317E9A29400ED18CB /* NSString+Encode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Encode.m"; sourceTree = "<group>"; };
+		76448C6217EFE86B00ED18CB /* EFImagePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFImagePickerViewController.h; sourceTree = "<group>"; };
+		76448C6317EFE86B00ED18CB /* EFImagePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFImagePickerViewController.m; sourceTree = "<group>"; };
+		76448C6817EFEC8B00ED18CB /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		76448C6A17EFEC9500ED18CB /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		76448C7217F002CE00ED18CB /* portrait_frame_22@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_frame_22@2x.png"; sourceTree = "<group>"; };
+		76448C7717F002F200ED18CB /* portrait_frame_22.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_frame_22.png; sourceTree = "<group>"; };
+		76448C7C17F0274600ED18CB /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		764CD8F0173A5C4600627237 /* EFNotificationBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFNotificationBannerView.h; sourceTree = "<group>"; };
 		764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFNotificationBannerView.m; sourceTree = "<group>"; };
 		764CD8FC173A8F9400627237 /* cautionbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cautionbar.png; sourceTree = "<group>"; };
@@ -4301,6 +4332,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76448C7E17F0275100ED18CB /* AudioToolbox.framework in Frameworks */,
+				76448C6D17EFECA200ED18CB /* AssetsLibrary.framework in Frameworks */,
+				76448C6C17EFEC9D00ED18CB /* ImageIO.framework in Frameworks */,
 				766032C317C0D4AC00B21A12 /* AddressBookUI.framework in Frameworks */,
 				761165A617B89104005B248A /* libRestKit.a in Frameworks */,
 				76B124501798ECF800A73E59 /* libicucore.dylib in Frameworks */,
@@ -4337,6 +4371,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76448C7F17F0275800ED18CB /* AudioToolbox.framework in Frameworks */,
+				76448C6F17EFECAD00ED18CB /* AssetsLibrary.framework in Frameworks */,
+				76448C6E17EFECA900ED18CB /* ImageIO.framework in Frameworks */,
 				766032BB17C0D4A500B21A12 /* AddressBookUI.framework in Frameworks */,
 				4F38E9E717B542FA00B850B6 /* libRestKit.a in Frameworks */,
 				76B124511798ECFD00A73E59 /* libicucore.dylib in Frameworks */,
@@ -4373,6 +4410,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76448C8017F0276000ED18CB /* AudioToolbox.framework in Frameworks */,
+				76448C7117EFECB800ED18CB /* AssetsLibrary.framework in Frameworks */,
+				76448C7017EFECB400ED18CB /* ImageIO.framework in Frameworks */,
 				4FC40F2817D04A5700D64105 /* AddressBookUI.framework in Frameworks */,
 				4FC40F2917D04A5700D64105 /* libFlurry_4.2.3.a in Frameworks */,
 				4FC40F2A17D04A5700D64105 /* libRestKit.a in Frameworks */,
@@ -4409,6 +4449,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76448C7D17F0274600ED18CB /* AudioToolbox.framework in Frameworks */,
+				76448C6B17EFEC9500ED18CB /* AssetsLibrary.framework in Frameworks */,
+				76448C6917EFEC8B00ED18CB /* ImageIO.framework in Frameworks */,
 				766032C417C0D4B400B21A12 /* AddressBookUI.framework in Frameworks */,
 				4F5AF03817BB6C1500AAE817 /* libFlurry_4.2.3.a in Frameworks */,
 				761165A717B8910D005B248A /* libRestKit.a in Frameworks */,
@@ -5001,6 +5044,15 @@
 			name = Object;
 			sourceTree = "<group>";
 		};
+		76448C5E17EFE84D00ED18CB /* Photo */ = {
+			isa = PBXGroup;
+			children = (
+				76448C6217EFE86B00ED18CB /* EFImagePickerViewController.h */,
+				76448C6317EFE86B00ED18CB /* EFImagePickerViewController.m */,
+			);
+			name = Photo;
+			sourceTree = "<group>";
+		};
 		76555B51179E78D600BCC5A7 /* WeixinSDK */ = {
 			isa = PBXGroup;
 			children = (
@@ -5060,6 +5112,7 @@
 			isa = PBXGroup;
 			children = (
 				76F6B3101740B5C1008B39C1 /* EFKit.h */,
+				76448C5E17EFE84D00ED18CB /* Photo */,
 				7660330717C21DD800B21A12 /* View */,
 				76B124521798F89F00A73E59 /* Streaming */,
 				7607AABE1796451200529F0D /* Map */,
@@ -5552,6 +5605,8 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				76448C7717F002F200ED18CB /* portrait_frame_22.png */,
+				76448C7217F002CE00ED18CB /* portrait_frame_22@2x.png */,
 				76DC712B17E323D800177F47 /* tab_tri.png */,
 				76DC712317E323AB00177F47 /* tab_tri@2x.png */,
 				761B24AE17CF4D270091DD7B /* map_arrow_blue.png */,
@@ -6044,6 +6099,9 @@
 		78A98E8A1560F832009E0806 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				76448C7C17F0274600ED18CB /* AudioToolbox.framework */,
+				76448C6A17EFEC9500ED18CB /* AssetsLibrary.framework */,
+				76448C6817EFEC8B00ED18CB /* ImageIO.framework */,
 				766032BA17C0D4A500B21A12 /* AddressBookUI.framework */,
 				76B1244E1798ECF000A73E59 /* libicucore.dylib */,
 				76073D10174F8802007CBFC3 /* MessageUI.framework */,
@@ -6670,6 +6728,7 @@
 				4F63DB3917172AA600136B7E /* identity_more_32@2x.png in Resources */,
 				4F63DB3A17172AA600136B7E /* identity_twitter_18_grey.png in Resources */,
 				4F63DB3B17172AA600136B7E /* identity_twitter_18_grey@2x.png in Resources */,
+				76448C7417F002CE00ED18CB /* portrait_frame_22@2x.png in Resources */,
 				4F63DB3C17172AA600136B7E /* identity_twitter_18.png in Resources */,
 				4F63DB3D17172AA600136B7E /* identity_twitter_18@2x.png in Resources */,
 				4F63DB3E17172AA600136B7E /* identity_twitter_32.png in Resources */,
@@ -7057,6 +7116,7 @@
 				4FE77629177C1CA200B20A32 /* Localizable.strings in Resources */,
 				761559BC177F1A2B00ABB62B /* header_arrow.png in Resources */,
 				761559BF177F1A2B00ABB62B /* header_arrow@2x.png in Resources */,
+				76448C7917F002F200ED18CB /* portrait_frame_22.png in Resources */,
 				4FE0C045178347040029B694 /* Localizable.strings in Resources */,
 				4F8507E117841BBF00BB86FA /* NBPhoneNumberMetadata.plist in Resources */,
 				4FF9D1D01790724E00D01765 /* textbox.png in Resources */,
@@ -7137,6 +7197,7 @@
 				4F63DD0917172B0700136B7E /* identity_twitter_18_grey.png in Resources */,
 				4F63DD0A17172B0700136B7E /* identity_twitter_18_grey@2x.png in Resources */,
 				4F63DD0B17172B0700136B7E /* identity_twitter_18.png in Resources */,
+				76448C7517F002CE00ED18CB /* portrait_frame_22@2x.png in Resources */,
 				4F63DD0C17172B0700136B7E /* identity_twitter_18@2x.png in Resources */,
 				76C9318417BDDA3600536383 /* cautionbar_cancel_pressed@2x.png in Resources */,
 				4F63DD0D17172B0700136B7E /* identity_twitter_32.png in Resources */,
@@ -7524,6 +7585,7 @@
 				765A82FE175F4F4C00448B64 /* EFContactViewController.xib in Resources */,
 				4FE7762A177C1CA200B20A32 /* Localizable.strings in Resources */,
 				4FE77630177C1E6200B20A32 /* Localizable.strings in Resources */,
+				76448C7A17F002F200ED18CB /* portrait_frame_22.png in Resources */,
 				761559BD177F1A2B00ABB62B /* header_arrow.png in Resources */,
 				761559C0177F1A2B00ABB62B /* header_arrow@2x.png in Resources */,
 				4F8507E217841BBF00BB86FA /* NBPhoneNumberMetadata.plist in Resources */,
@@ -7838,6 +7900,7 @@
 				4FC4104F17D04A5700D64105 /* exfee_accepted_badge@2x.png in Resources */,
 				4FC4105017D04A5700D64105 /* exfee_host_badge.png in Resources */,
 				4FC4105117D04A5700D64105 /* exfee_host_badge@2x.png in Resources */,
+				76448C7617F002CE00ED18CB /* portrait_frame_22@2x.png in Resources */,
 				4FC4105217D04A5700D64105 /* exfee_host_blue.png in Resources */,
 				4FC4105317D04A5700D64105 /* exfee_host_blue@2x.png in Resources */,
 				4FC4105417D04A5700D64105 /* exfee_line_h1.png in Resources */,
@@ -7954,6 +8017,7 @@
 				4FC410C417D04A5700D64105 /* start_tri-28.png in Resources */,
 				4FC410C517D04A5700D64105 /* start_tri-28@2x.png in Resources */,
 				4FC410C617D04A5700D64105 /* start_tri-29.png in Resources */,
+				76448C7B17F002F200ED18CB /* portrait_frame_22.png in Resources */,
 				4FC410C717D04A5700D64105 /* start_tri-29@2x.png in Resources */,
 				4FC410C817D04A5700D64105 /* list_divider.png in Resources */,
 				4FC410C917D04A5700D64105 /* list_divider@2x.png in Resources */,
@@ -8301,6 +8365,7 @@
 				4F29C90A16F80DC2001BB176 /* exfee_accepted_badge@2x.png in Resources */,
 				4F29C91516F813D7001BB176 /* exfee_host_badge.png in Resources */,
 				4F29C91616F813D7001BB176 /* exfee_host_badge@2x.png in Resources */,
+				76448C7317F002CE00ED18CB /* portrait_frame_22@2x.png in Resources */,
 				4F29C91716F813D7001BB176 /* exfee_host_blue.png in Resources */,
 				4F29C91816F813D7001BB176 /* exfee_host_blue@2x.png in Resources */,
 				4F29C91916F813D7001BB176 /* exfee_line_h1.png in Resources */,
@@ -8417,6 +8482,7 @@
 				4FDFA46D172A794900929BC9 /* start_tri-28.png in Resources */,
 				4FDFA470172A794900929BC9 /* start_tri-28@2x.png in Resources */,
 				4FDFA473172A794900929BC9 /* start_tri-29.png in Resources */,
+				76448C7817F002F200ED18CB /* portrait_frame_22.png in Resources */,
 				4FDFA476172A794900929BC9 /* start_tri-29@2x.png in Resources */,
 				4FDFA47B172A83CB00929BC9 /* list_divider.png in Resources */,
 				4FDFA47E172A83CB00929BC9 /* list_divider@2x.png in Resources */,
@@ -8604,6 +8670,7 @@
 				4F63DA9217172AA600136B7E /* PullRefreshTableViewController.m in Sources */,
 				4F63DA9317172AA600136B7E /* ProfileCellView.m in Sources */,
 				4F63DA9417172AA600136B7E /* Meta.m in Sources */,
+				76448C6517EFE86B00ED18CB /* EFImagePickerViewController.m in Sources */,
 				4F63DA9517172AA600136B7E /* OAuthLoginViewController.m in Sources */,
 				4F63DA9617172AA600136B7E /* URLParser.m in Sources */,
 				766032FE17C21C1B00B21A12 /* EFMapPersonViewController.m in Sources */,
@@ -8879,6 +8946,7 @@
 				4F63DC6117172B0700136B7E /* PullRefreshTableViewController.m in Sources */,
 				4F63DC6217172B0700136B7E /* ProfileCellView.m in Sources */,
 				4F63DC6317172B0700136B7E /* Meta.m in Sources */,
+				76448C6617EFE86B00ED18CB /* EFImagePickerViewController.m in Sources */,
 				4F63DC6417172B0700136B7E /* OAuthLoginViewController.m in Sources */,
 				4F63DC6517172B0700136B7E /* URLParser.m in Sources */,
 				766032FF17C21C1B00B21A12 /* EFMapPersonViewController.m in Sources */,
@@ -9154,6 +9222,7 @@
 				4FC40E2F17D04A5700D64105 /* PullRefreshTableViewController.m in Sources */,
 				4FC40E3017D04A5700D64105 /* ProfileCellView.m in Sources */,
 				4FC40E3117D04A5700D64105 /* Meta.m in Sources */,
+				76448C6717EFE86B00ED18CB /* EFImagePickerViewController.m in Sources */,
 				4FC40E3217D04A5700D64105 /* OAuthLoginViewController.m in Sources */,
 				4FC40E3317D04A5700D64105 /* URLParser.m in Sources */,
 				4FC40E3417D04A5700D64105 /* EFMapPersonViewController.m in Sources */,
@@ -9429,6 +9498,7 @@
 				785F6F7D1585A95D00BF8EA0 /* PullRefreshTableViewController.m in Sources */,
 				78A834091588BBDC0019FDF5 /* ProfileCellView.m in Sources */,
 				78DABCE9158B236C004447B5 /* Meta.m in Sources */,
+				76448C6417EFE86B00ED18CB /* EFImagePickerViewController.m in Sources */,
 				78D0A600158CFB4C00401BCA /* OAuthLoginViewController.m in Sources */,
 				78D0A601158CFB5F00401BCA /* URLParser.m in Sources */,
 				766032FD17C21C1B00B21A12 /* EFMapPersonViewController.m in Sources */,
