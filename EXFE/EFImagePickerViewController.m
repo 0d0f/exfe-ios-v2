@@ -169,7 +169,86 @@
 #pragma mark - Action
 
 - (void)okButtonPressed:(id)sender {
-    
+    if (self.imageDicts.count) {
+        EFImageComposerViewController *composerViewController = [[EFImageComposerViewController alloc] init];
+        composerViewController.delegate = self;
+        
+        __block NSMutableArray *newImageDicts = [[NSMutableArray alloc] init];
+        dispatch_semaphore_t enumerateSemaphore = dispatch_semaphore_create(0);
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+            
+            for (NSDictionary *imageDict in self.imageDicts) {
+                @autoreleasepool {
+                    NSURL *imageURL = [imageDict valueForKey:UIImagePickerControllerReferenceURL];
+                    if (imageURL) {
+                        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+                        
+                        [library assetForURL:imageURL
+                                 resultBlock:^(ALAsset *asset){
+                                     ALAssetRepresentation *representation = [asset defaultRepresentation];
+                                     
+                                     NSMutableDictionary *imageDict = [[NSMutableDictionary alloc] init];
+                                     UIImage *image = [UIImage imageWithCGImage:[representation fullScreenImage]];
+                                     [imageDict setValue:image forKey:@"image"];
+                                     
+                                     // create a buffer to hold image data
+                                     uint8_t *buffer = (uint8_t *)malloc(sizeof(uint8_t) * (long)representation.size);
+                                     NSUInteger length = [representation getBytes:buffer fromOffset: 0.0  length:(long)representation.size error:nil];
+                                     
+                                     if (length != 0)  {
+                                         // buffer -> NSData object; free buffer afterwards
+                                         NSData *adata = [[NSData alloc] initWithBytesNoCopy:buffer length:(long)representation.size freeWhenDone:YES];
+                                         
+                                         // identify image type (jpeg, png, RAW file, ...) using UTI hint
+                                         NSDictionary* sourceOptionsDict = [NSDictionary dictionaryWithObjectsAndKeys:(id)[representation UTI] ,kCGImageSourceTypeIdentifierHint,nil];
+                                         
+                                         // create CGImageSource with NSData
+                                         CGImageSourceRef sourceRef = CGImageSourceCreateWithData((__bridge CFDataRef) adata,  (__bridge CFDictionaryRef) sourceOptionsDict);
+                                         
+                                         // get imagePropertiesDictionary
+                                         CFDictionaryRef imagePropertiesDictionary;
+                                         imagePropertiesDictionary = CGImageSourceCopyPropertiesAtIndex(sourceRef,0, NULL);
+                                         
+                                         // get gps data
+                                         CFDictionaryRef gpsInfo = (CFDictionaryRef)CFDictionaryGetValue(imagePropertiesDictionary, kCGImagePropertyGPSDictionary);
+                                         NSDictionary *gpsDict = (__bridge NSDictionary *)gpsInfo;
+                                         NSLog(@"gps: %@", gpsDict);
+                                         
+                                         // clean up
+                                         CFRelease(imagePropertiesDictionary);
+                                         CFRelease(sourceRef);
+                                     } else {
+                                         NSLog(@"image_representation buffer length == 0");
+                                     }
+                                     
+                                     [newImageDicts addObject:imageDict];
+                                     
+                                     dispatch_semaphore_signal(sema);
+                                 }
+                                failureBlock:^(NSError *error){
+                                    dispatch_semaphore_signal(sema);
+                                }];
+                        
+                        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+                    }
+                }
+            }
+            
+            dispatch_semaphore_signal(enumerateSemaphore);
+        });
+        
+        dispatch_semaphore_wait(enumerateSemaphore, DISPATCH_TIME_FOREVER);
+        
+        [composerViewController customWithImageDicts:newImageDicts
+                                            geomarks:nil
+                                                path:nil];
+        
+        [self presentViewController:composerViewController
+                           animated:YES
+                         completion:nil];
+    }
 }
 
 #pragma mark - Public
@@ -182,6 +261,38 @@
 + (BOOL)isPhotoLibraryAccessAviliable {
     ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
     return (status != ALAuthorizationStatusAuthorized);
+}
+
+#pragma mark - EFImageComposerViewControllerDelegate
+
+- (void)imageComposerViewControllerShareButtonPressed:(EFImageComposerViewController *)viewController whithImage:(UIImage *)image {
+    if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi]) {
+        NSData *imageData = UIImageJPEGRepresentation(image, 0.8f);
+        NSData *thumbImageData = UIImageJPEGRepresentation(image, 0.1f);
+        
+        UIImage *thumbImage = [UIImage imageWithData:thumbImageData scale:[UIScreen mainScreen].scale];
+        
+        WXImageObject *imageObject = [WXImageObject object];
+        imageObject.imageData = imageData;
+        
+        WXMediaMessage *mediaMessage = [WXMediaMessage message];
+        [mediaMessage setThumbImage:thumbImage];
+        mediaMessage.mediaObject = imageObject;
+        mediaMessage.mediaTagName = @"WXImageObject";
+        
+        SendMessageToWXReq *requestMessage = [[SendMessageToWXReq alloc] init];
+        requestMessage.bText = NO;
+        requestMessage.scene = WXSceneSession;
+        requestMessage.message = mediaMessage;
+        
+        if (![WXApi sendReq:requestMessage]) {
+            RKLogInfo(@"Weixin send failure.");
+        }
+    }
+}
+
+- (void)imageComposerViewControllerCancelButtonPressed:(EFImageComposerViewController *)viewController {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UIImagePickerControllerDelegate
