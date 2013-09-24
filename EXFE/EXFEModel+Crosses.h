@@ -20,6 +20,7 @@
 - (NSArray *)getCrossList;
 - (Cross *)getCrossById:(NSUInteger)crossId;
 - (Cross *)getCrossById:(NSNumber *)crossId from:(NSManagedObjectContext *)moc;
+- (void)deleteCross:(Cross *)cross;
 
 #pragma mark - From remote api
 #pragma mark Cross
@@ -27,6 +28,7 @@
 - (void)loadCrossList;
 - (void)loadCrossListAfter:(NSDate *)time;
 - (void)editCross:(Cross *)cross;
+- (void)removeCross:(Cross *)cross;
 
 - (void)updateCrossTime:(CrossTime*)crossTime withCrossId:(NSNumber *)crossId;
 
