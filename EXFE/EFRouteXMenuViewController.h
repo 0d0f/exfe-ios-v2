@@ -11,7 +11,9 @@
 @class EFRouteXMenuViewController;
 @protocol EFRouteXMenuViewControllerDelegate <NSObject>
 
+@optional
 - (void)menuViewControllerWannaShowRouteX:(EFRouteXMenuViewController *)menuViewController;
+- (void)menuViewControllerWannaShowPhoto:(EFRouteXMenuViewController *)menuViewController;
 
 @end
 

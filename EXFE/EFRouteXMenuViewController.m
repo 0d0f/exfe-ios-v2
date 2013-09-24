@@ -16,10 +16,12 @@
 #define kTableViewWidth (165.0f)
 #define kCellHeight     (44.0f)
 #define kCornerRadius   (4.0f)
+#define kNumberOfRows   (2)
 
 @interface EFRouteXMenuViewController ()
 
 @property (nonatomic, strong) UIView *maskView;
+@property (nonatomic, strong) NSArray *titles;
 
 @end
 
@@ -46,13 +48,16 @@
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.scrollEnabled = NO;
+    
+    self.titles = @[NSLocalizedString(@"秀这张“活点地图”", nil),
+                    NSLocalizedString(@"分享足迹照片", nil)];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return kNumberOfRows;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -64,13 +69,18 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.backgroundColor = [UIColor clearColor];
         cell.contentView.backgroundColor = [UIColor clearColor];
-        cell.textLabel.textColor = [UIColor COLOR_RGB(0x59, 0xA9, 0xFF)];
         cell.textLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
         cell.textLabel.shadowOffset = (CGSize){0.0f, 0.5f};
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
     }
     
-    cell.textLabel.text = NSLocalizedString(@"秀这张“活点地图”", nil);
+    cell.textLabel.text = self.titles[indexPath.row];
+    
+    if (0 == indexPath.row) {
+        cell.textLabel.textColor = [UIColor COLOR_RGB(0x59, 0xA9, 0xFF)];
+    } else if (1 == indexPath.row) {
+        cell.textLabel.textColor = [UIColor whiteColor];
+    }
     
     return cell;
 }
@@ -87,6 +97,10 @@
     if (0 == indexPath.row) {
         if ([self.delegate respondsToSelector:@selector(menuViewControllerWannaShowRouteX:)]) {
             [self.delegate menuViewControllerWannaShowRouteX:self];
+        }
+    } else if (1 == indexPath.row) {
+        if ([self.delegate respondsToSelector:@selector(menuViewControllerWannaShowPhoto:)]) {
+            [self.delegate menuViewControllerWannaShowPhoto:self];
         }
     }
 }
@@ -113,7 +127,7 @@
         [fromViewController.view addSubview:self.maskView];
     }
     
-    CGRect selfFrame = (CGRect){{CGRectGetWidth(self.maskView.frame), 28.0f}, {kTableViewWidth + kCornerRadius, kCellHeight}};
+    CGRect selfFrame = (CGRect){{CGRectGetWidth(self.maskView.frame), 28.0f}, {kTableViewWidth + kCornerRadius, kCellHeight * kNumberOfRows}};
     self.tableView.frame = selfFrame;
     [self.maskView addSubview:self.tableView];
     

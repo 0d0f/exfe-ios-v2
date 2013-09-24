@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "EFImageComposerViewController.h"
+
 @class EFImagePickerViewController;
 typedef void (^EFImagePickerCancelActionBlock)(EFImagePickerViewController *picker);
 typedef void (^EFImagePickerChooseActionBlock)(EFImagePickerViewController *picker, NSArray *imageDicts);
@@ -15,7 +17,8 @@ typedef void (^EFImagePickerChooseActionBlock)(EFImagePickerViewController *pick
 @interface EFImagePickerViewController : UIImagePickerController
 <
 UINavigationControllerDelegate,
-UIImagePickerControllerDelegate
+UIImagePickerControllerDelegate,
+EFImageComposerViewControllerDelegate
 >
 
 + (BOOL)isPhotoLibraryAccessPermissionDetermined;
