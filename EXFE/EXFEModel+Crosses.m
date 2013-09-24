@@ -81,6 +81,7 @@
         //        c.time.begin_at = nil;
         //        c.time = nil;
         [self.objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:cross];
+        [self.objectManager.managedObjectStore.mainQueueManagedObjectContext saveToPersistentStore:nil];
         //        [[c managedObjectContext] deleteObject:c];
     }
     // notify the list to reload from local
