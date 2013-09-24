@@ -270,19 +270,24 @@
         NSData *imageData = UIImageJPEGRepresentation(image, 0.8f);
         NSData *thumbImageData = UIImageJPEGRepresentation(image, 0.1f);
         
+        UIImage *thumbImage = [UIImage imageWithData:thumbImageData scale:[UIScreen mainScreen].scale];
+        
         WXImageObject *imageObject = [WXImageObject object];
         imageObject.imageData = imageData;
         
         WXMediaMessage *mediaMessage = [WXMediaMessage message];
-        [mediaMessage setThumbData:thumbImageData];
+        [mediaMessage setThumbImage:thumbImage];
         mediaMessage.mediaObject = imageObject;
+        mediaMessage.mediaTagName = @"WXImageObject";
         
         SendMessageToWXReq *requestMessage = [[SendMessageToWXReq alloc] init];
         requestMessage.bText = NO;
         requestMessage.scene = WXSceneSession;
         requestMessage.message = mediaMessage;
         
-        [WXApi sendReq:requestMessage];
+        if (![WXApi sendReq:requestMessage]) {
+            RKLogInfo(@"Weixin send failure.");
+        }
     }
 }
 
