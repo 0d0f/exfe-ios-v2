@@ -21,11 +21,11 @@
 #define kInnserShadowRadius             (4.0f)
 #define kOuterShadowRadius              (10.0f)
 
-#define kNormalStyleFrame               ((CGRect){{0.0f, 0.0f}, {320.0f, 70.0f}})
-#define kDoubleheightStyleFrame         ((CGRect){{0.0f, 0.0f}, {320.0f, 100.0f}})
+#define kNormalStyleFrame               ((CGRect){{0.0f, 0.0f}, {320.0f, 90.0f}})
+#define kDoubleheightStyleFrame         ((CGRect){{0.0f, 0.0f}, {320.0f, 120.0f}})
 
-#define kButtonNormalStyleFrame         ((CGRect){{0.0f, 3.0f}, {44.0f, 44.0f}})
-#define kButtonDoubleheightStyleFrame   ((CGRect){{0.0f, 18.0f}, {44.0f, 44.0f}})
+#define kButtonNormalStyleFrame         ((CGRect){{0.0f, 13.0f}, {44.0f, 44.0f}})
+#define kButtonDoubleheightStyleFrame   ((CGRect){{0.0f, 28.0f}, {44.0f, 44.0f}})
 
 #define kDefaultBackgroundImage [UIImage imageNamed:@"x_titlebg_default.jpg"]
 

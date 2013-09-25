@@ -86,9 +86,9 @@
         
         /* Custom Background image */
         textViewBackgroundImage = [[UIImageView alloc] initWithFrame:backgroundFrame];
-        textViewBackgroundImage.image          = [UIImage imageNamed:@"textfield_round"];
+        textViewBackgroundImage.image          = [[UIImage imageNamed:@"textfield_round"] resizableImageWithCapInsets:UIEdgeInsetsMake(12, 12, 12, 12)];
         textViewBackgroundImage.contentMode    = UIViewContentModeScaleToFill;
-        textViewBackgroundImage.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+//        textViewBackgroundImage.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
         
         [self addSubview:textViewBackgroundImage];
         [self addSubview:internalTextView];

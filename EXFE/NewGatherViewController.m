@@ -31,7 +31,7 @@
 #define LARGE_SLOT                       (16)
 #define SMALL_SLOT                      (5)
 
-#define DECTOR_HEIGHT                    (80)
+#define DECTOR_HEIGHT                    (80 + 20)
 #define DECTOR_HEIGHT_EXTRA              (20)
 #define DECTOR_MARGIN                    (SMALL_SLOT)
 #define OVERLAP                          (DECTOR_HEIGHT)
@@ -80,7 +80,12 @@
 }
 
 - (void)initUI{
-    CGRect a = [UIScreen mainScreen].applicationFrame;
+    CGRect a = CGRectNull;
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        a = [UIScreen mainScreen].bounds;
+    } else {
+        a = [UIScreen mainScreen].applicationFrame;
+    }
     self.view.frame = a;
     //CGRect f = self.view.frame;
     CGRect b = self.view.bounds;
@@ -177,7 +182,7 @@
     headview.backgroundColor=[UIColor grayColor];
     {
         CGFloat scale = CGRectGetWidth(headview.bounds) / 880.0f;
-        CGFloat startY = 0 - 198 * scale;
+        CGFloat startY = 0 - 104 * scale;
         dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, 880 * scale, 495 * scale)];
         dectorView.image=[UIImage imageNamed:@"x_titlebg_default.jpg"];
         [headview addSubview:dectorView];
@@ -222,8 +227,8 @@
     self.view.backgroundColor = [UIColor grayColor];
     
     
-    CGRect screenframe=[[UIScreen mainScreen] bounds];
-    UIView *pannel=[[UIView alloc] initWithFrame:CGRectMake(0,screenframe.size.height - 46 - 20, self.view.frame.size.width, 46)];
+    CGRect screenframe = self.view.bounds;
+    UIView *pannel=[[UIView alloc] initWithFrame:CGRectMake(0,screenframe.size.height - 46, self.view.frame.size.width, 46)];
     UIImageView *pannelbackimg=[[UIImageView alloc] initWithFrame:CGRectMake(0,0, pannel.frame.size.width, 46)];
     pannelbackimg.image=[UIImage imageNamed:@"glassbar.png"];
     [pannel addSubview:pannelbackimg];
@@ -241,7 +246,7 @@
     [pannel addSubview:btngather];
     [self.view addSubview:pannel];
 
-    pannellight = [[UIImageView alloc] initWithFrame:CGRectMake(0,screenframe.size.height - 46 - 20, self.view.frame.size.width, 46)];
+    pannellight = [[UIImageView alloc] initWithFrame:CGRectMake(0,screenframe.size.height - 46, self.view.frame.size.width, 46)];
     pannellight.image = [UIImage imageNamed:@"glassbar_light.png"];
     [self.view addSubview:pannellight];
     [self startGlassAnimation];

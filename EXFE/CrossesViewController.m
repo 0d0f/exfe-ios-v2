@@ -84,7 +84,14 @@
     [super viewDidLoad];
     [Flurry logEvent:@"CROSS_LIST"];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        self.view.frame = [UIScreen mainScreen].bounds;
+    } else {
+        self.view.frame = [UIScreen mainScreen].applicationFrame;
+    }
+    
     self.clearsSelectionOnViewWillAppear = YES;
     
     UITableView * tableView = self.tableView;
@@ -101,7 +108,7 @@
     
     
     // Head View
-    EFHeadView *headView = [[EFHeadView alloc] initWithFrame:(CGRect){{0.0f, 9.0f}, {320.0f, 56.0f}}];
+    EFHeadView *headView = [[EFHeadView alloc] initWithFrame:(CGRect){{0.0f, 29.0f}, {320.0f, 56.0f}}];
     headView.headPressedHandler = ^{
         NSString *urlstr = [NSString stringWithFormat:@"%@://%@%@", [UIApplication sharedApplication].defaultScheme, [EFConfig sharedInstance].scope, @"/profile?animated=yes"];
         NSURL *url = [NSURL URLWithString:urlstr];
@@ -200,7 +207,7 @@
     default_background = UIGraphicsGetImageFromCurrentImageContext();
     
     
-    UILabel *label_profile = [[UILabel alloc] initWithFrame:CGRectMake(15, 65, 200, 50)];
+    UILabel *label_profile = [[UILabel alloc] initWithFrame:CGRectMake(15, 85, 200, 50)];
     label_profile.backgroundColor = [UIColor clearColor];
     label_profile.textColor = [UIColor COLOR_GRAY];
     label_profile.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
@@ -210,7 +217,7 @@
     self.label_profile = label_profile;
     [self.view addSubview:label_profile];
     
-    UILabel *label_gather = [[UILabel alloc] initWithFrame:CGRectMake(15, 65, 200, 50)];
+    UILabel *label_gather = [[UILabel alloc] initWithFrame:CGRectMake(15, 85, 200, 50)];
     label_gather.backgroundColor = [UIColor clearColor];
     label_gather.textColor = [UIColor COLOR_GRAY];
     label_gather.textAlignment = NSTextAlignmentRight;
@@ -223,7 +230,7 @@
     self.label_gather = label_gather;
     [self.view addSubview:label_gather];
     
-    TTTAttributedLabel *welcome_exfe = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(15, CGRectGetMidY(self.view.bounds) - 20, 290, 100)];
+    TTTAttributedLabel *welcome_exfe = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(15, CGRectGetMidY(self.view.bounds), 290, 100)];
     welcome_exfe.backgroundColor = [UIColor clearColor];
     welcome_exfe.textAlignment = NSTextAlignmentCenter;
     welcome_exfe.textColor = [UIColor COLOR_CARBON];
@@ -278,7 +285,7 @@
     [unverified_description sizeToFit];
     
     CGFloat h = CGRectGetHeight(unverified_description.bounds);
-    unverified_description.frame = CGRectMake(15, CGRectGetHeight(self.view.bounds) - 15 - h, 290, h + 15);
+    unverified_description.frame = CGRectMake(15, CGRectGetHeight(self.view.bounds) + 5 - h, 290, h);
     self.unverified_description = unverified_description;
     [self.view addSubview:unverified_description];
     
@@ -301,6 +308,13 @@
     [self refreshWelcome];
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return ![self.model isLoggedIn];
+}
+
+
+
 - (void)dealloc {
     [self unregObserver];
     self.crossList = nil;
@@ -314,9 +328,17 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    if (CGRectEqualToRect(CGRectZero, [UIApplication sharedApplication].statusBarFrame)) {
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    }
     
     [self refreshUI];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
 }
 
 - (void)forceSignOut {
@@ -745,7 +767,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(indexPath.section == 0){
-        return 70;
+        return 90;
     }else {
         return 90;
     }

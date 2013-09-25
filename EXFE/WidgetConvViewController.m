@@ -24,7 +24,7 @@
 #define LARGE_SLOT                       (15)
 #define SMALL_SLOT                      (5)
 
-#define DECTOR_HEIGHT                    (50)
+#define DECTOR_HEIGHT                    (50 + 20)
 #define DECTOR_HEIGHT_EXTRA              (20)
 #define DECTOR_MARGIN                    (SMALL_SLOT)
 #define OVERLAP                          (DECTOR_HEIGHT)
@@ -71,6 +71,14 @@
 {
     CGRect b = self.view.bounds;
     CGRect a = [[UIScreen mainScreen] applicationFrame];
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        a = [UIScreen mainScreen].bounds;
+    } else {
+        a = [UIScreen mainScreen].applicationFrame;
+    }
+    
 //    CGRect b = self.initFrame;
     
     CGRect frame = (CGRect){{0.0f, 0.0f}, {CGRectGetWidth(a), CGRectGetHeight(a) - DECTOR_HEIGHT}};
@@ -109,16 +117,7 @@
     inputToolbar.textView.delegate=self;
     [inputToolbar.textView setReturnKeyType:UIReturnKeySend];
     [self.view addSubview:inputToolbar];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-
-    
-#ifdef __IPHONE_5_0
-    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
-    if (version >= 5.0) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
-    }
-#endif    
+   
     cellbackground=[UIImage imageNamed:@"conv_bg.png"];
     cellsepator=[UIImage imageNamed:@"conv_line_h.png"];
     avatarframe=[UIImage imageNamed:@"conv_portrait_frame.png"];
@@ -167,6 +166,10 @@
 - (void)regObserver
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -262,8 +265,15 @@
 	CGRect frame = self.inputToolbar.frame;
     keyboardheight = keyboardEndFrame.size.height;
     
+    CGFloat deltaY = 0;
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        deltaY = -20;
+    } else {
+        deltaY = 0;
+    }
+    
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
-        frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height;
+        frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height - deltaY;
         if(self.tableView.contentSize.height>self.tableView.frame.size.height - keyboardEndFrame.size.height)
         {
             CGRect f = self.tableView.frame;

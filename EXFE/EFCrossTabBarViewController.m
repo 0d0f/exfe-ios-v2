@@ -37,6 +37,14 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    CGRect a = CGRectNull;
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        a = [UIScreen mainScreen].bounds;
+    } else {
+        a = [UIScreen mainScreen].applicationFrame;
+    }
+    self.view.frame = a;
 }
 
 - (void)viewWillAppear:(BOOL)animated
