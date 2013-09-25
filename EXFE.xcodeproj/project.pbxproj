@@ -1089,6 +1089,10 @@
 		4F7D7FFF17EF28610073DE6E /* time.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F7D7FFC17EF28610073DE6E /* time.strings */; };
 		4F7D800017EF28610073DE6E /* time.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F7D7FFC17EF28610073DE6E /* time.strings */; };
 		4F7D800117EF28610073DE6E /* time.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F7D7FFC17EF28610073DE6E /* time.strings */; };
+		4F7D800617F008120073DE6E /* EFRemoveCrossOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7D800517F008120073DE6E /* EFRemoveCrossOperation.m */; };
+		4F7D800717F008120073DE6E /* EFRemoveCrossOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7D800517F008120073DE6E /* EFRemoveCrossOperation.m */; };
+		4F7D800817F008120073DE6E /* EFRemoveCrossOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7D800517F008120073DE6E /* EFRemoveCrossOperation.m */; };
+		4F7D800917F008120073DE6E /* EFRemoveCrossOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7D800517F008120073DE6E /* EFRemoveCrossOperation.m */; };
 		4F8507D017841B8C00BB86FA /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8507C617841B8C00BB86FA /* NBNumberFormat.m */; };
 		4F8507D117841B8C00BB86FA /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8507C617841B8C00BB86FA /* NBNumberFormat.m */; };
 		4F8507D217841B8C00BB86FA /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8507C617841B8C00BB86FA /* NBNumberFormat.m */; };
@@ -3371,6 +3375,8 @@
 		4F7AA200179803A5005C4223 /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
 		4F7D7FF417EED80B0073DE6E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/time.strings; sourceTree = "<group>"; };
 		4F7D7FFD17EF28610073DE6E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/time.strings"; sourceTree = "<group>"; };
+		4F7D800417F008120073DE6E /* EFRemoveCrossOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRemoveCrossOperation.h; sourceTree = "<group>"; };
+		4F7D800517F008120073DE6E /* EFRemoveCrossOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRemoveCrossOperation.m; sourceTree = "<group>"; };
 		4F8507C517841B8C00BB86FA /* NBNumberFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBNumberFormat.h; path = "Vendor/libPhoneNumber-iOS/libPhoneNumber/NBNumberFormat.h"; sourceTree = SOURCE_ROOT; };
 		4F8507C617841B8C00BB86FA /* NBNumberFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBNumberFormat.m; path = "Vendor/libPhoneNumber-iOS/libPhoneNumber/NBNumberFormat.m"; sourceTree = SOURCE_ROOT; };
 		4F8507C717841B8C00BB86FA /* NBPhoneMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBPhoneMetaData.h; path = "Vendor/libPhoneNumber-iOS/libPhoneNumber/NBPhoneMetaData.h"; sourceTree = SOURCE_ROOT; };
@@ -5457,6 +5463,8 @@
 				4FB14BE217C228B400EFC3F9 /* EFEditCrossOperation.m */,
 				4FC4113B17D490FF00D64105 /* EFChangeCrossTimeOperation.h */,
 				4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */,
+				4F7D800417F008120073DE6E /* EFRemoveCrossOperation.h */,
+				4F7D800517F008120073DE6E /* EFRemoveCrossOperation.m */,
 			);
 			name = "Crosses API Operation";
 			sourceTree = "<group>";
@@ -8691,6 +8699,7 @@
 				4F63DA8D17172AA600136B7E /* UIExpandingTextViewInternal.m in Sources */,
 				4F63DA8E17172AA600136B7E /* UIInputToolbar.m in Sources */,
 				4F63DA8F17172AA600136B7E /* ConversationTableView.m in Sources */,
+				4F7D800717F008120073DE6E /* EFRemoveCrossOperation.m in Sources */,
 				4F63DA9117172AA600136B7E /* ProfileViewController.m in Sources */,
 				4F63DA9217172AA600136B7E /* PullRefreshTableViewController.m in Sources */,
 				4F63DA9317172AA600136B7E /* ProfileCellView.m in Sources */,
@@ -8968,6 +8977,7 @@
 				4F63DC5C17172B0700136B7E /* UIExpandingTextViewInternal.m in Sources */,
 				4F63DC5D17172B0700136B7E /* UIInputToolbar.m in Sources */,
 				4F63DC5E17172B0700136B7E /* ConversationTableView.m in Sources */,
+				4F7D800817F008120073DE6E /* EFRemoveCrossOperation.m in Sources */,
 				4F63DC6017172B0700136B7E /* ProfileViewController.m in Sources */,
 				4F63DC6117172B0700136B7E /* PullRefreshTableViewController.m in Sources */,
 				4F63DC6217172B0700136B7E /* ProfileCellView.m in Sources */,
@@ -9245,6 +9255,7 @@
 				4FC40E2B17D04A5700D64105 /* UIExpandingTextViewInternal.m in Sources */,
 				4FC40E2C17D04A5700D64105 /* UIInputToolbar.m in Sources */,
 				4FC40E2D17D04A5700D64105 /* ConversationTableView.m in Sources */,
+				4F7D800917F008120073DE6E /* EFRemoveCrossOperation.m in Sources */,
 				4FC40E2E17D04A5700D64105 /* ProfileViewController.m in Sources */,
 				4FC40E2F17D04A5700D64105 /* PullRefreshTableViewController.m in Sources */,
 				4FC40E3017D04A5700D64105 /* ProfileCellView.m in Sources */,
@@ -9522,6 +9533,7 @@
 				785FD5881580797F0056590D /* UIExpandingTextViewInternal.m in Sources */,
 				785FD5891580797F0056590D /* UIInputToolbar.m in Sources */,
 				78E4EE5A1581D02B00AE6211 /* ConversationTableView.m in Sources */,
+				4F7D800617F008120073DE6E /* EFRemoveCrossOperation.m in Sources */,
 				785F6F6415820A0000BF8EA0 /* ProfileViewController.m in Sources */,
 				785F6F7D1585A95D00BF8EA0 /* PullRefreshTableViewController.m in Sources */,
 				78A834091588BBDC0019FDF5 /* ProfileCellView.m in Sources */,

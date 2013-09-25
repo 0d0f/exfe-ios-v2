@@ -11,6 +11,7 @@
 #import "EFKit.h"
 #import "EFAPIOperations.h"
 #import "EFEntity.h"
+#import "Util.h"
 
 @implementation EXFEModel (Crosses)
 
@@ -74,6 +75,19 @@
     return x;
 }
 
+- (void)deleteCross:(Cross *)cross
+{
+    if (cross) {
+        //        c.time.begin_at = nil;
+        //        c.time = nil;
+        [self.objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:cross];
+        [self.objectManager.managedObjectStore.mainQueueManagedObjectContext saveToPersistentStore:nil];
+        //        [[c managedObjectContext] deleteObject:c];
+    }
+    // notify the list to reload from local
+    [NSNotificationCenter.defaultCenter postNotificationName:EXCrossListDidChangeNotification object:self];
+}
+
 - (void)loadCrossWithCrossId:(NSUInteger)crossId updatedTime:(NSDate *)updatedTime
 {
     EFLoadCrossOperation *operation = [EFLoadCrossOperation operationWithModel:self];
@@ -116,6 +130,15 @@
 {
     EFEditCrossOperation *operation = [EFEditCrossOperation operationWithModel:self];
 //    cross.by_identity = [cross.exfee getMyInvitation].identity;
+    operation.cross = cross;
+    
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+}
+
+- (void)removeCross:(Cross *)cross
+{
+    EFRemoveCrossOperation *operation = [EFRemoveCrossOperation operationWithModel:self];
     operation.cross = cross;
     
     EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:operation];
