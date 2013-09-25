@@ -812,6 +812,9 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     [menuViewController dismissAnimated:YES];
     
     EFImagePickerViewController *imagePicker = [[EFImagePickerViewController alloc] init];
+    imagePicker.initMapRect = self.mapView.visibleMapRect;
+    imagePicker.geomarks = [[NSMutableArray alloc] initWithArray:[self.mapDataSource allAnnotations]];
+    imagePicker.offset = self.mapDataSource.offset;
     imagePicker.cancelActionHandler = ^(EFImagePickerViewController *picker){
         [picker.presentingViewController dismissViewControllerAnimated:YES
                                                             completion:nil];

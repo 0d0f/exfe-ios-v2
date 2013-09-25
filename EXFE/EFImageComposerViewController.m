@@ -11,15 +11,29 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Util.h"
 #import "AMBlurView.h"
+#import "EFAnnotationDataDefines.h"
 
 #define kImageSize  (CGSize){75.0f, 75.0f}
 #define kImageEdge  (4.0f)
 #define kMapSize    (CGSize){320.0f, 320.f}
+#define kMapEdgePadding (60.0f)
+
+
+@interface EFImageComposerViewController ()
+
+@property (nonatomic, strong) NSMutableArray *photoCooridinates;
+
+@end
 
 @interface EFImageComposerViewController (Private)
 
 - (void)_addBlurViews;
 - (void)_layoutSubviews;
+- (void)_initMapRect;
+- (void)_initGeomarks;
+
+- (void)_initPhotoGeomarks;
+- (void)_resizeMap;
 
 @end
 
@@ -58,7 +72,7 @@
     topShadowFrame.origin.y = CGRectGetHeight(topBaseViewFrame) - 3.0f;
     self.topShadowView.frame = topShadowFrame;
     
-    CGFloat bottomBaseViewOriginY = topBaseViewHeight + kMapSize.height;
+    CGFloat bottomBaseViewOriginY = ceil(topBaseViewHeight + kMapSize.height);
     CGFloat bottomBaseViewHeight = CGRectGetHeight(self.baseView.frame) - bottomBaseViewOriginY;
     CGRect bottomBaseViewFrame = self.bottomBaseView.frame;
     bottomBaseViewFrame.origin.y = bottomBaseViewOriginY;
@@ -83,18 +97,73 @@
     }
 }
 
+- (void)_initMapRect {
+    [self.mapView setVisibleMapRect:self.mapRect];
+}
+
+- (void)_initGeomarks {
+    [self.mapView addAnnotations:self.geomarks];
+    [self.mapView addAnnotations:self.photoGeomarks];
+}
+
+- (void)_initPhotoGeomarks {
+    if (self.photoGeomarks) {
+        [self.photoGeomarks removeAllObjects];
+    } else {
+        self.photoGeomarks = [[NSMutableArray alloc] init];
+    }
+    
+    self.photoCooridinates = [[NSMutableArray alloc] init];
+    
+    int i = 1;
+    for (NSDictionary *imageDict in self.imageDicts) {
+        if ([imageDict valueForKey:@"longitude"] && [imageDict valueForKey:@"latitude"]) {
+            CGFloat longtitude = [[imageDict valueForKey:@"longitude"] doubleValue];
+            CGFloat latitude = [[imageDict valueForKey:@"latitude"] doubleValue];
+            CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latitude, longtitude);
+            
+            [self.photoCooridinates addObject:[NSValue valueWithMKCoordinate:coordinate]];
+            
+            EFAnnotation *annotation = [[EFAnnotation alloc] initWithStyle:kEFAnnotationStyleMarkRed
+                                                                coordinate:coordinate
+                                                                     title:nil
+                                                               description:nil];
+            annotation.markTitle = [NSString stringWithFormat:@"%d", i];
+            [self.photoGeomarks addObject:annotation];
+        }
+        
+        ++i;
+    }
+}
+
+- (void)_resizeMap {
+    if (1 == self.photoCooridinates.count) {
+        CLLocationCoordinate2D coordinate = [self.photoCooridinates[0] MKCoordinateValue];
+        [self.mapView setCenterCoordinate:coordinate];
+    } else if (self.photoCooridinates.count > 1) {
+        CGFloat minX = CGFLOAT_MAX, minY = CGFLOAT_MAX, maxX = CGFLOAT_MIN, maxY = CGFLOAT_MIN;
+        
+        for (NSValue *value in self.photoCooridinates) {
+            CLLocationCoordinate2D coordinate = [value MKCoordinateValue];
+            
+            MKMapPoint mapPoint = MKMapPointForCoordinate(coordinate);
+            
+            minX = MIN(minX, mapPoint.x);
+            minY = MIN(minY, mapPoint.y);
+            maxX = MAX(maxX, mapPoint.x);
+            maxY = MAX(maxY, mapPoint.y);
+        }
+        
+        MKMapRect mapRect = MKMapRectMake(minX, minY, maxX - minX, maxY - minY);
+        
+        UIEdgeInsets edgePadding = (UIEdgeInsets){CGRectGetHeight(self.topBaseView.frame) + kMapEdgePadding, kMapEdgePadding, CGRectGetHeight(self.bottomBaseView.frame) + kMapEdgePadding, kMapEdgePadding};
+        [self.mapView setVisibleMapRect:mapRect edgePadding:edgePadding animated:YES];
+    }
+}
+
 @end
 
 @implementation EFImageComposerViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -121,6 +190,9 @@
     [super viewWillAppear:animated];
     
     [self _layoutSubviews];
+    [self _initMapRect];
+    [self _initGeomarks];
+    [self _resizeMap];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -143,12 +215,29 @@
 
 - (IBAction)shareButtonPressed:(id)sender {
     if ([self.delegate respondsToSelector:@selector(imageComposerViewControllerShareButtonPressed:whithImage:)]) {
-        UIGraphicsBeginImageContextWithOptions(self.baseView.frame.size, NO, [UIScreen mainScreen].scale);
-        [self.baseView.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIGraphicsBeginImageContextWithOptions(self.baseView.bounds.size, NO, [UIScreen mainScreen].scale);
+        
+        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+            [self.baseView.layer renderInContext:UIGraphicsGetCurrentContext()];
+        } else {
+            [self.baseView drawViewHierarchyInRect:self.baseView.bounds afterScreenUpdates:YES];
+        }
+        
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-        [self.delegate imageComposerViewControllerShareButtonPressed:self whithImage:image];
+        CGRect snapshotFrame = self.baseView.bounds;
+        snapshotFrame.size.height = CGRectGetMaxY(self.topBaseView.frame) + kMapSize.height;
+        CGFloat scale = image.scale;
+        
+        snapshotFrame.size.width *= scale;
+        snapshotFrame.size.height *= scale;
+        
+        CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, snapshotFrame);
+        UIImage *result = [UIImage imageWithCGImage:imageRef scale:scale orientation:image.imageOrientation];
+        CGImageRelease(imageRef);
+        
+        [self.delegate imageComposerViewControllerShareButtonPressed:self whithImage:result];
     }
 }
 
@@ -158,10 +247,33 @@
     }
 }
 
-- (void)customWithImageDicts:(NSArray *)imageDicts geomarks:(NSArray *)geomarks path:(NSArray *)path {
+- (void)customWithImageDicts:(NSArray *)imageDicts geomarks:(NSArray *)geomarks path:(NSArray *)path mapRect:(MKMapRect)mapRect {
     self.imageDicts = imageDicts;
     self.geomarks = geomarks;
     self.path = path;
+    self.mapRect = mapRect;
+}
+
+#pragma mark - MKMapViewDelegate
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    if ([annotation isKindOfClass:[EFAnnotation class]]) {
+        static NSString *Identifier = @"Location";
+        
+        EFAnnotationView *annotationView = (EFAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:Identifier];
+        if (nil == annotationView) {
+            annotationView = [[EFAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:Identifier];
+            annotationView.canShowCallout = NO;
+            annotationView.mapView = self.mapView;
+            annotationView.draggable = NO;
+        }
+        
+        [annotationView reloadWithAnnotation:annotation];
+        
+        return annotationView;
+    }
+    
+    return nil;
 }
 
 #pragma mark -
@@ -171,6 +283,7 @@
     
     _imageDicts = imageDicts;
     
+    [self _initPhotoGeomarks];
     [self _layoutSubviews];
     
     [self didChangeValueForKey:@"imageDicts"];

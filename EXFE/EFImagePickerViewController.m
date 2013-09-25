@@ -214,7 +214,16 @@
                                          // get gps data
                                          CFDictionaryRef gpsInfo = (CFDictionaryRef)CFDictionaryGetValue(imagePropertiesDictionary, kCGImagePropertyGPSDictionary);
                                          NSDictionary *gpsDict = (__bridge NSDictionary *)gpsInfo;
-                                         NSLog(@"gps: %@", gpsDict);
+                                         
+                                         if ([gpsDict valueForKey:@"Latitude"] && [gpsDict valueForKey:@"Longitude"]) {
+                                             CGFloat latitude = [[gpsDict valueForKey:@"Latitude"] doubleValue];
+                                             CGFloat longitude = [[gpsDict valueForKey:@"Longitude"] doubleValue];
+                                             latitude += self.offset.x;
+                                             longitude += self.offset.y;
+                                             
+                                             [imageDict setValue:[NSNumber numberWithDouble:latitude] forKey:@"latitude"];
+                                             [imageDict setValue:[NSNumber numberWithDouble:longitude] forKey:@"longitude"];
+                                         }
                                          
                                          // clean up
                                          CFRelease(imagePropertiesDictionary);
@@ -242,8 +251,9 @@
         dispatch_semaphore_wait(enumerateSemaphore, DISPATCH_TIME_FOREVER);
         
         [composerViewController customWithImageDicts:newImageDicts
-                                            geomarks:nil
-                                                path:nil];
+                                            geomarks:self.geomarks
+                                                path:nil
+                                             mapRect:self.initMapRect];
         
         [self presentViewController:composerViewController
                            animated:YES

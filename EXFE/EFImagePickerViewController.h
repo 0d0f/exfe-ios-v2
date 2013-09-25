@@ -12,7 +12,6 @@
 
 @class EFImagePickerViewController;
 typedef void (^EFImagePickerCancelActionBlock)(EFImagePickerViewController *picker);
-typedef void (^EFImagePickerChooseActionBlock)(EFImagePickerViewController *picker, NSArray *imageDicts);
 
 @interface EFImagePickerViewController : UIImagePickerController
 <
@@ -24,7 +23,10 @@ EFImageComposerViewControllerDelegate
 + (BOOL)isPhotoLibraryAccessPermissionDetermined;
 + (BOOL)isPhotoLibraryAccessAviliable;
 
-@property (nonatomic, strong) EFImagePickerCancelActionBlock  cancelActionHandler;
-@property (nonatomic, strong) EFImagePickerChooseActionBlock  chooseActionHandler;
+@property (nonatomic, strong) EFImagePickerCancelActionBlock    cancelActionHandler;
+
+@property (nonatomic, strong) NSMutableArray                    *geomarks;
+@property (nonatomic, assign) MKMapRect                         initMapRect;
+@property (nonatomic, assign) CGPoint                           offset;         // earth -> mars.
 
 @end

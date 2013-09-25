@@ -649,6 +649,17 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
     return self.routeLocations;
 }
 
+- (NSArray *)allAnnotations {
+    NSMutableArray *annotations = [[NSMutableArray alloc] init];
+    
+    for (EFRouteLocation *routeLocation in self.routeLocations) {
+        EFAnnotation *annotation = [self annotationForRouteLocation:routeLocation];
+        [annotations addObject:annotation];
+    }
+    
+    return annotations;
+}
+
 #pragma mark - Streaming
 
 - (BOOL)isStreamOpened {

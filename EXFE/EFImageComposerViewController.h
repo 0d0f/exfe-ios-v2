@@ -18,6 +18,9 @@
 @end
 
 @interface EFImageComposerViewController : UIViewController
+<
+MKMapViewDelegate
+>
 
 @property (weak, nonatomic) IBOutlet UIView *baseView;
 @property (weak, nonatomic) IBOutlet UIView *barView;
@@ -30,15 +33,17 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *imageViews;
 
-@property (nonatomic, strong) NSArray *imageDicts;
-@property (nonatomic, strong) NSArray *geomarks;
-@property (nonatomic, strong) NSArray *path;
+@property (nonatomic, strong) NSArray   *imageDicts;
+@property (nonatomic, strong) NSArray   *geomarks;
+@property (nonatomic, strong) NSArray   *path;
+@property (nonatomic, assign) MKMapRect mapRect;
+@property (nonatomic, strong) NSMutableArray    *photoGeomarks;
 
 @property (nonatomic, weak) id<EFImageComposerViewControllerDelegate> delegate;
 
 - (IBAction)shareButtonPressed:(id)sender;
 - (IBAction)cancelButtonPressed:(id)sender;
 
-- (void)customWithImageDicts:(NSArray *)imageDicts geomarks:(NSArray *)geomarks path:(NSArray *)path;
+- (void)customWithImageDicts:(NSArray *)imageDicts geomarks:(NSArray *)geomarks path:(NSArray *)path mapRect:(MKMapRect)mapRect;
 
 @end

@@ -74,6 +74,7 @@ EFHTTPStreamingDelegate
 - (void)removeRouteLocation:(EFRouteLocation *)routeLocation fromMapView:(MKMapView *)mapView shouldPostToServer:(BOOL)shouldPost;
 - (void)removeRouteLocation:(EFRouteLocation *)routeLocation fromMapView:(MKMapView *)mapView;
 - (NSArray *)allRouteLocations;
+- (NSArray *)allAnnotations;
 
 /**
  * Person
