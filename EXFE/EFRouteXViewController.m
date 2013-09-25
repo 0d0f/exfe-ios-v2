@@ -788,6 +788,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+        
         NSData *imageData = UIImageJPEGRepresentation(image, 0.8f);
         NSData *thumbImageData = UIImageJPEGRepresentation(image, 0.1f);
         

@@ -237,6 +237,8 @@
         UIImage *result = [UIImage imageWithCGImage:imageRef scale:scale orientation:image.imageOrientation];
         CGImageRelease(imageRef);
         
+        UIImageWriteToSavedPhotosAlbum(result, nil, nil, nil);
+        
         [self.delegate imageComposerViewControllerShareButtonPressed:self whithImage:result];
     }
 }
