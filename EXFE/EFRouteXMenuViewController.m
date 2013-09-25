@@ -50,7 +50,7 @@
     self.tableView.scrollEnabled = NO;
     
     self.titles = @[NSLocalizedString(@"Show this map", nil),
-                    NSLocalizedString(@"Share trace photos", nil)];
+                    NSLocalizedString(@"Share trail photos", nil)];
 }
 
 #pragma mark - Table view data source
