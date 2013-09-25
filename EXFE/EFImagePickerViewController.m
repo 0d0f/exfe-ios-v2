@@ -144,7 +144,7 @@
         self.operationBaseView = operationBaseView;
         
         EFGradientView *backgroundView = [[EFGradientView alloc] initWithFrame:operationBaseView.bounds];
-        backgroundView.colors = @[[UIColor COLOR_RGB(80.0f, 80.0f, 80.0f)],
+        backgroundView.colors = @[[UIColor COLOR_RGB(0x4C, 0x4C, 0x4C)],
                                   [UIColor COLOR_RGB(0x19, 0x19, 0x19)]];
         backgroundView.alpha = 0.88f;
         [operationBaseView addSubview:backgroundView];
@@ -267,10 +267,15 @@
 
 - (void)imageComposerViewControllerShareButtonPressed:(EFImageComposerViewController *)viewController whithImage:(UIImage *)image {
     if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi]) {
-        NSData *imageData = UIImageJPEGRepresentation(image, 0.8f);
-        NSData *thumbImageData = UIImageJPEGRepresentation(image, 0.1f);
+        NSData *imageData = UIImageJPEGRepresentation(image, 0.4f);
         
-        UIImage *thumbImage = [UIImage imageWithData:thumbImageData scale:[UIScreen mainScreen].scale];
+        CGSize imageSize = image.size;
+        imageSize.width *= 0.3f;
+        imageSize.height *= 0.3f;
+        UIGraphicsBeginImageContextWithOptions(imageSize, NO, [UIScreen mainScreen].scale);
+        [image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
+        UIImage *thumbImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
         
         WXImageObject *imageObject = [WXImageObject object];
         imageObject.imageData = imageData;
@@ -278,16 +283,13 @@
         WXMediaMessage *mediaMessage = [WXMediaMessage message];
         [mediaMessage setThumbImage:thumbImage];
         mediaMessage.mediaObject = imageObject;
-        mediaMessage.mediaTagName = @"WXImageObject";
         
         SendMessageToWXReq *requestMessage = [[SendMessageToWXReq alloc] init];
         requestMessage.bText = NO;
         requestMessage.scene = WXSceneSession;
         requestMessage.message = mediaMessage;
         
-        if (![WXApi sendReq:requestMessage]) {
-            RKLogInfo(@"Weixin send failure.");
-        }
+        [WXApi sendReq:requestMessage];
     }
 }
 
