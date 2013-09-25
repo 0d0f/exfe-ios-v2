@@ -69,7 +69,7 @@
     self.topBaseView.frame = topBaseViewFrame;
     
     CGRect topShadowFrame = self.topShadowView.frame;
-    topShadowFrame.origin.y = CGRectGetHeight(topBaseViewFrame) - 3.0f;
+    topShadowFrame.origin.y = CGRectGetHeight(topBaseViewFrame) - 4.0f;
     self.topShadowView.frame = topShadowFrame;
     
     CGFloat bottomBaseViewOriginY = ceil(topBaseViewHeight + kMapSize.height);
@@ -80,7 +80,7 @@
     self.bottomBaseView.frame = bottomBaseViewFrame;
     
     CGRect bottomShadowFrame = self.bottomShadowView.frame;
-    bottomShadowFrame.origin.y = 0.0f;
+    bottomShadowFrame.origin.y = -1.0f;
     self.bottomShadowView.frame = bottomShadowFrame;
     
     for (UIImageView *imageView in self.imageViews) {
@@ -172,17 +172,20 @@
     
     [self _addBlurViews];
     
-    self.topShadowView.layer.transform = CATransform3DMakeRotation(M_PI, 0.0f, 0.0f, 1.0f);
+    self.bottomShadowView.layer.transform = CATransform3DMakeRotation(M_PI, 0.0f, 0.0f, 1.0f);
+    
     for (UIImageView *imageView in self.imageViews) {
         imageView.contentMode = UIViewContentModeScaleAspectFill;
-        imageView.layer.cornerRadius = 1.0f;
         imageView.layer.masksToBounds = YES;
         imageView.layer.borderColor = [UIColor COLOR_RGB(0xE6, 0xE6, 0xE6)].CGColor;
         imageView.layer.borderWidth = 0.5f;
+        
         imageView.layer.shadowColor = [UIColor blackColor].CGColor;
         imageView.layer.shadowOffset = (CGSize){0.0f, 0.0f};
         imageView.layer.shadowOpacity = 0.25f;
         imageView.layer.shadowRadius = 2.0f;
+        
+        imageView.clipsToBounds = NO;
     }
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
