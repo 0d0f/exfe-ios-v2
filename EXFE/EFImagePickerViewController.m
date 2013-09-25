@@ -191,7 +191,19 @@
                                      
                                      NSMutableDictionary *imageDict = [[NSMutableDictionary alloc] init];
                                      UIImage *image = [UIImage imageWithCGImage:[representation fullScreenImage]];
-                                     [imageDict setValue:image forKey:@"image"];
+                                     
+                                     CGFloat imageScale = image.scale;
+                                     CGSize imageSize = image.size;
+                                     CGFloat imageWidth = MIN(imageSize.width, imageSize.height);
+                                     CGRect imageRect = (CGRect){CGPointZero, {imageWidth, imageWidth}};
+                                     imageRect.origin = (CGPoint){((imageSize.width - imageWidth) * 0.5f) < 0.0f ? 0.0f : ((imageSize.width - imageWidth) * 0.5f),
+                                                                ((imageSize.height - imageWidth) * 0.5f) < 0.0f ? : (imageSize.height - imageWidth) * 0.5f};
+                                     
+                                     CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, imageRect);
+                                     UIImage *result = [UIImage imageWithCGImage:imageRef scale:imageScale orientation:image.imageOrientation];
+                                     CGImageRelease(imageRef);
+                                     
+                                     [imageDict setValue:result forKey:@"image"];
                                      
                                      // create a buffer to hold image data
                                      uint8_t *buffer = (uint8_t *)malloc(sizeof(uint8_t) * (long)representation.size);

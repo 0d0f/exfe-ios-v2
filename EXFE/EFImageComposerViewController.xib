@@ -79,8 +79,8 @@
                                     <rect key="frame" x="241" y="83" width="75" height="75"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="map_shadow_gap.png" id="UAe-zD-vTE">
-                                    <rect key="frame" x="0.0" y="155" width="320" height="3"/>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="shadow_gap.png" id="UAe-zD-vTE">
+                                    <rect key="frame" x="0.0" y="154" width="320" height="4"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 </imageView>
                             </subviews>
@@ -90,8 +90,8 @@
                             <rect key="frame" x="0.0" y="396" width="320" height="129"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="map_shadow_gap.png" id="9TX-YV-rEj">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="3"/>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="shadow_gap.png" id="9TX-YV-rEj">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="4"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
                             </subviews>
@@ -138,6 +138,6 @@
         </view>
     </objects>
     <resources>
-        <image name="map_shadow_gap.png" width="50" height="3"/>
+        <image name="shadow_gap.png" width="320" height="4"/>
     </resources>
 </document>
