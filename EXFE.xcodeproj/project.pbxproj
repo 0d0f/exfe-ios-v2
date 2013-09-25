@@ -1941,10 +1941,6 @@
 		4FC4113E17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */; };
 		4FC4113F17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */; };
 		4FC4114017D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */; };
-		4FC4114917D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
-		4FC4114A17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
-		4FC4114B17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
-		4FC4114C17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
 		4FC4115D17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */; };
 		4FC4115E17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */; };
 		4FC4115F17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */; };
@@ -3489,7 +3485,6 @@
 		4FC4110C17D04A5700D64105 /* Shuady.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shuady.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FC4113B17D490FF00D64105 /* EFChangeCrossTimeOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChangeCrossTimeOperation.h; sourceTree = "<group>"; };
 		4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChangeCrossTimeOperation.m; sourceTree = "<group>"; };
-		4FC4114817D5949B00D64105 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = Localizable.strings; sourceTree = "<group>"; };
 		4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = identity_weixin_18_grey.png; sourceTree = "<group>"; };
 		4FC4115C17D6E0CD00D64105 /* identity_weixin_18_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "identity_weixin_18_grey@2x.png"; sourceTree = "<group>"; };
 		4FC6E94316AFB6D00023AD1C /* xlist_conv_badge_many.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xlist_conv_badge_many.png; sourceTree = "<group>"; };
@@ -4661,14 +4656,6 @@
 				4F0C546117CC879900649C4F /* EFRemoveNotificationIdentityOperation.m */,
 			);
 			name = "Exfee API Operation";
-			sourceTree = "<group>";
-		};
-		4FC4114617D5949B00D64105 /* zh-Hant.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				4FC4114717D5949B00D64105 /* Localizable.strings */,
-			);
-			path = "zh-Hant.lproj";
 			sourceTree = "<group>";
 		};
 		4FC6E95416B0E6EC0023AD1C /* dock */ = {
@@ -6186,7 +6173,6 @@
 			children = (
 				4F8507DF17841BBF00BB86FA /* NBPhoneNumberMetadata.plist */,
 				4FE7762B177C1E4700B20A32 /* zh-Hans.lproj */,
-				4FC4114617D5949B00D64105 /* zh-Hant.lproj */,
 				4FE77625177C1C8800B20A32 /* en.lproj */,
 				78A98E931560F832009E0806 /* EXFE-Info.plist */,
 				4F63DE14171733C500136B7E /* 0d0f-Info.plist */,
@@ -7182,7 +7168,6 @@
 				763BE928179FD836003BF97C /* map_shadow_gap.png in Resources */,
 				4F2CF05117BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05417BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
-				4FC4114A17D5949B00D64105 /* Localizable.strings in Resources */,
 				4FC4115E17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
 				4FC4116217D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
@@ -7652,7 +7637,6 @@
 				762D9FA017B36D07002A528B /* map_arrow_14red@2x.png in Resources */,
 				4F2CF05217BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05517BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
-				4FC4114B17D5949B00D64105 /* Localizable.strings in Resources */,
 				4FC4115F17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
 				4FC4116317D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
@@ -8118,7 +8102,6 @@
 				4FC4110617D04A5700D64105 /* map_shadow_gap.png in Resources */,
 				4FC4110717D04A5700D64105 /* cautionbar_cancel_pressed.png in Resources */,
 				4FC4110817D04A5700D64105 /* cautionbar_cancel.png in Resources */,
-				4FC4114C17D5949B00D64105 /* Localizable.strings in Resources */,
 				4FC4116017D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
 				4FC4116417D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
@@ -8584,7 +8567,6 @@
 				763BE927179FD836003BF97C /* map_shadow_gap.png in Resources */,
 				4F2CF05017BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05317BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
-				4FC4114917D5949B00D64105 /* Localizable.strings in Resources */,
 				4FC4115D17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
 				4FC4116117D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
@@ -9860,14 +9842,6 @@
 				4F7D7FFD17EF28610073DE6E /* zh-Hans */,
 			);
 			name = time.strings;
-			sourceTree = "<group>";
-		};
-		4FC4114717D5949B00D64105 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4FC4114817D5949B00D64105 /* zh-Hant */,
-			);
-			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		4FE77626177C1CA200B20A32 /* Localizable.strings */ = {
