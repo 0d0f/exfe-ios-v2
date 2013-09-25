@@ -151,7 +151,7 @@
         
         UIButton *okButton = [UIButton buttonWithType:UIButtonTypeCustom];
         okButton.frame = (CGRect){{CGRectGetWidth(operationBaseView.frame) - kButtonWidth, 0.0f}, {kButtonWidth, kOperationViewHeight}};
-        [okButton setTitle:NSLocalizedString(@"确认", nil) forState:UIControlStateNormal];
+        [okButton setTitle:NSLocalizedString(@"OK", nil) forState:UIControlStateNormal];
         [okButton setTitleColor:[UIColor COLOR_RGB(0x58, 0x9D, 0xFF)] forState:UIControlStateNormal];
         [okButton addTarget:self
                      action:@selector(okButtonPressed:)

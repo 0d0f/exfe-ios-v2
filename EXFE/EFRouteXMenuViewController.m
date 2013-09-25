@@ -70,7 +70,7 @@
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
     }
     
-    cell.textLabel.text = NSLocalizedString(@"秀这张“活点地图”", nil);
+    cell.textLabel.text = NSLocalizedString(@"Show this map", nil);
     
     return cell;
 }

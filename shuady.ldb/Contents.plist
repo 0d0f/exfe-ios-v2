@@ -36,7 +36,7 @@
 						</dict>
 					</dict>
 					<key>change date</key>
-					<date>2013-09-23T14:19:25Z</date>
+					<date>2013-09-25T14:59:51Z</date>
 					<key>changed values</key>
 					<array/>
 					<key>class</key>
@@ -46,7 +46,7 @@
 					<key>flags</key>
 					<integer>0</integer>
 					<key>hash</key>
-					<string>7af004213c51ecbc55780ef054531278
+					<string>2f490eb5cb6d009c877f920ed42ec380
 </string>
 					<key>name</key>
 					<string>Localizable.strings</string>
@@ -1264,7 +1264,7 @@
 								<key>en</key>
 								<string>China mainland</string>
 								<key>zh-Hans</key>
-								<string>中国</string>
+								<string>中国大陆</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1758,98 +1758,6 @@
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>EEE, MMM d</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>EEE, MMM d</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>EEE, MMM d yyyy</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>EEE, MMM d yyyy</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>EEEE, MMMM d</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>EEEE, MMMM d</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>EEEE, MMMM d yyyy</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>EEEE, MMMM d yyyy</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>Enter contact name</string>
 							<key>localizations</key>
 							<dict>
@@ -2175,6 +2083,31 @@ Please retry or wait awhile.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
+							<string>Failed to remove {{X_NOUN}}.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Failed to remove {{X_NOUN}}.</string>
+								<key>zh-Hans</key>
+								<string>无法删除{{X_NOUN}}。</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
 							<string>Failed to update cross time: %@.</string>
 							<key>localizations</key>
 							<dict>
@@ -2425,52 +2358,6 @@ Please retry or wait awhile.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>h:mm</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>h:mm</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>h:mma</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>h:mma</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>Here</string>
 							<key>localizations</key>
 							<dict>
@@ -2478,52 +2365,6 @@ Please retry or wait awhile.</string>
 								<string>Here</string>
 								<key>zh-Hans</key>
 								<string>这里</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>HH:mm</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>HH:mm</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>HH:mm:ss</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>HH:mm:ss</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -3367,75 +3208,6 @@ Please retry or wait awhile.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>MM-dd</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>MM-dd</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>MMM d</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>MMM d</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>MMM d yyyy</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>MMM d yyyy</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
 							<string>Morning</string>
 							<key>localizations</key>
 							<dict>
@@ -3745,6 +3517,31 @@ Please retry or wait awhile.</string>
 								<string>Online</string>
 								<key>zh-Hans</key>
 								<string>在线</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Only host has the privilege.</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Only host has the privilege.</string>
+								<key>zh-Hans</key>
+								<string>只有活动主持才有权删除。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -5094,6 +4891,31 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
+							<string>Show this map</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Show this map</string>
+								<key>zh-Hans</key>
+								<string>秀这张“活点地图”</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
 							<string>Sign In</string>
 							<key>localizations</key>
 							<dict>
@@ -6356,7 +6178,7 @@ Request verification again?</string>
 								<key>en</key>
 								<string>Your region: %@</string>
 								<key>zh-Hans</key>
-								<string>???你的区域</string>
+								<string>选择地区：%@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -6407,29 +6229,6 @@ Request verification again?</string>
 								<string>You’re about to change important information of your account. For security concerns, please authenticate your account.</string>
 								<key>zh-Hans</key>
 								<string>您正要修改账号的重要信息，为了安全考虑请先通过验证。</string>
-							</dict>
-							<key>snapshots</key>
-							<dict/>
-						</dict>
-						<dict>
-							<key>change date</key>
-							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
-							<key>class</key>
-							<string>BLStringKeyObject</string>
-							<key>comment</key>
-							<string>No comment provided by engineer.</string>
-							<key>errors</key>
-							<array/>
-							<key>flags</key>
-							<integer>0</integer>
-							<key>key</key>
-							<string>yyyy-MM-dd</string>
-							<key>localizations</key>
-							<dict>
-								<key>en</key>
-								<string>yyyy-MM-dd</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -6676,6 +6475,32 @@ Request verification again?</string>
 							<key>snapshots</key>
 							<dict/>
 						</dict>
+					</array>
+					<key>old objects</key>
+					<array>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>确认</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>确认</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
@@ -6699,9 +6524,283 @@ Request verification again?</string>
 							<key>snapshots</key>
 							<dict/>
 						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>EEE, MMM d</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>EEE, MMM d</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>EEE, MMM d yyyy</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>EEE, MMM d yyyy</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>EEEE, MMMM d</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>EEEE, MMMM d</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>EEEE, MMMM d yyyy</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>EEEE, MMMM d yyyy</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>h:mm</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>h:mm</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>h:mma</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>h:mma</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>HH:mm</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>HH:mm</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>HH:mm:ss</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>HH:mm:ss</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>MM-dd</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>MM-dd</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>MMM d</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>MMM d</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>MMM d yyyy</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>MMM d yyyy</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>yyyy-MM-dd</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>yyyy-MM-dd</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
 					</array>
-					<key>old objects</key>
-					<array/>
 					<key>plist file</key>
 					<false/>
 					<key>snapshots</key>
@@ -6727,7 +6826,7 @@ Request verification again?</string>
 						</dict>
 					</dict>
 					<key>change date</key>
-					<date>2013-09-23T14:19:25Z</date>
+					<date>2013-09-25T14:59:51Z</date>
 					<key>changed values</key>
 					<array/>
 					<key>class</key>
@@ -6739,7 +6838,7 @@ Request verification again?</string>
 					<key>flags</key>
 					<integer>0</integer>
 					<key>hash</key>
-					<string>ea37535f813d33ebd0769e993ca15ff1
+					<string>ff63c7b047d1fa87cb8c677e0604680f
 </string>
 					<key>name</key>
 					<string>time.strings</string>
@@ -7157,6 +7256,75 @@ Request verification again?</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
+							<string>EEEE, MMMM d</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>EEEE, MMMM d</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>EEEE, MMMM d yyyy</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>EEEE, MMMM d yyyy</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>h:mm</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>h:mm</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
 							<string>h:mma</string>
 							<key>localizations</key>
 							<dict>
@@ -7289,6 +7457,144 @@ Request verification again?</string>
 								<string>h:mma, '%@'</string>
 								<key>zh-Hans</key>
 								<string>'%@' ah:mm</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>HH:mm</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>HH:mm</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>HH:mm:ss</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>HH:mm:ss</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>MM-dd</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>MM-dd</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>MMM d</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>MMM d</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>MMM d yyyy</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>MMM d yyyy</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>yyyy-MM-dd</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>yyyy-MM-dd</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
