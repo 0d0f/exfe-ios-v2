@@ -296,7 +296,7 @@
         
         SendMessageToWXReq *requestMessage = [[SendMessageToWXReq alloc] init];
         requestMessage.bText = NO;
-        requestMessage.scene = WXSceneSession;
+        requestMessage.scene = WXSceneTimeline;
         requestMessage.message = mediaMessage;
         
         [WXApi sendReq:requestMessage];
