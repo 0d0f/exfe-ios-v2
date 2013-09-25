@@ -33,6 +33,10 @@ extern NSString *kEFNotificationNameLoadCrossListFailure;
 extern NSString *kEFNotificationNameEditCrossSuccess;
 extern NSString *kEFNotificationNameEditCrossFailure;
 
+// defined in EFRemoveCrossOperation.m
+extern NSString *kEFNotificationNameRemoveCrossSuccess;
+extern NSString *kEFNotificationNameRemoveCrossFailure;
+
 // defined in EFChangeCrossTimeOperation.m
 extern NSString *kEFNotificationNameChangeCrossTimeSuccess;
 extern NSString *kEFNotificationNameChangeCrossTimeFailure;

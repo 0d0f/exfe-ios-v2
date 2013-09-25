@@ -153,4 +153,41 @@
 
 }
 
+- (void)removeCross:(Cross *)cross
+            success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+            failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
+    
+    RKObjectManager* manager = self.model.objectManager;
+    manager.requestSerializationMIMEType = RKMIMETypeJSON;
+    
+    NSString *endpoint = [NSString stringWithFormat:@"crosses/%u/delete?token=%@", [cross.cross_id intValue], self.model.userToken];
+
+    [manager postObject:nil
+                     path:endpoint
+               parameters:nil
+                  success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                      [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                                 withObject:operation
+                                 withObject:mappingResult];
+                      
+                      if (success) {
+                          dispatch_async(dispatch_get_main_queue(), ^{
+                              success(operation, mappingResult);
+                          });
+                      }
+                  }
+                  failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                      [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                 withObject:operation
+                                 withObject:error];
+                      
+                      if (failure) {
+                          dispatch_async(dispatch_get_main_queue(), ^{
+                              failure(operation, error);
+                          });
+                      }
+                  }];
+    
+}
+
 @end

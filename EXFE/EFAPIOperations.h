@@ -31,6 +31,7 @@
 #import "EFLoadCrossListOperation.h"
 #import "EFEditCrossOperation.h"
 #import "EFChangeCrossTimeOperation.h"
+#import "EFRemoveCrossOperation.h"
 
 // Exfee API
 #import "EFEditExfeeOperation.h"

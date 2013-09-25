@@ -90,6 +90,16 @@
                                                  name:kEFNotificationNameEditCrossFailure
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameRemoveCrossSuccess
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameRemoveCrossFailure
+                                               object:nil];
+    
+    
     // Exfee
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleNotification:)
@@ -157,11 +167,17 @@
             if (num && self.crossId == [num unsignedIntegerValue] ) {
                 // kEFNotificationNameEditCrossSuccess
                 // kEFNotificationNameLoadCrossSuccess
-                Cross *c = [userInfo objectForKey:@"response.cross"];
-                if (self.crossId == [c.cross_id unsignedIntegerValue]) {
-                    [self setValue:c forKeyPath:@"cross"];
-                    [self refreshUI];
-                    // notification to refresh cross
+                
+                if ([kEFNotificationNameRemoveCrossSuccess isEqualToString:name]) {
+                    // exit current page
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+                } else {
+                    Cross *c = [userInfo objectForKey:@"response.cross"];
+                    if (self.crossId == [c.cross_id unsignedIntegerValue]) {
+                        [self setValue:c forKeyPath:@"cross"];
+                        [self refreshUI];
+                        // notification to refresh cross
+                    }
                 }
             } else {
                 // for cross list
@@ -351,16 +367,11 @@
     // remove self from local storage
     Cross * c = [self.model getCrossById:self.crossId];
     if (c) {
-//        c.time.begin_at = nil;
-//        c.time = nil;
-        [self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:c];
-//        [[c managedObjectContext] deleteObject:c];
+        [self.model deleteCross:c];
     }
     
     // exit current page
     [self.navigationController popToRootViewControllerAnimated:YES];
-    // notify the list to reload from local
-    [NSNotificationCenter.defaultCenter postNotificationName:EXCrossListDidChangeNotification object:self];
 }
 
 @end

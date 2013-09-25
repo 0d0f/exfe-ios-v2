@@ -28,8 +28,8 @@
 - (void)_addBlurViews {
     if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
         // Load resources for iOS 6.1 or earlier
-        self.topBaseView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.8f];
-        self.bottomBaseView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.8f];
+        self.topBaseView.backgroundColor = [UIColor COLOR_RGBA(0xFA, 0xFA, 0xFA, 204.0f)];
+        self.bottomBaseView.backgroundColor = [UIColor COLOR_RGBA(0xFA, 0xFA, 0xFA, 204.0f)];
     } else {
         // Load resources for iOS 7 or later
         AMBlurView *topBlurView = [[AMBlurView alloc] init];
@@ -143,7 +143,7 @@
 
 - (IBAction)shareButtonPressed:(id)sender {
     if ([self.delegate respondsToSelector:@selector(imageComposerViewControllerShareButtonPressed:whithImage:)]) {
-        UIGraphicsBeginImageContextWithOptions(self.view.frame.size, 1, [UIScreen mainScreen].scale);
+        UIGraphicsBeginImageContextWithOptions(self.baseView.frame.size, NO, [UIScreen mainScreen].scale);
         [self.baseView.layer renderInContext:UIGraphicsGetCurrentContext()];
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
