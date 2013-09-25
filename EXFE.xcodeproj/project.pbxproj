@@ -1957,10 +1957,6 @@
 		4FC4113E17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */; };
 		4FC4113F17D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */; };
 		4FC4114017D4910300D64105 /* EFChangeCrossTimeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */; };
-		4FC4114917D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
-		4FC4114A17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
-		4FC4114B17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
-		4FC4114C17D5949B00D64105 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4114717D5949B00D64105 /* Localizable.strings */; };
 		4FC4115D17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */; };
 		4FC4115E17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */; };
 		4FC4115F17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */; };
@@ -2418,6 +2414,18 @@
 		76448C7E17F0275100ED18CB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C7C17F0274600ED18CB /* AudioToolbox.framework */; };
 		76448C7F17F0275800ED18CB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C7C17F0274600ED18CB /* AudioToolbox.framework */; };
 		76448C8017F0276000ED18CB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76448C7C17F0274600ED18CB /* AudioToolbox.framework */; };
+		76448C9317F1546500ED18CB /* EFImageComposerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448C9217F1546500ED18CB /* EFImageComposerViewController.m */; };
+		76448C9417F1546500ED18CB /* EFImageComposerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448C9217F1546500ED18CB /* EFImageComposerViewController.m */; };
+		76448C9517F1546500ED18CB /* EFImageComposerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448C9217F1546500ED18CB /* EFImageComposerViewController.m */; };
+		76448C9617F1546500ED18CB /* EFImageComposerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448C9217F1546500ED18CB /* EFImageComposerViewController.m */; };
+		76448C9B17F154C300ED18CB /* EFImageComposerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76448C9A17F154C300ED18CB /* EFImageComposerViewController.xib */; };
+		76448C9C17F154C300ED18CB /* EFImageComposerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76448C9A17F154C300ED18CB /* EFImageComposerViewController.xib */; };
+		76448C9D17F154C300ED18CB /* EFImageComposerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76448C9A17F154C300ED18CB /* EFImageComposerViewController.xib */; };
+		76448C9E17F154C300ED18CB /* EFImageComposerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76448C9A17F154C300ED18CB /* EFImageComposerViewController.xib */; };
+		76448CA117F18EC500ED18CB /* AMBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448CA017F18EC500ED18CB /* AMBlurView.m */; };
+		76448CA217F18EC500ED18CB /* AMBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448CA017F18EC500ED18CB /* AMBlurView.m */; };
+		76448CA317F18EC500ED18CB /* AMBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448CA017F18EC500ED18CB /* AMBlurView.m */; };
+		76448CA417F18EC500ED18CB /* AMBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448CA017F18EC500ED18CB /* AMBlurView.m */; };
 		764CD8F2173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
 		764CD8F3173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
 		764CD8F4173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
@@ -3497,7 +3505,6 @@
 		4FC4110C17D04A5700D64105 /* Shuady.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shuady.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FC4113B17D490FF00D64105 /* EFChangeCrossTimeOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChangeCrossTimeOperation.h; sourceTree = "<group>"; };
 		4FC4113C17D4910100D64105 /* EFChangeCrossTimeOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChangeCrossTimeOperation.m; sourceTree = "<group>"; };
-		4FC4114817D5949B00D64105 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = Localizable.strings; sourceTree = "<group>"; };
 		4FC4115B17D6E0CD00D64105 /* identity_weixin_18_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = identity_weixin_18_grey.png; sourceTree = "<group>"; };
 		4FC4115C17D6E0CD00D64105 /* identity_weixin_18_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "identity_weixin_18_grey@2x.png"; sourceTree = "<group>"; };
 		4FC6E94316AFB6D00023AD1C /* xlist_conv_badge_many.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xlist_conv_badge_many.png; sourceTree = "<group>"; };
@@ -3697,6 +3704,11 @@
 		76448C7217F002CE00ED18CB /* portrait_frame_22@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_frame_22@2x.png"; sourceTree = "<group>"; };
 		76448C7717F002F200ED18CB /* portrait_frame_22.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_frame_22.png; sourceTree = "<group>"; };
 		76448C7C17F0274600ED18CB /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		76448C9117F1546500ED18CB /* EFImageComposerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFImageComposerViewController.h; sourceTree = "<group>"; };
+		76448C9217F1546500ED18CB /* EFImageComposerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFImageComposerViewController.m; sourceTree = "<group>"; };
+		76448C9A17F154C300ED18CB /* EFImageComposerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFImageComposerViewController.xib; sourceTree = "<group>"; };
+		76448C9F17F18EC500ED18CB /* AMBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMBlurView.h; path = "Vendor/iOS-blur/blur/blur/AMBlurView.h"; sourceTree = SOURCE_ROOT; };
+		76448CA017F18EC500ED18CB /* AMBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMBlurView.m; path = "Vendor/iOS-blur/blur/blur/AMBlurView.m"; sourceTree = SOURCE_ROOT; };
 		764CD8F0173A5C4600627237 /* EFNotificationBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFNotificationBannerView.h; sourceTree = "<group>"; };
 		764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFNotificationBannerView.m; sourceTree = "<group>"; };
 		764CD8FC173A8F9400627237 /* cautionbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cautionbar.png; sourceTree = "<group>"; };
@@ -4666,14 +4678,6 @@
 			name = "Exfee API Operation";
 			sourceTree = "<group>";
 		};
-		4FC4114617D5949B00D64105 /* zh-Hant.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				4FC4114717D5949B00D64105 /* Localizable.strings */,
-			);
-			path = "zh-Hant.lproj";
-			sourceTree = "<group>";
-		};
 		4FC6E95416B0E6EC0023AD1C /* dock */ = {
 			isa = PBXGroup;
 			children = (
@@ -4706,6 +4710,7 @@
 				4FF69541171BC9B7003DF80B /* Login */,
 				782B3CC7156B918B00721150 /* User */,
 				761165A417B88D18005B248A /* RouteX */,
+				76448C5E17EFE84D00ED18CB /* Photo */,
 				4FFCDFC2177D8BA100E1EAC3 /* EFViewController.h */,
 				4FFCDFC3177D8BA100E1EAC3 /* EFViewController.m */,
 			);
@@ -5069,8 +5074,20 @@
 			children = (
 				76448C6217EFE86B00ED18CB /* EFImagePickerViewController.h */,
 				76448C6317EFE86B00ED18CB /* EFImagePickerViewController.m */,
+				76448C9117F1546500ED18CB /* EFImageComposerViewController.h */,
+				76448C9217F1546500ED18CB /* EFImageComposerViewController.m */,
+				76448C9A17F154C300ED18CB /* EFImageComposerViewController.xib */,
 			);
 			name = Photo;
+			sourceTree = "<group>";
+		};
+		76448CA517F18ECB00ED18CB /* iOS-blur */ = {
+			isa = PBXGroup;
+			children = (
+				76448C9F17F18EC500ED18CB /* AMBlurView.h */,
+				76448CA017F18EC500ED18CB /* AMBlurView.m */,
+			);
+			name = "iOS-blur";
 			sourceTree = "<group>";
 		};
 		76555B51179E78D600BCC5A7 /* WeixinSDK */ = {
@@ -5132,7 +5149,6 @@
 			isa = PBXGroup;
 			children = (
 				76F6B3101740B5C1008B39C1 /* EFKit.h */,
-				76448C5E17EFE84D00ED18CB /* Photo */,
 				7660330717C21DD800B21A12 /* View */,
 				76B124521798F89F00A73E59 /* Streaming */,
 				7607AABE1796451200529F0D /* Map */,
@@ -5883,6 +5899,7 @@
 		785FD54E158065610056590D /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				76448CA517F18ECB00ED18CB /* iOS-blur */,
 				76F510B917D4ED9200B62D77 /* BlocksKit */,
 				4F0F830817CF56B1001DD47E /* CocoaTemplateEngine */,
 				761B24BE17CF53050091DD7B /* PressDrag */,
@@ -6176,7 +6193,6 @@
 			children = (
 				4F8507DF17841BBF00BB86FA /* NBPhoneNumberMetadata.plist */,
 				4FE7762B177C1E4700B20A32 /* zh-Hans.lproj */,
-				4FC4114617D5949B00D64105 /* zh-Hant.lproj */,
 				4FE77625177C1C8800B20A32 /* en.lproj */,
 				78A98E931560F832009E0806 /* EXFE-Info.plist */,
 				4F63DE14171733C500136B7E /* 0d0f-Info.plist */,
@@ -7055,6 +7071,7 @@
 				4FDFA3DB172A794900929BC9 /* start_tri-03@2x.png in Resources */,
 				4FDFA3DE172A794900929BC9 /* start_tri-04.png in Resources */,
 				4FDFA3E1172A794900929BC9 /* start_tri-04@2x.png in Resources */,
+				76448C9C17F154C300ED18CB /* EFImageComposerViewController.xib in Resources */,
 				4FDFA3E4172A794900929BC9 /* start_tri-05.png in Resources */,
 				4FDFA3E7172A794900929BC9 /* start_tri-05@2x.png in Resources */,
 				4FDFA3EA172A794900929BC9 /* start_tri-06.png in Resources */,
@@ -7179,7 +7196,6 @@
 				763BE928179FD836003BF97C /* map_shadow_gap.png in Resources */,
 				4F2CF05117BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05417BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
-				4FC4114A17D5949B00D64105 /* Localizable.strings in Resources */,
 				4FC4115E17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
 				4FC4116217D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
@@ -7528,6 +7544,7 @@
 				4FDFA3DF172A794900929BC9 /* start_tri-04.png in Resources */,
 				4FDFA3E2172A794900929BC9 /* start_tri-04@2x.png in Resources */,
 				4FDFA3E5172A794900929BC9 /* start_tri-05.png in Resources */,
+				76448C9D17F154C300ED18CB /* EFImageComposerViewController.xib in Resources */,
 				4FDFA3E8172A794900929BC9 /* start_tri-05@2x.png in Resources */,
 				4FDFA3EB172A794900929BC9 /* start_tri-06.png in Resources */,
 				4FDFA3EE172A794900929BC9 /* start_tri-06@2x.png in Resources */,
@@ -7652,7 +7669,6 @@
 				762D9FA017B36D07002A528B /* map_arrow_14red@2x.png in Resources */,
 				4F2CF05217BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05517BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
-				4FC4114B17D5949B00D64105 /* Localizable.strings in Resources */,
 				4FC4115F17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
 				4FC4116317D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
@@ -7689,6 +7705,7 @@
 				4FC40F5E17D04A5700D64105 /* identity_email_18@2x.png in Resources */,
 				4FC40F5F17D04A5700D64105 /* map_mark_red@2x.png in Resources */,
 				4FC40F6017D04A5700D64105 /* identity_facebook_18_grey.png in Resources */,
+				76448C9E17F154C300ED18CB /* EFImageComposerViewController.xib in Resources */,
 				4FC40F6117D04A5700D64105 /* identity_facebook_18_grey@2x.png in Resources */,
 				4FC40F6217D04A5700D64105 /* identity_facebook_18.png in Resources */,
 				4FC40F6317D04A5700D64105 /* identity_facebook_18@2x.png in Resources */,
@@ -8121,7 +8138,6 @@
 				4FC4110617D04A5700D64105 /* map_shadow_gap.png in Resources */,
 				4FC4110717D04A5700D64105 /* cautionbar_cancel_pressed.png in Resources */,
 				4FC4110817D04A5700D64105 /* cautionbar_cancel.png in Resources */,
-				4FC4114C17D5949B00D64105 /* Localizable.strings in Resources */,
 				4FC4116017D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
 				4FC4116417D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
@@ -8158,6 +8174,7 @@
 				781178A215DA81E900A4BBCF /* identity_email_18@2x.png in Resources */,
 				76D024E317C7817100F69FD2 /* map_mark_red@2x.png in Resources */,
 				781178A515DA81E900A4BBCF /* identity_facebook_18_grey.png in Resources */,
+				76448C9B17F154C300ED18CB /* EFImageComposerViewController.xib in Resources */,
 				781178A615DA81E900A4BBCF /* identity_facebook_18_grey@2x.png in Resources */,
 				781178A715DA81E900A4BBCF /* identity_facebook_18.png in Resources */,
 				781178A815DA81E900A4BBCF /* identity_facebook_18@2x.png in Resources */,
@@ -8590,7 +8607,6 @@
 				763BE927179FD836003BF97C /* map_shadow_gap.png in Resources */,
 				4F2CF05017BEA43800E3A4B2 /* cautionbar_cancel_pressed.png in Resources */,
 				4F2CF05317BEA43800E3A4B2 /* cautionbar_cancel.png in Resources */,
-				4FC4114917D5949B00D64105 /* Localizable.strings in Resources */,
 				4FC4115D17D6E0CD00D64105 /* identity_weixin_18_grey.png in Resources */,
 				4FC4116117D6E0CD00D64105 /* identity_weixin_18_grey@2x.png in Resources */,
 			);
@@ -8715,6 +8731,7 @@
 				4F63DA9617172AA600136B7E /* URLParser.m in Sources */,
 				766032FE17C21C1B00B21A12 /* EFMapPersonViewController.m in Sources */,
 				4F63DA9717172AA600136B7E /* EXImagesCollectionView.m in Sources */,
+				76448C9417F1546500ED18CB /* EFImageComposerViewController.m in Sources */,
 				4F63DA9817172AA600136B7E /* PlaceViewController.m in Sources */,
 				4F63DA9A17172AA600136B7E /* PlaceAnnotation.m in Sources */,
 				4F63DA9B17172AA600136B7E /* WildcardGestureRecognizer.m in Sources */,
@@ -8799,6 +8816,7 @@
 				4F63DAF517172AA600136B7E /* PSTCollectionViewFlowLayout.m in Sources */,
 				4F63DAF617172AA600136B7E /* PSTCollectionViewItemKey.m in Sources */,
 				4F63DAF717172AA600136B7E /* PSTCollectionViewLayout.m in Sources */,
+				76448CA217F18EC500ED18CB /* AMBlurView.m in Sources */,
 				4F63DAF817172AA600136B7E /* PSTCollectionViewUpdateItem.m in Sources */,
 				4F63DAF917172AA600136B7E /* PSTGridLayoutInfo.m in Sources */,
 				4F63DAFA17172AA600136B7E /* PSTGridLayoutItem.m in Sources */,
@@ -8991,6 +9009,7 @@
 				4F63DC6517172B0700136B7E /* URLParser.m in Sources */,
 				766032FF17C21C1B00B21A12 /* EFMapPersonViewController.m in Sources */,
 				4F63DC6617172B0700136B7E /* EXImagesCollectionView.m in Sources */,
+				76448C9517F1546500ED18CB /* EFImageComposerViewController.m in Sources */,
 				4F63DC6717172B0700136B7E /* PlaceViewController.m in Sources */,
 				4F63DC6917172B0700136B7E /* PlaceAnnotation.m in Sources */,
 				4F63DC6A17172B0700136B7E /* WildcardGestureRecognizer.m in Sources */,
@@ -9075,6 +9094,7 @@
 				4F63DCC417172B0700136B7E /* PSTCollectionViewFlowLayout.m in Sources */,
 				4F63DCC517172B0700136B7E /* PSTCollectionViewItemKey.m in Sources */,
 				4F63DCC617172B0700136B7E /* PSTCollectionViewLayout.m in Sources */,
+				76448CA317F18EC500ED18CB /* AMBlurView.m in Sources */,
 				4F63DCC717172B0700136B7E /* PSTCollectionViewUpdateItem.m in Sources */,
 				4F63DCC817172B0700136B7E /* PSTGridLayoutInfo.m in Sources */,
 				4F63DCC917172B0700136B7E /* PSTGridLayoutItem.m in Sources */,
@@ -9267,6 +9287,7 @@
 				4FC40E3317D04A5700D64105 /* URLParser.m in Sources */,
 				4FC40E3417D04A5700D64105 /* EFMapPersonViewController.m in Sources */,
 				4FC40E3517D04A5700D64105 /* EXImagesCollectionView.m in Sources */,
+				76448C9617F1546500ED18CB /* EFImageComposerViewController.m in Sources */,
 				4FC40E3617D04A5700D64105 /* PlaceViewController.m in Sources */,
 				4FC40E3717D04A5700D64105 /* PlaceAnnotation.m in Sources */,
 				4FC40E3817D04A5700D64105 /* WildcardGestureRecognizer.m in Sources */,
@@ -9351,6 +9372,7 @@
 				4FC40E8617D04A5700D64105 /* PSTCollectionViewItemKey.m in Sources */,
 				4FC40E8717D04A5700D64105 /* PSTCollectionViewLayout.m in Sources */,
 				4FC40E8817D04A5700D64105 /* PSTCollectionViewUpdateItem.m in Sources */,
+				76448CA417F18EC500ED18CB /* AMBlurView.m in Sources */,
 				4FC40E8917D04A5700D64105 /* PSTGridLayoutInfo.m in Sources */,
 				4FC40E8A17D04A5700D64105 /* PSTGridLayoutItem.m in Sources */,
 				4FC40E8B17D04A5700D64105 /* PSTGridLayoutRow.m in Sources */,
@@ -9543,6 +9565,7 @@
 				78D0A601158CFB5F00401BCA /* URLParser.m in Sources */,
 				766032FD17C21C1B00B21A12 /* EFMapPersonViewController.m in Sources */,
 				789C8CAD1591D9B700580624 /* EXImagesCollectionView.m in Sources */,
+				76448C9317F1546500ED18CB /* EFImageComposerViewController.m in Sources */,
 				78F057FF1599A57C00F360F2 /* PlaceViewController.m in Sources */,
 				78415346159C3F5C002B7A2E /* PlaceAnnotation.m in Sources */,
 				78415363159D6766002B7A2E /* WildcardGestureRecognizer.m in Sources */,
@@ -9627,6 +9650,7 @@
 				4F9FE4E81702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m in Sources */,
 				4F9FE4E91702E12C0098B9B9 /* PSTCollectionViewItemKey.m in Sources */,
 				4F9FE4EA1702E12C0098B9B9 /* PSTCollectionViewLayout.m in Sources */,
+				76448CA117F18EC500ED18CB /* AMBlurView.m in Sources */,
 				4F9FE4EB1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m in Sources */,
 				4F9FE4EC1702E12C0098B9B9 /* PSTGridLayoutInfo.m in Sources */,
 				4F9FE4ED1702E12C0098B9B9 /* PSTGridLayoutItem.m in Sources */,
@@ -9858,14 +9882,6 @@
 				4F7D7FFD17EF28610073DE6E /* zh-Hans */,
 			);
 			name = time.strings;
-			sourceTree = "<group>";
-		};
-		4FC4114717D5949B00D64105 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4FC4114817D5949B00D64105 /* zh-Hant */,
-			);
-			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		4FE77626177C1CA200B20A32 /* Localizable.strings */ = {

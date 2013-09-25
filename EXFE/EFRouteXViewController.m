@@ -783,37 +783,46 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     [menuViewController dismissAnimated:YES];
     
     if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi]) {
-        EFImagePickerViewController *imagePicker = [[EFImagePickerViewController alloc] init];
-        imagePicker.cancelActionHandler = ^(EFImagePickerViewController *picker){
-            [picker.presentingViewController dismissViewControllerAnimated:YES
-                                                                completion:nil];
-        };
-        [self.tabBarViewController presentViewController:imagePicker animated:YES completion:nil];
+        UIGraphicsBeginImageContextWithOptions(self.view.frame.size, 1, [UIScreen mainScreen].scale);
+        [self.view.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
         
-//        UIGraphicsBeginImageContextWithOptions(self.view.frame.size, 1, [UIScreen mainScreen].scale);
-//        [self.view.layer renderInContext:UIGraphicsGetCurrentContext()];
-//        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-//        UIGraphicsEndImageContext();
-//        
-//        NSData *imageData = UIImageJPEGRepresentation(image, 0.8f);
-//        NSData *thumbImageData = UIImageJPEGRepresentation(image, 0.1f);
-//        
-//        WXImageObject *imageObject = [WXImageObject object];
-//        imageObject.imageData = imageData;
-//        
-//        WXMediaMessage *mediaMessage = [WXMediaMessage message];
-//        [mediaMessage setThumbData:thumbImageData];
-//        mediaMessage.title = self.cross.title;
-//        mediaMessage.description = @"test";
-//        mediaMessage.mediaObject = imageObject;
-//        
-//        SendMessageToWXReq *requestMessage = [[SendMessageToWXReq alloc] init];
-//        requestMessage.bText = NO;
-//        requestMessage.scene = WXSceneTimeline;
-//        requestMessage.message = mediaMessage;
-//        
-//        [WXApi sendReq:requestMessage];
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+        
+        NSData *imageData = UIImageJPEGRepresentation(image, 0.8f);
+        NSData *thumbImageData = UIImageJPEGRepresentation(image, 0.1f);
+        
+        WXImageObject *imageObject = [WXImageObject object];
+        imageObject.imageData = imageData;
+        
+        WXMediaMessage *mediaMessage = [WXMediaMessage message];
+        [mediaMessage setThumbData:thumbImageData];
+        mediaMessage.title = self.cross.title;
+        mediaMessage.mediaObject = imageObject;
+        
+        SendMessageToWXReq *requestMessage = [[SendMessageToWXReq alloc] init];
+        requestMessage.bText = NO;
+        requestMessage.scene = WXSceneTimeline;
+        requestMessage.message = mediaMessage;
+        
+        [WXApi sendReq:requestMessage];
     }
+}
+
+- (void)menuViewControllerWannaShowPhoto:(EFRouteXMenuViewController *)menuViewController {
+    [menuViewController dismissAnimated:YES];
+    
+    EFImagePickerViewController *imagePicker = [[EFImagePickerViewController alloc] init];
+    imagePicker.initMapRect = self.mapView.visibleMapRect;
+    imagePicker.geomarks = [[NSMutableArray alloc] initWithArray:[self.mapDataSource allAnnotations]];
+    imagePicker.offset = self.mapDataSource.offset;
+    imagePicker.cancelActionHandler = ^(EFImagePickerViewController *picker){
+        [picker.presentingViewController dismissViewControllerAnimated:YES
+                                                            completion:nil];
+    };
+    
+    [self.tabBarViewController presentViewController:imagePicker animated:YES completion:nil];
 }
 
 #pragma mark -

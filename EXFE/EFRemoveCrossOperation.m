@@ -7,6 +7,8 @@
 //
 
 #import "EFRemoveCrossOperation.h"
+#import "CCTemplate.h"
+#import "Util.h"
 
 NSString *kEFNotificationNameRemoveCrossSuccess = @"notification.removeCross.success";
 NSString *kEFNotificationNameRemoveCrossFailure = @"notification.removeCross.failure";
@@ -71,6 +73,11 @@ NSString *kEFNotificationNameRemoveCrossFailure = @"notification.removeCross.fai
                                         [userInfo setValue:@"cross" forKey:@"type"];
                                         [userInfo setValue:self.cross.cross_id forKey:@"id"];
                                         self.failureUserInfo = userInfo;
+                                        
+                                        if (c == 403 && [@"not_authorized" isEqualToString:meta.errorType]) {
+                                            [Util handleDefaultBannerTitle:[NSLocalizedString(@"Failed to remove {{X_NOUN}}.", nil) templateFromDict:[Util keywordDict]]andMessage:[NSLocalizedString(@"Only host has the privilege.", nil) templateFromDict:[Util keywordDict]]];
+                                        }
+                                        
                                         [self finish];
                                     } break;
                                 }

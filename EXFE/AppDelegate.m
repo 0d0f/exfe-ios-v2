@@ -36,7 +36,9 @@
 @synthesize navigationController=_navigationController;
 
 - (void)registerWeixin {
-    [WXApi registerApp:kWeixinAppID];
+    if (![WXApi registerApp:kWeixinAppID]) {
+        RKLogInfo(@"weixin register failure.");
+    }
 }
 
 - (void)handleLocationNotificaiton:(UILocalNotification *)localNotificaiton {

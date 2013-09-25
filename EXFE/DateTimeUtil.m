@@ -43,30 +43,30 @@ static NSDate* s_Now = nil;
     switch (type) {
         case 0: // ISO 8601 
             result = @{
-                       @"date": NSLocalizedString(@"MM-dd", nil),
-                       @"dateWithYear": NSLocalizedString(@"yyyy-MM-dd", nil),
-                       @"time": NSLocalizedString(@"HH:mm:ss", nil)
+                       @"date": NSLocalizedStringFromTable(@"MM-dd", @"time", nil),
+                       @"dateWithYear": NSLocalizedStringFromTable(@"yyyy-MM-dd", @"time", nil),
+                       @"time": NSLocalizedStringFromTable(@"HH:mm:ss", @"time", nil)
                        };
             break;
         case 1: // Long
             result = @{
-                       @"date": NSLocalizedString(@"EEEE, MMMM d", nil),
-                       @"dateWithYear": NSLocalizedString(@"EEEE, MMMM d yyyy", nil),
-                       @"time": NSLocalizedString(@"HH:mm", nil)
+                       @"date": NSLocalizedStringFromTable(@"EEEE, MMMM d", @"time", nil),
+                       @"dateWithYear": NSLocalizedStringFromTable(@"EEEE, MMMM d yyyy", @"time", nil),
+                       @"time": NSLocalizedStringFromTable(@"HH:mm", @"time", nil)
                        };
             break;
         case 2: // Mid
             result = @{
-                       @"date": NSLocalizedString(@"EEE, MMM d", nil),
-                       @"dateWithYear": NSLocalizedString(@"EEE, MMM d yyyy", nil),
-                       @"time": NSLocalizedString(@"h:mma", nil)
+                       @"date": NSLocalizedStringFromTable(@"EEE, MMM d", @"time", nil),
+                       @"dateWithYear": NSLocalizedStringFromTable(@"EEE, MMM d yyyy", @"time", nil),
+                       @"time": NSLocalizedStringFromTable(@"h:mma", @"time", nil)
                        };
             break;
         case 3 : // Short
             result = @{
-                       @"date": NSLocalizedString(@"MMM d", nil),
-                       @"dateWithYear": NSLocalizedString(@"MMM d yyyy", nil),
-                       @"time": NSLocalizedString(@"h:mm", nil)
+                       @"date": NSLocalizedStringFromTable(@"MMM d", @"time", nil),
+                       @"dateWithYear": NSLocalizedStringFromTable(@"MMM d yyyy", @"time", nil),
+                       @"time": NSLocalizedStringFromTable(@"h:mm", @"time", nil)
                        };
             break;
         default:
