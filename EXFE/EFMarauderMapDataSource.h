@@ -43,7 +43,7 @@ EFHTTPStreamingDelegate
 @property (nonatomic, weak) id <EFMarauderMapDataSourceDelegate> delegate;
 @property (nonatomic, readonly) EFRouteLocation *destinationLocation;
 @property (nonatomic, assign) CGPoint   offset;                 // earth -> mars
-@property (nonatomic, assign) EFMapPerson   *selectedPerson;
+@property (nonatomic, weak) EFMapPerson   *selectedPerson;
 
 - (id)initWithCross:(Cross *)cross;
 
@@ -74,6 +74,7 @@ EFHTTPStreamingDelegate
 - (void)removeRouteLocation:(EFRouteLocation *)routeLocation fromMapView:(MKMapView *)mapView shouldPostToServer:(BOOL)shouldPost;
 - (void)removeRouteLocation:(EFRouteLocation *)routeLocation fromMapView:(MKMapView *)mapView;
 - (NSArray *)allRouteLocations;
+- (NSArray *)allAnnotations;
 
 /**
  * Person

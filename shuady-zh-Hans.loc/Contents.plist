@@ -12,7 +12,9 @@
 			<key>change date</key>
 			<date>2001-01-01T00:00:00Z</date>
 			<key>changed values</key>
-			<array/>
+			<array>
+				<string>zh-Hans</string>
+			</array>
 			<key>class</key>
 			<string>BLBundleObject</string>
 			<key>errors</key>
@@ -34,9 +36,11 @@
 						</dict>
 					</dict>
 					<key>change date</key>
-					<date>2013-09-25T14:59:51Z</date>
+					<date>2013-09-25T15:13:53Z</date>
 					<key>changed values</key>
-					<array/>
+					<array>
+						<string>zh-Hans</string>
+					</array>
 					<key>class</key>
 					<string>BLStringsFileObject</string>
 					<key>errors</key>
@@ -44,7 +48,7 @@
 					<key>flags</key>
 					<integer>0</integer>
 					<key>hash</key>
-					<string>2f490eb5cb6d009c877f920ed42ec380
+					<string>d68bca83a1b119d6158065be607925af
 </string>
 					<key>name</key>
 					<string>Localizable.strings</string>
@@ -4854,6 +4858,33 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
 							<key>changed values</key>
+							<array>
+								<string>zh-Hans</string>
+							</array>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Share trace photos</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Share trace photos</string>
+								<key>zh-Hans</key>
+								<string>分享足迹照片</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
 							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
@@ -7335,6 +7366,8 @@ Request verification again?</string>
 		<string>zh-Hans</string>
 		<key>saveCompressed</key>
 		<false/>
+		<key>search</key>
+		<string>share</string>
 	</dict>
 	<key>reference language</key>
 	<string>en</string>

@@ -28,3 +28,6 @@
 [submodule "Vendor/PressDrag"]
 	path = Vendor/PressDrag
 	url = https://github.com/0day2010/PressDrag.git
+[submodule "Vendor/iOS-blur"]
+	path = Vendor/iOS-blur
+	url = https://github.com/0day2010/iOS-blur.git

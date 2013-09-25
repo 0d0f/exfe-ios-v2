@@ -144,15 +144,17 @@
         self.operationBaseView = operationBaseView;
         
         EFGradientView *backgroundView = [[EFGradientView alloc] initWithFrame:operationBaseView.bounds];
-        backgroundView.colors = @[[UIColor COLOR_RGBA(0x19, 0x19, 0x19, 192.0f)],
-                                     [UIColor COLOR_RGB(0x19, 0x19, 0x19)]];
+        backgroundView.colors = @[[UIColor COLOR_RGB(0x4C, 0x4C, 0x4C)],
+                                  [UIColor COLOR_RGB(0x19, 0x19, 0x19)]];
         backgroundView.alpha = 0.88f;
         [operationBaseView addSubview:backgroundView];
         
         UIButton *okButton = [UIButton buttonWithType:UIButtonTypeCustom];
         okButton.frame = (CGRect){{CGRectGetWidth(operationBaseView.frame) - kButtonWidth, 0.0f}, {kButtonWidth, kOperationViewHeight}};
         [okButton setTitle:NSLocalizedString(@"OK", nil) forState:UIControlStateNormal];
-        [okButton setTitleColor:[UIColor COLOR_RGB(0x58, 0x9D, 0xFF)] forState:UIControlStateNormal];
+        [okButton setTitleColor:[UIColor COLOR_RGB(0x00, 0x78, 0xFF)] forState:UIControlStateNormal];
+        [okButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.5f] forState:UIControlStateNormal];
+        okButton.titleLabel.shadowOffset = (CGSize){0.0f, 1.0f};
         [okButton addTarget:self
                      action:@selector(okButtonPressed:)
            forControlEvents:UIControlEventTouchUpInside];
@@ -167,7 +169,96 @@
 #pragma mark - Action
 
 - (void)okButtonPressed:(id)sender {
-    
+    if (self.imageDicts.count) {
+        EFImageComposerViewController *composerViewController = [[EFImageComposerViewController alloc] init];
+        composerViewController.delegate = self;
+        
+        __block NSMutableArray *newImageDicts = [[NSMutableArray alloc] init];
+        dispatch_semaphore_t enumerateSemaphore = dispatch_semaphore_create(0);
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+            
+            for (NSDictionary *imageDict in self.imageDicts) {
+                @autoreleasepool {
+                    NSURL *imageURL = [imageDict valueForKey:UIImagePickerControllerReferenceURL];
+                    if (imageURL) {
+                        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+                        
+                        [library assetForURL:imageURL
+                                 resultBlock:^(ALAsset *asset){
+                                     ALAssetRepresentation *representation = [asset defaultRepresentation];
+                                     
+                                     NSMutableDictionary *imageDict = [[NSMutableDictionary alloc] init];
+                                     UIImage *image = [UIImage imageWithCGImage:[representation fullScreenImage]];
+                                     [imageDict setValue:image forKey:@"image"];
+                                     
+                                     // create a buffer to hold image data
+                                     uint8_t *buffer = (uint8_t *)malloc(sizeof(uint8_t) * (long)representation.size);
+                                     NSUInteger length = [representation getBytes:buffer fromOffset: 0.0  length:(long)representation.size error:nil];
+                                     
+                                     if (length != 0)  {
+                                         // buffer -> NSData object; free buffer afterwards
+                                         NSData *adata = [[NSData alloc] initWithBytesNoCopy:buffer length:(long)representation.size freeWhenDone:YES];
+                                         
+                                         // identify image type (jpeg, png, RAW file, ...) using UTI hint
+                                         NSDictionary* sourceOptionsDict = [NSDictionary dictionaryWithObjectsAndKeys:(id)[representation UTI] ,kCGImageSourceTypeIdentifierHint,nil];
+                                         
+                                         // create CGImageSource with NSData
+                                         CGImageSourceRef sourceRef = CGImageSourceCreateWithData((__bridge CFDataRef) adata,  (__bridge CFDictionaryRef) sourceOptionsDict);
+                                         
+                                         // get imagePropertiesDictionary
+                                         CFDictionaryRef imagePropertiesDictionary;
+                                         imagePropertiesDictionary = CGImageSourceCopyPropertiesAtIndex(sourceRef,0, NULL);
+                                         
+                                         // get gps data
+                                         CFDictionaryRef gpsInfo = (CFDictionaryRef)CFDictionaryGetValue(imagePropertiesDictionary, kCGImagePropertyGPSDictionary);
+                                         NSDictionary *gpsDict = (__bridge NSDictionary *)gpsInfo;
+                                         
+                                         if ([gpsDict valueForKey:@"Latitude"] && [gpsDict valueForKey:@"Longitude"]) {
+                                             CGFloat latitude = [[gpsDict valueForKey:@"Latitude"] doubleValue];
+                                             CGFloat longitude = [[gpsDict valueForKey:@"Longitude"] doubleValue];
+                                             latitude += self.offset.x;
+                                             longitude += self.offset.y;
+                                             
+                                             [imageDict setValue:[NSNumber numberWithDouble:latitude] forKey:@"latitude"];
+                                             [imageDict setValue:[NSNumber numberWithDouble:longitude] forKey:@"longitude"];
+                                         }
+                                         
+                                         // clean up
+                                         CFRelease(imagePropertiesDictionary);
+                                         CFRelease(sourceRef);
+                                     } else {
+                                         NSLog(@"image_representation buffer length == 0");
+                                     }
+                                     
+                                     [newImageDicts addObject:imageDict];
+                                     
+                                     dispatch_semaphore_signal(sema);
+                                 }
+                                failureBlock:^(NSError *error){
+                                    dispatch_semaphore_signal(sema);
+                                }];
+                        
+                        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+                    }
+                }
+            }
+            
+            dispatch_semaphore_signal(enumerateSemaphore);
+        });
+        
+        dispatch_semaphore_wait(enumerateSemaphore, DISPATCH_TIME_FOREVER);
+        
+        [composerViewController customWithImageDicts:newImageDicts
+                                            geomarks:self.geomarks
+                                                path:nil
+                                             mapRect:self.initMapRect];
+        
+        [self presentViewController:composerViewController
+                           animated:YES
+                         completion:nil];
+    }
 }
 
 #pragma mark - Public
@@ -182,17 +273,47 @@
     return (status != ALAuthorizationStatusAuthorized);
 }
 
+#pragma mark - EFImageComposerViewControllerDelegate
+
+- (void)imageComposerViewControllerShareButtonPressed:(EFImageComposerViewController *)viewController whithImage:(UIImage *)image {
+    if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi]) {
+        NSData *imageData = UIImageJPEGRepresentation(image, 0.4f);
+        
+        CGSize imageSize = image.size;
+        imageSize.width *= 0.3f;
+        imageSize.height *= 0.3f;
+        UIGraphicsBeginImageContextWithOptions(imageSize, NO, [UIScreen mainScreen].scale);
+        [image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
+        UIImage *thumbImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        WXImageObject *imageObject = [WXImageObject object];
+        imageObject.imageData = imageData;
+        
+        WXMediaMessage *mediaMessage = [WXMediaMessage message];
+        [mediaMessage setThumbImage:thumbImage];
+        mediaMessage.mediaObject = imageObject;
+        
+        SendMessageToWXReq *requestMessage = [[SendMessageToWXReq alloc] init];
+        requestMessage.bText = NO;
+        requestMessage.scene = WXSceneTimeline;
+        requestMessage.message = mediaMessage;
+        
+        [WXApi sendReq:requestMessage];
+    }
+}
+
+- (void)imageComposerViewControllerCancelButtonPressed:(EFImageComposerViewController *)viewController {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - UIImagePickerControllerDelegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     if (![self _isImageAdded:info]) {
         if (self.imageDicts.count < kMaxImageCount) {
             [self _addImage:info];
-        } else {
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
         }
-    } else {
-        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     }
 }
 
