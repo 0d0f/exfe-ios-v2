@@ -184,6 +184,8 @@
         imageView.layer.shadowOpacity = 0.25f;
         imageView.layer.shadowRadius = 2.0f;
     }
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -197,8 +199,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -207,11 +207,7 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+#pragma mark - Action
 
 - (IBAction)shareButtonPressed:(id)sender {
     if ([self.delegate respondsToSelector:@selector(imageComposerViewControllerShareButtonPressed:whithImage:)]) {
