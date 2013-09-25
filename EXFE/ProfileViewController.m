@@ -659,7 +659,6 @@
     } else {
         [self setPwd:view];
     }
-    
 }
 
 - (void)setPwd:(UIControl *)view

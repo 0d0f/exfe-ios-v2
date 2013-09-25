@@ -26,6 +26,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.wantsFullScreenLayout = YES;
     }
     return self;
 }
@@ -38,7 +39,7 @@
     self.customPlace = [NSMutableDictionary dictionaryWithCapacity:10];
     self.placeResults = [NSMutableArray arrayWithCapacity:20];
 
-    toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44 + 20)];
     [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
     [toolbar.layer setShadowOpacity:0.8];
     [toolbar.layer setShadowRadius:3.0];
@@ -46,21 +47,21 @@
     [self.view addSubview:toolbar];
 
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
-    [btnBack setFrame:CGRectMake(0, 0, 20, 44)];
-    btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
-    [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
+    [btnBack setFrame:CGRectMake(0, 20, 20, 44)];
+    btnBack.backgroundColor = [UIColor clearColor];
+    [btnBack setImage:[UIImage imageNamed:@"back_g3.png"] forState:UIControlStateNormal];
+    [btnBack setImage:[UIImage imageNamed:@"back_g3_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchDragExit];
     [toolbar addSubview:btnBack];
 
     
-    UIImageView *inputframeview=[[UIImageView alloc] initWithFrame:CGRectMake(28, 7, 229, 31)];
+    UIImageView *inputframeview=[[UIImageView alloc] initWithFrame:CGRectMake(28, 7 + 20, 229, 31)];
     inputframeview.image=[UIImage imageNamed:@"textfield.png"];
     inputframeview.contentMode    = UIViewContentModeScaleToFill;
     inputframeview.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
     [toolbar addSubview:inputframeview];
     
-    inputplace=[[UITextField alloc] initWithFrame:CGRectMake(54, 13.5, 195-18, 18.5)];
+    inputplace=[[UITextField alloc] initWithFrame:CGRectMake(54, 13.5 + 20, 195-18, 18.5)];
     inputplace.tag=401;
     inputplace.placeholder=NSLocalizedString(@"Search place", nil);
     [inputplace setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
@@ -72,12 +73,12 @@
     [toolbar addSubview:inputplace];
     inputplace.text=@"";
     
-    UIImageView *icon=[[UIImageView alloc] initWithFrame:CGRectMake(33, 13.5, 18, 18)];
+    UIImageView *icon=[[UIImageView alloc] initWithFrame:CGRectMake(33, 13.5 + 20, 18, 18)];
     icon.image=[UIImage imageNamed:@"place_18.png"];
     [toolbar addSubview:icon];
 
     rightbutton=[UIButton buttonWithType:UIButtonTypeCustom];
-    [rightbutton setFrame:CGRectMake(265, 7, 50, 30)];
+    [rightbutton setFrame:CGRectMake(265, 7 + 20, 50, 30)];
     [rightbutton setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
     [rightbutton setBackgroundImage:[[UIImage imageNamed:@"btn_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 3, 0,3)] forState:UIControlStateNormal];
     [rightbutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];

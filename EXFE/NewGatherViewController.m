@@ -75,17 +75,13 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.wantsFullScreenLayout = YES;
     }
     return self;
 }
 
 - (void)initUI{
-    CGRect a = CGRectNull;
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
-        a = [UIScreen mainScreen].bounds;
-    } else {
-        a = [UIScreen mainScreen].applicationFrame;
-    }
+    CGRect a = [UIScreen mainScreen].bounds;;
     self.view.frame = a;
     //CGRect f = self.view.frame;
     CGRect b = self.view.bounds;
@@ -191,7 +187,7 @@
         dectorMask.backgroundColor = [UIColor COLOR_WA(0x00, 0x55)];
         [headview addSubview:dectorMask];
         
-        titleView = [[UILabel alloc] initWithFrame:CGRectMake(20 + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, CGRectGetWidth(b) - 20 - TITLE_HORIZON_MARGIN * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
+        titleView = [[UILabel alloc] initWithFrame:CGRectMake(20 + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN + 20, CGRectGetWidth(b) - 20 - TITLE_HORIZON_MARGIN * 2, DECTOR_HEIGHT - 20 - TITLE_VERTICAL_MARGIN * 2)];
         titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
         titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         titleView.backgroundColor = [UIColor clearColor];
@@ -209,7 +205,7 @@
     [self.view addSubview:headview];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
-    [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 /2, 40, 44)];
+    [btnBack setFrame:CGRectMake(0, (DECTOR_HEIGHT + 20) / 2 - 44 /2, 40, 44)];
     btnBack.imageEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 20.0);
     btnBack.backgroundColor = [UIColor clearColor];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];

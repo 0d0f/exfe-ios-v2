@@ -34,6 +34,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.wantsFullScreenLayout = YES;
     }
     return self;
 }
@@ -43,9 +44,8 @@
     [super viewDidLoad];
     [Flurry logEvent:@"EDIT_TITLE_DESCRIPTION"];
     CGRect b = self.view.bounds;
-    //CGRect a = [UIScreen mainScreen].applicationFrame;
     
-    toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44 + 20)];
     [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
     [toolbar.layer setShadowOpacity:0.8];
     [toolbar.layer setShadowRadius:3.0];
@@ -53,7 +53,7 @@
     
     [self.view addSubview:toolbar];
     
-    TTTAttributedLabel *viewtitle=[[TTTAttributedLabel alloc] initWithFrame:CGRectMake(60, (44-30)/2, self.view.frame.size.width-60-60, 30)];
+    TTTAttributedLabel *viewtitle=[[TTTAttributedLabel alloc] initWithFrame:CGRectMake(60, (44-30) /2 + 20, self.view.frame.size.width-60-60, 30)];
     viewtitle.backgroundColor = [UIColor clearColor];
     viewtitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
     viewtitle.textAlignment = NSTextAlignmentCenter;
@@ -62,10 +62,10 @@
     [self.view addSubview:viewtitle];
     
     UIButton *btncancel=[UIButton buttonWithType:UIButtonTypeCustom];
-    [btncancel setFrame:CGRectMake(0, 0, 20, 44)];
-    btncancel.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
-    [btncancel setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [btncancel setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
+    [btncancel setFrame:CGRectMake(0, 20, 20, 44)];
+    btncancel.backgroundColor = [UIColor clearColor];
+    [btncancel setImage:[UIImage imageNamed:@"back_g3.png"] forState:UIControlStateNormal];
+    [btncancel setImage:[UIImage imageNamed:@"back_g3_pressed.png"] forState:UIControlStateHighlighted];
     [btncancel addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchDragExit];
     
     [toolbar addSubview:btncancel];
@@ -73,7 +73,7 @@
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [doneButton setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
     [doneButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
-    doneButton.frame = CGRectMake(255+5+5, 7, 50, 30);
+    doneButton.frame = CGRectMake(255+5+5, 27, 50, 30);
     [doneButton addTarget:self action:@selector(done:) forControlEvents:UIControlEventTouchUpInside];
     [doneButton setBackgroundImage:[[UIImage imageNamed:@"btn_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
     

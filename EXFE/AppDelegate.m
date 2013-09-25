@@ -61,7 +61,7 @@
     // Setup RKLog
     RKLogSetAppLoggingLevel(RKLogLevelDefault);
 #ifdef DEBUG
-    RKLogConfigureByName("RestKit/Network", RKLogLevelDebug);
+    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
     //    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelDebug);
     RKLogConfigureByName("RestKit/CoreData", RKLogLevelOff);
     //    RKLogConfigureByName("RestKit/CoreData/Cache", RKLogLevelTrace);

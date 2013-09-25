@@ -126,6 +126,7 @@
     self = [super initWithModel:model];
     if (self) {
         self.model = model;
+        self.wantsFullScreenLayout = YES;
         self.data = [NSMutableDictionary dictionary];
         self.fillAvatarFlag = NO;
     }
@@ -135,8 +136,8 @@
 - (void)loadView
 {
     // root view
-    CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
-    UIScrollView *contentView = [[UIScrollView alloc] initWithFrame:applicationFrame];
+    CGRect b = [[UIScreen mainScreen] bounds];
+    UIScrollView *contentView = [[UIScrollView alloc] initWithFrame:b];
     contentView.backgroundColor = [UIColor COLOR_WA(0x4C, 0xFF)]; //[UIColor clearColor];
     contentView.scrollEnabled = NO;
     self.view = contentView;
