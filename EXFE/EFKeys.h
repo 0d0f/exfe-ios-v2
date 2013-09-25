@@ -22,7 +22,7 @@
 /**
  * Weixin AppId
  */
-#define kWeixinAppID    @"wxead9dbbbfe812a82"
+#define kWeixinAppID    @"wx28e51a8829f1e1b2"
 
 /**
  * Google API Key
