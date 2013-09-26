@@ -338,7 +338,12 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+    } else {
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
+    }
+    
 }
 
 - (void)forceSignOut {

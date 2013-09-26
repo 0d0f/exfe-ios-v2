@@ -43,6 +43,13 @@
 {
     [super viewDidLoad];
     [Flurry logEvent:@"EDIT_TITLE_DESCRIPTION"];
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    } else {
+        
+    }
+    
     CGRect b = self.view.bounds;
     
     toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44 + 20)];
@@ -58,10 +65,10 @@
     viewtitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
     viewtitle.textAlignment = NSTextAlignmentCenter;
     viewtitle.textColor = FONT_COLOR_51;
-    viewtitle.text =[NSLocalizedString(@"Edit {{X_NOUN}} Info", nil) templateFromDict:[Util keywordDict]];
+    viewtitle.text = [NSLocalizedString(@"Edit {{X_NOUN}} Info", nil) templateFromDict:[Util keywordDict]];
     [self.view addSubview:viewtitle];
     
-    UIButton *btncancel=[UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *btncancel = [UIButton buttonWithType:UIButtonTypeCustom];
     [btncancel setFrame:CGRectMake(0, 20, 20, 44)];
     btncancel.backgroundColor = [UIColor clearColor];
     [btncancel setImage:[UIImage imageNamed:@"back_g3.png"] forState:UIControlStateNormal];
@@ -84,13 +91,13 @@
     descView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
     descView.backgroundColor = [UIColor clearColor];
     descView.textAlignment = NSTextAlignmentLeft;
-    descView.backgroundColor=[UIColor whiteColor];
+    descView.backgroundColor = [UIColor whiteColor];
     descView.contentInset = UIEdgeInsetsMake(8, 0, 0, 0);
     descView.placeholder = NSLocalizedString(@"Take some notes", nil);
     [self.view addSubview:descView];
 
     headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 122,  DECTOR_HEIGHT, 122, DECTOR_HEIGHT_EXTRA) ];
-    headview.backgroundColor=[UIColor grayColor];
+    headview.backgroundColor = [UIColor grayColor];
     {
         CGFloat scale = CGRectGetWidth(headview.bounds) / HEADER_BACKGROUND_WIDTH;
         CGFloat startY = 0 - HEADER_BACKGROUND_Y_OFFSET * scale;
@@ -165,8 +172,6 @@
     CGRect rect = descView.frame;
     rect.size.height=self.view.frame.size.height-(dectorView.frame.origin.y+dectorView.frame.size.height)-keyboardheight-toolbar.frame.size.height;
     [descView setFrame:rect];
-    if([descView.text isEqualToString:NSLocalizedString(@"Take some notes", nil)])
-        descView.text=@"";
     
 //    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
 //        frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height;

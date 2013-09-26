@@ -50,6 +50,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    } else {
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
+    }
+    
     [self regObserver];
     if (!self.cross) {
         self.hasLocalCross = NO;
