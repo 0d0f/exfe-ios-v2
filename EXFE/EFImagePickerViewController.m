@@ -253,7 +253,9 @@
                                          NSLog(@"image_representation buffer length == 0");
                                      }
                                      
-                                     [newImageDicts addObject:imageDict];
+                                     if (result) {
+                                         [newImageDicts addObject:imageDict];
+                                     }
                                      
                                      dispatch_semaphore_signal(sema);
                                  }
