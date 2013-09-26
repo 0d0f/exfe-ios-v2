@@ -46,7 +46,8 @@
     self.tableView.backgroundView = backgroundView;
     self.tableView.backgroundColor = [UIColor clearColor];
     
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.tableView.separatorColor = [UIColor COLOR_RGBA(0x00, 0x00, 0x00, 0.25f * 0xFF)];
     self.tableView.scrollEnabled = NO;
     
     self.titles = @[NSLocalizedString(@"Show this map", nil),
@@ -72,8 +73,11 @@
         cell.textLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
         cell.textLabel.shadowOffset = (CGSize){0.0f, 0.5f};
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
+        UIView *selectedBackgroundView = [[UIView alloc] init];
+        selectedBackgroundView.backgroundColor = [UIColor COLOR_RGBA(0x3A, 0x6E, 0xA5, 0.2f * 0xFF)];
+        cell.selectedBackgroundView = selectedBackgroundView;
     }
-
+    
     cell.textLabel.text = self.titles[indexPath.row];
     
     if (0 == indexPath.row) {
@@ -143,13 +147,16 @@
     CGRect selfFrame = self.tableView.frame;
     selfFrame.origin.x += kTableViewWidth;
     
+    __weak typeof(self) weakSelf = self;
+    
     [UIView animateWithDuration:0.233f
                      animations:^{
                          self.tableView.frame = selfFrame;
                      }
                      completion:^(BOOL finished){
-                         [self.tableView removeFromSuperview];
-                         [self.maskView removeFromSuperview];
+                         [weakSelf.maskView removeFromSuperview];
+                         [weakSelf.tableView removeFromSuperview];
+                         weakSelf.maskView = nil;
                      }];
 }
 

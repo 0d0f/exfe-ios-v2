@@ -21,11 +21,13 @@
 #define kInnserShadowRadius             (4.0f)
 #define kOuterShadowRadius              (10.0f)
 
+#define offset                          (10.0f)
+
 #define kNormalStyleFrame               ((CGRect){{0.0f, 0.0f}, {320.0f, 90.0f}})
 #define kDoubleheightStyleFrame         ((CGRect){{0.0f, 0.0f}, {320.0f, 120.0f}})
 
-#define kButtonNormalStyleFrame         ((CGRect){{0.0f, 13.0f}, {44.0f, 44.0f}})
-#define kButtonDoubleheightStyleFrame   ((CGRect){{0.0f, 28.0f}, {44.0f, 44.0f}})
+#define kButtonNormalStyleFrame         ((CGRect){{0.0f, 13.0f + offset}, {44.0f, 44.0f}})
+#define kButtonDoubleheightStyleFrame   ((CGRect){{0.0f, 28.0f + offset}, {44.0f, 44.0f}})
 
 #define kDefaultBackgroundImage [UIImage imageNamed:@"x_titlebg_default.jpg"]
 
@@ -220,7 +222,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         self.clipsToBounds = YES;
         
         // title label
-        UILabel *label = [[UILabel alloc] initWithFrame:(CGRect){{kTitleEdgeBlank, floor((CGRectGetHeight(frame) - 20.0f - CGRectGetHeight(frame) + kTabBarItemSize.height) * 0.5f)}, {CGRectGetWidth(frame) - kTitleEdgeBlank * 2, CGRectGetHeight(frame) - kTabBarItemSize.height}}];
+        UILabel *label = [[UILabel alloc] initWithFrame:(CGRect){{kTitleEdgeBlank, floor((CGRectGetHeight(frame) - CGRectGetHeight(frame) + kTabBarItemSize.height) * 0.5f)}, {CGRectGetWidth(frame) - kTitleEdgeBlank * 2, CGRectGetHeight(frame) - kTabBarItemSize.height}}];
         label.textAlignment = NSTextAlignmentCenter;
         label.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         label.backgroundColor = [UIColor clearColor];
@@ -818,7 +820,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
                      animations:^{
                          self.frame = viewFrame;
                          self.leftButton.frame = leftButtonFrame;
-                         self.titleLabel.frame = (CGRect){{kTitleEdgeBlank, floor((CGRectGetHeight(viewFrame) - 20.0f - titleLabelSize.height) * 0.5f)}, titleLabelSize};
+                         self.titleLabel.frame = (CGRect){{kTitleEdgeBlank, floor((CGRectGetHeight(viewFrame) - titleLabelSize.height) * 0.5f)}, titleLabelSize};
                      }
                      completion:^(BOOL finished){
                          [UIView setAnimationsEnabled:YES];

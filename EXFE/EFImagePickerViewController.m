@@ -14,6 +14,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "EFGradientView.h"
 #import "Util.h"
+#import "AMBlurView.h"
 
 #define kOperationViewHeight    (44.0f)
 #define kButtonWidth            (80.0f)
@@ -76,7 +77,7 @@
 @implementation EFImagePickerViewController (Private)
 
 - (CGPoint)_imageViewCenterForIndex:(NSUInteger)index {
-    CGFloat x = 10.0f + index * (22.0f + 8.0f);
+    CGFloat x = 10.0f + index * (22.0f + 4.0f);
     CGPoint center = (CGPoint){x + 11.0f, CGRectGetMidY(self.operationBaseView.bounds)};
     return center;
 }
@@ -138,10 +139,17 @@
             }
         }
         
-        UIView *operationBaseView = [[UIView alloc] initWithFrame:(CGRect){{0.0f, CGRectGetMaxY(viewFrame) - kOperationViewHeight}, {CGRectGetWidth(viewFrame), kOperationViewHeight}}];
+        UIView *operationBaseView = [[UIView alloc] initWithFrame:(CGRect){{0.0f, floor(CGRectGetMaxY(viewFrame) - kOperationViewHeight)}, {CGRectGetWidth(viewFrame), kOperationViewHeight}}];
         operationBaseView.backgroundColor = [UIColor clearColor];
         [transitionView.superview addSubview:operationBaseView];
         self.operationBaseView = operationBaseView;
+        
+        AMBlurView *blurView = [[AMBlurView alloc] init];
+        CGRect blurViewFrame = operationBaseView.bounds;
+        blurViewFrame.origin.y = 1.0f;
+        blurView.frame = blurViewFrame;
+        blurView.blurTintColor = [UIColor colorWithWhite:1.0f alpha:0.1f];
+        [operationBaseView addSubview:blurView];
         
         EFGradientView *backgroundView = [[EFGradientView alloc] initWithFrame:operationBaseView.bounds];
         backgroundView.colors = @[[UIColor COLOR_RGB(0x4C, 0x4C, 0x4C)],
@@ -151,10 +159,12 @@
         
         UIButton *okButton = [UIButton buttonWithType:UIButtonTypeCustom];
         okButton.frame = (CGRect){{CGRectGetWidth(operationBaseView.frame) - kButtonWidth, 0.0f}, {kButtonWidth, kOperationViewHeight}};
+        okButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
         [okButton setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
         [okButton setTitleColor:[UIColor COLOR_RGB(0x00, 0x78, 0xFF)] forState:UIControlStateNormal];
+        [okButton setTitleColor:[UIColor COLOR_RGBA(0x00, 0x78, 0xFF, 0.3f * 0xFF)] forState:UIControlStateHighlighted];
         [okButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.5f] forState:UIControlStateNormal];
-        okButton.titleLabel.shadowOffset = (CGSize){0.0f, 1.0f};
+        okButton.titleLabel.shadowOffset = (CGSize){0.0f, 0.5f};
         [okButton addTarget:self
                      action:@selector(okButtonPressed:)
            forControlEvents:UIControlEventTouchUpInside];
@@ -191,7 +201,19 @@
                                      
                                      NSMutableDictionary *imageDict = [[NSMutableDictionary alloc] init];
                                      UIImage *image = [UIImage imageWithCGImage:[representation fullScreenImage]];
-                                     [imageDict setValue:image forKey:@"image"];
+                                     
+                                     CGFloat imageScale = image.scale;
+                                     CGSize imageSize = image.size;
+                                     CGFloat imageWidth = MIN(imageSize.width, imageSize.height);
+                                     CGRect imageRect = (CGRect){CGPointZero, {imageWidth, imageWidth}};
+                                     imageRect.origin = (CGPoint){((imageSize.width - imageWidth) * 0.5f) < 0.0f ? 0.0f : ((imageSize.width - imageWidth) * 0.5f),
+                                                                ((imageSize.height - imageWidth) * 0.5f) < 0.0f ? : (imageSize.height - imageWidth) * 0.5f};
+                                     
+                                     CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, imageRect);
+                                     UIImage *result = [UIImage imageWithCGImage:imageRef scale:imageScale orientation:image.imageOrientation];
+                                     CGImageRelease(imageRef);
+                                     
+                                     [imageDict setValue:result forKey:@"image"];
                                      
                                      // create a buffer to hold image data
                                      uint8_t *buffer = (uint8_t *)malloc(sizeof(uint8_t) * (long)representation.size);
@@ -232,7 +254,9 @@
                                          NSLog(@"image_representation buffer length == 0");
                                      }
                                      
-                                     [newImageDicts addObject:imageDict];
+                                     if (result) {
+                                         [newImageDicts addObject:imageDict];
+                                     }
                                      
                                      dispatch_semaphore_signal(sema);
                                  }

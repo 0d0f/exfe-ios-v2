@@ -12,6 +12,7 @@
 #import "Util.h"
 #import "AMBlurView.h"
 #import "EFAnnotationDataDefines.h"
+#import "EFGradientView.h"
 
 #define kImageSize  (CGSize){75.0f, 75.0f}
 #define kImageEdge  (4.0f)
@@ -40,6 +41,12 @@
 @implementation EFImageComposerViewController (Private)
 
 - (void)_addBlurViews {
+    EFGradientView *backgroundView = [[EFGradientView alloc] initWithFrame:self.barView.bounds];
+    backgroundView.colors = @[[UIColor COLOR_RGB(0x4C, 0x4C, 0x4C)],
+                              [UIColor COLOR_RGB(0x19, 0x19, 0x19)]];
+    backgroundView.alpha = 0.88f;
+    [self.barView insertSubview:backgroundView atIndex:0];
+    
     if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
         // Load resources for iOS 6.1 or earlier
         self.topBaseView.backgroundColor = [UIColor COLOR_RGBA(0xFA, 0xFA, 0xFA, 204.0f)];
@@ -53,10 +60,19 @@
         [self.topBaseView insertSubview:topBlurView atIndex:0];
         
         AMBlurView *bottomBlurView = [[AMBlurView alloc] init];
-        bottomBlurView.frame = self.bottomBaseView.bounds;
+        CGRect bottomBlurViewFrame = self.bottomBaseView.bounds;
+        bottomBlurViewFrame.origin.y = 1.0f;
+        bottomBlurView.frame = bottomBlurViewFrame;
         bottomBlurView.tag = 1024;
-        bottomBlurView.blurTintColor = [UIColor colorWithWhite:1.0f alpha:0.2f];
+        bottomBlurView.blurTintColor = [UIColor blackColor];
         [self.bottomBaseView insertSubview:bottomBlurView atIndex:0];
+        
+        AMBlurView *blurView = [[AMBlurView alloc] init];
+        CGRect blurViewFrame = self.barView.bounds;
+        blurViewFrame.origin.y = 1.0f;
+        blurView.frame = blurViewFrame;
+        blurView.blurTintColor = [UIColor colorWithWhite:1.0f alpha:0.2f];
+        [self.barView insertSubview:blurView atIndex:0];
     }
 }
 
@@ -64,12 +80,12 @@
     NSUInteger count = self.imageDicts.count;
     NSUInteger row = count / 4 + ((count % 4) ? 1 : 0);
     CGRect topBaseViewFrame = self.topBaseView.frame;
-    CGFloat topBaseViewHeight = row * kImageSize.height + kImageEdge;
+    CGFloat topBaseViewHeight = row * (kImageSize.height + kImageEdge);
     topBaseViewFrame.size.height = topBaseViewHeight;
     self.topBaseView.frame = topBaseViewFrame;
     
     CGRect topShadowFrame = self.topShadowView.frame;
-    topShadowFrame.origin.y = CGRectGetHeight(topBaseViewFrame) - 3.0f;
+    topShadowFrame.origin.y = CGRectGetHeight(topBaseViewFrame) - 4.0f;
     self.topShadowView.frame = topShadowFrame;
     
     CGFloat bottomBaseViewOriginY = ceil(topBaseViewHeight + kMapSize.height);
@@ -172,18 +188,23 @@
     
     [self _addBlurViews];
     
-    self.topShadowView.layer.transform = CATransform3DMakeRotation(M_PI, 0.0f, 0.0f, 1.0f);
+    self.bottomShadowView.layer.transform = CATransform3DMakeRotation(M_PI, 0.0f, 0.0f, 1.0f);
+    
     for (UIImageView *imageView in self.imageViews) {
         imageView.contentMode = UIViewContentModeScaleAspectFill;
-        imageView.layer.cornerRadius = 1.0f;
         imageView.layer.masksToBounds = YES;
-        imageView.layer.borderColor = [UIColor COLOR_RGB(0xE6, 0xE6, 0xE6)].CGColor;
+        imageView.layer.borderColor = [UIColor COLOR_RGBA(0xE6, 0xE6, 0xE6, 0.66f * 0xFF)].CGColor;
         imageView.layer.borderWidth = 0.5f;
+        
         imageView.layer.shadowColor = [UIColor blackColor].CGColor;
         imageView.layer.shadowOffset = (CGSize){0.0f, 0.0f};
         imageView.layer.shadowOpacity = 0.25f;
         imageView.layer.shadowRadius = 2.0f;
+        
+        imageView.clipsToBounds = NO;
     }
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -197,8 +218,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -207,11 +226,7 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+#pragma mark - Action
 
 - (IBAction)shareButtonPressed:(id)sender {
     if ([self.delegate respondsToSelector:@selector(imageComposerViewControllerShareButtonPressed:whithImage:)]) {
