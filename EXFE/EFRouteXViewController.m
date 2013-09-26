@@ -746,6 +746,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             self.personViewController = personViewController;
         }
         
+        [self _zoomToPerson:person];
+        
         return;
     }
     
