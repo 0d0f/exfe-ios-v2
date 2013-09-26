@@ -96,7 +96,7 @@
     self.bottomBaseView.frame = bottomBaseViewFrame;
     
     CGRect bottomShadowFrame = self.bottomShadowView.frame;
-    bottomShadowFrame.origin.y = -1.0f;
+    bottomShadowFrame.origin.y = 0.0f;
     self.bottomShadowView.frame = bottomShadowFrame;
     
     for (UIImageView *imageView in self.imageViews) {
