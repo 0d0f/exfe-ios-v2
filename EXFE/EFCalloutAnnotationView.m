@@ -130,7 +130,7 @@
     [self addSubview:self.titleTextField];
     
     UITextView *subtitleTextView = [[UITextView alloc] initWithFrame:(CGRect){{5.0f, CGRectGetMaxY(titleTextField.frame) + kBlank}, {kDefaultWidth + 5.0f, kSubtileHeight}}];
-    subtitleTextView.contentInset = (UIEdgeInsets){-7.0f, -8.0f, 0.0f, 0.0f};
+    subtitleTextView.contentInset = (UIEdgeInsets){-7.0f, -5.0f, 0.0f, 0.0f};
     subtitleTextView.delegate = self;
     subtitleTextView.returnKeyType = UIReturnKeyDefault;
     subtitleTextView.font = kSubtileFont;
