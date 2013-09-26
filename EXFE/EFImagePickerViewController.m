@@ -159,11 +159,12 @@
         
         UIButton *okButton = [UIButton buttonWithType:UIButtonTypeCustom];
         okButton.frame = (CGRect){{CGRectGetWidth(operationBaseView.frame) - kButtonWidth, 0.0f}, {kButtonWidth, kOperationViewHeight}};
+        okButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
         [okButton setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
         [okButton setTitleColor:[UIColor COLOR_RGB(0x00, 0x78, 0xFF)] forState:UIControlStateNormal];
         [okButton setTitleColor:[UIColor COLOR_RGBA(0x00, 0x78, 0xFF, 0.3f * 0xFF)] forState:UIControlStateHighlighted];
         [okButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.5f] forState:UIControlStateNormal];
-        okButton.titleLabel.shadowOffset = (CGSize){0.0f, 1.0f};
+        okButton.titleLabel.shadowOffset = (CGSize){0.0f, 0.5f};
         [okButton addTarget:self
                      action:@selector(okButtonPressed:)
            forControlEvents:UIControlEventTouchUpInside];

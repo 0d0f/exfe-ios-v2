@@ -108,7 +108,7 @@
                             <rect key="frame" x="113" y="0.0" width="95" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
-                            <size key="titleShadowOffset" width="0.0" height="1"/>
+                            <size key="titleShadowOffset" width="0.0" height="0.5"/>
                             <state key="normal" title="分享">
                                 <color key="titleColor" red="0.0" green="0.47058823529411764" blue="1" alpha="1" colorSpace="deviceRGB"/>
                                 <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
@@ -124,6 +124,7 @@
                             <rect key="frame" x="256" y="0.0" width="64" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                            <size key="titleShadowOffset" width="0.0" height="0.5"/>
                             <state key="normal" title="取消">
                                 <color key="titleColor" red="0.69803921568627447" green="0.69803921568627447" blue="0.69803921568627447" alpha="1" colorSpace="deviceRGB"/>
                                 <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -144,6 +145,7 @@
         </view>
     </objects>
     <resources>
+        <image name="shadow_gap.png" width="320" height="4"/>
         <image name="shadow_gap.png" width="320" height="4"/>
     </resources>
 </document>
