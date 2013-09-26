@@ -14,6 +14,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "EFGradientView.h"
 #import "Util.h"
+#import "AMBlurView.h"
 
 #define kOperationViewHeight    (44.0f)
 #define kButtonWidth            (80.0f)
@@ -138,10 +139,17 @@
             }
         }
         
-        UIView *operationBaseView = [[UIView alloc] initWithFrame:(CGRect){{0.0f, CGRectGetMaxY(viewFrame) - kOperationViewHeight}, {CGRectGetWidth(viewFrame), kOperationViewHeight}}];
+        UIView *operationBaseView = [[UIView alloc] initWithFrame:(CGRect){{0.0f, floor(CGRectGetMaxY(viewFrame) - kOperationViewHeight)}, {CGRectGetWidth(viewFrame), kOperationViewHeight}}];
         operationBaseView.backgroundColor = [UIColor clearColor];
         [transitionView.superview addSubview:operationBaseView];
         self.operationBaseView = operationBaseView;
+        
+        AMBlurView *blurView = [[AMBlurView alloc] init];
+        CGRect blurViewFrame = operationBaseView.bounds;
+        blurViewFrame.origin.y = 1.0f;
+        blurView.frame = blurViewFrame;
+        blurView.blurTintColor = [UIColor colorWithWhite:1.0f alpha:0.1f];
+        [operationBaseView addSubview:blurView];
         
         EFGradientView *backgroundView = [[EFGradientView alloc] initWithFrame:operationBaseView.bounds];
         backgroundView.colors = @[[UIColor COLOR_RGB(0x4C, 0x4C, 0x4C)],
@@ -153,6 +161,7 @@
         okButton.frame = (CGRect){{CGRectGetWidth(operationBaseView.frame) - kButtonWidth, 0.0f}, {kButtonWidth, kOperationViewHeight}};
         [okButton setTitle:NSLocalizedString(@"OK", nil) forState:UIControlStateNormal];
         [okButton setTitleColor:[UIColor COLOR_RGB(0x00, 0x78, 0xFF)] forState:UIControlStateNormal];
+        [okButton setTitleColor:[UIColor COLOR_RGBA(0x00, 0x78, 0xFF, 0.3f * 0xFF)] forState:UIControlStateHighlighted];
         [okButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.5f] forState:UIControlStateNormal];
         okButton.titleLabel.shadowOffset = (CGSize){0.0f, 1.0f};
         [okButton addTarget:self
@@ -244,7 +253,9 @@
                                          NSLog(@"image_representation buffer length == 0");
                                      }
                                      
-                                     [newImageDicts addObject:imageDict];
+                                     if (result) {
+                                         [newImageDicts addObject:imageDict];
+                                     }
                                      
                                      dispatch_semaphore_signal(sema);
                                  }

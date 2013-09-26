@@ -28,24 +28,28 @@
     if (_touchesBeganCallback) {
         _touchesBeganCallback(touches, event);
     }
+    [super touchesBegan:touches withEvent:event];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     if (_touchesMovedCallback) {
         _touchesMovedCallback(touches, event);
     }
+    [super touchesMoved:touches withEvent:event];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     if (_touchesEndedCallback) {
         _touchesEndedCallback(touches, event);
     }
+    [super touchesEnded:touches withEvent:event];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     if (_touchesCancelledCallback) {
         _touchesCancelledCallback(touches, event);
     }
+    [super touchesCancelled:touches withEvent:event];
 }
 
 #pragma mark - Override
