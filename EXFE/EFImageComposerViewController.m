@@ -60,9 +60,11 @@
         [self.topBaseView insertSubview:topBlurView atIndex:0];
         
         AMBlurView *bottomBlurView = [[AMBlurView alloc] init];
-        bottomBlurView.frame = self.bottomBaseView.bounds;
+        CGRect bottomBlurViewFrame = self.bottomBaseView.bounds;
+        bottomBlurViewFrame.origin.y = 1.0f;
+        bottomBlurView.frame = bottomBlurViewFrame;
         bottomBlurView.tag = 1024;
-        bottomBlurView.blurTintColor = [UIColor colorWithWhite:1.0f alpha:0.2f];
+        bottomBlurView.blurTintColor = [UIColor blackColor];
         [self.bottomBaseView insertSubview:bottomBlurView atIndex:0];
         
         AMBlurView *blurView = [[AMBlurView alloc] init];
@@ -78,7 +80,7 @@
     NSUInteger count = self.imageDicts.count;
     NSUInteger row = count / 4 + ((count % 4) ? 1 : 0);
     CGRect topBaseViewFrame = self.topBaseView.frame;
-    CGFloat topBaseViewHeight = row * kImageSize.height + kImageEdge;
+    CGFloat topBaseViewHeight = row * (kImageSize.height + kImageEdge);
     topBaseViewFrame.size.height = topBaseViewHeight;
     self.topBaseView.frame = topBaseViewFrame;
     
