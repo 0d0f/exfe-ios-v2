@@ -24,7 +24,7 @@
 #import "MBProgressHUD.h"
 #import "AYUIButton.h"
 
-#define DECTOR_HEIGHT                    (100)
+#define DECTOR_HEIGHT                    (100 + 20)
 
 @interface ProfileViewController ()
 
@@ -42,6 +42,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.wantsFullScreenLayout = YES;
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(receiveRefreshNotification:)
@@ -77,9 +78,19 @@
     
     CGRect b = self.view.bounds;
     
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        self.extendedLayoutIncludesOpaqueBars = YES;
+        //a = [UIScreen mainScreen].bounds;
+    } else {
+        //a = [UIScreen mainScreen].applicationFrame;
+    }
+    
+    
     headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), DECTOR_HEIGHT)];
     {
-        useravatar = [[UIImageView alloc] initWithFrame:CGRectMake(233, 18, 64, 64)];
+        useravatar = [[UIImageView alloc] initWithFrame:CGRectMake(233, (DECTOR_HEIGHT + 20) / 2 - 64 / 2, 64, 64)];
         useravatar.layer.cornerRadius = 2;
         useravatar.clipsToBounds = YES;
         [headerView addSubview:useravatar];
@@ -88,7 +99,7 @@
         mask.image = [UIImage imageNamed:@"profile_title_mask.png"];
         [headerView addSubview:mask];
         
-        username = [[UILabel alloc] initWithFrame:CGRectMake(40, DECTOR_HEIGHT / 2 - 56 / 2, 180, 56)];
+        username = [[UILabel alloc] initWithFrame:CGRectMake(40, (DECTOR_HEIGHT + 20) / 2 - 56 / 2, 180, 56)];
         username.backgroundColor = [UIColor clearColor];
         username.lineBreakMode = NSLineBreakByWordWrapping;
         username.numberOfLines = 2;
@@ -105,7 +116,7 @@
     [self.view addSubview:headerView];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
-    [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 40, 44)];
+    [btnBack setFrame:CGRectMake(0, (DECTOR_HEIGHT + 20) / 2 - 44 / 2, 40, 44)];
     btnBack.imageEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 20.0);
     btnBack.backgroundColor = [UIColor clearColor];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
@@ -648,7 +659,6 @@
     } else {
         [self setPwd:view];
     }
-    
 }
 
 - (void)setPwd:(UIControl *)view

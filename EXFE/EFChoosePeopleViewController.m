@@ -96,6 +96,9 @@
         _selectedDict = [[NSMutableDictionary alloc] init];
         _selectedRoughIdentityDict = [[NSMutableDictionary alloc] init];
         self.hasExfeeNameSetCompletion = YES;
+        
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
+        self.wantsFullScreenLayout = YES;
     }
     return self;
 }

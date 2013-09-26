@@ -118,6 +118,8 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
     if (self) {
         self.model = model;
         
+        self.wantsFullScreenLayout = YES;
+        
         self.accountStore = [[ACAccountStore alloc] init];
         self.apiManager = [[TWAPIManager alloc] init];
     }
@@ -126,18 +128,17 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
 
 - (void)loadView
 {
-    CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
-    UIView *contentView = [[UIView alloc] initWithFrame:applicationFrame];
+    CGRect b = [[UIScreen mainScreen] bounds];
+    UIView *contentView = [[UIView alloc] initWithFrame:b];
     contentView.backgroundColor = [UIColor COLOR_SNOW];
     self.view = contentView;
     
     UIImageView *fullScreen = [[UIImageView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:fullScreen];
     
-    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 44)];
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), 44)];
     
-    
-    EXGradientToolbarView *toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    EXGradientToolbarView *toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 44 + 20)];
     [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
     [toolbar.layer setShadowOpacity:0.8];
     [toolbar.layer setShadowRadius:3.0];
@@ -157,9 +158,9 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
     
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
     [btnBack setFrame:CGRectMake(0, 0, 20,  CGRectGetHeight(header.bounds))];
-    btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
-    [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
+    btnBack.backgroundColor = [UIColor clearColor];
+    [btnBack setImage:[UIImage imageNamed:@"back_g3.png"] forState:UIControlStateNormal];
+    [btnBack setImage:[UIImage imageNamed:@"back_g3_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
     [header addSubview:btnBack];
     self.btnBack = btnBack;
@@ -173,7 +174,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
     [header addGestureRecognizer:swipe];
     [self.view addSubview:header];
     
-    CSLinearLayoutView * authLayout = [[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - 44)];
+    CSLinearLayoutView * authLayout = [[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(header.frame), CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - 44)];
     {
         UILabel * labelHead = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 100)];
         labelHead.backgroundColor = [UIColor clearColor];

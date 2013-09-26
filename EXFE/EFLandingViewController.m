@@ -36,6 +36,13 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        
+        if ([UIViewController instancesRespondToSelector: @selector(edgesForExtendedLayout)]) {
+            self.edgesForExtendedLayout = UIRectEdgeNone;
+        } else {
+            self.wantsFullScreenLayout = YES;
+        }
+        
         firstLoad = YES;
         self.labelEXFE.hidden = YES;
         self.labelDescription.hidden = YES;
@@ -46,12 +53,15 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+//    [self.navigationController setNavigationBarHidden:YES animated:NO];
     // Do any additional setup after loading the view from its nib.
-    CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
-    [self.view setFrame:appFrame];
-    
+//    CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
+//    CGRect appBound = [UIScreen mainScreen].bounds;
+//    [self.view setFrame:appBound];
+//    RKLogDebug(@"appFrame %@", NSStringFromCGRect(appBound));
+    if ([UIViewController instancesRespondToSelector: @selector(edgesForExtendedLayout)]) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     
     UIGraphicsBeginImageContext(self.view.frame.size);
     [[UIImage imageNamed:@"home_bg.png"] drawInRect:self.view.bounds];
@@ -92,6 +102,9 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
     if (_labelEXFE.hidden) {
         _labelEXFE.hidden = NO;
@@ -123,12 +136,16 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
     }
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 - (void)showStart
 {

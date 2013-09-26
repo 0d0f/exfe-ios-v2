@@ -99,6 +99,7 @@
     self = [super init];
     if (self) {
         self.model = model;
+        self.wantsFullScreenLayout = YES;
     }
     return self;
 }
@@ -113,10 +114,10 @@
     UIImageView *fullScreen = [[UIImageView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:fullScreen];
     
-    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 44)];
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 44 + 20)];
     
     
-    EXGradientToolbarView *toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    EXGradientToolbarView *toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44 + 20)];
     [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
     [toolbar.layer setShadowOpacity:0.8];
     [toolbar.layer setShadowRadius:3.0];
@@ -124,21 +125,22 @@
     
     [self.view addSubview:toolbar];
     
-    UILabel *title = [[UILabel alloc] initWithFrame:header.bounds];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, CGRectGetWidth(header.bounds) - 20 * 2, CGRectGetHeight(header.bounds) - 20)];
     title.backgroundColor = [UIColor clearColor];
     title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
     title.textColor = [UIColor COLOR_CARBON];
     title.textAlignment = NSTextAlignmentCenter;
     title.shadowColor = [UIColor COLOR_WA(0xFF, 0xBF)];
     title.shadowOffset = CGSizeMake(0, 1);
+    title.backgroundColor = [UIColor clearColor];
     title.text = NSLocalizedString(@"Change password", nil);
     [header addSubview:title];
     
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
-    [btnBack setFrame:CGRectMake(0, 0, 20,  CGRectGetHeight(header.bounds))];
-    btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
-    [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
+    [btnBack setFrame:CGRectMake(0, 20, 20,  CGRectGetHeight(header.bounds) - 20)];
+    btnBack.backgroundColor = [UIColor clearColor];
+    [btnBack setImage:[UIImage imageNamed:@"back_g3.png"] forState:UIControlStateNormal];
+    [btnBack setImage:[UIImage imageNamed:@"back_g3_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
     [header addSubview:btnBack];
     self.btnBack = btnBack;

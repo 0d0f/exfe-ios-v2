@@ -49,8 +49,8 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.scrollEnabled = NO;
     
-    self.titles = @[NSLocalizedString(@"秀这张“活点地图”", nil),
-                    NSLocalizedString(@"分享足迹照片", nil)];
+    self.titles = @[NSLocalizedString(@"Show this map", nil),
+                    NSLocalizedString(@"Share trail photos", nil)];
 }
 
 #pragma mark - Table view data source
@@ -73,7 +73,7 @@
         cell.textLabel.shadowOffset = (CGSize){0.0f, 0.5f};
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
     }
-    
+
     cell.textLabel.text = self.titles[indexPath.row];
     
     if (0 == indexPath.row) {

@@ -21,6 +21,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.wantsFullScreenLayout = YES;
     }
     return self;
 }
@@ -29,13 +30,11 @@
 {
     [super viewDidLoad];
     [Flurry logEvent:@"EDIT_TIME"];
-    CGRect screenframe=[[UIScreen mainScreen] bounds];
+    CGRect b=[[UIScreen mainScreen] bounds];
     
-    CGRect statusframe=[[UIApplication sharedApplication] statusBarFrame];
-    screenframe.size.height-=statusframe.size.height;
-    [self.view setFrame:screenframe];
+    [self.view setFrame:b];
 
-    toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44 + 20)];
     [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
     [toolbar.layer setShadowOpacity:0.8];
     [toolbar.layer setShadowRadius:3.0];
@@ -44,17 +43,17 @@
     [self.view addSubview:toolbar];
 
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
-    [btnBack setFrame:CGRectMake(0, 0, 20, 44)];
-    btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
-    [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
+    [btnBack setFrame:CGRectMake(0, 20, 20, 44)];
+    btnBack.backgroundColor = [UIColor clearColor];
+    [btnBack setImage:[UIImage imageNamed:@"back_g3.png"] forState:UIControlStateNormal];
+    [btnBack setImage:[UIImage imageNamed:@"back_g3_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchDragExit];
     [toolbar addSubview:btnBack];
 
-    UIImageView *icon=[[UIImageView alloc] initWithFrame:CGRectMake(33, 13.5, 18, 18)];
+    UIImageView *icon=[[UIImageView alloc] initWithFrame:CGRectMake(33, 13.5 + 20, 18, 18)];
     icon.image=[UIImage imageNamed:@"time_18.png"];
 
-    TTTAttributedLabel *viewtitle = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(60, (44-30)/2, self.view.frame.size.width-60-60, 30)];
+    TTTAttributedLabel *viewtitle = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(60, (44 - 30)/2 + 20, self.view.frame.size.width- 60 - 60, 30)];
     viewtitle.backgroundColor = [UIColor clearColor];
     viewtitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
     viewtitle.textAlignment = NSTextAlignmentCenter;
@@ -72,7 +71,7 @@
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [doneButton setTitle:NSLocalizedString(@"Save", nil) forState:UIControlStateNormal];
     [doneButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
-    doneButton.frame = CGRectMake(265, 7, 50, 31);
+    doneButton.frame = CGRectMake(265, 7 + 20, 50, 31);
     [doneButton addTarget:self action:@selector(Done:) forControlEvents:UIControlEventTouchUpInside];
     [doneButton setBackgroundImage:[[UIImage imageNamed:@"btn_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 3, 0,3)] forState:UIControlStateNormal];
     
