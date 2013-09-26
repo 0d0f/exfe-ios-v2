@@ -12,6 +12,7 @@
 #import "Util.h"
 #import "AMBlurView.h"
 #import "EFAnnotationDataDefines.h"
+#import "EFGradientView.h"
 
 #define kImageSize  (CGSize){75.0f, 75.0f}
 #define kImageEdge  (4.0f)
@@ -40,6 +41,12 @@
 @implementation EFImageComposerViewController (Private)
 
 - (void)_addBlurViews {
+    EFGradientView *backgroundView = [[EFGradientView alloc] initWithFrame:self.barView.bounds];
+    backgroundView.colors = @[[UIColor COLOR_RGB(0x4C, 0x4C, 0x4C)],
+                              [UIColor COLOR_RGB(0x19, 0x19, 0x19)]];
+    backgroundView.alpha = 0.88f;
+    [self.barView insertSubview:backgroundView atIndex:0];
+    
     if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
         // Load resources for iOS 6.1 or earlier
         self.topBaseView.backgroundColor = [UIColor COLOR_RGBA(0xFA, 0xFA, 0xFA, 204.0f)];
@@ -57,6 +64,13 @@
         bottomBlurView.tag = 1024;
         bottomBlurView.blurTintColor = [UIColor colorWithWhite:1.0f alpha:0.2f];
         [self.bottomBaseView insertSubview:bottomBlurView atIndex:0];
+        
+        AMBlurView *blurView = [[AMBlurView alloc] init];
+        CGRect blurViewFrame = self.barView.bounds;
+        blurViewFrame.origin.y = 1.0f;
+        blurView.frame = blurViewFrame;
+        blurView.blurTintColor = [UIColor colorWithWhite:1.0f alpha:0.2f];
+        [self.barView insertSubview:blurView atIndex:0];
     }
 }
 
@@ -177,7 +191,7 @@
     for (UIImageView *imageView in self.imageViews) {
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.layer.masksToBounds = YES;
-        imageView.layer.borderColor = [UIColor COLOR_RGB(0xE6, 0xE6, 0xE6)].CGColor;
+        imageView.layer.borderColor = [UIColor COLOR_RGBA(0xE6, 0xE6, 0xE6, 0.66f * 0xFF)].CGColor;
         imageView.layer.borderWidth = 0.5f;
         
         imageView.layer.shadowColor = [UIColor blackColor].CGColor;
