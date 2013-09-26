@@ -146,6 +146,5 @@
     </objects>
     <resources>
         <image name="shadow_gap.png" width="320" height="4"/>
-        <image name="shadow_gap.png" width="320" height="4"/>
     </resources>
 </document>
