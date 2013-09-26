@@ -132,7 +132,7 @@
 //    [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
     
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
+//    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
     
     // Handle Remote notification
     if (userinfo) {

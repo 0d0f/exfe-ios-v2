@@ -99,11 +99,22 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
     _imgHead.hidden = YES;
     _imgHead.userInteractionEnabled = YES;
 }
+    
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        [self setNeedsStatusBarAppearanceUpdate];
+    }
+}
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    
+    
     
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
     if (_labelEXFE.hidden) {
