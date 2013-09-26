@@ -79,8 +79,8 @@
                                     <rect key="frame" x="241" y="83" width="75" height="75"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="map_shadow_gap.png" id="UAe-zD-vTE">
-                                    <rect key="frame" x="0.0" y="155" width="320" height="3"/>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="shadow_gap.png" id="UAe-zD-vTE">
+                                    <rect key="frame" x="0.0" y="154" width="320" height="4"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 </imageView>
                             </subviews>
@@ -90,8 +90,8 @@
                             <rect key="frame" x="0.0" y="396" width="320" height="129"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="map_shadow_gap.png" id="9TX-YV-rEj">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="3"/>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="shadow_gap.png" id="9TX-YV-rEj">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="4"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
                             </subviews>
@@ -113,6 +113,9 @@
                                 <color key="titleColor" red="0.0" green="0.47058823529411764" blue="1" alpha="1" colorSpace="deviceRGB"/>
                                 <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                             </state>
+                            <state key="highlighted">
+                                <color key="titleColor" red="0.086274512112140656" green="0.49411767721176147" blue="0.98431378602981567" alpha="0.29999999999999999" colorSpace="deviceRGB"/>
+                            </state>
                             <connections>
                                 <action selector="shareButtonPressed:" destination="-1" eventType="touchUpInside" id="BLu-ns-r9T"/>
                             </connections>
@@ -125,12 +128,15 @@
                                 <color key="titleColor" red="0.69803921568627447" green="0.69803921568627447" blue="0.69803921568627447" alpha="1" colorSpace="deviceRGB"/>
                                 <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <state key="highlighted">
+                                <color key="titleColor" red="0.69803921570000005" green="0.69803921570000005" blue="0.69803921570000005" alpha="0.29999999999999999" colorSpace="deviceRGB"/>
+                            </state>
                             <connections>
                                 <action selector="cancelButtonPressed:" destination="-1" eventType="touchUpInside" id="Y7E-XK-ryV"/>
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -138,6 +144,6 @@
         </view>
     </objects>
     <resources>
-        <image name="map_shadow_gap.png" width="50" height="3"/>
+        <image name="shadow_gap.png" width="320" height="4"/>
     </resources>
 </document>
