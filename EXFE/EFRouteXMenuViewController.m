@@ -81,7 +81,7 @@
     cell.textLabel.text = self.titles[indexPath.row];
     
     if (0 == indexPath.row) {
-        cell.textLabel.textColor = [UIColor COLOR_RGB(0x59, 0xA9, 0xFF)];
+        cell.textLabel.textColor = [UIColor COLOR_RGB(0x5B, 0xA5, 0xFA)];
     } else if (1 == indexPath.row) {
         cell.textLabel.textColor = [UIColor whiteColor];
     }
