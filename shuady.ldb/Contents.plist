@@ -1689,7 +1689,7 @@
 								<key>en</key>
 								<string>Done</string>
 								<key>zh-Hans</key>
-								<string>完成</string>
+								<string>确认</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
