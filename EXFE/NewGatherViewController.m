@@ -8,22 +8,21 @@
 
 #import "NewGatherViewController.h"
 #import <BlocksKit/BlocksKit.h>
+#import "CCTemplate.h"
+
 #import "Util.h"
-#import "MapPin.h"
-#import "Place+Helper.h"
-#import "CrossTime+Helper.h"
-#import "EFTime+Helper.h"
+#import "EFAPI.h"
+#import "EFKit.h"
 #import "NSString+EXFE.h"
+
 #import "EFContactViewController.h"
+#import "CrossesViewController.h"
+
+#import "MapPin.h"
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
-#import "EFAPI.h"
 #import "EFContactObject.h"
 #import "RoughIdentity.h"
-#import "IdentityId.h"
-#import "Identity+EXFE.h"
-#import "EFKit.h"
-#import "CrossesViewController.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -390,8 +389,7 @@
     }
     [_cross.widget addObject:widget];
     
-    
-    self.cross.title=[NSString stringWithFormat:@"·X· %@",default_identity.name];
+    self.cross.title = [NSString stringWithFormat:NSLocalizedString(@"%@ %@", nil), [NSLocalizedString(@"{{X_FOR_GATHER}}", nil) templateFromDict:[Util keywordDict]], default_identity.name];
     self.cross.cross_description = @"";
     
     if (self.cross.exfee == nil) {
@@ -505,17 +503,18 @@
 }
 
 - (void) reFormatTitle{
-    NSString *newtitle = @"·X· ";
+    NSString *newtitle = [NSLocalizedString(@"{{X_FOR_GATHER}}", nil) templateFromDict:[Util keywordDict]];
     if(title_be_edit == NO){
         int count = 0;
         for(Invitation *invitation in self.sortedInvitations){
-            if(count == 3){
+            if(count > 2){
                 break;
             }
-            if(count < 3 && count >= 1){
-                newtitle = [newtitle stringByAppendingString:@", "];
+            if(count == 0){
+                newtitle = [NSString stringWithFormat:NSLocalizedString(@"%@ %@", nil), newtitle, invitation.identity.name];
+            } else {
+                newtitle = [NSString stringWithFormat:NSLocalizedString(@"%@, %@", nil), newtitle, invitation.identity.name];
             }
-            newtitle = [newtitle stringByAppendingFormat:@"%@", invitation.identity.name];
             count++;
         }
         _cross.title = newtitle;
