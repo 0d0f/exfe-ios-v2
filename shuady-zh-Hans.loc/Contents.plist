@@ -11,10 +11,6 @@
 			</array>
 			<key>change date</key>
 			<date>2001-01-01T00:00:00Z</date>
-			<key>changed values</key>
-			<array>
-				<string>zh-Hans</string>
-			</array>
 			<key>class</key>
 			<string>BLBundleObject</string>
 			<key>errors</key>
@@ -37,10 +33,6 @@
 					</dict>
 					<key>change date</key>
 					<date>2013-09-25T15:38:54Z</date>
-					<key>changed values</key>
-					<array>
-						<string>zh-Hans</string>
-					</array>
 					<key>class</key>
 					<string>BLStringsFileObject</string>
 					<key>errors</key>
@@ -57,8 +49,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -80,8 +70,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -103,8 +91,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -126,8 +112,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -151,8 +135,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -176,8 +158,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -201,8 +181,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -226,8 +204,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -251,8 +227,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -276,8 +250,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -301,8 +273,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -326,8 +296,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -351,8 +319,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -376,8 +342,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -401,8 +365,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -426,8 +388,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -451,8 +411,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -476,8 +434,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -501,8 +457,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -526,8 +480,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -551,8 +503,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -574,8 +524,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -599,8 +547,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -624,8 +570,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -649,8 +593,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -674,8 +616,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -699,8 +639,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -724,8 +662,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -749,8 +685,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -774,8 +708,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -799,8 +731,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -824,8 +754,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -849,8 +777,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -874,8 +800,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -899,8 +823,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -924,8 +846,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -949,8 +869,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -974,8 +892,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -999,8 +915,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1024,8 +938,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1049,8 +961,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1074,8 +984,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1099,8 +1007,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1124,8 +1030,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1149,8 +1053,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1174,8 +1076,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1199,8 +1099,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1224,8 +1122,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1249,8 +1145,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1274,8 +1168,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1299,8 +1191,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1324,8 +1214,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1349,8 +1237,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1374,8 +1260,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1399,8 +1283,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1424,8 +1306,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1449,8 +1329,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1474,8 +1352,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1499,8 +1375,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1524,8 +1398,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1549,8 +1421,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1574,8 +1444,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1599,8 +1467,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1624,8 +1490,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1649,8 +1513,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1674,8 +1536,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1691,7 +1551,7 @@
 								<key>en</key>
 								<string>Done</string>
 								<key>zh-Hans</key>
-								<string>完成</string>
+								<string>确认</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1699,8 +1559,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1724,8 +1582,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1749,8 +1605,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1774,8 +1628,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1799,8 +1651,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1824,8 +1674,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1849,8 +1697,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1874,8 +1720,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1899,8 +1743,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1924,8 +1766,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1949,8 +1789,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1972,8 +1810,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -1997,8 +1833,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2022,8 +1856,6 @@
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2049,8 +1881,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2074,8 +1904,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2099,8 +1927,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2124,8 +1950,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2149,8 +1973,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2174,8 +1996,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2199,8 +2019,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2224,8 +2042,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2249,8 +2065,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2274,8 +2088,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2299,8 +2111,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2324,8 +2134,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2349,8 +2157,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2374,8 +2180,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2399,8 +2203,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2424,8 +2226,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2449,8 +2249,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2474,8 +2272,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2499,8 +2295,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2524,8 +2318,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2549,8 +2341,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2574,8 +2364,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2599,8 +2387,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2624,8 +2410,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2649,8 +2433,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2674,8 +2456,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2699,8 +2479,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2724,8 +2502,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2749,8 +2525,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2774,8 +2548,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2799,8 +2571,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2824,8 +2594,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2849,8 +2617,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2874,8 +2640,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2899,8 +2663,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2924,8 +2686,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2949,8 +2709,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2974,8 +2732,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -2999,8 +2755,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3024,8 +2778,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3049,8 +2801,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3074,8 +2824,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3099,8 +2847,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3124,8 +2870,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3149,8 +2893,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3174,8 +2916,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3199,8 +2939,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3224,8 +2962,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3249,8 +2985,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3274,8 +3008,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3299,8 +3031,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3324,8 +3054,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3349,8 +3077,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3374,8 +3100,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3399,8 +3123,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3426,8 +3148,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3451,8 +3171,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3476,8 +3194,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3501,8 +3217,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3526,8 +3240,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3551,8 +3263,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3576,8 +3286,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3601,8 +3309,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3626,8 +3332,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3651,8 +3355,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3676,8 +3378,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3701,8 +3401,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3726,8 +3424,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3751,8 +3447,6 @@ Please retry or wait awhile.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3780,8 +3474,6 @@ menu of ‘Settings’ app.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3805,8 +3497,6 @@ menu of ‘Settings’ app.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3830,8 +3520,6 @@ menu of ‘Settings’ app.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3855,8 +3543,6 @@ menu of ‘Settings’ app.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3880,8 +3566,6 @@ menu of ‘Settings’ app.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3905,8 +3589,6 @@ menu of ‘Settings’ app.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3932,8 +3614,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3957,8 +3637,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -3982,8 +3660,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4007,8 +3683,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4032,8 +3706,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4057,8 +3729,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4082,8 +3752,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4107,8 +3775,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4132,8 +3798,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4157,8 +3821,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4182,8 +3844,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4207,8 +3867,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4232,8 +3890,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4257,8 +3913,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4282,8 +3936,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4307,8 +3959,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4332,8 +3982,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4357,8 +4005,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4382,8 +4028,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4407,8 +4051,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4432,8 +4074,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4457,8 +4097,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4482,8 +4120,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4507,8 +4143,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4532,8 +4166,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4557,8 +4189,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4582,8 +4212,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4607,8 +4235,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4632,8 +4258,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4657,8 +4281,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4682,8 +4304,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4707,8 +4327,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4732,8 +4350,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4757,8 +4373,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4782,8 +4396,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4807,8 +4419,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4832,8 +4442,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4857,10 +4465,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array>
-								<string>zh-Hans</string>
-							</array>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4884,8 +4488,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4909,8 +4511,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4934,8 +4534,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4959,8 +4557,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -4984,8 +4580,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5009,8 +4603,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5034,8 +4626,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5059,8 +4649,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5084,8 +4672,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5109,8 +4695,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5134,8 +4718,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5159,8 +4741,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5184,8 +4764,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5209,8 +4787,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5234,8 +4810,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5259,8 +4833,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5284,8 +4856,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5309,8 +4879,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5334,8 +4902,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5359,8 +4925,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5384,8 +4948,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5409,8 +4971,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5434,8 +4994,6 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5461,8 +5019,6 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5486,8 +5042,6 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5511,8 +5065,6 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5536,8 +5088,6 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5559,8 +5109,6 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5584,8 +5132,6 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5609,8 +5155,6 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5634,8 +5178,6 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5659,8 +5201,6 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5684,8 +5224,6 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5709,8 +5247,6 @@ until your account is verified. Please go to verify first.</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5736,8 +5272,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5763,8 +5297,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5788,8 +5320,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5813,8 +5343,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5838,8 +5366,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5863,8 +5389,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5888,8 +5412,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5913,8 +5435,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5938,8 +5458,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5963,8 +5481,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -5988,8 +5504,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6015,8 +5529,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6040,8 +5552,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6065,8 +5575,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6090,8 +5598,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6115,8 +5621,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6140,8 +5644,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6165,8 +5667,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6190,8 +5690,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6215,8 +5713,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6240,8 +5736,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6265,8 +5759,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6290,8 +5782,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6315,8 +5805,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6340,8 +5828,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6363,8 +5849,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6386,8 +5870,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6409,8 +5891,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6434,8 +5914,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6457,8 +5935,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6482,8 +5958,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6531,8 +6005,6 @@ Request verification again?</string>
 					</dict>
 					<key>change date</key>
 					<date>2013-09-25T14:59:51Z</date>
-					<key>changed values</key>
-					<array/>
 					<key>class</key>
 					<string>BLStringsFileObject</string>
 					<key>custom type</key>
@@ -6551,8 +6023,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6574,8 +6044,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6599,8 +6067,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6624,8 +6090,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6649,8 +6113,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6674,8 +6136,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6699,8 +6159,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6724,8 +6182,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6749,8 +6205,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6774,8 +6228,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6799,8 +6251,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6824,8 +6274,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6849,8 +6297,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6874,8 +6320,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6899,8 +6343,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6924,8 +6366,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6949,8 +6389,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6972,8 +6410,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -6995,8 +6431,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -7018,8 +6452,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -7043,8 +6475,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -7068,8 +6498,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -7093,8 +6521,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -7118,8 +6544,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -7143,8 +6567,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -7168,8 +6590,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -7191,8 +6611,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -7214,8 +6632,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -7237,8 +6653,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -7260,8 +6674,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -7283,8 +6695,6 @@ Request verification again?</string>
 						<dict>
 							<key>change date</key>
 							<date>2001-01-01T00:00:00Z</date>
-							<key>changed values</key>
-							<array/>
 							<key>class</key>
 							<string>BLStringKeyObject</string>
 							<key>comment</key>
@@ -7333,8 +6743,6 @@ Request verification again?</string>
 			</array>
 			<key>change date</key>
 			<date>2001-01-01T00:00:00Z</date>
-			<key>changed values</key>
-			<array/>
 			<key>class</key>
 			<string>BLBundleObject</string>
 			<key>errors</key>
@@ -7359,16 +6767,7 @@ Request verification again?</string>
 		<string>zh-Hans</string>
 	</array>
 	<key>preferences</key>
-	<dict>
-		<key>leftLanguage</key>
-		<string>en</string>
-		<key>rightLanguage</key>
-		<string>zh-Hans</string>
-		<key>saveCompressed</key>
-		<false/>
-		<key>search</key>
-		<string>share</string>
-	</dict>
+	<dict/>
 	<key>reference language</key>
 	<string>en</string>
 	<key>supports preview</key>
