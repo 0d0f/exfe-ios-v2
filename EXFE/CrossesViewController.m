@@ -1030,6 +1030,8 @@
                         cls = [WidgetExfeeViewController class];
                     } else if ([@"routex" caseInsensitiveCompare:tab] == NSOrderedSame) {
                         cls = [EFRouteXViewController class];
+                    } else if ([@"cross" caseInsensitiveCompare:tab] == NSOrderedSame) {
+                        cls = [CrossGroupViewController class];
                     }
                 }
                 [self showCross:crossId withTabClass:cls animated:animated];
