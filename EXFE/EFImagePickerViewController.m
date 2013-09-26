@@ -76,7 +76,7 @@
 @implementation EFImagePickerViewController (Private)
 
 - (CGPoint)_imageViewCenterForIndex:(NSUInteger)index {
-    CGFloat x = 10.0f + index * (22.0f + 8.0f);
+    CGFloat x = 10.0f + index * (22.0f + 4.0f);
     CGPoint center = (CGPoint){x + 11.0f, CGRectGetMidY(self.operationBaseView.bounds)};
     return center;
 }
