@@ -159,7 +159,7 @@
         
         UIButton *okButton = [UIButton buttonWithType:UIButtonTypeCustom];
         okButton.frame = (CGRect){{CGRectGetWidth(operationBaseView.frame) - kButtonWidth, 0.0f}, {kButtonWidth, kOperationViewHeight}};
-        [okButton setTitle:NSLocalizedString(@"OK", nil) forState:UIControlStateNormal];
+        [okButton setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
         [okButton setTitleColor:[UIColor COLOR_RGB(0x00, 0x78, 0xFF)] forState:UIControlStateNormal];
         [okButton setTitleColor:[UIColor COLOR_RGBA(0x00, 0x78, 0xFF, 0.3f * 0xFF)] forState:UIControlStateHighlighted];
         [okButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.5f] forState:UIControlStateNormal];
