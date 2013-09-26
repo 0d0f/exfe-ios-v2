@@ -76,7 +76,7 @@
 @implementation EFImagePickerViewController (Private)
 
 - (CGPoint)_imageViewCenterForIndex:(NSUInteger)index {
-    CGFloat x = 10.0f + index * (22.0f + 8.0f);
+    CGFloat x = 10.0f + index * (22.0f + 4.0f);
     CGPoint center = (CGPoint){x + 11.0f, CGRectGetMidY(self.operationBaseView.bounds)};
     return center;
 }
@@ -151,7 +151,7 @@
         
         UIButton *okButton = [UIButton buttonWithType:UIButtonTypeCustom];
         okButton.frame = (CGRect){{CGRectGetWidth(operationBaseView.frame) - kButtonWidth, 0.0f}, {kButtonWidth, kOperationViewHeight}};
-        [okButton setTitle:NSLocalizedString(@"确认", nil) forState:UIControlStateNormal];
+        [okButton setTitle:NSLocalizedString(@"OK", nil) forState:UIControlStateNormal];
         [okButton setTitleColor:[UIColor COLOR_RGB(0x00, 0x78, 0xFF)] forState:UIControlStateNormal];
         [okButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.5f] forState:UIControlStateNormal];
         okButton.titleLabel.shadowOffset = (CGSize){0.0f, 1.0f};

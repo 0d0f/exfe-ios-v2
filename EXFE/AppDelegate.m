@@ -121,17 +121,18 @@
     
     // Setup root UIViewController
     CrossesViewController *crossviewController = [[CrossesViewController alloc] initWithStyle:UITableViewStylePlain];
+    crossviewController.wantsFullScreenLayout = YES;
     crossviewController.needHeaderAnimation = userinfo ? NO : YES;
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
     self.crossesViewController = crossviewController;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = self.navigationController;
-    CGRect appFrame = [UIScreen mainScreen].applicationFrame;
-    self.window.frame = appFrame;
+//    CGRect appFrame = [UIScreen mainScreen].applicationFrame;
+//    self.window.frame = appFrame;
 //    [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
     
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
     
     // Handle Remote notification
     if (userinfo) {

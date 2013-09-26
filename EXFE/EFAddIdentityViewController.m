@@ -77,6 +77,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.wantsFullScreenLayout = YES;
+        
         _accountStore = [[ACAccountStore alloc] init];
         _apiManager = [[TWAPIManager alloc] init];
     }
@@ -90,29 +92,38 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [Flurry logEvent:@"ADD_IDENTITY"];
     CGRect a = [UIScreen mainScreen].applicationFrame;
     
-    self.toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44 + 20)];
     [self.toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
     [self.toolbar.layer setShadowOpacity:0.8];
     [self.toolbar.layer setShadowRadius:3.0];
     [self.toolbar.layer setShadowOffset:CGSizeMake(0, 0)];
     
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, CGRectGetWidth(self.toolbar.bounds) - 20, CGRectGetHeight(self.toolbar.bounds))];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, CGRectGetWidth(self.toolbar.bounds) - 20 * 2, CGRectGetHeight(self.toolbar.bounds) - 20)];
     title.text = NSLocalizedString(@"Add identity", nil);
     title.textAlignment = NSTextAlignmentCenter;
     title.textColor = [UIColor COLOR_CARBON];
     title.shadowColor = [UIColor COLOR_WHITE];
     title.shadowOffset = CGSizeMake(0, 1);
+    title.backgroundColor = [UIColor clearColor];
     title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
     [self.toolbar addSubview:title];
     [self.view addSubview:self.toolbar];
     
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
-    [btnBack setFrame:CGRectMake(0, 0, 20, 44)];
-    btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
-    [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
+    [btnBack setFrame:CGRectMake(0, 20, 20, 44)];
+    btnBack.backgroundColor = [UIColor clearColor];
+    [btnBack setImage:[UIImage imageNamed:@"back_g3.png"] forState:UIControlStateNormal];
+    [btnBack setImage:[UIImage imageNamed:@"back_g3_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
     [self.view  addSubview:btnBack];
+    
+    UISwipeGestureRecognizer *swipe = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+        if (state == UIGestureRecognizerStateEnded) {
+            [btnBack sendActionsForControlEvents:UIControlEventTouchUpInside];
+        }
+    }];
+    swipe.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.toolbar addGestureRecognizer:swipe];
     
     // create the linear layout view
     CSLinearLayoutView *linearLayoutView = [[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.toolbar.frame), CGRectGetWidth(a), CGRectGetHeight(a) - CGRectGetHeight(self.toolbar.frame))];
@@ -621,7 +632,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         // [code integerValue] == 200
                         NSDictionary *responseobj = [responseObject objectForKey:@"response"];
                         if([responseobj isKindOfClass:[NSDictionary class]]){
-                            if([[responseobj objectForKey:@"action"] isEqualToString:@"REDIRECT"] && [responseobj objectForKey:@"url"] != nil){
+                            if([responseobj objectForKey:@"url"] != nil){
+                                // [[responseobj objectForKey:@"action"] isEqualToString:@"REDIRECT"] @"VERIFYING"
                                 OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil provider:provider];
                                 oauth.oAuthURL = [responseobj objectForKey:@"url"];
                                 oauth.external_username = username;

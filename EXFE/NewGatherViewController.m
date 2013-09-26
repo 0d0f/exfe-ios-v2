@@ -31,7 +31,7 @@
 #define LARGE_SLOT                       (16)
 #define SMALL_SLOT                      (5)
 
-#define DECTOR_HEIGHT                    (80)
+#define DECTOR_HEIGHT                    (80 + 20)
 #define DECTOR_HEIGHT_EXTRA              (20)
 #define DECTOR_MARGIN                    (SMALL_SLOT)
 #define OVERLAP                          (DECTOR_HEIGHT)
@@ -75,12 +75,13 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.wantsFullScreenLayout = YES;
     }
     return self;
 }
 
 - (void)initUI{
-    CGRect a = [UIScreen mainScreen].applicationFrame;
+    CGRect a = [UIScreen mainScreen].bounds;;
     self.view.frame = a;
     //CGRect f = self.view.frame;
     CGRect b = self.view.bounds;
@@ -177,7 +178,7 @@
     headview.backgroundColor=[UIColor grayColor];
     {
         CGFloat scale = CGRectGetWidth(headview.bounds) / 880.0f;
-        CGFloat startY = 0 - 198 * scale;
+        CGFloat startY = 0 - 104 * scale;
         dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, 880 * scale, 495 * scale)];
         dectorView.image=[UIImage imageNamed:@"x_titlebg_default.jpg"];
         [headview addSubview:dectorView];
@@ -186,7 +187,7 @@
         dectorMask.backgroundColor = [UIColor COLOR_WA(0x00, 0x55)];
         [headview addSubview:dectorMask];
         
-        titleView = [[UILabel alloc] initWithFrame:CGRectMake(20 + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, CGRectGetWidth(b) - 20 - TITLE_HORIZON_MARGIN * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
+        titleView = [[UILabel alloc] initWithFrame:CGRectMake(20 + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN + 20, CGRectGetWidth(b) - 20 - TITLE_HORIZON_MARGIN * 2, DECTOR_HEIGHT - 20 - TITLE_VERTICAL_MARGIN * 2)];
         titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
         titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         titleView.backgroundColor = [UIColor clearColor];
@@ -204,7 +205,7 @@
     [self.view addSubview:headview];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
-    [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 /2, 40, 44)];
+    [btnBack setFrame:CGRectMake(0, (DECTOR_HEIGHT + 20) / 2 - 44 /2, 40, 44)];
     btnBack.imageEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 20.0);
     btnBack.backgroundColor = [UIColor clearColor];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
@@ -222,8 +223,8 @@
     self.view.backgroundColor = [UIColor grayColor];
     
     
-    CGRect screenframe=[[UIScreen mainScreen] bounds];
-    UIView *pannel=[[UIView alloc] initWithFrame:CGRectMake(0,screenframe.size.height - 46 - 20, self.view.frame.size.width, 46)];
+    CGRect screenframe = self.view.bounds;
+    UIView *pannel=[[UIView alloc] initWithFrame:CGRectMake(0,screenframe.size.height - 46, self.view.frame.size.width, 46)];
     UIImageView *pannelbackimg=[[UIImageView alloc] initWithFrame:CGRectMake(0,0, pannel.frame.size.width, 46)];
     pannelbackimg.image=[UIImage imageNamed:@"glassbar.png"];
     [pannel addSubview:pannelbackimg];
@@ -241,7 +242,7 @@
     [pannel addSubview:btngather];
     [self.view addSubview:pannel];
 
-    pannellight = [[UIImageView alloc] initWithFrame:CGRectMake(0,screenframe.size.height - 46 - 20, self.view.frame.size.width, 46)];
+    pannellight = [[UIImageView alloc] initWithFrame:CGRectMake(0,screenframe.size.height - 46, self.view.frame.size.width, 46)];
     pannellight.image = [UIImage imageNamed:@"glassbar_light.png"];
     [self.view addSubview:pannellight];
     [self startGlassAnimation];

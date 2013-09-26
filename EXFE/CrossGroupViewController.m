@@ -35,7 +35,7 @@
 #define SMALL_SLOT                       (5)
 #define ADDITIONAL_SLOT                  (8)
 
-#define DECTOR_HEIGHT                    (80)
+#define DECTOR_HEIGHT                    (80 + 20)
 #define DECTOR_HEIGHT_EXTRA              (20)
 #define DECTOR_MARGIN                    (SMALL_SLOT)
 #define OVERLAP                          (0)
@@ -133,8 +133,15 @@
     [Flurry logEvent:@"WIDGET_CROSS"];
     // Do any additional setup after loading the view from its nib.
     CGRect b = self.view.bounds;
-    CGRect a = [UIScreen mainScreen].applicationFrame;
+//    CGRect a = [UIScreen mainScreen].applicationFrame;
 //    CGRect b = self.initFrame;
+    CGRect a = CGRectNull;
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        a = [UIScreen mainScreen].bounds;
+    } else {
+        a = [UIScreen mainScreen].applicationFrame;
+    }
+    self.view.frame = a;
     
     CGRect viewFrame = (CGRect){{0.0f, 0.0f}, {CGRectGetWidth(b), CGRectGetHeight(a) - DECTOR_HEIGHT}};
     self.view.frame = viewFrame;
@@ -615,6 +622,12 @@
         
         // Map
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) - DECTOR_HEIGHT;
+        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+            a = CGRectGetHeight([UIScreen mainScreen].bounds) - DECTOR_HEIGHT;
+        } else {
+            a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) - DECTOR_HEIGHT;
+        }
+        
         int b = (CGRectGetMaxY(placeDescView.frame) - CGRectGetMinY(placeTitleView.frame) + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + OVERLAP + 8 /*+ SMALL_SLOT */);
         mapView.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width , a - b);
         mapShadow.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width , 4);
