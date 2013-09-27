@@ -325,6 +325,8 @@
         
         [WXApi sendReq:requestMessage];
     }
+    
+    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void)imageComposerViewControllerCancelButtonPressed:(EFImageComposerViewController *)viewController {
