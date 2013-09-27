@@ -153,16 +153,16 @@
         [operationBaseView addSubview:blurView];
         
         EFGradientView *backgroundView = [[EFGradientView alloc] initWithFrame:operationBaseView.bounds];
-        backgroundView.colors = @[[UIColor COLOR_RGB(0x4C, 0x4C, 0x4C)],
+        backgroundView.colors = @[[UIColor COLOR_RGB(0x33, 0x33, 0x33)],
                                   [UIColor COLOR_RGB(0x19, 0x19, 0x19)]];
-        backgroundView.alpha = 0.88f;
+        backgroundView.alpha = 0.92f;
         [operationBaseView addSubview:backgroundView];
         
         EFLoadingButton *okButton = [EFLoadingButton buttonWithType:UIButtonTypeCustom];
         okButton.frame = (CGRect){{CGRectGetWidth(operationBaseView.frame) - kButtonWidth, 0.0f}, {kButtonWidth, kOperationViewHeight}};
         okButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
         [okButton setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
-        [okButton setTitleColor:[UIColor COLOR_RGB(0x00, 0x78, 0xFF)] forState:UIControlStateNormal];
+        [okButton setTitleColor:[UIColor COLOR_RGB(0x00, 0x7B, 0xFF)] forState:UIControlStateNormal];
         [okButton setTitleColor:[UIColor COLOR_RGBA(0x00, 0x78, 0xFF, 0.3f * 0xFF)] forState:UIControlStateHighlighted];
         [okButton setTitleColor:[UIColor COLOR_RGBA(0x00, 0x78, 0xFF, 0.3f * 0xFF)] forState:UIControlStateDisabled];
         [okButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.5f] forState:UIControlStateNormal];

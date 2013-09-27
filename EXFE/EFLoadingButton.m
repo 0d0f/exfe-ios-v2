@@ -33,7 +33,7 @@
     
     CGRect buttonBounds = self.bounds;
     CGRect labelFrame = self.titleLabel.frame;
-    self.activityView.center = (CGPoint){CGRectGetMaxX(labelFrame) + CGRectGetMidX(self.activityView.bounds), CGRectGetMidY(buttonBounds)};
+    self.activityView.center = (CGPoint){CGRectGetMinX(labelFrame) - CGRectGetMidX(self.activityView.bounds) - 5.0f, CGRectGetMidY(buttonBounds)};
 }
 
 - (void)setEnabled:(BOOL)enabled {

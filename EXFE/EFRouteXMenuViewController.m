@@ -42,7 +42,7 @@
     self.tableView.layer.cornerRadius = kCornerRadius;
     
     EFGradientView *backgroundView = [[EFGradientView alloc] initWithFrame:self.tableView.bounds];
-    backgroundView.colors = @[[UIColor COLOR_RGB(0x4C, 0x4C, 0x4C)], [UIColor COLOR_RGB(0x33, 0x33, 0x33)]];
+    backgroundView.colors = @[[UIColor COLOR_RGB(0x33, 0x33, 0x33)], [UIColor COLOR_RGB(0x19, 0x19, 0x19)]];
     self.tableView.backgroundView = backgroundView;
     self.tableView.backgroundColor = [UIColor clearColor];
     
@@ -81,7 +81,7 @@
     cell.textLabel.text = self.titles[indexPath.row];
     
     if (0 == indexPath.row) {
-        cell.textLabel.textColor = [UIColor COLOR_RGB(0x5B, 0xA5, 0xFA)];
+        cell.textLabel.textColor = [UIColor COLOR_RGB(0x00, 0x7B, 0xFF)];
     } else if (1 == indexPath.row) {
         cell.textLabel.textColor = [UIColor whiteColor];
     }

@@ -178,8 +178,8 @@
                                                             delegate:self
                                                    cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                                    otherButtonTitles:nil];
-            [self.noGPSAlertView show];
         }
+        [self.noGPSAlertView show];
     } else {
         if ([self _isRouteXAvalibleForThisCorss]) {
             [self _startUpdating];
