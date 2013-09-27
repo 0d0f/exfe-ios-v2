@@ -14,6 +14,8 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "EFGradientView.h"
 #import "Util.h"
+#import "AMBlurView.h"
+#import "EFLoadingButton.h"
 
 #define kOperationViewHeight    (44.0f)
 #define kButtonWidth            (80.0f)
@@ -76,7 +78,7 @@
 @implementation EFImagePickerViewController (Private)
 
 - (CGPoint)_imageViewCenterForIndex:(NSUInteger)index {
-    CGFloat x = 10.0f + index * (22.0f + 8.0f);
+    CGFloat x = 10.0f + index * (22.0f + 4.0f);
     CGPoint center = (CGPoint){x + 11.0f, CGRectGetMidY(self.operationBaseView.bounds)};
     return center;
 }
@@ -138,23 +140,33 @@
             }
         }
         
-        UIView *operationBaseView = [[UIView alloc] initWithFrame:(CGRect){{0.0f, CGRectGetMaxY(viewFrame) - kOperationViewHeight}, {CGRectGetWidth(viewFrame), kOperationViewHeight}}];
+        UIView *operationBaseView = [[UIView alloc] initWithFrame:(CGRect){{0.0f, floor(CGRectGetMaxY(viewFrame) - kOperationViewHeight)}, {CGRectGetWidth(viewFrame), kOperationViewHeight}}];
         operationBaseView.backgroundColor = [UIColor clearColor];
         [transitionView.superview addSubview:operationBaseView];
         self.operationBaseView = operationBaseView;
         
+        AMBlurView *blurView = [[AMBlurView alloc] init];
+        CGRect blurViewFrame = operationBaseView.bounds;
+        blurViewFrame.origin.y = 1.0f;
+        blurView.frame = blurViewFrame;
+        blurView.blurTintColor = [UIColor colorWithWhite:1.0f alpha:0.1f];
+        [operationBaseView addSubview:blurView];
+        
         EFGradientView *backgroundView = [[EFGradientView alloc] initWithFrame:operationBaseView.bounds];
-        backgroundView.colors = @[[UIColor COLOR_RGB(0x4C, 0x4C, 0x4C)],
+        backgroundView.colors = @[[UIColor COLOR_RGB(0x33, 0x33, 0x33)],
                                   [UIColor COLOR_RGB(0x19, 0x19, 0x19)]];
-        backgroundView.alpha = 0.88f;
+        backgroundView.alpha = 0.92f;
         [operationBaseView addSubview:backgroundView];
         
-        UIButton *okButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        EFLoadingButton *okButton = [EFLoadingButton buttonWithType:UIButtonTypeCustom];
         okButton.frame = (CGRect){{CGRectGetWidth(operationBaseView.frame) - kButtonWidth, 0.0f}, {kButtonWidth, kOperationViewHeight}};
-        [okButton setTitle:NSLocalizedString(@"OK", nil) forState:UIControlStateNormal];
-        [okButton setTitleColor:[UIColor COLOR_RGB(0x00, 0x78, 0xFF)] forState:UIControlStateNormal];
+        okButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+        [okButton setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
+        [okButton setTitleColor:[UIColor COLOR_RGB(0x00, 0x7B, 0xFF)] forState:UIControlStateNormal];
+        [okButton setTitleColor:[UIColor COLOR_RGBA(0x00, 0x78, 0xFF, 0.3f * 0xFF)] forState:UIControlStateHighlighted];
+        [okButton setTitleColor:[UIColor COLOR_RGBA(0x00, 0x78, 0xFF, 0.3f * 0xFF)] forState:UIControlStateDisabled];
         [okButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.5f] forState:UIControlStateNormal];
-        okButton.titleLabel.shadowOffset = (CGSize){0.0f, 1.0f};
+        okButton.titleLabel.shadowOffset = (CGSize){0.0f, 0.5f};
         [okButton addTarget:self
                      action:@selector(okButtonPressed:)
            forControlEvents:UIControlEventTouchUpInside];
@@ -170,94 +182,115 @@
 
 - (void)okButtonPressed:(id)sender {
     if (self.imageDicts.count) {
+        UIButton *button = (UIButton *)sender;
+        button.enabled = NO;
+        
         EFImageComposerViewController *composerViewController = [[EFImageComposerViewController alloc] init];
         composerViewController.delegate = self;
         
-        __block NSMutableArray *newImageDicts = [[NSMutableArray alloc] init];
-        dispatch_semaphore_t enumerateSemaphore = dispatch_semaphore_create(0);
-        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+            __block NSMutableArray *newImageDicts = [[NSMutableArray alloc] init];
+            dispatch_semaphore_t enumerateSemaphore = dispatch_semaphore_create(0);
             
-            for (NSDictionary *imageDict in self.imageDicts) {
-                @autoreleasepool {
-                    NSURL *imageURL = [imageDict valueForKey:UIImagePickerControllerReferenceURL];
-                    if (imageURL) {
-                        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
-                        
-                        [library assetForURL:imageURL
-                                 resultBlock:^(ALAsset *asset){
-                                     ALAssetRepresentation *representation = [asset defaultRepresentation];
-                                     
-                                     NSMutableDictionary *imageDict = [[NSMutableDictionary alloc] init];
-                                     UIImage *image = [UIImage imageWithCGImage:[representation fullScreenImage]];
-                                     [imageDict setValue:image forKey:@"image"];
-                                     
-                                     // create a buffer to hold image data
-                                     uint8_t *buffer = (uint8_t *)malloc(sizeof(uint8_t) * (long)representation.size);
-                                     NSUInteger length = [representation getBytes:buffer fromOffset: 0.0  length:(long)representation.size error:nil];
-                                     
-                                     if (length != 0)  {
-                                         // buffer -> NSData object; free buffer afterwards
-                                         NSData *adata = [[NSData alloc] initWithBytesNoCopy:buffer length:(long)representation.size freeWhenDone:YES];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+                
+                for (NSDictionary *imageDict in self.imageDicts) {
+                    @autoreleasepool {
+                        NSURL *imageURL = [imageDict valueForKey:UIImagePickerControllerReferenceURL];
+                        if (imageURL) {
+                            dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+                            
+                            [library assetForURL:imageURL
+                                     resultBlock:^(ALAsset *asset){
+                                         ALAssetRepresentation *representation = [asset defaultRepresentation];
                                          
-                                         // identify image type (jpeg, png, RAW file, ...) using UTI hint
-                                         NSDictionary* sourceOptionsDict = [NSDictionary dictionaryWithObjectsAndKeys:(id)[representation UTI] ,kCGImageSourceTypeIdentifierHint,nil];
+                                         NSMutableDictionary *imageDict = [[NSMutableDictionary alloc] init];
+                                         UIImage *image = [UIImage imageWithCGImage:[representation fullScreenImage]];
                                          
-                                         // create CGImageSource with NSData
-                                         CGImageSourceRef sourceRef = CGImageSourceCreateWithData((__bridge CFDataRef) adata,  (__bridge CFDictionaryRef) sourceOptionsDict);
+                                         CGFloat imageScale = image.scale;
+                                         CGSize imageSize = image.size;
+                                         CGFloat imageWidth = MIN(imageSize.width, imageSize.height);
+                                         CGRect imageRect = (CGRect){CGPointZero, {imageWidth, imageWidth}};
+                                         imageRect.origin = (CGPoint){((imageSize.width - imageWidth) * 0.5f) < 0.0f ? 0.0f : ((imageSize.width - imageWidth) * 0.5f),
+                                             ((imageSize.height - imageWidth) * 0.5f) < 0.0f ? : (imageSize.height - imageWidth) * 0.5f};
                                          
-                                         // get imagePropertiesDictionary
-                                         CFDictionaryRef imagePropertiesDictionary;
-                                         imagePropertiesDictionary = CGImageSourceCopyPropertiesAtIndex(sourceRef,0, NULL);
+                                         CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, imageRect);
+                                         UIImage *result = [UIImage imageWithCGImage:imageRef scale:imageScale orientation:image.imageOrientation];
+                                         CGImageRelease(imageRef);
                                          
-                                         // get gps data
-                                         CFDictionaryRef gpsInfo = (CFDictionaryRef)CFDictionaryGetValue(imagePropertiesDictionary, kCGImagePropertyGPSDictionary);
-                                         NSDictionary *gpsDict = (__bridge NSDictionary *)gpsInfo;
+                                         [imageDict setValue:result forKey:@"image"];
                                          
-                                         if ([gpsDict valueForKey:@"Latitude"] && [gpsDict valueForKey:@"Longitude"]) {
-                                             CGFloat latitude = [[gpsDict valueForKey:@"Latitude"] doubleValue];
-                                             CGFloat longitude = [[gpsDict valueForKey:@"Longitude"] doubleValue];
-                                             latitude += self.offset.x;
-                                             longitude += self.offset.y;
+                                         // create a buffer to hold image data
+                                         uint8_t *buffer = (uint8_t *)malloc(sizeof(uint8_t) * (long)representation.size);
+                                         NSUInteger length = [representation getBytes:buffer fromOffset: 0.0  length:(long)representation.size error:nil];
+                                         
+                                         if (length != 0)  {
+                                             // buffer -> NSData object; free buffer afterwards
+                                             NSData *adata = [[NSData alloc] initWithBytesNoCopy:buffer length:(long)representation.size freeWhenDone:YES];
                                              
-                                             [imageDict setValue:[NSNumber numberWithDouble:latitude] forKey:@"latitude"];
-                                             [imageDict setValue:[NSNumber numberWithDouble:longitude] forKey:@"longitude"];
+                                             // identify image type (jpeg, png, RAW file, ...) using UTI hint
+                                             NSDictionary* sourceOptionsDict = [NSDictionary dictionaryWithObjectsAndKeys:(id)[representation UTI] ,kCGImageSourceTypeIdentifierHint,nil];
+                                             
+                                             // create CGImageSource with NSData
+                                             CGImageSourceRef sourceRef = CGImageSourceCreateWithData((__bridge CFDataRef) adata,  (__bridge CFDictionaryRef) sourceOptionsDict);
+                                             
+                                             // get imagePropertiesDictionary
+                                             CFDictionaryRef imagePropertiesDictionary;
+                                             imagePropertiesDictionary = CGImageSourceCopyPropertiesAtIndex(sourceRef,0, NULL);
+                                             
+                                             // get gps data
+                                             CFDictionaryRef gpsInfo = (CFDictionaryRef)CFDictionaryGetValue(imagePropertiesDictionary, kCGImagePropertyGPSDictionary);
+                                             NSDictionary *gpsDict = (__bridge NSDictionary *)gpsInfo;
+                                             
+                                             if ([gpsDict valueForKey:@"Latitude"] && [gpsDict valueForKey:@"Longitude"]) {
+                                                 CGFloat latitude = [[gpsDict valueForKey:@"Latitude"] doubleValue];
+                                                 CGFloat longitude = [[gpsDict valueForKey:@"Longitude"] doubleValue];
+                                                 latitude += self.offset.x;
+                                                 longitude += self.offset.y;
+                                                 
+                                                 [imageDict setValue:[NSNumber numberWithDouble:latitude] forKey:@"latitude"];
+                                                 [imageDict setValue:[NSNumber numberWithDouble:longitude] forKey:@"longitude"];
+                                             }
+                                             
+                                             // clean up
+                                             CFRelease(imagePropertiesDictionary);
+                                             CFRelease(sourceRef);
+                                         } else {
+                                             NSLog(@"image_representation buffer length == 0");
                                          }
                                          
-                                         // clean up
-                                         CFRelease(imagePropertiesDictionary);
-                                         CFRelease(sourceRef);
-                                     } else {
-                                         NSLog(@"image_representation buffer length == 0");
+                                         if (result) {
+                                             [newImageDicts addObject:imageDict];
+                                         }
+                                         
+                                         dispatch_semaphore_signal(sema);
                                      }
-                                     
-                                     [newImageDicts addObject:imageDict];
-                                     
-                                     dispatch_semaphore_signal(sema);
-                                 }
-                                failureBlock:^(NSError *error){
-                                    dispatch_semaphore_signal(sema);
-                                }];
-                        
-                        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+                                    failureBlock:^(NSError *error){
+                                        dispatch_semaphore_signal(sema);
+                                    }];
+                            
+                            dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+                        }
                     }
                 }
-            }
+                
+                dispatch_semaphore_signal(enumerateSemaphore);
+            });
             
-            dispatch_semaphore_signal(enumerateSemaphore);
+            dispatch_semaphore_wait(enumerateSemaphore, DISPATCH_TIME_FOREVER);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [composerViewController customWithImageDicts:newImageDicts
+                                                    geomarks:self.geomarks
+                                                        path:nil
+                                                     mapRect:self.initMapRect];
+                
+                [self presentViewController:composerViewController
+                                   animated:YES
+                                 completion:nil];
+            });
         });
-        
-        dispatch_semaphore_wait(enumerateSemaphore, DISPATCH_TIME_FOREVER);
-        
-        [composerViewController customWithImageDicts:newImageDicts
-                                            geomarks:self.geomarks
-                                                path:nil
-                                             mapRect:self.initMapRect];
-        
-        [self presentViewController:composerViewController
-                           animated:YES
-                         completion:nil];
     }
 }
 
@@ -301,6 +334,8 @@
         
         [WXApi sendReq:requestMessage];
     }
+    
+    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void)imageComposerViewControllerCancelButtonPressed:(EFImageComposerViewController *)viewController {

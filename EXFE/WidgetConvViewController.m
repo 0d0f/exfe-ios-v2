@@ -266,11 +266,6 @@
     keyboardheight = keyboardEndFrame.size.height;
     
     CGFloat deltaY = 0;
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
-        deltaY = -20;
-    } else {
-        deltaY = 0;
-    }
     
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
         frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height - deltaY;

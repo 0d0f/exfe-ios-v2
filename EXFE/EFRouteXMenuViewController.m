@@ -42,15 +42,16 @@
     self.tableView.layer.cornerRadius = kCornerRadius;
     
     EFGradientView *backgroundView = [[EFGradientView alloc] initWithFrame:self.tableView.bounds];
-    backgroundView.colors = @[[UIColor COLOR_RGB(0x4C, 0x4C, 0x4C)], [UIColor COLOR_RGB(0x33, 0x33, 0x33)]];
+    backgroundView.colors = @[[UIColor COLOR_RGB(0x33, 0x33, 0x33)], [UIColor COLOR_RGB(0x19, 0x19, 0x19)]];
     self.tableView.backgroundView = backgroundView;
     self.tableView.backgroundColor = [UIColor clearColor];
     
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.tableView.separatorColor = [UIColor COLOR_RGBA(0x00, 0x00, 0x00, 0.25f * 0xFF)];
     self.tableView.scrollEnabled = NO;
     
     self.titles = @[NSLocalizedString(@"Show this map", nil),
-                    NSLocalizedString(@"Share trace photos", nil)];
+                    NSLocalizedString(@"Share trail photos", nil)];
 }
 
 #pragma mark - Table view data source
@@ -72,12 +73,15 @@
         cell.textLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
         cell.textLabel.shadowOffset = (CGSize){0.0f, 0.5f};
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
+        UIView *selectedBackgroundView = [[UIView alloc] init];
+        selectedBackgroundView.backgroundColor = [UIColor COLOR_RGBA(0x3A, 0x6E, 0xA5, 0.2f * 0xFF)];
+        cell.selectedBackgroundView = selectedBackgroundView;
     }
-
+    
     cell.textLabel.text = self.titles[indexPath.row];
     
     if (0 == indexPath.row) {
-        cell.textLabel.textColor = [UIColor COLOR_RGB(0x59, 0xA9, 0xFF)];
+        cell.textLabel.textColor = [UIColor COLOR_RGB(0x00, 0x7B, 0xFF)];
     } else if (1 == indexPath.row) {
         cell.textLabel.textColor = [UIColor whiteColor];
     }
@@ -143,13 +147,16 @@
     CGRect selfFrame = self.tableView.frame;
     selfFrame.origin.x += kTableViewWidth;
     
+    __weak typeof(self) weakSelf = self;
+    
     [UIView animateWithDuration:0.233f
                      animations:^{
                          self.tableView.frame = selfFrame;
                      }
                      completion:^(BOOL finished){
-                         [self.tableView removeFromSuperview];
-                         [self.maskView removeFromSuperview];
+                         [weakSelf.maskView removeFromSuperview];
+                         [weakSelf.tableView removeFromSuperview];
+                         weakSelf.maskView = nil;
                      }];
 }
 

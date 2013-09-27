@@ -178,8 +178,8 @@
                                                             delegate:self
                                                    cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                                    otherButtonTitles:nil];
-            [self.noGPSAlertView show];
         }
+        [self.noGPSAlertView show];
     } else {
         if ([self _isRouteXAvalibleForThisCorss]) {
             [self _startUpdating];
@@ -746,6 +746,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             self.personViewController = personViewController;
         }
         
+        [self _zoomToPerson:person];
+        
         return;
     }
     
@@ -790,14 +792,21 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
         
+        CGSize imageSize = image.size;
+        imageSize.width *= 0.3f;
+        imageSize.height *= 0.3f;
+        UIGraphicsBeginImageContextWithOptions(imageSize, NO, [UIScreen mainScreen].scale);
+        [image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
+        UIImage *thumbImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
         NSData *imageData = UIImageJPEGRepresentation(image, 0.8f);
-        NSData *thumbImageData = UIImageJPEGRepresentation(image, 0.1f);
         
         WXImageObject *imageObject = [WXImageObject object];
         imageObject.imageData = imageData;
         
         WXMediaMessage *mediaMessage = [WXMediaMessage message];
-        [mediaMessage setThumbData:thumbImageData];
+        [mediaMessage setThumbImage:thumbImage];
         mediaMessage.title = self.cross.title;
         mediaMessage.mediaObject = imageObject;
         

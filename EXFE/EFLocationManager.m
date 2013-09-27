@@ -165,7 +165,7 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 @implementation EFLocationManager
 
 + (BOOL)locationServicesEnabled {
-    return [CLLocationManager locationServicesEnabled];
+    return (kCLAuthorizationStatusAuthorized == [CLLocationManager authorizationStatus]);
 }
 
 + (BOOL)headingServicesEnabled {
@@ -257,7 +257,7 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
             }
         } else {
 #warning MUST solve this problem in next version.
-            if ([[EFConfig sharedInstance].scope isEqualToString:EFServerScopeCN]) {
+            if ([[EFConfig sharedInstance].scope isEqualToString:EFServerScopeCN] && [EFLocationManager locationServicesEnabled]) {
                 UILocalNotification *localNotification = [[UILocalNotification alloc] init];
                 localNotification.alertBody = NSLocalizedString(@"RouteX will show your location for 30 minutes, only to those who're agreed.", nil);
                 localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:2.33f];
@@ -273,7 +273,7 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
         
         [[UIApplication sharedApplication] cancelAllLocalNotifications];
         
-        if ([CLLocationManager locationServicesEnabled] && ![self isFirstTimeToPostUserLocation]) {
+        if ([EFLocationManager locationServicesEnabled] && ![self isFirstTimeToPostUserLocation]) {
             [self startUpdatingLocation];
         }
     }

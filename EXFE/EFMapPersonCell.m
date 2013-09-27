@@ -49,6 +49,8 @@
             self.meterLabel.hidden = YES;
             self.stateLabel.textAlignment = NSTextAlignmentCenter;
             self.stateLabel.frame = kStateLabelNormalFrame;
+            self.stateLabel.text = infoText;
+            [self.stateLabel sizeToFit];
         } else {
             infoText = NSLocalizedString(@"Unknown", nil);
             self.stateImageView.hidden = YES;
@@ -128,6 +130,8 @@
                     self.stateImageView.hidden = YES;
                     self.meterLabel.hidden = YES;
                     self.stateLabel.textAlignment = NSTextAlignmentLeft;
+                    self.stateLabel.text = infoText;
+                    [self.stateLabel sizeToFit];
                     self.stateLabel.frame = (CGRect){{CGRectGetMaxX(self.stateView.frame) + 2.0f, CGRectGetMinY(self.stateLabel.frame)}, self.stateLabel.frame.size};
                 } else {
                     NSDate *timestamp = self.person.lastLocation.timestamp;

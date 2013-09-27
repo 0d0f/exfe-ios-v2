@@ -794,6 +794,9 @@ CGFloat HeadingInRadian(CLLocationCoordinate2D destinationCoordinate, CLLocation
                                                                 options:NSJSONReadingMutableContainers
                                                                   error:&error];
     
+    
+    NSLog(@"%@", jsonDictionary);
+    
     if (jsonDictionary && !error) {
         NSString *type = [jsonDictionary valueForKey:@"type"];
         BOOL isAction = !![jsonDictionary valueForKey:@"action"];

@@ -36,7 +36,7 @@
 						</dict>
 					</dict>
 					<key>change date</key>
-					<date>2013-09-25T15:13:53Z</date>
+					<date>2013-09-26T09:47:01Z</date>
 					<key>changed values</key>
 					<array/>
 					<key>class</key>
@@ -46,7 +46,7 @@
 					<key>flags</key>
 					<integer>0</integer>
 					<key>hash</key>
-					<string>d68bca83a1b119d6158065be607925af
+					<string>dc94c48a943f841f371a7920a7810aee
 </string>
 					<key>name</key>
 					<string>Localizable.strings</string>
@@ -117,6 +117,31 @@
 							<dict>
 								<key>en</key>
 								<string>##Alert Title##</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%@ %@</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%1$@ %2$@</string>
+								<key>zh-Hans</key>
+								<string>%1$@ %2$@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -292,6 +317,31 @@
 								<string>%1$@ to arrive, %2$@ apart</string>
 								<key>zh-Hans</key>
 								<string>至目的地%1$@ 与您相距%2$@</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>%@, %@</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>%1$@, %2$@</string>
+								<key>zh-Hans</key>
+								<string>%1$@、%2$@</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -1689,7 +1739,7 @@
 								<key>en</key>
 								<string>Done</string>
 								<key>zh-Hans</key>
-								<string>完成</string>
+								<string>确认</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -4866,11 +4916,11 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 							<key>flags</key>
 							<integer>0</integer>
 							<key>key</key>
-							<string>Share trace photos</string>
+							<string>Share trail photos</string>
 							<key>localizations</key>
 							<dict>
 								<key>en</key>
-								<string>Share trace photos</string>
+								<string>Share trail photos</string>
 								<key>zh-Hans</key>
 								<string>分享足迹照片</string>
 							</dict>
@@ -5372,7 +5422,7 @@ then turn it on for “{{PRODUCT_APP_NAME}}”.</string>
 								<key>en</key>
 								<string>This number requires verification before proceeding. Verification request is sent, please check your message for instructions.</string>
 								<key>zh-Hans</key>
-								<string>需验证此号码才能继续。验证已发送。请查看您的邮件阅读说明。</string>
+								<string>需验证此号码才能继续。验证已发送。请查看您的消息阅读说明。</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>
@@ -6821,6 +6871,31 @@ Request verification again?</string>
 							<dict>
 								<key>en</key>
 								<string>yyyy-MM-dd</string>
+							</dict>
+							<key>snapshots</key>
+							<dict/>
+						</dict>
+						<dict>
+							<key>change date</key>
+							<date>2001-01-01T00:00:00Z</date>
+							<key>changed values</key>
+							<array/>
+							<key>class</key>
+							<string>BLStringKeyObject</string>
+							<key>comment</key>
+							<string>No comment provided by engineer.</string>
+							<key>errors</key>
+							<array/>
+							<key>flags</key>
+							<integer>0</integer>
+							<key>key</key>
+							<string>Share trace photos</string>
+							<key>localizations</key>
+							<dict>
+								<key>en</key>
+								<string>Share trace photos</string>
+								<key>zh-Hans</key>
+								<string>分享足迹照片</string>
 							</dict>
 							<key>snapshots</key>
 							<dict/>

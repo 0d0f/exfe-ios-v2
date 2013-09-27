@@ -52,6 +52,8 @@
         self.javaScriptString = nil;
         self.provider = provider;
         
+        self.wantsFullScreenLayout = YES;
+        
         // eg:  exfe://oauthcallback
         NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback", [UIApplication sharedApplication].defaultScheme];
         self.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", [EFConfig sharedInstance].OAUTH_ROOT, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
@@ -63,7 +65,7 @@
     
     [super viewDidLoad];
     [Flurry logEvent:@"OAUTH_SIGN_IN"];
-    toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
+    toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 47)];
     [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
 	self.title = NSLocalizedString(@"Sign In", nil);
     UIImage *btn_dark = [UIImage imageNamed:@"btn_dark.png"];

@@ -46,7 +46,7 @@
 
 - (UIView *)_selectedBackgroundView {
     UIView *backgroundView = [[UIView alloc] initWithFrame:self.bounds];
-    backgroundView.backgroundColor = [[UIColor COLOR_BLUE_EXFE] colorWithAlphaComponent:0.08f];
+    backgroundView.backgroundColor = [UIColor COLOR_RGBA(0x3A, 0x6E, 0xA5, 0.08f * 0xFF)];
     
     UIView *topLine = [[UIView alloc] initWithFrame:(CGRect){{0.0f, 0.0f}, {CGRectGetWidth(self.frame), 0.5f}}];
     topLine.backgroundColor = [UIColor COLOR_RGB(0xCC, 0xCC, 0xCC)];
