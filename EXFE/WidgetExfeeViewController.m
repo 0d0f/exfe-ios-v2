@@ -654,6 +654,9 @@ typedef enum {
                     [self removeCross];
                 }
             }
+            if (tableView.editing) {
+                [tableView setEditing:NO animated:YES];
+            }
             break;
         case 2:
             if (indexPath.row == 0) {
@@ -663,6 +666,9 @@ typedef enum {
                     }
                 } else {
                     [self removeInvitation];
+                }
+                if (tableView.editing) {
+                    [tableView setEditing:NO animated:YES];
                 }
             } else {
                 // remove notification identity;
