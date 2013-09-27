@@ -332,18 +332,17 @@
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
     }
     
-    [self refreshUI];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     } else {
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
     }
     
+    [self refreshUI];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
 }
 
 - (void)forceSignOut {
