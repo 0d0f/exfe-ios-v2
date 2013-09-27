@@ -42,9 +42,9 @@
 
 - (void)_addBlurViews {
     EFGradientView *backgroundView = [[EFGradientView alloc] initWithFrame:self.barView.bounds];
-    backgroundView.colors = @[[UIColor COLOR_RGB(0x4C, 0x4C, 0x4C)],
+    backgroundView.colors = @[[UIColor COLOR_RGB(0x33, 0x33, 0x33)],
                               [UIColor COLOR_RGB(0x19, 0x19, 0x19)]];
-    backgroundView.alpha = 0.88f;
+    backgroundView.alpha = 0.92f;
     [self.barView insertSubview:backgroundView atIndex:0];
     
     if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {

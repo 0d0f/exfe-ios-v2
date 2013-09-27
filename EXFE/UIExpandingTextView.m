@@ -171,7 +171,7 @@
         newText = [newText stringByAppendingString:@"\n|W|"];
     }
     internalTextView.text     = newText;
-    minimumHeight             = internalTextView.contentSize.height;
+    minimumHeight             = internalTextView.contentSize.height <= 36.0f ? 36.0f : internalTextView.contentSize.height;
     internalTextView.text     = saveText;
     internalTextView.hidden   = NO;
     internalTextView.delegate = self;

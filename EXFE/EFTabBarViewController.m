@@ -32,7 +32,13 @@
     self = [super init];
     if (self) {
         // self.view frame
-        CGRect appFrame = [UIScreen mainScreen].applicationFrame;
+        CGRect appFrame = CGRectNull;
+        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+            appFrame = [UIScreen mainScreen].applicationFrame;
+        } else {
+            appFrame = [UIScreen mainScreen].bounds;
+        }
+        
         self.view.frame = appFrame;
         
         _cache.appFrame = appFrame;
