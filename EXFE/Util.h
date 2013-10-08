@@ -102,12 +102,5 @@ extern NSString *const EXCrossListDidChangeNotification;
 
 + (int) daysBetween:(NSDate *)dt1 and:(NSDate *)dt2;
 
-// URL query param tool: XQueryComponents.h
-+ (NSString *) concatenateQuery:(NSDictionary *)parameters __attribute__ ((deprecated));
-+ (NSDictionary *) splitQuery:(NSString *)query __attribute__ ((deprecated)) ;
-+ (NSString *) decodeFromPercentEscapeString:(NSString *)string __attribute__ ((deprecated)) ;
-+ (NSString *) encodeToPercentEscapeString:(NSString *)string __attribute__ ((deprecated));
-+ (NSString *) EFPercentEscapedQueryStringPairMemberFromString:(NSString *)string __attribute__ ((deprecated));
-
 @end
 

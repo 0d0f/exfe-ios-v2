@@ -13,7 +13,6 @@
 #import "Util.h"
 #import "FullScreenViewController.h"
 #import "EFAddIdentityViewController.h"
-#import "CustomAttributedTextView.h"
 #import "EFModel.h"
 
 @interface ProfileViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>{

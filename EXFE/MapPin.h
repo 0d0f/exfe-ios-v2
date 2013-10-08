@@ -9,15 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-@interface MapPin : NSObject<MKAnnotation> {
-    CLLocationCoordinate2D coordinate;
-    NSString *__weak title;
-    NSString *__weak subTitle;
-}
+@interface MapPin : NSObject<MKAnnotation>
 
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
-@property (weak, nonatomic, readonly) NSString *title;
-@property (weak, nonatomic, readonly) NSString *subTitle;
+@property (nonatomic, readonly, copy) NSString *title;
+@property (nonatomic, readonly, copy) NSString *subTitle;
 
 - (id)initWithCoordinates:(CLLocationCoordinate2D)location placeName:(NSString *)placeName description:(NSString *)description;
 @end

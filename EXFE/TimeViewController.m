@@ -105,7 +105,6 @@
     [datepicker setTimeZone:[NSTimeZone localTimeZone]];
     [datepicker addTarget:self action:@selector(dateChanged:)
      forControlEvents:UIControlEventValueChanged];
-    [self regObserver];
     [self refreshUI];
 }
     
@@ -118,85 +117,6 @@
     } else {
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
     }
-}
-
-- (void)regObserver
-{
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:timeInput];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:inputplace];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editingDidBegan:) name:UITextFieldTextDidBeginEditingNotification object:inputplace];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:placeedit.PlaceTitle];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:placeedit.PlaceDesc];
-}
-
-- (void)textDidChange:(NSNotification*)notification
-{
-
-//    if([timeInput.text length]>2)
-//    {
-//        editinginterval=CFAbsoluteTimeGetCurrent();
-//        [self performSelector:@selector(getTimeFromAPI) withObject:self afterDelay:0.8];
-//    }
-}
-
-- (void) getTimeFromAPI{
-    if(CFAbsoluteTimeGetCurrent()-editinginterval>0.8)
-    {
-//        NSString *params_timezone=[DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];        
-//        RKParams* rsvpParams = [RKParams params];
-//        [rsvpParams setValue:params_timezone forParam:@"timezone"];
-////        [rsvpParams setValue:timeInput.text forParam:@"time_string"];
-//        RKClient *client = [RKClient sharedClient];
-//        [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//        NSString *endpoint = [NSString stringWithFormat:@"/time/Recognize"];
-//        [client post:endpoint usingBlock:^(RKRequest *request){
-//            request.method=RKRequestMethodPOST;
-//            request.params=rsvpParams;
-//            request.onDidLoadResponse=^(RKResponse *response){
-//                if (response.statusCode == 200) {
-//                    NSDictionary *body=[response.body objectFromJSONData];
-//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                    if(code){
-//                        if([code intValue]==200) {
-////                            RKLogDebug(@"%@",[body objectForKey:@"response"]);
-//                            NSDictionary *cross_time=[[body objectForKey:@"response"] objectForKey:@"cross_time"];
-//                            NSDictionary *begin_at=[cross_time objectForKey:@"begin_at"];
-////                            if(_crosstime==nil){
-////                                _crosstime=[CrossTime object];
-////                                _crosstime.begin_at=[EFTime object];
-////                                
-////                            }
-//                            CrossTime *crosstime=[CrossTime object];
-//                            crosstime.begin_at=[EFTime object];
-//                            
-//                            crosstime.origin=[cross_time objectForKey:@"origin"];
-//                            crosstime.outputformat=[NSNumber numberWithBool:[[cross_time objectForKey:@"outputformat"] boolValue]];
-//                            crosstime.begin_at.date=[begin_at objectForKey:@"date"];
-//                            crosstime.begin_at.date_word=[begin_at objectForKey:@"date_word"];
-//                            crosstime.begin_at.time=[begin_at objectForKey:@"time"];
-//                            crosstime.begin_at.time_word=[begin_at objectForKey:@"time_word"];
-//                            crosstime.begin_at.timezone=[begin_at objectForKey:@"timezone"];
-//                            [self setDateTime:crosstime];
-//                            datechanged=YES;
-//                        }
-//
-//                    }
-//
-//                }
-//            };
-//            request.onDidFailLoadWithError=^(NSError *error){
-//        //            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
-//        //            if(error.code==2)
-//        //                errormsg=@"A connection failure has occurred.";
-//        //            else
-//        //                errormsg=@"Could not connect to the server.";
-//        //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-//        //            [alert show];
-//        //            [alert release];
-//            };
-//        }];
-    }
-    
 }
 
 // deprecated
@@ -373,7 +293,7 @@
 }
 
 - (void) cleanDate{
-    [(NewGatherViewController*)self.delegate setTime:nil];
+    [self.delegate setTime:nil];
 }
 
 #pragma mark UIScrollView methods

@@ -406,7 +406,7 @@
     if ([name hasSuffix:@".success"] && userInfo) {
         // for success
         NSString *cat = userInfo[@"type"];
-        NSNumber *num = userInfo[@"id"];
+        NSNumber *num __attribute__((unused)) = userInfo[@"id"];
         
         if ([@"user" isEqualToString:cat]) {
             
@@ -417,7 +417,7 @@
     } else if ([name hasSuffix:@".failure"] && userInfo) {
         // for failure
         NSString *cat = userInfo[@"type"];
-        NSNumber *num = userInfo[@"id"];
+        NSNumber *num __attribute__((unused)) = userInfo[@"id"];
         
         if ([@"user" isEqualToString:cat]) {
             //            if (num && self.model.userId == [num unsignedIntegerValue] ) {

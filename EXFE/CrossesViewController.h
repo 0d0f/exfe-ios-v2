@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "PullRefreshTableViewController.h"
-#import "EXInnerButton.h"
 #import "EXSpinView.h"
 
 #import "CrossCard.h"

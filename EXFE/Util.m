@@ -48,65 +48,6 @@ static NSDictionary * _keywordDict = nil;
     return _keywordDict;
 }
 
-#pragma mark URL query param tool
-+ (NSString*) decodeFromPercentEscapeString:(NSString*)string {
-    CFStringRef sref = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL,(CFStringRef) string,CFSTR(""),kCFStringEncodingUTF8);
-    NSString *s=[NSString stringWithFormat:@"%@", (__bridge NSString *)sref];
-    CFRelease(sref);
-    return s;
-}
-
-+ (NSString*) encodeToPercentEscapeString:(NSString*)string {
-    CFStringRef urlString = CFURLCreateStringByAddingPercentEscapes(
-                                                                    NULL,
-                                                                    (CFStringRef)string,
-                                                                    NULL,
-                                                                    (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",
-                                                                    kCFStringEncodingUTF8 );
-    return (__bridge NSString *)urlString;
-    
-}
-
-+ (NSString *) EFPercentEscapedQueryStringPairMemberFromString:(NSString *)string {
-    static NSString * const kEFCharactersToBeEscaped = @":/?&=;+!@#$()~";
-    static NSString * const kEFCharactersToLeaveUnescaped = @"[].";
-    
-	CFStringRef urlString = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                   (CFStringRef)string,
-                                                                   (CFStringRef)kEFCharactersToLeaveUnescaped,
-                                                                   (CFStringRef)kEFCharactersToBeEscaped,
-                                                                   kCFStringEncodingUTF8);
-    return (__bridge NSString *)urlString;
-}
-
-+ (NSString *) concatenateQuery:(NSDictionary *)parameters {
-    if (!parameters || [parameters count] == 0){
-        return nil;
-    }
-    NSMutableString *query = [NSMutableString string];
-    for (NSString *parameter in [parameters allKeys]){
-        [query appendFormat:@"&%@=%@", [parameter stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding], [[parameters valueForKey:parameter] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
-    }
-    return [query substringFromIndex:1];
-}
-
-+ (NSDictionary *)splitQuery:(NSString *)query {
-    if ([query length] == 0){
-        return nil;
-    }
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    for(NSString *parameter in [query componentsSeparatedByString:@"&"]) {
-        NSRange range = [parameter rangeOfString:@"="];
-        if(range.location != NSNotFound){
-            [parameters setValue:[[parameter substringFromIndex:range.location+range.length] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
-                          forKey:[[parameter substringToIndex:range.location] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-        } else {
-            [parameters setValue:[[NSString alloc] init] forKey:[parameter stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-        }
-    }
-    return parameters;
-}
-
 #pragma mark provider
 + (NSString *) findProvider:(NSString *)external_id
 {

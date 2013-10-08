@@ -8,12 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
-//#import "GatherViewController.h"
-#import "NewGatherViewController.h"
-#import "CrossTime.h"
-#import "EFTime.h"
 #import "DateTimeUtil.h"
 #import "EditCrossDelegate.h"
+#import "EXGradientToolbarView.h"
+#import "Util.h"
 
 @interface TimeViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>{
     IBOutlet UITextField *inputtimeword;
@@ -38,7 +36,4 @@
 - (void) uselasttime;
 - (void) dateChanged:(id) sender;
 - (void) Close;
-- (void) textDidChange:(NSNotification*)notification;
-- (void) getTimeFromAPI;
-//- (void) updateDate;
 @end
