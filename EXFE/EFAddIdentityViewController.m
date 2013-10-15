@@ -27,6 +27,7 @@
 #import "EFAPI.h"
 #import "OAuthLoginViewController.h"
 #import "EFKit.h"
+#import "XQueryComponents.h"
 
 typedef NS_ENUM(NSUInteger, EFViewTag) {
     kViewTagNone,
@@ -990,11 +991,18 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [_apiManager performReverseAuthForAccount:acct withHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
         if (!error) {
             NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-            NSDictionary *params = [Util splitQuery:responseStr];
-            // NSDictionary *params = [responseStr dictionaryFromQueryComponents]; //#import "XQueryComponents.h"
+            NSDictionary *param = [responseStr dictionaryFromQueryComponents];
+            NSString *token = [[param valueForKey:@"oauth_token"] lastObject];
+            
+            NSMutableDictionary *params = [NSMutableDictionary dictionary];
+            for (NSString *key in [param allKeys]) {
+                if (![key isEqualToString:@"oauth_token"]) {
+                    [params setObject:[[param valueForKey:key] lastObject] forKey:key];
+                }
+            }
             
             AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-            [app.model.apiServer addReverseAuthIdentity:kProviderTwitter withToken:[params valueForKey:@"oauth_token"] andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [app.model.apiServer addReverseAuthIdentity:kProviderTwitter withToken:token andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                     

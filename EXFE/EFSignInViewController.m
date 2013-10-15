@@ -15,6 +15,7 @@
 #import <Accounts/Accounts.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import "CCTemplate.h"
+#import "XQueryComponents.h"
 
 #import "Util.h"
 #import "EFEntity.h"
@@ -808,7 +809,10 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
             case kProviderTwitter:
             case kProviderFacebook:
             {
-                oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", [EFConfig sharedInstance].OAUTH_ROOT, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
+                NSDictionary *param = @{@"device": @"iOS", @"device_callback": callback, @"provider": [Identity getProviderString:provider]};
+                oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?%@", [EFConfig sharedInstance].OAUTH_ROOT, [param stringFromQueryComponents]];
+                
+//                oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", [EFConfig sharedInstance].OAUTH_ROOT, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
             }   break;
             default:
                 break;
@@ -1794,10 +1798,18 @@ typedef NS_ENUM(NSInteger, EFViewTag) {
     [_apiManager performReverseAuthForAccount:acct withHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
         if (!error) {
             NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-            NSDictionary *params = [Util splitQuery:responseStr];
+            NSDictionary *param = [responseStr dictionaryFromQueryComponents];
+            NSString *token = [[param valueForKey:@"oauth_token"] lastObject];
+            
+            NSMutableDictionary *params = [NSMutableDictionary dictionary];
+            for (NSString *key in [param allKeys]) {
+                if (![key isEqualToString:@"oauth_token"]) {
+                    [params setObject:[[param valueForKey:key] lastObject] forKey:key];
+                }
+            }
             
             AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-            [app.model.apiServer reverseAuth:kProviderTwitter withToken:[params valueForKey:@"oauth_token"] andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [app.model.apiServer reverseAuth:kProviderTwitter withToken:token andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                     

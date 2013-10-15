@@ -16,7 +16,6 @@
 #import "ConversationTableView.h"
 #import "PostCell.h"
 #import "ConversationInputAccessoryView.h"
-#import "GatherExfeeInputCell.h"
 #import "CTUtil.h"
 #import "CrossesViewController.h"
 #import "EFKit.h"

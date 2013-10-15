@@ -55,7 +55,7 @@ UIGestureRecognizerDelegate
 @property (nonatomic, strong)                       UIButton                *cancelButton;
 @property (nonatomic, strong)                       UIButton                *headingButton;
 
-- (void)removeSelectedPath;
+//- (void)removeSelectedPath;
 - (void)userLocationDidChange;
 
 - (void)customEditingViewWithRouteLocation:(EFRouteLocation *)routeLocation;

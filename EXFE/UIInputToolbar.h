@@ -26,7 +26,7 @@
 #import <UIKit/UIKit.h>
 #import "UIExpandingTextView.h"
 
-@protocol UIInputToolbarDelegate <NSObject>
+@protocol UIInputToolbarDelegate <UIToolbarDelegate>
 @optional
 -(void)inputButtonPressed:(NSString *)inputText;
 @end

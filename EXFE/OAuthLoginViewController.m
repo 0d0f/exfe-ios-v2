@@ -8,7 +8,7 @@
 
 #import "OAuthLoginViewController.h"
 #import "Util.h"
-#import "URLParser.h"
+#import "XQueryComponents.h"
 #import "UIApplication+EXFE.h"
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
@@ -56,7 +56,10 @@
         
         // eg:  exfe://oauthcallback
         NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback", [UIApplication sharedApplication].defaultScheme];
-        self.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", [EFConfig sharedInstance].OAUTH_ROOT, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
+        NSDictionary *param = @{@"device": @"iOS", @"device_callback": callback, @"provider": [Identity getProviderString:provider]};
+        self.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?%@", [EFConfig sharedInstance].OAUTH_ROOT, [param stringFromQueryComponents]];
+        
+//        self.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", [EFConfig sharedInstance].OAUTH_ROOT, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
     }
     return self;
 }
@@ -132,8 +135,7 @@
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
-    if(firstLoading==YES)
-    {
+    if (firstLoading == YES) {
         MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.webView animated:YES];
         hud.mode=MBProgressHUDModeCustomView;
         EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
@@ -145,9 +147,8 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    if(firstLoading==YES)
-    {
-        firstLoading=NO;
+    if (firstLoading == YES) {
+        firstLoading = NO;
         [MBProgressHUD hideHUDForView:self.webView animated:YES];
     }
     
@@ -155,9 +156,8 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    if(firstLoading==YES)
-    {
-        firstLoading=NO;
+    if (firstLoading == YES) {
+        firstLoading = NO;
         [MBProgressHUD hideHUDForView:self.webView animated:YES];
         NSString *currentURL = webView.request.URL.absoluteString;
         if (self.matchedURL && self.javaScriptString) {
@@ -170,17 +170,13 @@
 - (BOOL)webView:(UIWebView *)webview shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     if ([@"oauthcallback" isEqualToString:request.URL.host] && [request.URL.parameterString rangeOfString:@"token="].location != NSNotFound) {
         
-        URLParser *parser = [[URLParser alloc] initWithURLString:request.URL.absoluteString];
-        NSString *err = [parser valueForVariable:@"err"];
-        if(!err)
-        {
-            NSString *userid = [parser valueForVariable:@"userid"];
-            NSString *name = [parser valueForVariable:@"name"];
-            
-            name = [Util decodeFromPercentEscapeString:name];
-            
-            NSString *token = [parser valueForVariable:@"token"];
-            NSString *external_id = [parser valueForVariable:@"external_id"];
+        NSDictionary *params = [request.URL queryComponents];
+        NSString *err = [[params objectForKey:@"err"] lastObject];
+        if (!err) {
+            NSString *token = [[params objectForKey:@"token"] lastObject];
+            NSString *userid = [[params objectForKey:@"userid"] lastObject];
+            NSString *name = [[params objectForKey:@"username"] lastObject];
+            NSString *external_id = [[params objectForKey:@"external_id"] lastObject];
             if (self.onSuccess) {
                 NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:4];
                 [params setValue:userid forKey:@"userid"];

@@ -11,7 +11,7 @@
 #import "User+EXFE.h"
 #import "Identity+EXFE.h"
 #import "IdentityId.h"
-#import "NSString+Encode.h"
+#import "XQueryComponents.h"
 
 @interface EFRouteLocation (Private)
 
@@ -39,9 +39,9 @@
     } else {
         NSString *endPoint = nil;
         if (kEFRouteLocationColorBlue == self.markColor) {
-            endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=blue", [self.markTitle encodeString:NSUTF8StringEncoding]];
+            endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=blue", [self.markTitle stringByEncodingURLFormat]];
         } else {
-            endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=red", [self.markTitle encodeString:NSUTF8StringEncoding]];
+            endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=red", [self.markTitle stringByEncodingURLFormat]];
         }
         NSURL *url = [NSURL URLWithString:endPoint
                             relativeToURL:baseURl];

@@ -14,6 +14,7 @@
 #import <Accounts/Accounts.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import "CCTemplate.h"
+#import "XQueryComponents.h"
 #import "Util.h"
 #import "EFEntity.h"
 #import "EFKit.h"
@@ -1289,9 +1290,15 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                 [_apiManager performReverseAuthForAccount:account withHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
                     if (!error) {
                         NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-                        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:[Util splitQuery:responseStr]];
-                        NSString *token = [params valueForKey:@"oauth_token"];
-                        [params removeObjectForKey:@"oauth_token"];
+                        NSDictionary *param = [responseStr dictionaryFromQueryComponents];
+                        NSString *token = [[param valueForKey:@"oauth_token"] lastObject];
+                        
+                        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+                        for (NSString *key in [param allKeys]) {
+                            if (![key isEqualToString:@"oauth_token"]) {
+                                [params setObject:[[param valueForKey:key] lastObject] forKey:key];
+                            }
+                        }
                         
                         [self.model.apiServer reverseAuth:kProviderTwitter withToken:token andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                             [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -1382,7 +1389,10 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                 };
                 // eg:  exfe://oauthcallback
                 NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback", [UIApplication sharedApplication].defaultScheme];
-                oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", [EFConfig sharedInstance].OAUTH_ROOT, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
+                NSDictionary *param = @{@"device": @"iOS", @"device_callback": callback, @"provider": [Identity getProviderString:provider]};
+                oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?%@", [EFConfig sharedInstance].OAUTH_ROOT, [param stringFromQueryComponents]];
+                
+//                oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", [EFConfig sharedInstance].OAUTH_ROOT, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
                 
                 [self presentViewController:oauth animated:YES completion:nil];
             }
@@ -1463,7 +1473,10 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                     };
                     // eg:  exfe://oauthcallback
                     NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback", [UIApplication sharedApplication].defaultScheme];
-                    oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", [EFConfig sharedInstance].OAUTH_ROOT, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
+                    NSDictionary *param = @{@"device": @"iOS", @"device_callback": callback, @"provider": [Identity getProviderString:provider]};
+                    oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?%@", [EFConfig sharedInstance].OAUTH_ROOT, [param stringFromQueryComponents]];
+                    
+//                    oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", [EFConfig sharedInstance].OAUTH_ROOT, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
                     
                     [self presentViewController:oauth animated:YES completion:nil];
                 }
