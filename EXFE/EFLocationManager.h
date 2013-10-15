@@ -32,6 +32,9 @@ CLLocationManagerDelegate
 @property (nonatomic, readonly) BOOL            isUpdating;
 
 + (instancetype)defaultManager;
+
++ (BOOL)isLocationServicesDetermined;
++ (BOOL)isLocationServicesAuthored;
 + (BOOL)locationServicesEnabled;
 + (BOOL)headingServicesEnabled;
 

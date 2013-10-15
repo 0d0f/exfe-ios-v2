@@ -16,6 +16,7 @@
 			<array>
 				<string>Icon@2x.png</string>
 				<string>Icon.png</string>
+				<string>icon_120x120.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>

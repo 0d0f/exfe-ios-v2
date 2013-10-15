@@ -2438,6 +2438,10 @@
 		76448CF617F535BF00ED18CB /* EFLoadingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448CF117F535B900ED18CB /* EFLoadingButton.m */; };
 		76448CF717F535C000ED18CB /* EFLoadingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448CF117F535B900ED18CB /* EFLoadingButton.m */; };
 		76448CF817F535C100ED18CB /* EFLoadingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 76448CF117F535B900ED18CB /* EFLoadingButton.m */; };
+		76448CFF17F5A6A500ED18CB /* icon_120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448CFE17F5A6A500ED18CB /* icon_120x120.png */; };
+		76448D0017F5A6A500ED18CB /* icon_120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448CFE17F5A6A500ED18CB /* icon_120x120.png */; };
+		76448D0117F5A6A500ED18CB /* icon_120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448CFE17F5A6A500ED18CB /* icon_120x120.png */; };
+		76448D0217F5A6A500ED18CB /* icon_120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 76448CFE17F5A6A500ED18CB /* icon_120x120.png */; };
 		764CD8F2173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
 		764CD8F3173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
 		764CD8F4173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
@@ -3725,6 +3729,7 @@
 		76448CC217F2D68B00ED18CB /* shadow_gap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shadow_gap.png; sourceTree = "<group>"; };
 		76448CF017F535B900ED18CB /* EFLoadingButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLoadingButton.h; sourceTree = "<group>"; };
 		76448CF117F535B900ED18CB /* EFLoadingButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLoadingButton.m; sourceTree = "<group>"; };
+		76448CFE17F5A6A500ED18CB /* icon_120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_120x120.png; sourceTree = "<group>"; };
 		764CD8F0173A5C4600627237 /* EFNotificationBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFNotificationBannerView.h; sourceTree = "<group>"; };
 		764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFNotificationBannerView.m; sourceTree = "<group>"; };
 		764CD8FC173A8F9400627237 /* cautionbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cautionbar.png; sourceTree = "<group>"; };
@@ -6476,6 +6481,7 @@
 				78CD517815EF61CF00086036 /* Icon-Small@2x.png */,
 				78CD517915EF61CF00086036 /* Icon.png */,
 				78CD517A15EF61CF00086036 /* Icon@2x.png */,
+				76448CFE17F5A6A500ED18CB /* icon_120x120.png */,
 				78CD517F15EF620600086036 /* iTunesArtwork.png */,
 			);
 			name = appstore;
@@ -7124,6 +7130,7 @@
 				4FDFA432172A794900929BC9 /* start_tri-18.png in Resources */,
 				4FDFA435172A794900929BC9 /* start_tri-18@2x.png in Resources */,
 				4FDFA438172A794900929BC9 /* start_tri-19.png in Resources */,
+				76448D0017F5A6A500ED18CB /* icon_120x120.png in Resources */,
 				4FDFA43B172A794900929BC9 /* start_tri-19@2x.png in Resources */,
 				4FDFA43E172A794900929BC9 /* start_tri-20.png in Resources */,
 				4FDFA441172A794900929BC9 /* start_tri-20@2x.png in Resources */,
@@ -7599,6 +7606,7 @@
 				4FDFA433172A794900929BC9 /* start_tri-18.png in Resources */,
 				4FDFA436172A794900929BC9 /* start_tri-18@2x.png in Resources */,
 				4FDFA439172A794900929BC9 /* start_tri-19.png in Resources */,
+				76448D0117F5A6A500ED18CB /* icon_120x120.png in Resources */,
 				4FDFA43C172A794900929BC9 /* start_tri-19@2x.png in Resources */,
 				4FDFA43F172A794900929BC9 /* start_tri-20.png in Resources */,
 				4FDFA442172A794900929BC9 /* start_tri-20@2x.png in Resources */,
@@ -7926,6 +7934,7 @@
 				4FC4101D17D04A5700D64105 /* identity_phone_18.png in Resources */,
 				4FC4101E17D04A5700D64105 /* identity_phone_18@2x.png in Resources */,
 				4FC4101F17D04A5700D64105 /* (null) in Resources */,
+				76448D0217F5A6A500ED18CB /* icon_120x120.png in Resources */,
 				4FC4102017D04A5700D64105 /* rsvp_accepted_18blue.png in Resources */,
 				4FC4102117D04A5700D64105 /* rsvp_accepted_18blue@2x.png in Resources */,
 				4FC4102217D04A5700D64105 /* rsvp_accepted_18w.png in Resources */,
@@ -8397,6 +8406,7 @@
 				7848CE0516D7682700F9488E /* identity_phone_18.png in Resources */,
 				7848CE0616D7682700F9488E /* identity_phone_18@2x.png in Resources */,
 				788B621216E9C0470019B953 /* (null) in Resources */,
+				76448CFF17F5A6A500ED18CB /* icon_120x120.png in Resources */,
 				4F29C8C416F6D968001BB176 /* rsvp_accepted_18blue.png in Resources */,
 				4F29C8C516F6D968001BB176 /* rsvp_accepted_18blue@2x.png in Resources */,
 				4F29C8C616F6D968001BB176 /* rsvp_accepted_18w.png in Resources */,

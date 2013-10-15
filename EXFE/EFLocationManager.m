@@ -164,8 +164,16 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 
 @implementation EFLocationManager
 
++ (BOOL)isLocationServicesDetermined {
+    return kCLAuthorizationStatusNotDetermined != [CLLocationManager authorizationStatus];
+}
+
++ (BOOL)isLocationServicesAuthored {
+    return kCLAuthorizationStatusAuthorized == [CLLocationManager authorizationStatus];
+}
+
 + (BOOL)locationServicesEnabled {
-    return (kCLAuthorizationStatusAuthorized == [CLLocationManager authorizationStatus]);
+    return [CLLocationManager locationServicesEnabled];
 }
 
 + (BOOL)headingServicesEnabled {
@@ -257,7 +265,10 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
             }
         } else {
 #warning MUST solve this problem in next version.
-            if ([[EFConfig sharedInstance].scope isEqualToString:EFServerScopeCN] && [EFLocationManager locationServicesEnabled]) {
+            if ([[EFConfig sharedInstance].scope isEqualToString:EFServerScopeCN] &&
+                [EFLocationManager locationServicesEnabled] &&
+                [EFLocationManager isLocationServicesDetermined] &&
+                [EFLocationManager isLocationServicesAuthored]) {
                 UILocalNotification *localNotification = [[UILocalNotification alloc] init];
                 localNotification.alertBody = NSLocalizedString(@"RouteX will show your location for 30 minutes, only to those who're agreed.", nil);
                 localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:2.33f];
@@ -273,7 +284,10 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
         
         [[UIApplication sharedApplication] cancelAllLocalNotifications];
         
-        if ([EFLocationManager locationServicesEnabled] && ![self isFirstTimeToPostUserLocation]) {
+        if ([EFLocationManager locationServicesEnabled] &&
+            [EFLocationManager isLocationServicesDetermined] &&
+            [EFLocationManager isLocationServicesAuthored] &&
+            ![self isFirstTimeToPostUserLocation]) {
             [self startUpdatingLocation];
         }
     }
@@ -310,6 +324,11 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
     self.userHeading = newHeading;
 }
 
+- (void)locationManager:(CLLocationManager *)manager
+       didFailWithError:(NSError *)error {
+    [self stopUpdatingLocation];
+}
+
 #pragma mark - Timer Runloop
 
 - (void)runloop:(NSTimer *)timer {
@@ -321,7 +340,7 @@ NSString *EFNotificationUserLocationOffsetDidGet = @"notification.offset.didGet"
 - (void)startUpdatingLocation {
     if ([EFLocationManager locationServicesEnabled]) {
         self.isUpdating = YES;
-        
+
         [self.locationManager startUpdatingLocation];
         [self _fireTimer];
     }

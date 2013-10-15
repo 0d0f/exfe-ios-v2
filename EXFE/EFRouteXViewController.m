@@ -171,7 +171,11 @@
 }
 
 - (void)_checkRouteXStatus {
-    if (![EFLocationManager locationServicesEnabled]) {
+    BOOL isDetermined = [EFLocationManager isLocationServicesDetermined];
+    BOOL isAuthored = [EFLocationManager isLocationServicesAuthored];
+    BOOL isLocationServicesEnabled = [EFLocationManager locationServicesEnabled];
+    
+    if (!isLocationServicesEnabled || (isLocationServicesEnabled && isDetermined && !isAuthored)) {
         if (!self.noGPSAlertView) {
             self.noGPSAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Location unavailable", nil)
                                                              message:[NSLocalizedString(@"Please proceed to “Settings” app » Privacy » Location Service,\nthen turn it on for “{{PRODUCT_APP_NAME}}”.", nil) templateFromDict:[Util keywordDict]]
