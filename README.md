@@ -1,4 +1,4 @@
 exfe-ios-v2
 ===========
 
-EXFE iOS cliient version 2.x
+EXFE iOS client version 2.x
