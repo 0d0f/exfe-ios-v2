@@ -272,7 +272,7 @@
         }
     };
     
-    if (dispatch_get_current_queue() != dispatch_get_main_queue()) {
+    if (![NSThread isMainThread]) {
         dispatch_sync(dispatch_get_main_queue(), block);
     } else {
         block();

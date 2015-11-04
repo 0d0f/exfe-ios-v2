@@ -965,7 +965,7 @@ typedef enum {
     if (section == 1) {
         if (indexPath.row == self.sortedInvitations.count){
             void (^addActionHandler)(NSArray *contactObjects) = ^(NSArray *contactObjects){
-                NSAssert(dispatch_get_main_queue() == dispatch_get_current_queue(), @"WTF! MUST on main queue! boy!");
+                NSAssert([NSThread isMainThread], @"MUST on main queue! boy!");
                 
 //                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
 //                hud.labelText = @"Adding...";

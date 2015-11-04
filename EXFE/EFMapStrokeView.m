@@ -95,7 +95,7 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-    NSAssert(dispatch_get_current_queue() == dispatch_get_main_queue(), @"MUST be on main thread.");
+    NSAssert([NSThread isMainThread], @"MUST be on main thread.");
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
@@ -138,7 +138,7 @@
 #pragma mark - Public
 
 - (void)reloadData {
-    NSAssert(dispatch_get_current_queue() == dispatch_get_main_queue(), @"MUST be on main thread.");
+    NSAssert([NSThread isMainThread], @"MUST be on main thread.");
     
     CLLocationCoordinate2D cooridnate = self.mapView.centerCoordinate;
     CGPoint center = [self.mapView convertCoordinate:cooridnate toPointToView:self.superview];

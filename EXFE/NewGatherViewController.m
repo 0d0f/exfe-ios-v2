@@ -1001,7 +1001,7 @@
         [self hideMenu];
         
         void (^addActionHandler)(NSArray *contactObjects) = ^(NSArray *contactObjects){
-            NSAssert(dispatch_get_main_queue() == dispatch_get_current_queue(), @"WTF! MUST on main queue! boy!");
+            NSAssert([NSThread isMainThread], @"MUST on main queue! boy!");
             
             [self dismissViewControllerAnimated:YES completion:nil];
             
