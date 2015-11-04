@@ -16,7 +16,7 @@
 
 - (UIImage *)imageForKey:(NSString *)key {
     NSParameterAssert(key);
-    NSAssert(dispatch_get_current_queue() == dispatch_get_main_queue(), @"MUST called on main thread.");
+    NSAssert([NSThread isMainThread], @"MUST called on main thread.");
     
     return [self objectForKey:key];
 }
@@ -24,7 +24,7 @@
 - (void)setImage:(UIImage *)image forKey:(NSString *)key {
     NSParameterAssert(image);
     NSParameterAssert(key);
-    NSAssert(dispatch_get_current_queue() == dispatch_get_main_queue(), @"MUST called on main thread.");
+    NSAssert([NSThread isMainThread], @"MUST called on main thread.");
     
     [self setObject:image forKey:key];
 }

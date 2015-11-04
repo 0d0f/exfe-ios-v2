@@ -193,7 +193,7 @@ NSString *kEFAPIErrorDomain = @"errorDomain.efapi";
                                                          needInsertNew = YES;
                                                      }
                                                  };
-                                                 if (dispatch_get_current_queue() != dispatch_get_main_queue()) {
+                                                 if (![NSThread isMainThread]) {
                                                      dispatch_sync(dispatch_get_main_queue(), block);
                                                  } else {
                                                      block();
@@ -216,7 +216,7 @@ NSString *kEFAPIErrorDomain = @"errorDomain.efapi";
                                                          [identityEntities addObject:identity];
                                                      }];
                                                  };
-                                                 if (dispatch_get_current_queue() != dispatch_get_main_queue()) {
+                                                 if (![NSThread isMainThread]) {
                                                      dispatch_sync(dispatch_get_main_queue(), block);
                                                  } else {
                                                      block();
